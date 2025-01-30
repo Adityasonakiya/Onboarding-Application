@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaSearch, FaCheck, FaBell, FaUser, FaTimes } from 'react-icons/fa';
 import logo from '../assets/images/logo.png';
+import smallLogo from '../assets/images/logo2.png';
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -20,10 +21,8 @@ export default function Navbar() {
     <div className='shadow-md w-full p-2 fixed top-0 left-0 bg-white'>
       <div className='flex items-center justify-between py-2 px-4 md:py-4 md:px-7'>
         <div className='flex items-center'>
-          <img src={logo} alt='Logo' className='h-6 md:h-8 mr-2' />
-        </div>
-        <div className='text-center flex-grow'>
-          <span className='font-bold text-lg md:text-2xl text-gray-800'>Selection Tracker</span>
+          <img src={logo} alt='Logo' className='hidden md:block h-8 mr-2' />
+          <img src={smallLogo} alt='Logo' className='block md:hidden h-6 mr-2' />
         </div>
         <div className='flex items-center space-x-2 md:space-x-4'>
           <div className='flex items-center bg-gray-200 rounded-full px-2 py-1 md:px-3'>
