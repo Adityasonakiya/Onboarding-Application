@@ -4,17 +4,20 @@ import Register from './components/Register';
 import Login from './components/Login';
 import SelectionTracker from './components/SelectionTracker';
 import UpdateDetails from './components/UpdateDetails';
+import Layout from './components/Layout';
 
 const App = () => {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Navigate replace to="/login" />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/selection-tracker" element={<SelectionTracker />}/>
-        <Route path="/updateDetails" element={<UpdateDetails/>}/>
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Navigate replace to="/navbar" />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/selection-tracker" element={<SelectionTracker/>}/>
+          <Route path="/updateDetails" element={<UpdateDetails/>}/>
+        </Routes>
+      </Layout>
     </Router>
   );
 };
