@@ -27,5 +27,5 @@ The HSBC Onboarding Application is a streamlined solution designed to automate t
 ### Backend Setup
 1. **Clone the repository:**
    ```bash
-git clone [https://your-repo-url.git](https://github.com/Adityasonakiya/Onboarding-Application)
-   cd Onboarding-Application/backend
+git clone https://github.com/Adityasonakiya/Onboarding-Application
+cd Onboarding-Application/backend
