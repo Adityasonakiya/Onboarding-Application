@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 
 function SelectionTracker() {
   const [form, setForm] = useState({});
-  const [status, setStatus] = useState(false);
+  const [isInternal, setIsInternal] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-    setStatus(prevState => !prevState);
+    const { name, value, type, checked } = e.target;
+    if (type === 'checkbox') {
+      setIsInternal(name === 'internal' ? checked : !checked);
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -24,7 +27,7 @@ function SelectionTracker() {
             <label className="font-bold w-1/3">Internal</label>
             <input type="checkbox"
               name="internal"
-              checked={status}
+              checked={isInternal}
               onChange={handleChange}
               className="p-2" />
           </div>
@@ -32,7 +35,7 @@ function SelectionTracker() {
             <label className="font-bold w-1/3">External</label>
             <input type="checkbox"
               name="external"
-              checked={!status}
+              checked={!isInternal}
               onChange={handleChange}
               className="p-2" />
           </div>
@@ -45,7 +48,8 @@ function SelectionTracker() {
               value={form.psId || ''}
               onChange={handleChange}
               required
-              className="p-2 border rounded w-full" />
+              className="p-2 border rounded w-full"
+              disabled={!isInternal} />
           </div>
           <div className="flex items-center">
             <label className="w-1/3 font-semibold">Candidate ID:</label>
@@ -53,7 +57,8 @@ function SelectionTracker() {
               name="candidateId"
               value={form.candidateId || ''}
               onChange={handleChange}
-              className="p-2 border rounded w-full" />
+              className="p-2 border rounded w-full"
+              disabled={isInternal} />
           </div>
           <div className="flex items-center">
             <label className="w-1/3 font-semibold">First Name:</label>
@@ -61,8 +66,8 @@ function SelectionTracker() {
               name="fname"
               value={form.fname || ''}
               onChange={handleChange}
-              className="p-2 border rounded w-full bg-slate-100"
-              disabled />
+              className="p-2 border rounded w-full"
+              disabled={isInternal || !isInternal} />
           </div>
           <div className="flex items-center">
             <label className="w-1/3 font-semibold">Last Name:</label>
@@ -70,8 +75,8 @@ function SelectionTracker() {
               name="lname"
               value={form.lname || ''}
               onChange={handleChange}
-              className="p-2 border rounded w-full bg-slate-100"
-              disabled />
+              className="p-2 border rounded w-full"
+              disabled={isInternal || !isInternal} />
           </div>
           <div className="flex items-center">
             <label className="w-1/3 font-semibold">Grade:</label>
@@ -79,8 +84,8 @@ function SelectionTracker() {
               name="grade"
               value={form.grade || ''}
               onChange={handleChange}
-              className="p-2 border rounded w-full bg-slate-100"
-              disabled />
+              className="p-2 border rounded w-full"
+              disabled={isInternal || !isInternal} />
           </div>
           <div className="flex items-center">
             <label className="w-1/3 font-semibold">Location:</label>
@@ -88,8 +93,8 @@ function SelectionTracker() {
               name="location"
               value={form.location || ''}
               onChange={handleChange}
-              className="p-2 border rounded w-full bg-slate-100"
-              disabled />
+              className="p-2 border rounded w-full"
+              disabled={isInternal || !isInternal} />
           </div>
           <div className="flex items-center">
             <label className="w-1/3 font-semibold">PU:</label>
@@ -97,8 +102,8 @@ function SelectionTracker() {
               name="pu"
               value={form.pu || ''}
               onChange={handleChange}
-              className="p-2 border rounded w-full bg-slate-100"
-              disabled />
+              className="p-2 border rounded w-full"
+              disabled={isInternal || !isInternal} />
           </div>
           <div className="flex items-center">
             <label className="w-1/3 font-semibold">Total Exp:</label>
@@ -106,8 +111,8 @@ function SelectionTracker() {
               name="totalExp"
               value={form.totalExp || ''}
               onChange={handleChange}
-              className="p-2 border rounded w-full bg-slate-100"
-              disabled />
+              className="p-2 border rounded w-full"
+              disabled={isInternal || !isInternal} />
           </div>
           <div className="flex items-center">
             <label className="w-1/3 font-semibold">Skill:</label>
@@ -115,8 +120,8 @@ function SelectionTracker() {
               name="skill"
               value={form.skill || ''}
               onChange={handleChange}
-              className="p-2 border rounded w-full bg-slate-100"
-              disabled />
+              className="p-2 border rounded w-full"
+              disabled={isInternal || !isInternal} />
           </div>
           <div className="flex items-center">
             <label className="w-1/3 font-semibold">Mail ID:</label>
@@ -124,8 +129,8 @@ function SelectionTracker() {
               name="email"
               value={form.email || ''}
               onChange={handleChange}
-              className="p-2 border rounded w-full bg-slate-100"
-              disabled />
+              className="p-2 border rounded w-full"
+              disabled={isInternal || !isInternal} />
           </div>
         </div>
 

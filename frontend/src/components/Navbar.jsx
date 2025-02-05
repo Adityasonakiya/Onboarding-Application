@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { FaSearch, FaCheck, FaBell, FaUser, FaTimes } from 'react-icons/fa';
+import { FiAlignJustify } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
 import smallLogo from '../assets/images/logo2.png';
 
@@ -46,7 +48,7 @@ export default function Navbar() {
               <FaCheck className='text-gray-800' />
             </div>
             {activePopup === 'tickMark' && (
-              <div className='absolute right-0 mt-2 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4'>
+              <div className='absolute right-0 mt-2 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300'>
                 <div className='flex justify-end'>
                   <FaTimes
                     className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
@@ -67,7 +69,7 @@ export default function Navbar() {
               <FaBell className='text-gray-800' />
             </div>
             {activePopup === 'notification' && (
-              <div className='absolute right-0 mt-2 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4'>
+              <div className='absolute right-0 mt-2 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300'>
                 <div className='flex justify-end'>
                   <FaTimes
                     className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
@@ -88,16 +90,67 @@ export default function Navbar() {
               <FaUser className='text-gray-800' />
             </div>
             {activePopup === 'user' && (
-              <div className='absolute right-0 mt-2 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4'>
+              <div className='absolute right-0 mt-2 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300'>
                 <div className='flex justify-end'>
                   <FaTimes
                     className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
                     onClick={() => setActivePopup(null)}
                   />
                 </div>
-                <h1 className='text-lg md:text-xl font-bold mb-2'>Lorem Ipsum</h1>
-                <p className='text-gray-700 mb-2'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <p className='text-gray-700'>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <div className='flex flex-col items-center mb-4'>
+                  <FaUser className='text-gray-800 text-4xl mb-2' />
+                  <h1 className='text-lg md:text-xl font-bold'>John Doe</h1>
+                  <p className='mb-2 text-gray-700'>PS ID: 123456</p>
+                  <p className='text-gray-700'>Designation: Software Engineer</p>
+                </div>
+                <div className='flex flex-col'>
+                  <p className='text-gray-700'><strong>Email:</strong> john.doe@example.com</p>
+                  <p className='text-gray-700'><strong>Phone:</strong> +1 234 567 890</p>
+                  <p className='text-gray-700'><strong>Work Location:</strong> Pune</p>
+                  <p className='text-gray-700'><strong>Work Mode:</strong> Hybrid</p>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className='relative'>
+            <div
+              className='p-1 md:p-2 rounded-full bg-gray-200 hover:bg-gray-300 duration-300 cursor-pointer'
+              onClick={() => togglePopup('menu')}
+            >
+              <FiAlignJustify className='text-gray-800' />
+            </div>
+            {activePopup === 'menu' && (
+              <div className='absolute right-0 mt-2 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300'>
+                <div className='flex justify-end'>
+                  <FaTimes
+                    className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
+                    onClick={() => setActivePopup(null)}
+                  />
+                </div>
+                <Link
+                  to='/dashboard'
+                  className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to='/selection-tracker'
+                  className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
+                >
+                  Selection Tracker
+                </Link>
+                <Link
+                  to='/update-details'
+                  className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
+                >
+                  Update
+                </Link>
+                <Link
+                  to='/logout'
+                  className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
+                >
+                  Logout
+                </Link>
               </div>
             )}
           </div>
