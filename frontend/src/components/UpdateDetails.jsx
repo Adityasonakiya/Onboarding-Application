@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 
 function UpdateDetails() {
@@ -21,7 +22,7 @@ function UpdateDetails() {
           <table className='w-full border-collapse'>
             <tbody>
               <tr className='flex flex-wrap md:flex-nowrap'>
-                <td className='p-2 w-full md:w-1/4'><label>Status:</label></td>
+                <td className='p-2 w-full md:w-1/4'><label className="font-bold">Status:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
                   <select onChange={handleChange} className="p-2 mb-2 border rounded w-full">
                     <option value="CTool Pending">CTool Pending</option>
@@ -37,7 +38,7 @@ function UpdateDetails() {
                     <option value="Drop out case">Drop Out Case</option>
                   </select>
                 </td>
-                <td className='p-2 w-full md:w-1/4'><label>BGV Status:</label></td>
+                <td className='p-2 w-full md:w-1/4'><label className="font-bold">BGV Status:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
                   <select onChange={handleChange} className="p-2 mb-2 border rounded w-full">
                     <option value="BGV Initiated">BGV Initiated</option>
@@ -51,31 +52,31 @@ function UpdateDetails() {
                 </td>
               </tr>
               <tr className='flex flex-wrap md:flex-nowrap'>
-                <td className='p-2 w-full md:w-1/4'><label>Status Additional Remark:</label></td>
+                <td className='p-2 w-full md:w-1/4'><label className="font-bold">Status Additional Remark:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
                   <textarea name='addRemark' value={form.addRemark} onChange={handleChange} className="p-2 mb-2 border rounded w-full resize-none" />
                 </td>
-                <td className='p-2 w-full md:w-1/4'><label>BGV Additional Remark:</label></td>
+                <td className='p-2 w-full md:w-1/4'><label className="font-bold">BGV Additional Remark:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
                   <textarea name='bgvRemark' value={form.bgvRemark} onChange={handleChange} className="p-2 mb-2 border rounded w-full resize-none" />
                 </td>
               </tr>
               <tr className='flex flex-wrap md:flex-nowrap'>
-                <td className='p-2 w-full md:w-1/4'><label>Tagging date:</label></td>
+                <td className='p-2 w-full md:w-1/4'><label className="font-bold">Tagging date:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
                   <input type='date' name='tagDate' value={form.tagDate} required onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
                 </td>
-                <td className='p-2 w-full md:w-1/4'><label>Tech Selection Date:</label></td>
+                <td className='p-2 w-full md:w-1/4'><label className="font-bold">Tech Selection Date:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
                   <input type='date' name='techSelectDate' required value={form.techSelectDate} onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
                 </td>
               </tr>
               <tr className='flex flex-wrap md:flex-nowrap'>
-                <td className='p-2 w-full md:w-1/4'><label>DOJ Recieved Date:</label></td>
+                <td className='p-2 w-full md:w-1/4'><label className="font-bold">DOJ Recieved Date:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
                   <input type='date' name='dojRecDate' value={form.dojRecDate} required onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
                 </td>
-                <td className='p-2 w-full md:w-1/4'><label>Onboarding Date:</label></td>
+                <td className='p-2 w-full md:w-1/4'><label className="font-bold">Onboarding Date:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
                   <input type='date' name='onboardingDate' value={form.onboardingDate} required onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
                 </td>
