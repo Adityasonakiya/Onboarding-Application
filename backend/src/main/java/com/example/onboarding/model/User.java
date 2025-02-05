@@ -1,6 +1,7 @@
 package com.example.onboarding.model;
 
 import java.security.Timestamp;
+import java.util.Optional;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -71,6 +72,5 @@ public class User {
     public void setUserManagerId(int userManagerId) {
         this.userManagerId = userManagerId;
     }
-
     
 }

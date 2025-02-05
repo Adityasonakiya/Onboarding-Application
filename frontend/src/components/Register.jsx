@@ -39,6 +39,7 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const errors = validate();
     if (Object.keys(errors).length === 0) {
       // Submit form
@@ -52,7 +53,7 @@ const Register = () => {
       <form className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-5 text-center">Register</h2>
         <input
-          type="text"
+          type="number"
           name="username"
           placeholder="Username"
           value={form.username}
@@ -117,7 +118,9 @@ const Register = () => {
           </button>
         </div>
         {touched.confirmPassword && errors.confirmPassword && <p className="text-red-500 text-sm mb-4">{errors.confirmPassword}</p>}
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">Register</button>
+        <Link to="/login">
+          <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">Register</button>
+        </Link>
         <p className="mt-4 text-center">
           Already have an account? <Link to="/login" className="text-blue-500">Login</Link>
         </p>
