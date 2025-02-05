@@ -28,6 +28,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const errors = validate();
     if (Object.keys(errors).length === 0) {
       // Simulate backend validation
@@ -42,13 +43,14 @@ const Login = () => {
       setErrors(errors);
     }
   };
+  
 
   return (
     <div className="min-h-screen md:min-h-[86vh] flex items-center justify-center bg-gray-100">
       <form className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-5" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-5 text-center">Login</h2>
         <input
-          type="text"
+          type="number"
           name="username"
           placeholder="Username"
           value={form.username}
