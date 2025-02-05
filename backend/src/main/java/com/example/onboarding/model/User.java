@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,37 +18,28 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int psid;
- 
-    @Column(nullable = false)
-    private int roleId;
- 
+
+    @ManyToOne
+    @JoinColumn(name = "psid", referencedColumnName = "psId")
+    private Candidate candidate;
+
+    @ManyToOne
+    @JoinColumn(name = "roleId", referencedColumnName = "roleid")
+    private Roles role;
+
+    @ManyToOne
+    @JoinColumn(name = "userManagerId", referencedColumnName = "psId")
+    private Candidate userManager;
     @Column(nullable = false)
     private String password;
- 
     private Timestamp lastLogin;
     private Timestamp lastLogout;
-    private int userManagerId;
-    public User() {
-    }
-    public User(int psid, int roleId, String password, Timestamp lastLogin, Timestamp lastLogout, int userManagerId) {
-        this.psid = psid;
-        this.roleId = roleId;
-        this.password = password;
-        this.lastLogin = lastLogin;
-        this.lastLogout = lastLogout;
-        this.userManagerId = userManagerId;
-    }
+    
     public int getPsid() {
         return psid;
     }
     public void setPsid(int psid) {
         this.psid = psid;
-    }
-    public int getRoleId() {
-        return roleId;
-    }
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
     }
     public String getPassword() {
         return password;
@@ -66,11 +59,22 @@ public class User {
     public void setLastLogout(Timestamp lastLogout) {
         this.lastLogout = lastLogout;
     }
-    public int getUserManagerId() {
-        return userManagerId;
+    public Candidate getCandidate() {
+        return candidate;
     }
-    public void setUserManagerId(int userManagerId) {
-        this.userManagerId = userManagerId;
+    public void setCandidate(Candidate candidate) {
+        this.candidate = candidate;
     }
-    
+    public Roles getRole() {
+        return role;
+    }
+    public void setRole(Roles role) {
+        this.role = role;
+    }
+    public Candidate getUserManager() {
+        return userManager;
+    }
+    public void setUserManager(Candidate userManager) {
+        this.userManager = userManager;
+    }   
 }

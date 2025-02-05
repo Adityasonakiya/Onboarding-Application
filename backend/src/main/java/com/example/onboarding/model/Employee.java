@@ -23,33 +23,17 @@ public class Employee {
     private BigDecimal totalExperience;
     private int pu;
     private String mailID;
- 
-    @ManyToOne
-    @JoinColumn(name = "createdBy")
-    private Employee createdBy;
- 
-    @ManyToOne
-    @JoinColumn(name = "updatedBy")
-    private Employee updatedBy;
 
-    public Employee() {
-    }
+    @ManyToOne
+    @JoinColumn(name = "createdBy", referencedColumnName = "psId")
+    private Candidate createdBy;
 
-    public Employee(int psId, String firstName, String middleName, String lastName, String grade, String location,
-            String skill, BigDecimal totalExperience, int pu, String mailID, Employee createdBy, Employee updatedBy) {
-        this.psId = psId;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.grade = grade;
-        this.location = location;
-        this.skill = skill;
-        this.totalExperience = totalExperience;
-        this.pu = pu;
-        this.mailID = mailID;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-    }
+    @ManyToOne
+    @JoinColumn(name = "updatedBy", referencedColumnName = "psId")
+    private Candidate updatedBy;
+
+    private byte[] createdDate;
+    private byte[] updatedDate;
 
     public int getPsId() {
         return psId;
@@ -62,90 +46,80 @@ public class Employee {
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
     public String getMiddleName() {
         return middleName;
     }
-
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
-
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
     public String getGrade() {
         return grade;
     }
-
     public void setGrade(String grade) {
         this.grade = grade;
     }
-
     public String getLocation() {
         return location;
     }
-
     public void setLocation(String location) {
         this.location = location;
     }
-
     public String getSkill() {
         return skill;
     }
-
     public void setSkill(String skill) {
         this.skill = skill;
     }
-
     public BigDecimal getTotalExperience() {
         return totalExperience;
     }
-
     public void setTotalExperience(BigDecimal totalExperience) {
         this.totalExperience = totalExperience;
     }
-
     public int getPu() {
         return pu;
     }
-
     public void setPu(int pu) {
         this.pu = pu;
     }
-
     public String getMailID() {
         return mailID;
     }
-
     public void setMailID(String mailID) {
         this.mailID = mailID;
     }
-
-    public Employee getCreatedBy() {
+    public Candidate getCreatedBy() {
         return createdBy;
     }
-
-    public void setCreatedBy(Employee createdBy) {
+    public void setCreatedBy(Candidate createdBy) {
         this.createdBy = createdBy;
     }
-
-    public Employee getUpdatedBy() {
+    public Candidate getUpdatedBy() {
         return updatedBy;
     }
-
-    public void setUpdatedBy(Employee updatedBy) {
+    public void setUpdatedBy(Candidate updatedBy) {
         this.updatedBy = updatedBy;
     }
+    public byte[] getCreatedDate() {
+        return createdDate;
+    }
+    public void setCreatedDate(byte[] createdDate) {
+        this.createdDate = createdDate;
+    }
+    public byte[] getUpdatedDate() {
+        return updatedDate;
+    }
+    public void setUpdatedDate(byte[] updatedDate) {
+        this.updatedDate = updatedDate;
+    }
 
-    
 }
