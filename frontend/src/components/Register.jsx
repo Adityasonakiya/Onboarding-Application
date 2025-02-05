@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [form, setForm] = useState({ username: '', password: '', email: '', confirmPassword: '' });
@@ -7,6 +7,7 @@ const Register = () => {
   const [touched, setTouched] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate(); // Use navigate hook for navigation
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,14 +43,16 @@ const Register = () => {
 
     const errors = validate();
     if (Object.keys(errors).length === 0) {
-      // Submit form
+      // Simulate successful registration
+      localStorage.setItem('user', JSON.stringify({ username: form.username, password: form.password }));
+      navigate('/login'); // Navigate to login page after successful registration
     } else {
       setErrors(errors);
     }
   };
 
   return (
-    <div className="min-h-screen md:min-h-[86vh] flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <form className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-5 text-center">Register</h2>
         <input

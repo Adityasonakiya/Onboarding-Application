@@ -15,7 +15,7 @@ function UpdateDetails() {
   return (
     <div className='w-full px-4 py-6'>
       <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">HSBC Selection Tracker Form</h1>
-      <h4 className='bg-gray-200 font-bold px-2 py-1'>Tagging and Onboarding Details</h4>
+      <h4 className='bg-gray-200 font-bold px-2 py-1 mt-4'>Tagging and Onboarding Details</h4>
       <form onSubmit={handleSubmit}>
         <div className='overflow-x-auto'>
           <table className='w-full border-collapse'>
