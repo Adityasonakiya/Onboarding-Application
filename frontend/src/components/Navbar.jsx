@@ -146,7 +146,7 @@ export default function Navbar() {
                   Update
                 </Link>
                 <Link
-                  to='/logout'
+                  to='/login'
                   className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
                 >
                   Logout
