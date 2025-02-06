@@ -20,16 +20,11 @@ public class User {
     private int psid;
 
     @ManyToOne
-    @JoinColumn(name = "psid", referencedColumnName = "psId")
-    private Candidate candidate;
-
-    @ManyToOne
-    @JoinColumn(name = "roleId", referencedColumnName = "roleid")
+    @JoinColumn(name = "roleId")
     private Roles role;
 
-    @ManyToOne
-    @JoinColumn(name = "userManagerId", referencedColumnName = "psId")
-    private Candidate userManager;
+    private int userManagerId;
+
     @Column(nullable = false)
     private String password;
     private Timestamp lastLogin;
@@ -59,22 +54,19 @@ public class User {
     public void setLastLogout(Timestamp lastLogout) {
         this.lastLogout = lastLogout;
     }
-    public Candidate getCandidate() {
-        return candidate;
-    }
-    public void setCandidate(Candidate candidate) {
-        this.candidate = candidate;
-    }
+    
     public Roles getRole() {
         return role;
     }
     public void setRole(Roles role) {
         this.role = role;
     }
-    public Candidate getUserManager() {
-        return userManager;
+    public int getUserManagerId() {
+        return userManagerId;
     }
-    public void setUserManager(Candidate userManager) {
-        this.userManager = userManager;
-    }   
+    public void setUserManagerId(int userManagerId) {
+        this.userManagerId = userManagerId;
+    }
+    
+
 }

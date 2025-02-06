@@ -16,47 +16,40 @@ public class SelectionDetails {
     private int selectionId;
 
     @ManyToOne
-    @JoinColumn(name = "psId", referencedColumnName = "psId")
+    @JoinColumn(name = "psId")
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "candidateId", referencedColumnName = "candidateId")
+    @JoinColumn(name="candidateId")
     private Candidate candidate;
 
+    private int deliveryManager;
+
     @ManyToOne
-    @JoinColumn(name = "lobId", referencedColumnName = "lob_id")
+    @JoinColumn(name = "lobId")
     private LOB lob;
 
     @ManyToOne
-    @JoinColumn(name = "subLobId", referencedColumnName = "subLOBid")
+    @JoinColumn(name = "subLobId")
     private SubLOB subLob;
 
     @ManyToOne
-    @JoinColumn(name = "deliveryManager", referencedColumnName = "psId")
-    private Candidate deliveryManager;
-
-    @ManyToOne
-    @JoinColumn(name = "IRM", referencedColumnName = "psId")
+    @JoinColumn(name = "IRM")
     private Employee irm;
 
     @ManyToOne
-    @JoinColumn(name = "createdBy", referencedColumnName = "psId")
+    @JoinColumn(name = "createdBy")
     private Employee createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "updatedBy", referencedColumnName = "psId")
+    @JoinColumn(name = "updatedBy")
     private Employee updatedBy;
 
-    private int psId;
-    private int candidateId;
     private Date HSBCSelecionDate;
-    private int lobId;
-    private int subLobId;
     private String HSBCHiringManager;
     private String HSBCHead;
     private String salesPOC;
     private String PricingModel;
-    private int IRM;
     private int HSBCToolId;
     private Date CToolReceivedDate;
     private String CToolJobCategory;
@@ -80,36 +73,14 @@ public class SelectionDetails {
     public void setSelectionId(int selectionId) {
         this.selectionId = selectionId;
     }
-    public int getPsId() {
-        return psId;
-    }
-    public void setPsId(int psId) {
-        this.psId = psId;
-    }
-    public int getCandidateId() {
-        return candidateId;
-    }
-    public void setCandidateId(int candidateId) {
-        this.candidateId = candidateId;
-    }
+    
     public Date getHSBCSelecionDate() {
         return HSBCSelecionDate;
     }
     public void setHSBCSelecionDate(Date hSBCSelecionDate) {
         HSBCSelecionDate = hSBCSelecionDate;
     }
-    public int getLobId() {
-        return lobId;
-    }
-    public void setLobId(int lobId) {
-        this.lobId = lobId;
-    }
-    public int getSubLobId() {
-        return subLobId;
-    }
-    public void setSubLobId(int subLobId) {
-        this.subLobId = subLobId;
-    }
+    
     public String getHSBCHiringManager() {
         return HSBCHiringManager;
     }
@@ -134,12 +105,7 @@ public class SelectionDetails {
     public void setPricingModel(String pricingModel) {
         PricingModel = pricingModel;
     }
-    public int getIRM() {
-        return IRM;
-    }
-    public void setIRM(int iRM) {
-        IRM = iRM;
-    }
+    
     public int getHSBCToolId() {
         return HSBCToolId;
     }
@@ -254,12 +220,6 @@ public class SelectionDetails {
     public void setSubLob(SubLOB subLob) {
         this.subLob = subLob;
     }
-    public Candidate getDeliveryManager() {
-        return deliveryManager;
-    }
-    public void setDeliveryManager(Candidate deliveryManager) {
-        this.deliveryManager = deliveryManager;
-    }
     public Employee getIrm() {
         return irm;
     }
@@ -278,6 +238,11 @@ public class SelectionDetails {
     public void setUpdatedBy(Employee updatedBy) {
         this.updatedBy = updatedBy;
     }
-
+    public void setDeliveryManager(int deliveryManager) {
+        this.deliveryManager = deliveryManager;
+    }
+    public int getDeliveryManager() {
+        return deliveryManager;
+    }
     
 }

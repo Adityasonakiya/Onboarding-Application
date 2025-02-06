@@ -11,28 +11,28 @@ import jakarta.persistence.ManyToOne;
 public class LOB {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int lob_id;
-    private int lobName;
+    private int lobId;
+    private String lobName;
     private String remarks;
     @ManyToOne
-    @JoinColumn(name = "createdBy", referencedColumnName = "id")
+    @JoinColumn(name = "createdBy")
     private Candidate createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "updatedBy", referencedColumnName = "id")
+    @JoinColumn(name = "updatedBy")
     private Candidate updatedBy;
     private byte[] createdDate;
     private byte[] updateDate;
-    public int getLob_id() {
-        return lob_id;
+    public int getLobId() {
+        return lobId;
     }
-    public void setLob_id(int lob_id) {
-        this.lob_id = lob_id;
+    public void setLobId(int lobId) {
+        this.lobId = lobId;
     }
-    public int getLobName() {
+    public String getLobName() {
         return lobName;
     }
-    public void setLobName(int lobName) {
+    public void setLobName(String lobName) {
         this.lobName = lobName;
     }
     public String getRemarks() {
