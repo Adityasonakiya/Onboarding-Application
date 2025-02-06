@@ -14,27 +14,25 @@ public class TaggingDetails {
     private int tagId;
     
     @ManyToOne
-    @JoinColumn(name = "psId", referencedColumnName = "psId")
+    @JoinColumn(name = "psId")
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "candidateId", referencedColumnName = "candidateId")
+    @JoinColumn(name = "candidateId")
     private Candidate candidate;
 
     @ManyToOne
-    @JoinColumn(name = "onboardingStatusId", referencedColumnName = "statusId")
+    @JoinColumn(name = "onboardingStatusId")
     private OnboardingStatus onboardingStatus;
 
     @ManyToOne
-    @JoinColumn(name = "BGVStatusId", referencedColumnName = "bgvStatusId")
+    @JoinColumn(name = "BGVStatusId")
     private BGVStatus bgvStatus;
 
     @ManyToOne
-    @JoinColumn(name = "createdBy", referencedColumnName = "psid")
     private User createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "updatedBy", referencedColumnName = "psid")
     private User updatedBy;
 
     private String statusRemarks;

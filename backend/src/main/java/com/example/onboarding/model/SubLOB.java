@@ -14,17 +14,17 @@ public class SubLOB {
     private int subLOBid;
 
     @ManyToOne
-    @JoinColumn(name = "lobId", referencedColumnName = "lob_id")
+    @JoinColumn(name = "lobId")
     private LOB lob;
 
-    private int subLobName;
+    private String subLobName;
 
     @ManyToOne
-    @JoinColumn(name = "createdBy", referencedColumnName = "s_id")
+    @JoinColumn(name = "createdBy")
     private Candidate createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "updateBy", referencedColumnName = "id")
+    @JoinColumn(name = "updateBy")
     private Candidate updateBy;
 
     private byte[] createDate;
@@ -36,10 +36,10 @@ public class SubLOB {
     public void setSubLOBid(int subLOBid) {
         this.subLOBid = subLOBid;
     }
-    public int getSubLobName() {
+    public String getSubLobName() {
         return subLobName;
     }
-    public void setSubLobName(int subLobName) {
+    public void setSubLobName(String subLobName) {
         this.subLobName = subLobName;
     }
     public byte[] getCreateDate() {

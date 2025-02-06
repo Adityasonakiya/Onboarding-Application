@@ -19,14 +19,15 @@ public class Candidate {
     private String lastName;
     private Date LTIOnboardingDate;
     @ManyToOne
-    @JoinColumn(name = "createdBy", referencedColumnName = "psId")
+    @JoinColumn(name = "createdBy")
     private Employee createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "updatedBy", referencedColumnName = "psId")
+    @JoinColumn(name = "updatedBy")
     private Employee updatedBy;
     private Date createDate;
     private Date updateDate;
+    
     public int getCandidateId() {
         return candidateId;
     }
