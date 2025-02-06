@@ -1,7 +1,5 @@
 package com.example.onboarding.model;
 
-import java.math.BigDecimal;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -12,35 +10,34 @@ import jakarta.persistence.Table;
 @Table(name = "employee")
 public class Employee {
     @Id
-    private int psId;
- 
+    private int psid;
     private String firstName;
     private String middleName;
     private String lastName;
     private String grade;
     private String location;
     private String skill;
-    private BigDecimal totalExperience;
+    private double totalExperience;
     private int pu;
     private String mailID;
 
     @ManyToOne
-    @JoinColumn(name = "createdBy", referencedColumnName = "psId")
+    @JoinColumn(name = "createdBy")
     private Candidate createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "updatedBy", referencedColumnName = "psId")
+    @JoinColumn(name = "updatedBy")
     private Candidate updatedBy;
 
     private byte[] createdDate;
     private byte[] updatedDate;
 
-    public int getPsId() {
-        return psId;
+    public int getPsid() {
+        return psid;
     }
 
-    public void setPsId(int psId) {
-        this.psId = psId;
+    public void setPsid(int psId) {
+        this.psid = psId;
     }
 
     public String getFirstName() {
@@ -79,10 +76,10 @@ public class Employee {
     public void setSkill(String skill) {
         this.skill = skill;
     }
-    public BigDecimal getTotalExperience() {
+    public double getTotalExperience() {
         return totalExperience;
     }
-    public void setTotalExperience(BigDecimal totalExperience) {
+    public void setTotalExperience(double totalExperience) {
         this.totalExperience = totalExperience;
     }
     public int getPu() {
@@ -97,18 +94,7 @@ public class Employee {
     public void setMailID(String mailID) {
         this.mailID = mailID;
     }
-    public Candidate getCreatedBy() {
-        return createdBy;
-    }
-    public void setCreatedBy(Candidate createdBy) {
-        this.createdBy = createdBy;
-    }
-    public Candidate getUpdatedBy() {
-        return updatedBy;
-    }
-    public void setUpdatedBy(Candidate updatedBy) {
-        this.updatedBy = updatedBy;
-    }
+    
     public byte[] getCreatedDate() {
         return createdDate;
     }
@@ -121,5 +107,22 @@ public class Employee {
     public void setUpdatedDate(byte[] updatedDate) {
         this.updatedDate = updatedDate;
     }
+
+    public Candidate getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Candidate createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Candidate getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Candidate updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
 
 }

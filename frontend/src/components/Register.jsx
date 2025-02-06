@@ -7,7 +7,7 @@ const Register = () => {
   const [touched, setTouched] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const navigate = useNavigate(); // Use navigate hook for navigation
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,14 +38,31 @@ const Register = () => {
     return errors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const errors = validate();
-    if (Object.keys(errors).length === 0) {
-      // Simulate successful registration
-      localStorage.setItem('user', JSON.stringify({ username: form.username, password: form.password }));
-      navigate('/login'); // Navigate to login page after successful registration
+    if (true) {
+      try {
+        const response = await fetch('http://localhost:8080/api/users/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ psid: form.username, password: form.password }),
+        });
+
+        if (response.ok) {
+          // Simulate successful registration
+          // localStorage.setItem('user', JSON.stringify({ psid: form.username, password: form.password }));
+          navigate('/login'); // Navigate to login page after successful registration
+        } else {
+          const errorData = await response.json();
+          setErrors({ submit: errorData.message });
+        }
+      } catch (error) {
+        setErrors({ submit: 'An error occurred while submitting the form' });
+      }
     } else {
       setErrors(errors);
     }
@@ -65,7 +82,7 @@ const Register = () => {
           className="block w-full p-2 mb-2 border rounded"
         />
         {touched.username && errors.username && <p className="text-red-500 text-sm mb-4">{errors.username}</p>}
-        <input
+        {/* <input
           type="email"
           name="email"
           placeholder="Email"
@@ -74,7 +91,7 @@ const Register = () => {
           onBlur={handleBlur}
           className="block w-full p-2 mb-2 border rounded"
         />
-        {touched.email && errors.email && <p className="text-red-500 text-sm mb-4">{errors.email}</p>}
+        {touched.email && errors.email && <p className="text-red-500 text-sm mb-4">{errors.email}</p>} */}
         <div className="relative">
           <input
             type={showPassword ? "text" : "password"}
@@ -121,9 +138,8 @@ const Register = () => {
           </button>
         </div>
         {touched.confirmPassword && errors.confirmPassword && <p className="text-red-500 text-sm mb-4">{errors.confirmPassword}</p>}
-        <Link to="/login">
-          <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">Register</button>
-        </Link>
+        {errors.submit && <p className="text-red-500 text-sm mb-4">{errors.submit}</p>}
+        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">Register</button>
         <p className="mt-4 text-center">
           Already have an account? <Link to="/login" className="text-blue-500">Login</Link>
         </p>

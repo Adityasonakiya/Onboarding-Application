@@ -1,12 +1,12 @@
 package com.example.onboarding.model;
 
-import java.security.Timestamp;
-import java.util.Optional;
+import java.sql.Timestamp;
+// import java.util.Optional;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+// import jakarta.persistence.GeneratedValue;
+// import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -16,20 +16,15 @@ import jakarta.persistence.Table;
 @Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int psid;
 
     @ManyToOne
-    @JoinColumn(name = "psid", referencedColumnName = "psId")
-    private Candidate candidate;
-
-    @ManyToOne
-    @JoinColumn(name = "roleId", referencedColumnName = "roleid")
+    @JoinColumn(name = "roleId")
     private Roles role;
 
-    @ManyToOne
-    @JoinColumn(name = "userManagerId", referencedColumnName = "psId")
-    private Candidate userManager;
+    private int userManagerId;
+
     @Column(nullable = false)
     private String password;
     private Timestamp lastLogin;
@@ -59,22 +54,19 @@ public class User {
     public void setLastLogout(Timestamp lastLogout) {
         this.lastLogout = lastLogout;
     }
-    public Candidate getCandidate() {
-        return candidate;
-    }
-    public void setCandidate(Candidate candidate) {
-        this.candidate = candidate;
-    }
+    
     public Roles getRole() {
         return role;
     }
     public void setRole(Roles role) {
         this.role = role;
     }
-    public Candidate getUserManager() {
-        return userManager;
+    public int getUserManagerId() {
+        return userManagerId;
     }
-    public void setUserManager(Candidate userManager) {
-        this.userManager = userManager;
-    }   
+    public void setUserManagerId(int userManagerId) {
+        this.userManagerId = userManagerId;
+    }
+    
+
 }

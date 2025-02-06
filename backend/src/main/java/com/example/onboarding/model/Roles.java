@@ -12,7 +12,7 @@ public class Roles {
     private int roleid;
     private String roleName;
     private String roleFunctions;
-    private int remarks;
+    private String remarks;
     
     public int getRoleid() {
         return roleid;
@@ -32,10 +32,10 @@ public class Roles {
     public void setRoleFunctions(String roleFunctions) {
         this.roleFunctions = roleFunctions;
     }
-    public int getRemarks() {
+    public String getRemarks() {
         return remarks;
     }
-    public void setRemarks(int remarks) {
+    public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
