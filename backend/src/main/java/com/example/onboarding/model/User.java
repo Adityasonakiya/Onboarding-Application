@@ -19,9 +19,7 @@ public class User {
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int psid;
 
-    @ManyToOne
-    @JoinColumn(name = "roleId")
-    private Roles role;
+    int roleId;
 
     private int userManagerId;
 
@@ -55,17 +53,17 @@ public class User {
         this.lastLogout = lastLogout;
     }
     
-    public Roles getRole() {
-        return role;
-    }
-    public void setRole(Roles role) {
-        this.role = role;
-    }
     public int getUserManagerId() {
         return userManagerId;
     }
     public void setUserManagerId(int userManagerId) {
         this.userManagerId = userManagerId;
+    }
+    public int getRoleId() {
+        return roleId;
+    }
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
     
 

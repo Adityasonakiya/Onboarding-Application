@@ -23,7 +23,7 @@ public class SelectionDetails {
     @JoinColumn(name="candidateId")
     private Candidate candidate;
 
-    private int deliveryManager;
+    private String deliveryManager;
 
     @ManyToOne
     @JoinColumn(name = "lobId")
@@ -33,9 +33,7 @@ public class SelectionDetails {
     @JoinColumn(name = "subLobId")
     private SubLOB subLob;
 
-    @ManyToOne
-    @JoinColumn(name = "IRM")
-    private Employee irm;
+    private String irm;
 
     @ManyToOne
     @JoinColumn(name = "createdBy")
@@ -220,10 +218,10 @@ public class SelectionDetails {
     public void setSubLob(SubLOB subLob) {
         this.subLob = subLob;
     }
-    public Employee getIrm() {
+    public String getIrm() {
         return irm;
     }
-    public void setIrm(Employee irm) {
+    public void setIrm(String irm) {
         this.irm = irm;
     }
     public Employee getCreatedBy() {
@@ -238,10 +236,10 @@ public class SelectionDetails {
     public void setUpdatedBy(Employee updatedBy) {
         this.updatedBy = updatedBy;
     }
-    public void setDeliveryManager(int deliveryManager) {
+    public void setDeliveryManager(String deliveryManager) {
         this.deliveryManager = deliveryManager;
     }
-    public int getDeliveryManager() {
+    public String getDeliveryManager() {
         return deliveryManager;
     }
     
