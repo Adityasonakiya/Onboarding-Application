@@ -1,8 +1,121 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getCandidateById, getEmployeeByPsid, getSelectionDetailsByCandidateId, getSelectionDetailsByPsid } from '../services/api';
 
 function SelectionTracker() {
   const [form, setForm] = useState({});
   const [isInternal, setIsInternal] = useState(false);
+
+  useEffect(() => {
+    if (form.psId) {
+      fetchEmployeeData(form.psId);
+      fetchSelectionDetailsByPsid(form.psId);
+    }
+  }, [form.psId]);
+
+  useEffect(() => {
+    if (form.candidateId) {
+      fetchCandidateData(form.candidateId);
+      fetchSelectionDetailsByCandidateId(form.candidateId);
+    }
+  }, [form.candidateId]);
+
+  const fetchEmployeeData = async (psid) => {
+    try {
+      const employee = await getEmployeeByPsid(psid);
+      setForm((prevForm) => ({
+        ...prevForm,
+        fname: employee.firstName,
+        lname: employee.lastName,
+        grade: employee.grade,
+        location: employee.location,
+        pu: employee.pu,
+        totalExp: employee.totalExperience,
+        skill: employee.skill,
+        email: employee.mailID,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchCandidateData = async (candidateId) => {
+    try {
+      const candidate = await getCandidateById(candidateId);
+      setForm((prevForm) => ({
+        ...prevForm,
+        fname: candidate.firstName,
+        lname: candidate.lastName,
+        grade: '', // Assuming grade is not available for candidate
+        location: '', // Assuming location is not available for candidate
+        pu: '', // Assuming pu is not available for candidate
+        totalExp: '', // Assuming totalExperience is not available for candidate
+        skill: '', // Assuming skill is not available for candidate
+        email: '', // Assuming email is not available for candidate
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchSelectionDetailsByPsid = async (psid) => {
+    try {
+      const selectionDetails = await getSelectionDetailsByPsid(psid);
+      setForm((prevForm) => ({
+        ...prevForm,
+        selectionDate: selectionDetails.HSBCSelecionDate,
+        bu: selectionDetails.baseBU,
+        lob: selectionDetails.lob,
+        subLob: selectionDetails.subLob,
+        hiringManager: selectionDetails.HSBCHiringManager,
+        head: selectionDetails.HSBCHead,
+        deliveryManager: selectionDetails.deliveryManager,
+        salesSpoc: selectionDetails.salesPOC,
+        pricingModel: selectionDetails.PricingModel,
+        irm: selectionDetails.irm,
+        ctoolId: selectionDetails.HSBCToolId,
+        ctoolRecDate: selectionDetails.CToolReceivedDate,
+        ctoolJobCat: selectionDetails.CToolJobCategory,
+        ctoolLocation: selectionDetails.CToolLocation,
+        ctoolRate: selectionDetails.CToolRate,
+        ctoolPropRate: selectionDetails.CToolProposedRate,
+        recruiterName: selectionDetails.recruiterName,
+        offerReleaseStatus: selectionDetails.offerReleaseStatus,
+        ltiOnboardDate: selectionDetails.LTIOnboardingDate,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchSelectionDetailsByCandidateId = async (candidateId) => {
+    try {
+      const selectionDetails = await getSelectionDetailsByCandidateId(candidateId);
+      setForm((prevForm) => ({
+        ...prevForm,
+        selectionDate: selectionDetails.HSBCSelecionDate,
+        bu: selectionDetails.baseBU,
+        lob: selectionDetails.lob,
+        subLob: selectionDetails.subLob,
+        hiringManager: selectionDetails.HSBCHiringManager,
+        head: selectionDetails.HSBCHead,
+        deliveryManager: selectionDetails.deliveryManager,
+        salesSpoc: selectionDetails.salesPOC,
+        pricingModel: selectionDetails.PricingModel,
+        irm: selectionDetails.irm,
+        ctoolId: selectionDetails.HSBCToolId,
+        ctoolRecDate: selectionDetails.CToolReceivedDate,
+        ctoolJobCat: selectionDetails.CToolJobCategory,
+        ctoolLocation: selectionDetails.CToolLocation,
+        ctoolRate: selectionDetails.CToolRate,
+        ctoolPropRate: selectionDetails.CToolProposedRate,
+        recruiterName: selectionDetails.recruiterName,
+        offerReleaseStatus: selectionDetails.offerReleaseStatus,
+        ltiOnboardDate: selectionDetails.LTIOnboardingDate,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -20,7 +133,7 @@ function SelectionTracker() {
   return (
     <div className="w-full px-4 py-6">
       <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">HSBC Selection Tracker Form</h1>
-      
+
       <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">Basic Info</h4>
       <form onSubmit={handleSubmit}>
         <div className="overflow-x-auto">
