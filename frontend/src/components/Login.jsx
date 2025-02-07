@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [form, setForm] = useState({ username: '', password: '' });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,24 +27,35 @@ const Login = () => {
     return errors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const errors = validate();
     if (Object.keys(errors).length === 0) {
-      // Simulate backend validation
-      if (form.username !== 'existingUser') {
-        setErrors({ username: 'Username does not exist' });
-      } else if (form.password !== 'correctPassword') {
-        setErrors({ password: 'Username / Password is wrong, please enter correct details' });
-      } else {
-        // Successful login
+      try {
+        const response = await fetch('http://localhost:8080/api/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ psid: form.username, password: form.password }),
+        });
+
+        if (response.ok) {
+          // Simulate successful login
+          localStorage.setItem('user', JSON.stringify({ psid: form.username, password: form.password }));
+          navigate('/selection-tracker'); // Navigate to the home page after successful login
+        } else {
+          const errorData = await response.json();
+          setErrors({ submit: errorData.message });
+        }
+      } catch (error) {
+        setErrors({ submit: 'An error occurred while submitting the form' });
       }
     } else {
       setErrors(errors);
     }
   };
-  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -78,6 +90,7 @@ const Login = () => {
           </button>
         </div>
         {touched.password && errors.password && <p className="text-red-500 text-sm mb-4">{errors.password}</p>}
+        {errors.submit && <p className="text-red-500 text-sm mb-4">{errors.submit}</p>}
         <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">Login</button>
         <p className="mt-4 text-center">
           Forgot Password? <Link to="/reset-password" className="text-blue-500">Reset Password</Link>

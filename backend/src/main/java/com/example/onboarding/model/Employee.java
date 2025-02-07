@@ -1,7 +1,5 @@
 package com.example.onboarding.model;
 
-import java.math.BigDecimal;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -12,140 +10,119 @@ import jakarta.persistence.Table;
 @Table(name = "employee")
 public class Employee {
     @Id
-    private int psId;
- 
+    private int psid;
     private String firstName;
     private String middleName;
     private String lastName;
     private String grade;
     private String location;
     private String skill;
-    private BigDecimal totalExperience;
+    private double totalExperience;
     private int pu;
     private String mailID;
- 
+
     @ManyToOne
     @JoinColumn(name = "createdBy")
-    private Employee createdBy;
- 
+    private Candidate createdBy;
+
     @ManyToOne
     @JoinColumn(name = "updatedBy")
-    private Employee updatedBy;
+    private Candidate updatedBy;
 
-    public Employee() {
+    private byte[] createdDate;
+    private byte[] updatedDate;
+
+    public int getPsid() {
+        return psid;
     }
 
-    public Employee(int psId, String firstName, String middleName, String lastName, String grade, String location,
-            String skill, BigDecimal totalExperience, int pu, String mailID, Employee createdBy, Employee updatedBy) {
-        this.psId = psId;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.grade = grade;
-        this.location = location;
-        this.skill = skill;
-        this.totalExperience = totalExperience;
-        this.pu = pu;
-        this.mailID = mailID;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-    }
-
-    public int getPsId() {
-        return psId;
-    }
-
-    public void setPsId(int psId) {
-        this.psId = psId;
+    public void setPsid(int psId) {
+        this.psid = psId;
     }
 
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
     public String getMiddleName() {
         return middleName;
     }
-
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
-
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
     public String getGrade() {
         return grade;
     }
-
     public void setGrade(String grade) {
         this.grade = grade;
     }
-
     public String getLocation() {
         return location;
     }
-
     public void setLocation(String location) {
         this.location = location;
     }
-
     public String getSkill() {
         return skill;
     }
-
     public void setSkill(String skill) {
         this.skill = skill;
     }
-
-    public BigDecimal getTotalExperience() {
+    public double getTotalExperience() {
         return totalExperience;
     }
-
-    public void setTotalExperience(BigDecimal totalExperience) {
+    public void setTotalExperience(double totalExperience) {
         this.totalExperience = totalExperience;
     }
-
     public int getPu() {
         return pu;
     }
-
     public void setPu(int pu) {
         this.pu = pu;
     }
-
     public String getMailID() {
         return mailID;
     }
-
     public void setMailID(String mailID) {
         this.mailID = mailID;
     }
+    
+    public byte[] getCreatedDate() {
+        return createdDate;
+    }
+    public void setCreatedDate(byte[] createdDate) {
+        this.createdDate = createdDate;
+    }
+    public byte[] getUpdatedDate() {
+        return updatedDate;
+    }
+    public void setUpdatedDate(byte[] updatedDate) {
+        this.updatedDate = updatedDate;
+    }
 
-    public Employee getCreatedBy() {
+    public Candidate getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(Employee createdBy) {
+    public void setCreatedBy(Candidate createdBy) {
         this.createdBy = createdBy;
     }
 
-    public Employee getUpdatedBy() {
+    public Candidate getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(Employee updatedBy) {
+    public void setUpdatedBy(Candidate updatedBy) {
         this.updatedBy = updatedBy;
     }
-
     
+
 }
