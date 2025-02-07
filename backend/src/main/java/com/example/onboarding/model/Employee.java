@@ -18,7 +18,7 @@ public class Employee {
     private String location;
     private String skill;
     private double totalExperience;
-    private int pu;
+    private String pu;
     private String mailID;
 
     @ManyToOne
@@ -82,10 +82,10 @@ public class Employee {
     public void setTotalExperience(double totalExperience) {
         this.totalExperience = totalExperience;
     }
-    public int getPu() {
+    public String getPu() {
         return pu;
     }
-    public void setPu(int pu) {
+    public void setPu(String pu) {
         this.pu = pu;
     }
     public String getMailID() {
