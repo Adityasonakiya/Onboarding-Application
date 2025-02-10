@@ -1,7 +1,4 @@
 package com.example.onboarding.service;
-
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +11,78 @@ public class SelectionDetailsService {
     private SelectionDetailsRepository selectionDetailsRepository;
 
     public SelectionDetails getSelectionDetailsByPsid(int psid) {
-        return selectionDetailsRepository.findByEmployeePsid(psid);
+        return selectionDetailsRepository.findByEmployee_Psid(psid);
     }
 
     public SelectionDetails getSelectionDetailsByCandidateId(int candidateId) {
-        return selectionDetailsRepository.findByCandidateCandidateId(candidateId);
+        return selectionDetailsRepository.findByCandidate_CandidateId(candidateId);
+    }
+
+    public SelectionDetails updateSelectionDetailsByPsId(int psId, SelectionDetails updatedDetails) {
+        SelectionDetails existingDetails = selectionDetailsRepository.findByEmployee_Psid(psId);
+        if (existingDetails != null) {
+            existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());
+            existingDetails.setHSBCSelecionDate(updatedDetails.getHSBCSelecionDate());
+            existingDetails.setHSBCHiringManager(updatedDetails.getHSBCHiringManager());
+            existingDetails.setHSBCHead(updatedDetails.getHSBCHead());
+            existingDetails.setSalesPOC(updatedDetails.getSalesPOC());
+            existingDetails.setPricingModel(updatedDetails.getPricingModel());
+            existingDetails.setHSBCToolId(updatedDetails.getHSBCToolId());
+            existingDetails.setCToolReceivedDate(updatedDetails.getCToolReceivedDate());
+            existingDetails.setCToolJobCategory(updatedDetails.getCToolJobCategory());
+            existingDetails.setCToolLocation(updatedDetails.getCToolLocation());
+            existingDetails.setCToolRate(updatedDetails.getCToolRate());
+            existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
+            existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
+            existingDetails.setInterviewEvidences(updatedDetails.getInterviewEvidences());
+            existingDetails.setOfferReleaseStatus(updatedDetails.getOfferReleaseStatus());
+            existingDetails.setHSBCOnboardingDate(updatedDetails.getHSBCOnboardingDate());
+            existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
+            existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
+            existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
+            existingDetails.setCreateDate(updatedDetails.getCreateDate());
+            existingDetails.setUpdateDate(updatedDetails.getUpdateDate());
+            existingDetails.setLob(updatedDetails.getLob());
+            existingDetails.setSubLob(updatedDetails.getSubLob());
+            existingDetails.setIrm(updatedDetails.getIrm());
+            existingDetails.setCreatedBy(updatedDetails.getCreatedBy());
+            existingDetails.setUpdatedBy(updatedDetails.getUpdatedBy());
+            return selectionDetailsRepository.save(existingDetails);
+        }
+        return selectionDetailsRepository.save(updatedDetails);
+    }
+
+    public SelectionDetails updateSelectionDetailsByCandidateId(int candidateId, SelectionDetails updatedDetails) {
+        SelectionDetails existingDetails = selectionDetailsRepository.findByCandidate_CandidateId(candidateId);
+        if (existingDetails != null) {
+            existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());
+            existingDetails.setHSBCSelecionDate(updatedDetails.getHSBCSelecionDate());
+            existingDetails.setHSBCHiringManager(updatedDetails.getHSBCHiringManager());
+            existingDetails.setHSBCHead(updatedDetails.getHSBCHead());
+            existingDetails.setSalesPOC(updatedDetails.getSalesPOC());
+            existingDetails.setPricingModel(updatedDetails.getPricingModel());
+            existingDetails.setHSBCToolId(updatedDetails.getHSBCToolId());
+            existingDetails.setCToolReceivedDate(updatedDetails.getCToolReceivedDate());
+            existingDetails.setCToolJobCategory(updatedDetails.getCToolJobCategory());
+            existingDetails.setCToolLocation(updatedDetails.getCToolLocation());
+            existingDetails.setCToolRate(updatedDetails.getCToolRate());
+            existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
+            existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
+            existingDetails.setInterviewEvidences(updatedDetails.getInterviewEvidences());
+            existingDetails.setOfferReleaseStatus(updatedDetails.getOfferReleaseStatus());
+            existingDetails.setHSBCOnboardingDate(updatedDetails.getHSBCOnboardingDate());
+            existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
+            existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
+            existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
+            existingDetails.setCreateDate(updatedDetails.getCreateDate());
+            existingDetails.setUpdateDate(updatedDetails.getUpdateDate());
+            existingDetails.setLob(updatedDetails.getLob());
+            existingDetails.setSubLob(updatedDetails.getSubLob());
+            existingDetails.setIrm(updatedDetails.getIrm());
+            existingDetails.setCreatedBy(updatedDetails.getCreatedBy());
+            existingDetails.setUpdatedBy(updatedDetails.getUpdatedBy());
+            return selectionDetailsRepository.save(existingDetails);
+        }
+        return selectionDetailsRepository.save(updatedDetails);
     }
 }
