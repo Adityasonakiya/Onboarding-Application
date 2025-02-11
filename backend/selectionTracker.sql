@@ -75,8 +75,8 @@ VALUES
 (11, 1, 'Architecture Stds & Gov', NULL, NULL, NULL, NULL),
 (12,2,'Colleague & Collaboration',NULL,NULl,NULL,NULL),
 (22,2,'Dev Ops Services',NULL,NULl,NULL,NULL),
-(23,2,'Engineering & PE',NULL,NULl,NULL,NULL),
-(24,2,'Enterprise Infrastructure',NULL,NULl,NULL,NULL),
+(32,2,'Engineering & PE',NULL,NULl,NULL,NULL),
+(42,2,'Enterprise Infrastructure',NULL,NULl,NULL,NULL),
 (13, 3, 'Cyber Assessment & Testing', NULL, NULL, NULL, NULL),
 (14,4,'Colleague Experience Tech',NULL,NULL,NULL,NULL),
 (24,4,'Core Banking',NULL,NULL,NULL,NULL),
@@ -138,22 +138,22 @@ hsbchiring_manager, hsbchead, salespoc, pricing_model, hsbctool_id, ctool_receiv
 ctool_location, ctool_rate, ctool_proposed_rate, recruiter_name, interview_evidences, offer_release_status, 
 hsbconboarding_date, tech_selection_date, dojreceived_date, ltionboarding_date, create_date, update_date) 
 VALUES
-(10820984, NULL, 'Sachin Shaha', 1, 11, NULL, "Aditya", NULL, '2024-12-18', 
+(10820984, NULL, 'Sachin Shaha', 1, 11, NULL, NULL, NULL, '2024-12-18', 
 NULL, NULL, 'Anand Devi', 'T&M', 10893, NULL, NULL, 
 'Pune', 3, 3, "Sachin Shaha", NULL, 'WIP', 
 '2024-12-23', NULL, '2024-12-18', '2024-09-23',NULL ,NULL),
-(NULL, 10829803, 'Anirudha Deshpande', 6, 36, NULL, "Harshita", NULL, '2024-12-18',
+(NULL, 10829803, 'Anirudha Deshpande', 6, 36, NULL, NULL, NULL, '2024-12-18',
 NULL, NULL,"Nishant Sharma" , 'FP', 108293, NULL, NULL,
 'Pune', 3, 2, "Sachin Shaha", NULL, 'On Hold', 
-'2024-12-23', NULL, '2024-12-18', '2024-09-23',NULL ,NULL);
-(10715126, NULL, 'Sachin Shaha', 7, 17, NULL, "Monali", NULL, '2024-12-18',
+'2024-12-23', NULL, '2024-12-18', '2024-09-23',NULL ,NULL),
+(10715126, NULL, 'Sachin Shaha', 7, 17, NULL, NULL, NULL, '2024-12-18',
 NULL, NULL,"Nishant Sharma" , 'FP', 108293, NULL, NULL,
 'Pune', 3, 2, "Sachin Shaha", NULL, 'Release', 
 '2024-12-23', NULL, '2024-12-18', '2024-09-23',NULL ,NULL),
-(10820932, NULL, 'Sachin Shaha', 15, 515, NULL, "Bhakti", NULL, '2024-12-18', 
+(10825932, NULL, 'Sachin Shaha', 15, 515, NULL, NULL, NULL, '2024-12-18', 
 NULL, NULL, 'Ajay Pillai', 'T&M', 10893, NULL, NULL, 
 'Pune', 3, 3, "Sachin Shaha", NULL, 'Pending', 
-'2024-12-23', NULL, '2024-12-18', '2024-09-23',NULL ,NULL),
+'2024-12-23', NULL, '2024-12-18', '2024-09-23',NULL ,NULL);
 
 INSERT INTO tagging_details 
 (ps_id, candidate_id, onboarding_status_id, bgvstatus_id, created_by_psid, updated_by_psid, status_remarks, create_date, update_date) 
