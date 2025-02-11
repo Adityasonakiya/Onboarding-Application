@@ -45,6 +45,8 @@ function UpdateDetails() {
       
     };
 
+    console.log("tagging details: ", taggingDetails);
+    console.log("selection details: ", selectionDetails);
     if (isInternal && psId) {
       updateTaggingDetailsByPsId(psId, taggingDetails)
         .then(() => updateSelectionDetailsByPsId(psId, selectionDetails))

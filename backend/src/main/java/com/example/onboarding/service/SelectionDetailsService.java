@@ -1,4 +1,6 @@
 package com.example.onboarding.service;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,10 @@ public class SelectionDetailsService {
     }
 
     public SelectionDetails updateSelectionDetailsByPsId(int psId, SelectionDetails updatedDetails) {
+        System.out.println("updated Details that is provided by frontend is here: " + updatedDetails);
+        System.out.println("updated Details that is provided by frontend is here 2: " + updatedDetails.getTechSelectionDate());
+        System.out.println("updated Details that is provided by frontend is here 3: " + updatedDetails.getDOJReceivedDate());
+        System.out.println("updated Details that is provided by frontend is here 4: " + updatedDetails.getHSBCOnboardingDate());
         SelectionDetails existingDetails = selectionDetailsRepository.findByEmployee_Psid(psId);
         if (existingDetails != null) {
             existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());

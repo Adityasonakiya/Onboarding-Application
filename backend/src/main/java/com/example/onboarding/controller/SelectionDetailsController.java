@@ -44,8 +44,10 @@ public class SelectionDetailsController {
     }
 
     @PutMapping("/psid/{psId}")
-    public ResponseEntity<?> updateSelectionDetailsByPsId(@PathVariable int psId,
-            @RequestBody SelectionDetails updatedDetails) {
+    public ResponseEntity<?> updateSelectionDetailsByPsId(@PathVariable int psId, @RequestBody SelectionDetails updatedDetails) {
+        System.out.println("Incoming request payload: " + updatedDetails);
+        System.out.println("CToolJobCategory in payload: " + updatedDetails.getCToolJobCategory());
+        
         SelectionDetails details = selectionDetailsService.updateSelectionDetailsByPsId(psId, updatedDetails);
         if (details != null) {
             return ResponseEntity.ok(details);
@@ -53,6 +55,7 @@ public class SelectionDetailsController {
             return ResponseEntity.notFound().build();
         }
     }
+    
 
     @PutMapping("/candidate/{candidateId}")
     public ResponseEntity<SelectionDetails> updateSelectionDetailsByCandidateId(@PathVariable int candidateId,
