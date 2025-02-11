@@ -2,6 +2,8 @@ package com.example.onboarding.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,13 +45,13 @@ public class SelectionDetails {
     @JoinColumn(name = "updatedBy")
     private Employee updatedBy;
 
-    private Date HSBCSelecionDate;
+    // private Date HSBCSelecionDate;
     private String HSBCHiringManager;
     private String HSBCHead;
     private String salesPOC;
     private String PricingModel;
     private int HSBCToolId;
-    private Date CToolReceivedDate;
+    // private Date CToolReceivedDate;
     private String CToolJobCategory;
     private String CToolLocation;
     private int CToolRate;
@@ -57,9 +59,22 @@ public class SelectionDetails {
     private String recruiterName;
     private String InterviewEvidences;
     private String offerReleaseStatus;
+     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date HSBCSelecionDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date CToolReceivedDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date HSBCOnboardingDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date techSelectionDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date DOJReceivedDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date LTIOnboardingDate;
     private byte[] createDate;
     private byte[] updateDate;

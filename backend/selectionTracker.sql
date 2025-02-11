@@ -1,4 +1,4 @@
-use selectionTracker;
+use selectiontracker;
 
 INSERT INTO roles 
 (roleid, role_name, role_functions, remarks) 

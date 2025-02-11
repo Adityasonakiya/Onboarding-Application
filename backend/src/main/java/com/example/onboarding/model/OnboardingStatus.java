@@ -1,9 +1,13 @@
 package com.example.onboarding.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class OnboardingStatus {
@@ -12,6 +16,10 @@ public class OnboardingStatus {
     private int statusId;
     private String onboardingStatus;
     private String remarks;
+
+    @OneToMany(mappedBy = "onboardingStatus", cascade = CascadeType.ALL)
+    private List<TaggingDetails> taggingDetails;
+
     public int getStatusId() {
         return statusId;
     }
