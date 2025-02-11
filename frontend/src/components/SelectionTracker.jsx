@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  getCandidateById,
-  getEmployeeByPsid,
-  getSelectionDetailsByCandidateId,
-  getSelectionDetailsByPsid,
-} from "../services/api";
+import React, { useState, useEffect } from 'react';
+import { getCandidateById, getEmployeeByPsid, getSelectionDetailsByCandidateId, getSelectionDetailsByPsId } from '../services/api';
 
 function SelectionTracker() {
   const [form, setForm] = useState({});
@@ -69,7 +64,7 @@ function SelectionTracker() {
 
   const fetchSelectionDetailsByPsid = async (psid) => {
     try {
-      const selectionDetails = await getSelectionDetailsByPsid(psid);
+      const selectionDetails = await getSelectionDetailsByPsId(psid);
       setForm((prevForm) => ({
         ...prevForm,
         selectionDate: selectionDetails.HSBCSelectionDate,

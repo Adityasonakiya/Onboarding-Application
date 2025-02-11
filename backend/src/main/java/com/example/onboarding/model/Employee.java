@@ -32,6 +32,13 @@ public class Employee {
     private byte[] createdDate;
     private byte[] updatedDate;
 
+    public Employee(int psid) {
+        this.psid = psid;
+    }
+
+    public Employee() {
+    }
+
     public int getPsid() {
         return psid;
     }
@@ -43,67 +50,87 @@ public class Employee {
     public String getFirstName() {
         return firstName;
     }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
     public String getMiddleName() {
         return middleName;
     }
+
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
+
     public String getLastName() {
         return lastName;
     }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
     public String getGrade() {
         return grade;
     }
+
     public void setGrade(String grade) {
         this.grade = grade;
     }
+
     public String getLocation() {
         return location;
     }
+
     public void setLocation(String location) {
         this.location = location;
     }
+
     public String getSkill() {
         return skill;
     }
+
     public void setSkill(String skill) {
         this.skill = skill;
     }
+
     public double getTotalExperience() {
         return totalExperience;
     }
+
     public void setTotalExperience(double totalExperience) {
         this.totalExperience = totalExperience;
     }
+
     public String getPu() {
         return pu;
     }
+
     public void setPu(String pu) {
         this.pu = pu;
     }
+
     public String getMailID() {
         return mailID;
     }
+
     public void setMailID(String mailID) {
         this.mailID = mailID;
     }
-    
+
     public byte[] getCreatedDate() {
         return createdDate;
     }
+
     public void setCreatedDate(byte[] createdDate) {
         this.createdDate = createdDate;
     }
+
     public byte[] getUpdatedDate() {
         return updatedDate;
     }
+
     public void setUpdatedDate(byte[] updatedDate) {
         this.updatedDate = updatedDate;
     }
@@ -123,6 +150,5 @@ public class Employee {
     public void setUpdatedBy(Candidate updatedBy) {
         this.updatedBy = updatedBy;
     }
-    
 
 }
