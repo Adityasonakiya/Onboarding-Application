@@ -19,7 +19,7 @@ public class User {
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int psid;
 
-    int roleId;
+    private int roleId;
 
     private int userManagerId;
 
