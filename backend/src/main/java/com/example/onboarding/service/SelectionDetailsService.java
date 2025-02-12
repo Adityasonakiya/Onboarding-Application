@@ -91,4 +91,7 @@ public class SelectionDetailsService {
         }
         return selectionDetailsRepository.save(updatedDetails);
     }
+    public SelectionDetails createSelectionDetails(SelectionDetails details){
+        return selectionDetailsRepository.save(details);
+    }
 }

@@ -43,7 +43,7 @@ public class SelectionDetails {
     @JoinColumn(name = "updatedBy")
     private Employee updatedBy;
 
-    private Date HSBCSelecionDate;
+    private Date HSBCSelectionDate;
     private String HSBCHiringManager;
     private String HSBCHead;
     private String salesPOC;
@@ -72,24 +72,24 @@ public class SelectionDetails {
         this.selectionId = selectionId;
     }
     
-    public Date getHSBCSelecionDate() {
-        return HSBCSelecionDate;
+    public Date getHSBCSelectionDate() {
+        return HSBCSelectionDate;
     }
-    public void setHSBCSelecionDate(Date hSBCSelecionDate) {
-        HSBCSelecionDate = hSBCSelecionDate;
+    public void setHSBCSelectionDate(Date HSBCSelectionDate) {
+        this.HSBCSelectionDate = HSBCSelectionDate;
     }
     
     public String getHSBCHiringManager() {
         return HSBCHiringManager;
     }
-    public void setHSBCHiringManager(String hSBCHiringManager) {
-        HSBCHiringManager = hSBCHiringManager;
+    public void setHSBCHiringManager(String HSBCHiringManager) {
+        this.HSBCHiringManager = HSBCHiringManager;
     }
     public String getHSBCHead() {
         return HSBCHead;
     }
-    public void setHSBCHead(String hSBCHead) {
-        HSBCHead = hSBCHead;
+    public void setHSBCHead(String HSBCHead) {
+        this.HSBCHead = HSBCHead;
     }
     public String getSalesPOC() {
         return salesPOC;
@@ -100,27 +100,27 @@ public class SelectionDetails {
     public String getPricingModel() {
         return PricingModel;
     }
-    public void setPricingModel(String pricingModel) {
-        PricingModel = pricingModel;
+    public void setPricingModel(String PricingModel) {
+        this.PricingModel = PricingModel;
     }
     
     public int getHSBCToolId() {
         return HSBCToolId;
     }
-    public void setHSBCToolId(int hSBCToolId) {
-        HSBCToolId = hSBCToolId;
+    public void setHSBCToolId(int HSBCToolId) {
+        this.HSBCToolId = HSBCToolId;
     }
     public Date getCToolReceivedDate() {
         return CToolReceivedDate;
     }
-    public void setCToolReceivedDate(Date cToolReceivedDate) {
-        CToolReceivedDate = cToolReceivedDate;
+    public void setCToolReceivedDate(Date CToolReceivedDate) {
+        this.CToolReceivedDate = CToolReceivedDate;
     }
     public String getCToolJobCategory() {
         return CToolJobCategory;
     }
-    public void setCToolJobCategory(String cToolJobCategory) {
-        CToolJobCategory = cToolJobCategory;
+    public void setCToolJobCategory(String CToolJobCategory) {
+        this.CToolJobCategory = CToolJobCategory;
     }
     public String getCToolLocation() {
         return CToolLocation;
@@ -137,8 +137,8 @@ public class SelectionDetails {
     public int getCToolProposedRate() {
         return CToolProposedRate;
     }
-    public void setCToolProposedRate(int cToolProposedRate) {
-        CToolProposedRate = cToolProposedRate;
+    public void setCToolProposedRate(int CToolProposedRate) {
+        this.CToolProposedRate = CToolProposedRate;
     }
     public String getRecruiterName() {
         return recruiterName;
@@ -149,8 +149,8 @@ public class SelectionDetails {
     public String getInterviewEvidences() {
         return InterviewEvidences;
     }
-    public void setInterviewEvidences(String interviewEvidences) {
-        InterviewEvidences = interviewEvidences;
+    public void setInterviewEvidences(String InterviewEvidences) {
+        this.InterviewEvidences = InterviewEvidences;
     }
     public String getOfferReleaseStatus() {
         return offerReleaseStatus;
@@ -161,8 +161,8 @@ public class SelectionDetails {
     public Date getHSBCOnboardingDate() {
         return HSBCOnboardingDate;
     }
-    public void setHSBCOnboardingDate(Date hSBCOnboardingDate) {
-        HSBCOnboardingDate = hSBCOnboardingDate;
+    public void setHSBCOnboardingDate(Date HSBCOnboardingDate) {
+        this.HSBCOnboardingDate = HSBCOnboardingDate;
     }
     public Date getTechSelectionDate() {
         return techSelectionDate;
@@ -173,14 +173,14 @@ public class SelectionDetails {
     public Date getDOJReceivedDate() {
         return DOJReceivedDate;
     }
-    public void setDOJReceivedDate(Date dOJReceivedDate) {
-        DOJReceivedDate = dOJReceivedDate;
+    public void setDOJReceivedDate(Date DOJReceivedDate) {
+        this.DOJReceivedDate = DOJReceivedDate;
     }
     public Date getLTIOnboardingDate() {
         return LTIOnboardingDate;
     }
-    public void setLTIOnboardingDate(Date lTIOnboardingDate) {
-        LTIOnboardingDate = lTIOnboardingDate;
+    public void setLTIOnboardingDate(Date LTIOnboardingDate) {
+        this.LTIOnboardingDate = LTIOnboardingDate;
     }
     public byte[] getCreateDate() {
         return createDate;
