@@ -28,7 +28,7 @@ public class TaggingDetails {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "BGVStatusId")
-    private BGVStatus bgvStatus;
+     BGVStatus bgvStatus;
 
     @ManyToOne
     private User createdBy;

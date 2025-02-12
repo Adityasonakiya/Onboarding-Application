@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.onboarding.model.TaggingDetails;
 import com.example.onboarding.service.TaggingDetailsService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @CrossOrigin("*")
 @RestController
@@ -47,9 +47,11 @@ public class TaggingDetailsController {
     }
 
     @PutMapping("/psid/{psId}")
-    public ResponseEntity<TaggingDetails> updateTaggingDetails(@PathVariable int psId,
+    public ResponseEntity<TaggingDetails> updateTaggingDetailsByPsId(@PathVariable int psId,
             @RequestBody TaggingDetails updates) {
         logger.info("Received request to update tagging details for PsId: {}", psId);
+        System.out.println("Received request to update tagging details with BGV updates: "+ updates);
+        System.out.println("Received request to update tagging details with BGV: "+ updates.getBgvStatus());
         TaggingDetails updated = taggingDetailsService.updateTaggingDetailsByPsId(psId, updates);
         logger.info("Updated tagging details returned: {}", updated);
         return ResponseEntity.ok(updated);
