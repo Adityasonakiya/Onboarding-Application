@@ -269,17 +269,30 @@ function SelectionTracker() {
     const errors = validate();
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await fetch("http://localhost:8080/selection-details/create",
+        const response = await fetch(
+          "http://localhost:8080/selection-details/create",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
+              employee: {
+                psid: form.psId,
+                firstName: form.fname,
+                lastName: form.lname,
+                grade: form.grade,
+                location: form.location,
+                pu: form.pu,
+                totalExperience: form.totalExp,
+                skill: form.skill,
+                mailID: form.email,
+              }||null,
+              candidate:form.candidate||null,
               hsbcselectionDate: form.selectionDate,
               baseBU: "BF",
-              lob:form.lob,
-              sublob:form.subLob,
+              lob: form.lob,
+              sublob: form.subLob,
               hsbchiringManager: form.hiringManager,
               hsbchead: form.head,
               deliveryManager: form.deliveryManager,
@@ -297,32 +310,48 @@ function SelectionTracker() {
               offerReleaseStatus: form.offerReleaseStatus,
               ltionboardingDate: form.ltiOnboardDate,
             }),
-          });
+          }
+        );
 
         if (response.ok) {
           // Simulate successful creation of selection details for the employee
-          localStorage.setItem("selectionDetails", JSON.stringify({
-            hsbcselectionDate: form.selectionDate,
-            baseBU: "BF",
-            lob: form.lob,
-            subLob: form.subLob,
-            hsbchiringManager: form.hiringManager,
-            hsbchead: form.head,
-            deliveryManager: form.deliveryManager,
-            salesPOC: form.salespoc,
-            pricingModel: form.pricingModel,
-            irm: form.irm,
-            hsbctoolId: form.ctoolId,
-            ctoolReceivedDate: form.ctoolRecDate,
-            ctoolJobCategory: form.ctoolJobCat,
-            ctoolLocation: form.ctoolLocation,
-            ctoolRate: form.ctoolRate,
-            ctoolProposedRate: form.ctoolPropRate,
-            recruiterName: form.recruiterName,
-            interviewEvidence: form.evidence,
-            offerReleaseStatus: form.offerReleaseStatus,
-            ltionboardingDate: form.ltiOnboardDate
-          }));
+          localStorage.setItem(
+            "selectionDetails",
+            JSON.stringify({
+              employee: {
+                psid: form.psId,
+                firstName: form.fname,
+                lastName: form.lname,
+                grade: form.grade,
+                location: form.location,
+                pu: form.pu,
+                totalExperience: form.totalExp,
+                skill: form.skill,
+                mailID: form.email,
+              }||null,
+              candidate:form.candidate||null,
+              hsbcselectionDate: form.selectionDate,
+              baseBU: "BF",
+              lob: form.lob,
+              subLob: form.subLob,
+              hsbchiringManager: form.hiringManager,
+              hsbchead: form.head,
+              deliveryManager: form.deliveryManager,
+              salesPOC: form.salespoc,
+              pricingModel: form.pricingModel,
+              irm: form.irm,
+              hsbctoolId: form.ctoolId,
+              ctoolReceivedDate: form.ctoolRecDate,
+              ctoolJobCategory: form.ctoolJobCat,
+              ctoolLocation: form.ctoolLocation,
+              ctoolRate: form.ctoolRate,
+              ctoolProposedRate: form.ctoolPropRate,
+              recruiterName: form.recruiterName,
+              interviewEvidence: form.evidence,
+              offerReleaseStatus: form.offerReleaseStatus,
+              ltionboardingDate: form.ltiOnboardDate,
+            })
+          );
 
           navigate("/selection-tracker"); // Navigate to the dashboard after successful creation
         } else {

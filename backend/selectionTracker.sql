@@ -141,7 +141,7 @@ VALUES
 (10820984, NULL, 'Sachin Shaha', 1, 11, 10825932, NULL, NULL, '2024-12-18', 
 "Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 10893, '2025-12-02', "TM", 
 'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
-'2024-12-23', NULL, '2024-12-18', '2024-09-23',NULL ,NULL);
+'2024-12-23', NULL, NULL, NULL,NOW() ,NOW());
 
 INSERT INTO tagging_details 
 (ps_id, candidate_id, onboarding_status_id, bgvstatus_id, created_by_psid, updated_by_psid, status_remarks, create_date, update_date) 
