@@ -139,8 +139,8 @@ ctool_location, ctool_rate, ctool_proposed_rate, recruiter_name, interview_evide
 hsbconboarding_date, tech_selection_date, dojreceived_date, ltionboarding_date, create_date, update_date) 
 VALUES
 (10820984, NULL, 'Sachin Shaha', 1, 11, 10825932, NULL, NULL, '2024-12-18', 
-"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 10893, NULL, NULL, 
-'Pune', 3, 3, "Sachin Shaha", NULL, 'WIP', 
+"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 10893, '2025-12-02', "TM", 
+'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
 '2024-12-23', NULL, '2024-12-18', '2024-09-23',NULL ,NULL);
 
 INSERT INTO tagging_details 

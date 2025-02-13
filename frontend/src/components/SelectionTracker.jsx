@@ -84,21 +84,21 @@ function SelectionTracker() {
         bu: selectionDetails.baseBU,
         lob: selectionDetails.lob,
         subLob: selectionDetails.subLob,
-        hiringManager: selectionDetails.HSBCHiringManager,
-        head: selectionDetails.HSBCHead,
+        hiringManager: selectionDetails.hsbchiringManager,
+        head: selectionDetails.hsbchead,
         deliveryManager: selectionDetails.deliveryManager,
-        salesPoc: selectionDetails.salesPOC,
-        pricingModel: selectionDetails.PricingModel,
+        salespoc: selectionDetails.salesPOC,
+        pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
-        ctoolId: selectionDetails.HSBCToolId,
-        ctoolRecDate: selectionDetails.CToolReceivedDate,
-        ctoolJobCat: selectionDetails.CToolJobCategory,
-        ctoolLocation: selectionDetails.CToolLocation,
-        ctoolRate: selectionDetails.CToolRate,
-        ctoolPropRate: selectionDetails.CToolProposedRate,
+        ctoolId: selectionDetails.hsbctoolId,
+        ctoolRecDate: selectionDetails.ctoolReceivedDate,
+        ctoolJobCat: selectionDetails.ctoolJobCategory,
+        ctoolLocation: selectionDetails.ctoolLocation,
+        ctoolRate: selectionDetails.ctoolRate,
+        ctoolPropRate: selectionDetails.ctoolProposedRate,
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
-        ltiOnboardDate: selectionDetails.LTIOnboardingDate,
+        ltiOnboardDate: selectionDetails.ltionboardingDate,
       }));
     } catch (error) {
       console.error(error);
@@ -112,25 +112,25 @@ function SelectionTracker() {
       );
       setForm((prevForm) => ({
         ...prevForm,
-        selectionDate: selectionDetails.HSBCSelectionDate,
+        selectionDate: selectionDetails.hsbcSelectionDate,
         bu: selectionDetails.baseBU,
         lob: selectionDetails.lob,
         subLob: selectionDetails.subLob,
-        hiringManager: selectionDetails.HSBCHiringManager,
-        head: selectionDetails.HSBCHead,
+        hiringManager: selectionDetails.hsbchiringManager,
+        head: selectionDetails.hsbchead,
         deliveryManager: selectionDetails.deliveryManager,
-        salesPoc: selectionDetails.salesPOC,
-        pricingModel: selectionDetails.PricingModel,
+        salespoc: selectionDetails.salesPOC,
+        pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
-        ctoolId: selectionDetails.HSBCToolId,
-        ctoolRecDate: selectionDetails.CToolReceivedDate,
-        ctoolJobCat: selectionDetails.CToolJobCategory,
-        ctoolLocation: selectionDetails.CToolLocation,
-        ctoolRate: selectionDetails.CToolRate,
-        ctoolPropRate: selectionDetails.CToolProposedRate,
+        ctoolId: selectionDetails.hsbctoolId,
+        ctoolRecDate: selectionDetails.ctoolReceivedDate,
+        ctoolJobCat: selectionDetails.ctoolJobCategory,
+        ctoolLocation: selectionDetails.ctoolLocation,
+        ctoolRate: selectionDetails.ctoolRate,
+        ctoolPropRate: selectionDetails.ctoolProposedRate,
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
-        ltiOnboardDate: selectionDetails.LTIOnboardingDate,
+        ltiOnboardDate: selectionDetails.ltionboardingDate,
       }));
     } catch (error) {
       console.error(error);
@@ -269,8 +269,7 @@ function SelectionTracker() {
     const errors = validate();
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await fetch(
-          "http://localhost:8080/selection-details/create",
+        const response = await fetch("http://localhost:8080/selection-details/create",
           {
             method: "POST",
             headers: {
@@ -278,9 +277,9 @@ function SelectionTracker() {
             },
             body: JSON.stringify({
               hsbcselectionDate: form.selectionDate,
-              bu: "BF",
-              lob: form.lob,
-              subLob: form.sublob,
+              baseBU: "BF",
+              lob:form.lob,
+              sublob:form.subLob,
               hsbchiringManager: form.hiringManager,
               hsbchead: form.head,
               deliveryManager: form.deliveryManager,
@@ -298,15 +297,15 @@ function SelectionTracker() {
               offerReleaseStatus: form.offerReleaseStatus,
               ltionboardingDate: form.ltiOnboardDate,
             }),
-          }
-        );
+          });
 
         if (response.ok) {
           // Simulate successful creation of selection details for the employee
-          localStorage.setItem("selectionDetails", JSON.stringify({hsbcselectionDate: form.selectionDate,
-            bu: "BF",
+          localStorage.setItem("selectionDetails", JSON.stringify({
+            hsbcselectionDate: form.selectionDate,
+            baseBU: "BF",
             lob: form.lob,
-            subLob: form.sublob,
+            subLob: form.subLob,
             hsbchiringManager: form.hiringManager,
             hsbchead: form.head,
             deliveryManager: form.deliveryManager,
@@ -324,7 +323,7 @@ function SelectionTracker() {
             offerReleaseStatus: form.offerReleaseStatus,
             ltionboardingDate: form.ltiOnboardDate
           }));
-          console.log(response);
+
           navigate("/selection-tracker"); // Navigate to the dashboard after successful creation
         } else {
           const errorData = await response.json();
@@ -588,7 +587,7 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <select
                     className="p-2 bordered w-full"
-                    name="sublob"
+                    name="subLob"
                     onChange={handleChange}
                   >
                     <option value="0">Choose SubLOB</option>
