@@ -28,7 +28,7 @@ public class SelectionDetailsService {
         SelectionDetails existingDetails = selectionDetailsRepository.findByEmployee_Psid(psId);
         if (existingDetails != null) {
             existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());
-            existingDetails.setHSBCSelecionDate(updatedDetails.getHSBCSelecionDate());
+            existingDetails.setHSBCSelectionDate(updatedDetails.getHSBCSelectionDate());
             existingDetails.setHSBCHiringManager(updatedDetails.getHSBCHiringManager());
             existingDetails.setHSBCHead(updatedDetails.getHSBCHead());
             existingDetails.setSalesPOC(updatedDetails.getSalesPOC());
@@ -62,7 +62,7 @@ public class SelectionDetailsService {
         SelectionDetails existingDetails = selectionDetailsRepository.findByCandidate_CandidateId(candidateId);
         if (existingDetails != null) {
             existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());
-            existingDetails.setHSBCSelecionDate(updatedDetails.getHSBCSelecionDate());
+            existingDetails.setHSBCSelectionDate(updatedDetails.getHSBCSelectionDate());
             existingDetails.setHSBCHiringManager(updatedDetails.getHSBCHiringManager());
             existingDetails.setHSBCHead(updatedDetails.getHSBCHead());
             existingDetails.setSalesPOC(updatedDetails.getSalesPOC());
@@ -90,5 +90,8 @@ public class SelectionDetailsService {
             return selectionDetailsRepository.save(existingDetails);
         }
         return selectionDetailsRepository.save(updatedDetails);
+    }
+    public SelectionDetails createSelectionDetails(SelectionDetails details){
+        return selectionDetailsRepository.save(details);
     }
 }

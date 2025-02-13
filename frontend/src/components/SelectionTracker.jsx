@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { getCandidateById, getEmployeeByPsid, getSelectionDetailsByCandidateId, getSelectionDetailsByPsId } from '../services/api';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  getCandidateById,
+  getEmployeeByPsid,
+  getSelectionDetailsByCandidateId,
+  getSelectionDetailsByPsId,
+} from "../services/api";
 
 function SelectionTracker() {
   const [form, setForm] = useState({});
+  const [errors, setErrors] = useState({});
   const [isInternal, setIsInternal] = useState(false);
   const [selected, setSelected] = React.useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (form.psId) {
@@ -22,6 +30,11 @@ function SelectionTracker() {
 
   const changeSelectOptionHandler = (event) => {
     setSelected(event.target.value);
+  };
+
+  const validate = () => {
+    const errors = {};
+    return errors;
   };
 
   const fetchEmployeeData = async (psid) => {
@@ -67,25 +80,25 @@ function SelectionTracker() {
       const selectionDetails = await getSelectionDetailsByPsId(psid);
       setForm((prevForm) => ({
         ...prevForm,
-        selectionDate: selectionDetails.HSBCSelectionDate,
+        selectionDate: selectionDetails.hsbcSelectionDate,
         bu: selectionDetails.baseBU,
         lob: selectionDetails.lob,
         subLob: selectionDetails.subLob,
-        hiringManager: selectionDetails.HSBCHiringManager,
-        head: selectionDetails.HSBCHead,
+        hiringManager: selectionDetails.hsbchiringManager,
+        head: selectionDetails.hsbchead,
         deliveryManager: selectionDetails.deliveryManager,
-        salesSpoc: selectionDetails.salesPOC,
-        pricingModel: selectionDetails.PricingModel,
+        salespoc: selectionDetails.salesPOC,
+        pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
-        ctoolId: selectionDetails.HSBCToolId,
-        ctoolRecDate: selectionDetails.CToolReceivedDate,
-        ctoolJobCat: selectionDetails.CToolJobCategory,
-        ctoolLocation: selectionDetails.CToolLocation,
-        ctoolRate: selectionDetails.CToolRate,
-        ctoolPropRate: selectionDetails.CToolProposedRate,
+        ctoolId: selectionDetails.hsbctoolId,
+        ctoolRecDate: selectionDetails.ctoolReceivedDate,
+        ctoolJobCat: selectionDetails.ctoolJobCategory,
+        ctoolLocation: selectionDetails.ctoolLocation,
+        ctoolRate: selectionDetails.ctoolRate,
+        ctoolPropRate: selectionDetails.ctoolProposedRate,
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
-        ltiOnboardDate: selectionDetails.LTIOnboardingDate,
+        ltiOnboardDate: selectionDetails.ltionboardingDate,
       }));
     } catch (error) {
       console.error(error);
@@ -99,109 +112,148 @@ function SelectionTracker() {
       );
       setForm((prevForm) => ({
         ...prevForm,
-        selectionDate: selectionDetails.HSBCSelectionDate,
+        selectionDate: selectionDetails.hsbcSelectionDate,
         bu: selectionDetails.baseBU,
         lob: selectionDetails.lob,
         subLob: selectionDetails.subLob,
-        hiringManager: selectionDetails.HSBCHiringManager,
-        head: selectionDetails.HSBCHead,
+        hiringManager: selectionDetails.hsbchiringManager,
+        head: selectionDetails.hsbchead,
         deliveryManager: selectionDetails.deliveryManager,
-        salesSpoc: selectionDetails.salesPOC,
-        pricingModel: selectionDetails.PricingModel,
+        salespoc: selectionDetails.salesPOC,
+        pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
-        ctoolId: selectionDetails.HSBCToolId,
-        ctoolRecDate: selectionDetails.CToolReceivedDate,
-        ctoolJobCat: selectionDetails.CToolJobCategory,
-        ctoolLocation: selectionDetails.CToolLocation,
-        ctoolRate: selectionDetails.CToolRate,
-        ctoolPropRate: selectionDetails.CToolProposedRate,
+        ctoolId: selectionDetails.hsbctoolId,
+        ctoolRecDate: selectionDetails.ctoolReceivedDate,
+        ctoolJobCat: selectionDetails.ctoolJobCategory,
+        ctoolLocation: selectionDetails.ctoolLocation,
+        ctoolRate: selectionDetails.ctoolRate,
+        ctoolPropRate: selectionDetails.ctoolProposedRate,
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
-        ltiOnboardDate: selectionDetails.LTIOnboardingDate,
+        ltiOnboardDate: selectionDetails.ltionboardingDate,
       }));
     } catch (error) {
       console.error(error);
     }
   };
- 
+
   //Selection for LOB and SubLOB
   const bdArch = ["Architecture Stds & Gov"];
-  const cto = ["Colleague & Collaboration","Dev Ops Services","Engineering & PE","Enterprise Infrastructure"];
+  const cto = [
+    "Colleague & Collaboration",
+    "Dev Ops Services",
+    "Engineering & PE",
+    "Enterprise Infrastructure",
+  ];
   const cybersecurity = ["Cyber Assessment & Testing"];
-  const enterprise = ["Colleague Experience Tech","Core Banking","Cross Functions Technology","Finance Technology","Risk & Compliance Technology","Risk-Compliance Technology"];
-  const globalOps = ["Automation Platforms","Ops Management","Tech Change Delivery" ];
-  const groupData = ["GDT BI & Visualization Tech","GDT Data Asset Tech & Control","GDT Data Management Tech","GDT Data Provisioning Tech",
-    "GDT ET","GDT MENAT, EU & UK","GDT WPB","GDT WS, MSS and ESG"];
+  const enterprise = [
+    "Colleague Experience Tech",
+    "Core Banking",
+    "Cross Functions Technology",
+    "Finance Technology",
+    "Risk & Compliance Technology",
+    "Risk-Compliance Technology",
+  ];
+  const globalOps = [
+    "Automation Platforms",
+    "Ops Management",
+    "Tech Change Delivery",
+  ];
+  const groupData = [
+    "GDT BI & Visualization Tech",
+    "GDT Data Asset Tech & Control",
+    "GDT Data Management Tech",
+    "GDT Data Provisioning Tech",
+    "GDT ET",
+    "GDT MENAT, EU & UK",
+    "GDT WPB",
+    "GDT WS, MSS and ESG",
+  ];
   const hdpi = ["HDPI"];
   const inm = ["INM"];
-  const marketServ = ["Equities Technology","Fin Data & Reg Reporting Tech","Global Debt Markets Tech","Markets Treasury Tech","MSS Central Services",
-    "MSS Operations Technology","Securities Financing Tech","Securities Services Tech","Surveillance & Supervision","Traded Risk"];
+  const marketServ = [
+    "Equities Technology",
+    "Fin Data & Reg Reporting Tech",
+    "Global Debt Markets Tech",
+    "Markets Treasury Tech",
+    "MSS Central Services",
+    "MSS Operations Technology",
+    "Securities Financing Tech",
+    "Securities Services Tech",
+    "Surveillance & Supervision",
+    "Traded Risk",
+  ];
   const mds = ["ESG Data & Analytics"];
   const cio_eur = ["Regional Tech - Europe"];
   const sab = ["SAB Tech"];
   const strataserv = ["SST Group Enterprise Arch"];
-  const coo = ["Tech COO - Enterprise Tech","Tech Third Party Mgmt"];
-  const wholesale = ["WS Global Payment Solutions","WS Tech Client Services","WS Tech Credit & Lending","WS Tech Digital","WS Tech FEM&S",
-    "WS Tech General","WS Tech Global Banking","WS Tech Global Trade and RF","WS Tech Regional","WS Tech Shared Services","WSIT General"];
-  const wpb = ["Enabler Platforms","GPBW and AMG Tech","Insurance",
-    "Retail Banking Technology","WPB Technology Management","WPB UK Tech"];
-   /** Type variable to store different array for different dropdown */
-   let type = null;
+  const coo = ["Tech COO - Enterprise Tech", "Tech Third Party Mgmt"];
+  const wholesale = [
+    "WS Global Payment Solutions",
+    "WS Tech Client Services",
+    "WS Tech Credit & Lending",
+    "WS Tech Digital",
+    "WS Tech FEM&S",
+    "WS Tech General",
+    "WS Tech Global Banking",
+    "WS Tech Global Trade and RF",
+    "WS Tech Regional",
+    "WS Tech Shared Services",
+    "WSIT General",
+  ];
+  const wpb = [
+    "Enabler Platforms",
+    "GPBW and AMG Tech",
+    "Insurance",
+    "Retail Banking Technology",
+    "WPB Technology Management",
+    "WPB UK Tech",
+  ];
+  /** Type variable to store different array for different dropdown */
+  let type = null;
 
-   /** This will be used to create set of options that user will see */
-   let options = null;
-   /** Setting Type variable according to dropdown */
-   if (selected === "1") {
-     type = bdArch;
-   } else if (selected === "2") {
-     type = cto;
-   } else if (selected === "3") {
-     type = cybersecurity;
-   }
-   else if (selected === "4") {
+  /** This will be used to create set of options that user will see */
+  let options = null;
+  /** Setting Type variable according to dropdown */
+  if (selected === "1") {
+    type = bdArch;
+  } else if (selected === "2") {
+    type = cto;
+  } else if (selected === "3") {
+    type = cybersecurity;
+  } else if (selected === "4") {
     type = enterprise;
-  }
-  else if (selected === "5") {
+  } else if (selected === "5") {
     type = globalOps;
-  }
-  else if (selected === "6") {
+  } else if (selected === "6") {
     type = groupData;
-  }
-  else if (selected === "7") {
+  } else if (selected === "7") {
     type = hdpi;
-  }
-  else if (selected === "8") {
+  } else if (selected === "8") {
     type = inm;
-  }
-  else if (selected === "9") {
+  } else if (selected === "9") {
     type = marketServ;
-  }
-  else if (selected === "10") {
+  } else if (selected === "10") {
     type = mds;
-  }
-  else if (selected === "11") {
+  } else if (selected === "11") {
     type = cio_eur;
-  }
-  else if (selected === "12") {
+  } else if (selected === "12") {
     type = sab;
-  }
-  else if (selected === "13") {
+  } else if (selected === "13") {
     type = strataserv;
-  }
-  else if (selected === "14") {
+  } else if (selected === "14") {
     type = coo;
-  }
-  else if (selected === "15") {
+  } else if (selected === "15") {
     type = wholesale;
-  }
-  else if (selected === "16") {
+  } else if (selected === "16") {
     type = wpb;
   }
-//defining type for the options
+  //defining type for the options
   if (type) {
     options = type.map((el) => <option key={el}>{el}</option>);
   }
-//handle changes in form
+
+  //handle changes in form
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
@@ -210,9 +262,79 @@ function SelectionTracker() {
       setForm({ ...form, [name]: value });
     }
   };
-//for submit
-  const handleSubmit = (e) => {
+  //for submit
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const errors = validate();
+    if (Object.keys(errors).length === 0) {
+      try {
+        const response = await fetch("http://localhost:8080/selection-details/create",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              hsbcselectionDate: form.selectionDate,
+              baseBU: "BF",
+              lob:form.lob,
+              sublob:form.subLob,
+              hsbchiringManager: form.hiringManager,
+              hsbchead: form.head,
+              deliveryManager: form.deliveryManager,
+              salesPOC: form.salespoc,
+              pricingModel: form.pricingModel,
+              irm: form.irm,
+              hsbctoolId: form.ctoolId,
+              ctoolReceivedDate: form.ctoolRecDate,
+              ctoolJobCategory: form.ctoolJobCat,
+              ctoolLocation: form.ctoolLocation,
+              ctoolRate: form.ctoolRate,
+              ctoolProposedRate: form.ctoolPropRate,
+              recruiterName: form.recruiterName,
+              interviewEvidence: form.evidence,
+              offerReleaseStatus: form.offerReleaseStatus,
+              ltionboardingDate: form.ltiOnboardDate,
+            }),
+          });
+
+        if (response.ok) {
+          // Simulate successful creation of selection details for the employee
+          localStorage.setItem("selectionDetails", JSON.stringify({
+            hsbcselectionDate: form.selectionDate,
+            baseBU: "BF",
+            lob: form.lob,
+            subLob: form.subLob,
+            hsbchiringManager: form.hiringManager,
+            hsbchead: form.head,
+            deliveryManager: form.deliveryManager,
+            salesPOC: form.salespoc,
+            pricingModel: form.pricingModel,
+            irm: form.irm,
+            hsbctoolId: form.ctoolId,
+            ctoolReceivedDate: form.ctoolRecDate,
+            ctoolJobCategory: form.ctoolJobCat,
+            ctoolLocation: form.ctoolLocation,
+            ctoolRate: form.ctoolRate,
+            ctoolProposedRate: form.ctoolPropRate,
+            recruiterName: form.recruiterName,
+            interviewEvidence: form.evidence,
+            offerReleaseStatus: form.offerReleaseStatus,
+            ltionboardingDate: form.ltiOnboardDate
+          }));
+
+          navigate("/selection-tracker"); // Navigate to the dashboard after successful creation
+        } else {
+          const errorData = await response.json();
+          setErrors({ submit: errorData.message });
+        }
+      } catch (error) {
+        setErrors({ submit: "An error occurred while submitting the form" });
+      }
+    } else {
+      setErrors(errors);
+    }
   };
 
   return (
@@ -463,7 +585,11 @@ function SelectionTracker() {
                   <label className="font-semibold">Sub LOB:</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <select className="p-2 bordered w-full" onChange={handleChange}>
+                  <select
+                    className="p-2 bordered w-full"
+                    name="subLob"
+                    onChange={handleChange}
+                  >
                     <option value="0">Choose SubLOB</option>
                     {options}
                   </select>
@@ -507,28 +633,36 @@ function SelectionTracker() {
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                   >
-                    <option value="1">Abhijeet Sureshchandra More</option>
-                    <option value="2">Aniruddha Deshpande</option>
-                    <option value="3">Arvind Deogade</option>
-                    <option value="4">Chinni Krishna Nakka</option>
-                    <option value="5">Mayuresh Nirantar</option>
-                    <option value="6">Saber Sarode</option>
-                    <option value="7">Sachin Shaha</option>
+                    <option value="0">Choose..</option>
+                    <option value="Abhijeet Sureshchandra More">
+                      Abhijeet Sureshchandra More
+                    </option>
+                    <option value="Aniruddha Deshpande">
+                      Aniruddha Deshpande
+                    </option>
+                    <option value="Arvind Deogade">Arvind Deogade</option>
+                    <option value="Chinni Krishna Nakka">
+                      Chinni Krishna Nakka
+                    </option>
+                    <option value="Mayuresh Nirantar">Mayuresh Nirantar</option>
+                    <option value="Saber Sarode">Saber Sarode</option>
+                    <option value="Sachin Shaha">Sachin Shaha</option>
                   </select>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Sales SPOC:</label>
+                  <label className="font-semibold">Sales POC:</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
-                    name="salesSpoc"
+                    name="salespoc"
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                   >
-                    <option value="1">Anand Devi</option>
-                    <option value="2">Nishant sharma</option>
-                    <option value="3">Indranil Moolay</option>
-                    <option value="4">Ajay Pillai</option>
+                    <option value="0">Choose..</option>
+                    <option value="Anand Devi">Anand Devi</option>
+                    <option value="Nishant sharma">Nishant sharma</option>
+                    <option value="Indranil Moolay">Indranil Moolay</option>
+                    <option value="Ajay Pillai">Ajay Pillai</option>
                   </select>
                 </td>
               </tr>
@@ -542,8 +676,9 @@ function SelectionTracker() {
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                   >
-                    <option value="1">T&M</option>
-                    <option value="2">FP</option>
+                    <option value="0">Choose..</option>
+                    <option value="T&M">T&M</option>
+                    <option value="FP">FP</option>
                   </select>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -672,10 +807,11 @@ function SelectionTracker() {
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                   >
-                    <option value="1">Pending</option>
-                    <option value="2">On Hold</option>
-                    <option value="3">Release</option>
-                    <option value="4">WIP</option>
+                    <option value="">Choose...</option>
+                    <option value="Pending">Pending</option>
+                    <option value="On Hold">On Hold</option>
+                    <option value="Release">Release</option>
+                    <option value="WIP">WIP</option>
                   </select>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
