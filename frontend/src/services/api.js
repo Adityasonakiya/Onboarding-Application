@@ -104,4 +104,20 @@ export const updateSelectionDetailsByCandidateId = async (candidateId, data) => 
   return response.json();
 };
 
+export const fetchLobs = async () => {
+  const response = await fetch('http://localhost:8080/users/lob');
+  if (!response.ok) {
+    throw new Error('Failed to fetch LOBs');
+  }
+  return response.json();
+};
+
+export const fetchSubLobs = async (lobId) => {
+  const response = await fetch(`http://localhost:8080/users/sublob/${lobId}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch SubLOBs');
+  }
+  return response.json();
+};
+
 

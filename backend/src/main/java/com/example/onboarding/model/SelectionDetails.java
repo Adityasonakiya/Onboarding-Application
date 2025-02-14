@@ -16,7 +16,7 @@ public class SelectionDetails {
     private int selectionId;
 
     @ManyToOne
-    @JoinColumn(name = "psId")
+    @JoinColumn(name = "employee")
     private Employee employee;
 
     @ManyToOne
