@@ -5,6 +5,8 @@ import {
   getEmployeeByPsid,
   getSelectionDetailsByCandidateId,
   getSelectionDetailsByPsId,
+  fetchLobs,
+  fetchSubLobs
 } from "../services/api";
 
 function SelectionTracker() {
@@ -13,6 +15,9 @@ function SelectionTracker() {
   const [isInternal, setIsInternal] = useState(false);
   const [selected, setSelected] = React.useState("");
   const navigate = useNavigate();
+  const [lobs, setLobs] = useState([]);
+  const [subLobs, setSubLobs] = useState([]);
+  const [selectedLob, setSelectedLob] = useState('');
 
   useEffect(() => {
     if (form.psId) {
@@ -28,8 +33,33 @@ function SelectionTracker() {
     }
   }, [form.candidateId]);
 
+  useEffect(() => {
+    const getLobs = async () => {
+      try {
+        const data = await fetchLobs();
+        setLobs(data);
+      } catch (error) {
+        console.error('There was an error fetching the LOBs!', error);
+      }
+    };
+
+    getLobs();
+  }, []);
+
   const changeSelectOptionHandler = (event) => {
     setSelected(event.target.value);
+  };
+
+  const handleLobChange = async (event) => {
+    const lobId = event.target.value;
+    setSelectedLob(lobId);
+
+    try {
+      const data = await fetchSubLobs(lobId);
+      setSubLobs(data);
+    } catch (error) {
+      console.error('There was an error fetching the SubLOBs!', error);
+    }
   };
 
   const validate = () => {
@@ -137,121 +167,121 @@ function SelectionTracker() {
     }
   };
 
-  //Selection for LOB and SubLOB
-  const bdArch = ["Architecture Stds & Gov"];
-  const cto = [
-    "Colleague & Collaboration",
-    "Dev Ops Services",
-    "Engineering & PE",
-    "Enterprise Infrastructure",
-  ];
-  const cybersecurity = ["Cyber Assessment & Testing"];
-  const enterprise = [
-    "Colleague Experience Tech",
-    "Core Banking",
-    "Cross Functions Technology",
-    "Finance Technology",
-    "Risk & Compliance Technology",
-    "Risk-Compliance Technology",
-  ];
-  const globalOps = [
-    "Automation Platforms",
-    "Ops Management",
-    "Tech Change Delivery",
-  ];
-  const groupData = [
-    "GDT BI & Visualization Tech",
-    "GDT Data Asset Tech & Control",
-    "GDT Data Management Tech",
-    "GDT Data Provisioning Tech",
-    "GDT ET",
-    "GDT MENAT, EU & UK",
-    "GDT WPB",
-    "GDT WS, MSS and ESG",
-  ];
-  const hdpi = ["HDPI"];
-  const inm = ["INM"];
-  const marketServ = [
-    "Equities Technology",
-    "Fin Data & Reg Reporting Tech",
-    "Global Debt Markets Tech",
-    "Markets Treasury Tech",
-    "MSS Central Services",
-    "MSS Operations Technology",
-    "Securities Financing Tech",
-    "Securities Services Tech",
-    "Surveillance & Supervision",
-    "Traded Risk",
-  ];
-  const mds = ["ESG Data & Analytics"];
-  const cio_eur = ["Regional Tech - Europe"];
-  const sab = ["SAB Tech"];
-  const strataserv = ["SST Group Enterprise Arch"];
-  const coo = ["Tech COO - Enterprise Tech", "Tech Third Party Mgmt"];
-  const wholesale = [
-    "WS Global Payment Solutions",
-    "WS Tech Client Services",
-    "WS Tech Credit & Lending",
-    "WS Tech Digital",
-    "WS Tech FEM&S",
-    "WS Tech General",
-    "WS Tech Global Banking",
-    "WS Tech Global Trade and RF",
-    "WS Tech Regional",
-    "WS Tech Shared Services",
-    "WSIT General",
-  ];
-  const wpb = [
-    "Enabler Platforms",
-    "GPBW and AMG Tech",
-    "Insurance",
-    "Retail Banking Technology",
-    "WPB Technology Management",
-    "WPB UK Tech",
-  ];
-  /** Type variable to store different array for different dropdown */
-  let type = null;
+  // //Selection for LOB and SubLOB
+  // const bdArch = ["Architecture Stds & Gov"];
+  // const cto = [
+  //   "Colleague & Collaboration",
+  //   "Dev Ops Services",
+  //   "Engineering & PE",
+  //   "Enterprise Infrastructure",
+  // ];
+  // const cybersecurity = ["Cyber Assessment & Testing"];
+  // const enterprise = [
+  //   "Colleague Experience Tech",
+  //   "Core Banking",
+  //   "Cross Functions Technology",
+  //   "Finance Technology",
+  //   "Risk & Compliance Technology",
+  //   "Risk-Compliance Technology",
+  // ];
+  // const globalOps = [
+  //   "Automation Platforms",
+  //   "Ops Management",
+  //   "Tech Change Delivery",
+  // ];
+  // const groupData = [
+  //   "GDT BI & Visualization Tech",
+  //   "GDT Data Asset Tech & Control",
+  //   "GDT Data Management Tech",
+  //   "GDT Data Provisioning Tech",
+  //   "GDT ET",
+  //   "GDT MENAT, EU & UK",
+  //   "GDT WPB",
+  //   "GDT WS, MSS and ESG",
+  // ];
+  // const hdpi = ["HDPI"];
+  // const inm = ["INM"];
+  // const marketServ = [
+  //   "Equities Technology",
+  //   "Fin Data & Reg Reporting Tech",
+  //   "Global Debt Markets Tech",
+  //   "Markets Treasury Tech",
+  //   "MSS Central Services",
+  //   "MSS Operations Technology",
+  //   "Securities Financing Tech",
+  //   "Securities Services Tech",
+  //   "Surveillance & Supervision",
+  //   "Traded Risk",
+  // ];
+  // const mds = ["ESG Data & Analytics"];
+  // const cio_eur = ["Regional Tech - Europe"];
+  // const sab = ["SAB Tech"];
+  // const strataserv = ["SST Group Enterprise Arch"];
+  // const coo = ["Tech COO - Enterprise Tech", "Tech Third Party Mgmt"];
+  // const wholesale = [
+  //   "WS Global Payment Solutions",
+  //   "WS Tech Client Services",
+  //   "WS Tech Credit & Lending",
+  //   "WS Tech Digital",
+  //   "WS Tech FEM&S",
+  //   "WS Tech General",
+  //   "WS Tech Global Banking",
+  //   "WS Tech Global Trade and RF",
+  //   "WS Tech Regional",
+  //   "WS Tech Shared Services",
+  //   "WSIT General",
+  // ];
+  // const wpb = [
+  //   "Enabler Platforms",
+  //   "GPBW and AMG Tech",
+  //   "Insurance",
+  //   "Retail Banking Technology",
+  //   "WPB Technology Management",
+  //   "WPB UK Tech",
+  // ];
+  // /** Type variable to store different array for different dropdown */
+  // let type = null;
 
-  /** This will be used to create set of options that user will see */
-  let options = null;
-  /** Setting Type variable according to dropdown */
-  if (selected === "1") {
-    type = bdArch;
-  } else if (selected === "2") {
-    type = cto;
-  } else if (selected === "3") {
-    type = cybersecurity;
-  } else if (selected === "4") {
-    type = enterprise;
-  } else if (selected === "5") {
-    type = globalOps;
-  } else if (selected === "6") {
-    type = groupData;
-  } else if (selected === "7") {
-    type = hdpi;
-  } else if (selected === "8") {
-    type = inm;
-  } else if (selected === "9") {
-    type = marketServ;
-  } else if (selected === "10") {
-    type = mds;
-  } else if (selected === "11") {
-    type = cio_eur;
-  } else if (selected === "12") {
-    type = sab;
-  } else if (selected === "13") {
-    type = strataserv;
-  } else if (selected === "14") {
-    type = coo;
-  } else if (selected === "15") {
-    type = wholesale;
-  } else if (selected === "16") {
-    type = wpb;
-  }
-  //defining type for the options
-  if (type) {
-    options = type.map((el) => <option key={el}>{el}</option>);
-  }
+  // /** This will be used to create set of options that user will see */
+  // let options = null;
+  // /** Setting Type variable according to dropdown */
+  // if (selected === "1") {
+  //   type = bdArch;
+  // } else if (selected === "2") {
+  //   type = cto;
+  // } else if (selected === "3") {
+  //   type = cybersecurity;
+  // } else if (selected === "4") {
+  //   type = enterprise;
+  // } else if (selected === "5") {
+  //   type = globalOps;
+  // } else if (selected === "6") {
+  //   type = groupData;
+  // } else if (selected === "7") {
+  //   type = hdpi;
+  // } else if (selected === "8") {
+  //   type = inm;
+  // } else if (selected === "9") {
+  //   type = marketServ;
+  // } else if (selected === "10") {
+  //   type = mds;
+  // } else if (selected === "11") {
+  //   type = cio_eur;
+  // } else if (selected === "12") {
+  //   type = sab;
+  // } else if (selected === "13") {
+  //   type = strataserv;
+  // } else if (selected === "14") {
+  //   type = coo;
+  // } else if (selected === "15") {
+  //   type = wholesale;
+  // } else if (selected === "16") {
+  //   type = wpb;
+  // }
+  // //defining type for the options
+  // if (type) {
+  //   options = type.map((el) => <option key={el}>{el}</option>);
+  // }
 
   //handle changes in form
   const handleChange = (e) => {
@@ -585,7 +615,7 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">LOB:</label>
                 </td>
-                <td className="p-2 w-full md:w-1/4">
+                {/* <td className="p-2 w-full md:w-1/4">
                   <select
                     onChange={changeSelectOptionHandler}
                     name="lob"
@@ -609,8 +639,20 @@ function SelectionTracker() {
                     <option value="15">Wholesale Technology</option>
                     <option value="16">WPB Technology</option>
                   </select>
+                </td> */}
+                 <td className="p-2 w-full md:w-1/4">
+                  <select
+                    onChange={handleLobChange}
+                    name="lob"
+                    className="p-2 bordered w-full"
+                  >
+                    <option value="">Select LOB</option>
+                    {lobs.map(lob => (
+                      <option key={lob.lobId} value={lob.lobId}>{lob.lobName}</option>
+                    ))}
+                  </select>
                 </td>
-                <td className="p-2 w-full md:w-1/4">
+                {/* <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">Sub LOB:</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -621,6 +663,21 @@ function SelectionTracker() {
                   >
                     <option value="0">Choose SubLOB</option>
                     {options}
+                  </select>
+                </td> */}
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-semibold">Sub LOB:</label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <select
+                    className="p-2 bordered w-full"
+                    name="subLob"
+                    onChange={handleChange}
+                  >
+                    <option value="0">Choose SubLOB</option>
+                    {subLobs.map(subLob => (
+                      <option key={subLob.subLOBid} value={subLob.subLOBid}>{subLob.subLobName}</option>
+                    ))}
                   </select>
                 </td>
               </tr>
