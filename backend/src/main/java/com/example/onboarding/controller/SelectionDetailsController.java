@@ -66,7 +66,7 @@ public class SelectionDetailsController {
     }
     
 
-    @PutMapping("/candidate/{candidateId}")
+    @PutMapping("/candidateId/{candidateId}")
     public ResponseEntity<SelectionDetails> updateSelectionDetailsByCandidateId(@PathVariable int candidateId,
             @RequestBody SelectionDetails updatedDetails) {
         SelectionDetails details = selectionDetailsService.updateSelectionDetailsByCandidateId(candidateId,
