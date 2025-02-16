@@ -9,4 +9,6 @@ import com.example.onboarding.model.SelectionDetails;
 public interface SelectionDetailsRepository extends JpaRepository<SelectionDetails, Integer> {
     SelectionDetails findByEmployee_Psid(int psid); 
     SelectionDetails findByCandidate_CandidateId(int candidateId);
+    Boolean existsByEmployee_Psid(int psId);
+    Boolean existsByCandidate_CandidateId(int candidateId);
 }

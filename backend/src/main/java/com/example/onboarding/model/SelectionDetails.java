@@ -1,5 +1,6 @@
 package com.example.onboarding.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
@@ -61,8 +62,8 @@ public class SelectionDetails {
     private Date techSelectionDate;
     private Date DOJReceivedDate;
     private Date LTIOnboardingDate;
-    private byte[] createDate;
-    private byte[] updateDate;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
 
     public int getSelectionId() {
@@ -182,18 +183,7 @@ public class SelectionDetails {
     public void setLTIOnboardingDate(Date LTIOnboardingDate) {
         this.LTIOnboardingDate = LTIOnboardingDate;
     }
-    public byte[] getCreateDate() {
-        return createDate;
-    }
-    public void setCreateDate(byte[] createDate) {
-        this.createDate = createDate;
-    }
-    public byte[] getUpdateDate() {
-        return updateDate;
-    }
-    public void setUpdateDate(byte[] updateDate) {
-        this.updateDate = updateDate;
-    }
+    
     public Employee getEmployee() {
         return employee;
     }
@@ -242,5 +232,16 @@ public class SelectionDetails {
     public String getDeliveryManager() {
         return deliveryManager;
     }
-    
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+    public LocalDateTime getUpdateDate() {
+        return updateDate;
+    }
+    public void setUpdateDate(LocalDateTime updateDate) {
+        this.updateDate = updateDate;
+    }
 }

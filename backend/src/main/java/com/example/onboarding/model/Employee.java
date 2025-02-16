@@ -1,5 +1,7 @@
 package com.example.onboarding.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -22,15 +24,14 @@ public class Employee {
     private String mailID;
 
     @ManyToOne
-    @JoinColumn(name = "createdBy")
-    private Candidate createdBy;
-
+    @JoinColumn(name="createdByPsId")
+    private Employee createdBy;
     @ManyToOne
-    @JoinColumn(name = "updatedBy")
-    private Candidate updatedBy;
+    @JoinColumn(name="updatedByPsId")
+    private Employee updatedBy;
 
-    private byte[] createdDate;
-    private byte[] updatedDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
 
     public Employee(int psid) {
         this.psid = psid;
@@ -119,36 +120,35 @@ public class Employee {
         this.mailID = mailID;
     }
 
-    public byte[] getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(byte[] createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public byte[] getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(byte[] updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
-    public Candidate getCreatedBy() {
+    public Employee getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(Candidate createdBy) {
+    public void setCreatedBy(Employee createdBy) {
         this.createdBy = createdBy;
     }
 
-    public Candidate getUpdatedBy() {
+    public Employee getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(Candidate updatedBy) {
+    public void setUpdatedBy(Employee updatedBy) {
         this.updatedBy = updatedBy;
     }
 
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(LocalDateTime updatedDate) {
+        this.updatedDate = updatedDate;
+    }
 }

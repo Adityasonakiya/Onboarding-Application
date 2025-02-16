@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { FaSearch, FaCheck, FaBell, FaUser, FaTimes } from 'react-icons/fa';
 import { FiAlignJustify } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
 import smallLogo from '../assets/images/logo2.png';
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activePopup, setActivePopup] = useState(null);
+  const [errors,setErrors] = useState('');
+  const navigate=useNavigate();
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -17,6 +19,30 @@ export default function Navbar() {
 
   const togglePopup = (popup) => {
     setActivePopup(activePopup === popup ? null : popup);
+  };
+
+  
+  const handleLogout = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const response = await fetch('http://localhost:8080/api/users/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ psid: user.psid }),
+      });
+
+      if (response.ok) {
+        localStorage.removeItem('user'); // Remove user info from local storage
+        navigate('/login'); // Navigate back to the login page
+      } else {
+        const errorData = await response.json();
+        setErrors({ submit: errorData.message });
+      }
+    } catch (error) {
+      setErrors({ submit: 'An error occurred while logging out' });
+    }
   };
 
   return (
@@ -148,6 +174,7 @@ export default function Navbar() {
                 <Link
                   to='/login'
                   className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
+                  onClick={handleLogout}
                 >
                   Logout
                 </Link>

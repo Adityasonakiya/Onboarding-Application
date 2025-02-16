@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getCandidateById,
   getEmployeeByPsid,
@@ -13,7 +13,7 @@ function SelectionTracker() {
   const [form, setForm] = useState({});
   const [errors, setErrors] = useState({});
   const [isInternal, setIsInternal] = useState(false);
-  const [selected, setSelected] = React.useState("");
+  // const [selected, setSelected] = React.useState("");
   const navigate = useNavigate();
   const [lobs, setLobs] = useState([]);
   const [subLobs, setSubLobs] = useState([]);
@@ -46,9 +46,9 @@ function SelectionTracker() {
     getLobs();
   }, []);
 
-  const changeSelectOptionHandler = (event) => {
-    setSelected(event.target.value);
-  };
+  // const changeSelectOptionHandler = (event) => {
+  //   setSelected(event.target.value);
+  // };
 
   const handleLobChange = async (event) => {
     const lobId = event.target.value;
@@ -295,95 +295,51 @@ function SelectionTracker() {
   //for submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const errors = validate();
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await fetch(
-          "http://localhost:8080/selection-details/create",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              employee: {
-                psid: form.psId,
-                firstName: form.fname,
-                lastName: form.lname,
-                grade: form.grade,
-                location: form.location,
-                pu: form.pu,
-                totalExperience: form.totalExp,
-                skill: form.skill,
-                mailID: form.email,
-              }||null,
-              candidate:form.candidate||null,
-              hsbcselectionDate: form.selectionDate,
-              baseBU: "BF",
-              lob: form.lob,
-              sublob: form.subLob,
-              hsbchiringManager: form.hiringManager,
-              hsbchead: form.head,
-              deliveryManager: form.deliveryManager,
-              salesPOC: form.salespoc,
-              pricingModel: form.pricingModel,
-              irm: form.irm,
-              hsbctoolId: form.ctoolId,
-              ctoolReceivedDate: form.ctoolRecDate,
-              ctoolJobCategory: form.ctoolJobCat,
-              ctoolLocation: form.ctoolLocation,
-              ctoolRate: form.ctoolRate,
-              ctoolProposedRate: form.ctoolPropRate,
-              recruiterName: form.recruiterName,
-              interviewEvidence: form.evidence,
-              offerReleaseStatus: form.offerReleaseStatus,
-              ltionboardingDate: form.ltiOnboardDate,
-            }),
-          }
-        );
-
+        const requestBody = {
+          hsbcselectionDate: form.selectionDate,
+          baseBU: "BF",
+          lob: form.lob,
+          sublob: form.subLob,
+          hsbchiringManager: form.hiringManager,
+          hsbchead: form.head,
+          deliveryManager: form.deliveryManager,
+          salesPOC: form.salespoc,
+          pricingModel: form.pricingModel,
+          irm: form.irm,
+          hsbctoolId: form.ctoolId,
+          ctoolReceivedDate: form.ctoolRecDate,
+          ctoolJobCategory: form.ctoolJobCat,
+          ctoolLocation: form.ctoolLocation,
+          ctoolRate: form.ctoolRate,
+          ctoolProposedRate: form.ctoolPropRate,
+          recruiterName: form.recruiterName,
+          interviewEvidence: form.evidence,
+          offerReleaseStatus: form.offerReleaseStatus,
+          ltionboardingDate: form.ltiOnboardDate,
+        };
+  
+        if (form.psId) {
+          requestBody.employee = { psid: form.psId };
+        } else if (form.candidateId) {
+          requestBody.candidate = { candidateId: form.candidateId };
+        }
+  
+        const response = await fetch("http://localhost:8080/selection-details/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+  
         if (response.ok) {
-          // Simulate successful creation of selection details for the employee
-          localStorage.setItem(
-            "selectionDetails",
-            JSON.stringify({
-              employee: {
-                psid: form.psId,
-                firstName: form.fname,
-                lastName: form.lname,
-                grade: form.grade,
-                location: form.location,
-                pu: form.pu,
-                totalExperience: form.totalExp,
-                skill: form.skill,
-                mailID: form.email,
-              }||null,
-              candidate:form.candidate||null,
-              hsbcselectionDate: form.selectionDate,
-              baseBU: "BF",
-              lob: form.lob,
-              subLob: form.subLob,
-              hsbchiringManager: form.hiringManager,
-              hsbchead: form.head,
-              deliveryManager: form.deliveryManager,
-              salesPOC: form.salespoc,
-              pricingModel: form.pricingModel,
-              irm: form.irm,
-              hsbctoolId: form.ctoolId,
-              ctoolReceivedDate: form.ctoolRecDate,
-              ctoolJobCategory: form.ctoolJobCat,
-              ctoolLocation: form.ctoolLocation,
-              ctoolRate: form.ctoolRate,
-              ctoolProposedRate: form.ctoolPropRate,
-              recruiterName: form.recruiterName,
-              interviewEvidence: form.evidence,
-              offerReleaseStatus: form.offerReleaseStatus,
-              ltionboardingDate: form.ltiOnboardDate,
-            })
-          );
-
-          navigate("/selection-tracker"); // Navigate to the dashboard after successful creation
+          // Simulate successful creation of selection details for the employee or candidate
+          localStorage.setItem("selectionDetails", JSON.stringify(requestBody));
+          navigate("/landing-page"); // Navigate to the dashboard after successful creation
         } else {
           const errorData = await response.json();
           setErrors({ submit: errorData.message });
@@ -395,6 +351,86 @@ function SelectionTracker() {
       setErrors(errors);
     }
   };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   const errors = validate();
+  //   if (Object.keys(errors).length === 0) {
+  //     try {
+  //       const response = await fetch(
+  //         "http://localhost:8080/selection-details/create",
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({
+  //             employee:{psid:form.psId}||null,
+  //             candidate:{candidateId:form.candidateId||null},
+  //             hsbcselectionDate: form.selectionDate,
+  //             baseBU: "BF",
+  //             lob: form.lob,
+  //             sublob: form.subLob,
+  //             hsbchiringManager: form.hiringManager,
+  //             hsbchead: form.head,
+  //             deliveryManager: form.deliveryManager,
+  //             salesPOC: form.salespoc,
+  //             pricingModel: form.pricingModel,
+  //             irm: form.irm,
+  //             hsbctoolId: form.ctoolId,
+  //             ctoolReceivedDate: form.ctoolRecDate,
+  //             ctoolJobCategory: form.ctoolJobCat,
+  //             ctoolLocation: form.ctoolLocation,
+  //             ctoolRate: form.ctoolRate,
+  //             ctoolProposedRate: form.ctoolPropRate,
+  //             recruiterName: form.recruiterName,
+  //             interviewEvidence: form.evidence,
+  //             offerReleaseStatus: form.offerReleaseStatus,
+  //             ltionboardingDate: form.ltiOnboardDate,
+  //           }),
+  //         }
+  //       );
+
+  //       if (response.ok) {
+  //         // Simulate successful creation of selection details for the employee
+  //         localStorage.setItem(
+  //           "selectionDetails",
+  //           JSON.stringify({
+  //             hsbcselectionDate: form.selectionDate,
+  //             baseBU: "BF",
+  //             lob: form.lob,
+  //             subLob: form.subLob,
+  //             hsbchiringManager: form.hiringManager,
+  //             hsbchead: form.head,
+  //             deliveryManager: form.deliveryManager,
+  //             salesPOC: form.salespoc,
+  //             pricingModel: form.pricingModel,
+  //             irm: form.irm,
+  //             hsbctoolId: form.ctoolId,
+  //             ctoolReceivedDate: form.ctoolRecDate,
+  //             ctoolJobCategory: form.ctoolJobCat,
+  //             ctoolLocation: form.ctoolLocation,
+  //             ctoolRate: form.ctoolRate,
+  //             ctoolProposedRate: form.ctoolPropRate,
+  //             recruiterName: form.recruiterName,
+  //             interviewEvidence: form.evidence,
+  //             offerReleaseStatus: form.offerReleaseStatus,
+  //             ltionboardingDate: form.ltiOnboardDate,
+  //           })
+  //         );
+
+  //         navigate("/selection-tracker"); // Navigate to the dashboard after successful creation
+  //       } else {
+  //         const errorData = await response.json();
+  //         setErrors({ submit: errorData.message });
+  //       }
+  //     } catch (error) {
+  //       setErrors({ submit: "An error occurred while submitting the form" });
+  //     }
+  //   } else {
+  //     setErrors(errors);
+  //   }
+  // };
 
   return (
     <div className="w-full px-4 py-6">
@@ -917,11 +953,12 @@ function SelectionTracker() {
                 <td colSpan="4" className="p-2">
                   <div className="flex justify-center space-x-4">
                     <button
-                      type="submit"
+                      type="submit" onClick={handleSubmit} 
                       className="bg-blue-500 text-white py-2 px-10 rounded"
                     >
                       Submit
                     </button>
+                    
                     <button
                       type="button"
                       className="bg-gray-500 text-white py-2 px-10 rounded"

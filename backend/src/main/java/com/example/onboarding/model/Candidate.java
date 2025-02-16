@@ -1,5 +1,6 @@
 package com.example.onboarding.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
@@ -19,14 +20,15 @@ public class Candidate {
     private String lastName;
     private Date LTIOnboardingDate;
     @ManyToOne
-    @JoinColumn(name = "createdBy")
+    @JoinColumn(name = "createdByPsId")
     private Employee createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "updatedBy")
+    @JoinColumn(name = "updatedByPsId")
     private Employee updatedBy;
-    private Date createDate;
-    private Date updateDate;
+    
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
     public Candidate(int candidateId) {
         this.candidateId = candidateId;
@@ -75,22 +77,6 @@ public class Candidate {
         LTIOnboardingDate = lTIOnboardingDate;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
     public Employee getCreatedBy() {
         return createdBy;
     }
@@ -105,6 +91,22 @@ public class Candidate {
 
     public void setUpdatedBy(Employee updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public LocalDateTime getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(LocalDateTime updateDate) {
+        this.updateDate = updateDate;
     }
 
 }

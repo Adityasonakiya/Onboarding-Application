@@ -66,5 +66,15 @@ public class User {
         this.roleId = roleId;
     }
     
+    @Override
+    public String toString() {
+        return "TaggingDetails{" +
+                "psid=" + psid +
+                ", roleId=" + roleId +
+                ", userManagerId=" + userManagerId +
+                ", lastLogin=" + lastLogin +
+                ", lastLogout=" + lastLogout+ 
+                '}';
+    }
 
 }
