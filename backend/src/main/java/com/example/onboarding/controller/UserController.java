@@ -1,5 +1,7 @@
 package com.example.onboarding.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,5 +48,19 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body("User Logged in successfully");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody LoginDTO loginDTO) {
+        Optional<User> optionalUser = userService.getUserById(loginDTO.getPsid());
+
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username");
+        }
+
+        User user = optionalUser.get();
+        userService.logoutUser(user);
+
+        return ResponseEntity.ok("User logged out successfully");
     }
 }

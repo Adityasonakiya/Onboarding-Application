@@ -39,5 +39,14 @@ public class BGVStatus {
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
- 
+
+    @Override
+    public String toString() {
+        return "TaggingDetails{" +
+                "bgvstatusId=" + bgvStatusId +
+                ", bgvStatus=" + bgvStatus +
+                ", remarks=" + remarks +
+                ", tagging details=" + taggingDetails +
+                '}';
+    }
 }

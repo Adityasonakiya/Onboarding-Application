@@ -1,5 +1,7 @@
 package com.example.onboarding.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,8 +39,8 @@ public class TaggingDetails {
     private User updatedBy;
 
     private String statusRemarks;
-    private byte[] createDate;
-    private byte[] updateDate;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
     @Override
     public String toString() {
@@ -72,19 +74,19 @@ public class TaggingDetails {
         this.statusRemarks = statusRemarks;
     }
 
-    public byte[] getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(byte[] createDate) {
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
-    public byte[] getUpdateDate() {
+    public LocalDateTime getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(byte[] updateDate) {
+    public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
     }
 

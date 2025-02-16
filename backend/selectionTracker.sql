@@ -9,21 +9,23 @@ VALUES
 (4, 'Staff-Other', 'Any other employee', 'Do specify');
 
 INSERT INTO user (psid, role_id, user_manager_id, password, last_login, last_logout) VALUES
+(10713037,1,10713037,'Sachin@12',NOW(),NOW()),
 (10820934, 1, 10820934, 'Harshi@12', NOW(), NOW()),
 (10820984, 1, 10713037, 'Adity@12', NOW(), NOW());
 
 INSERT INTO employee 
-(psid, first_name, middle_name, last_name, grade, location, skill, total_experience, pu, mailid) 
+(psid, first_name, middle_name, last_name, grade, location, skill, total_experience, pu, mailid,created_by_ps_id,updated_by_ps_id,created_date,updated_date) 
 VALUES
-(10820984, 'Aditya', NULL, 'Sonakiya', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'aditya.sonakiya@ltimindtree.com'),
-(108210014, 'Abhijeet', NULL, 'Verma', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'abhijeet.verma@ltimindtree.com'),
-(10715126, 'Monali', NULL, 'Jangam', 'P4', 'Pune', 'Java Fullstack', 1, 'BB', 'monali.jangam@ltimindtree.com'),
-(10825932, 'Bhakti', 'Anand', 'Kulkarni', 'M4', 'Pune', 'Scrum Mamagement', 1, 'BB', 'bhakti.kulkarni@ltimindtree.com');
+(10713037,'Sachin',NULl,'Shaha','P6','Pune','Delivery Manager',20,'BB','sachin.shaha@ltimindtree.com',NULL,NULL,NOW(), NOW()),
+(10820984, 'Aditya', NULL, 'Sonakiya', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'aditya.sonakiya@ltimindtree.com',10713037,10713037,NOW(), NOW()),
+(108210014, 'Abhijeet', NULL, 'Verma', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'abhijeet.verma@ltimindtree.com',NULL,NULL,NOW(), NOW()),
+(10715126, 'Monali', NULL, 'Jangam', 'P4', 'Pune', 'Java Fullstack', 16, 'BB', 'monali.jangam@ltimindtree.com',10713037,10713037,NOW(), NOW()),
+(10825932, 'Bhakti', 'Anand', 'Kulkarni', 'M4', 'Pune', 'Scrum Mamagement', 1, 'BB', 'bhakti.kulkarni@ltimindtree.com',10713037,10713037,NOW(), NOW());
 
 INSERT INTO candidate
-(candidate_id, first_name, middle_name, last_name, ltionboarding_date, created_by, updated_by, create_date, update_date) 
+(candidate_id, first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date) 
 VALUES
-(10829803, 'Harshita', NULL, 'Tripathi', '2024-09-23', NULL, NULL, '2024-09-23', NULL),
+(10829803, 'Harshita', NULL, 'Tripathi', '2024-09-23', 10713037, 10713037, '2024-09-23', NULL),
 (10820581, 'Komal', 'Vitthal', 'More', '2024-09-23', NULL, NULL, '2024-09-23', NULL);
 
 INSERT INTO onboarding_status 
@@ -70,7 +72,7 @@ INSERT INTO lob (lob_id, lob_name, remarks, created_by, updated_by, created_date
 (16, 'WPB Technology', 'WPB', NULL, NULL, NULL, NULL);
 
 INSERT INTO sublob 
-(sublobid, lob_id, sub_lob_name, created_by, update_by, create_date, update_date) 
+(sublobid, lob_id, sub_lob_name, created_by_ps_id, update_by_ps_id, create_date, update_date) 
 VALUES
 (11, 1, 'Architecture Stds & Gov', NULL, NULL, NULL, NULL),
 (12,2,'Colleague & Collaboration',NULL,NULl,NULL,NULL),
@@ -138,7 +140,19 @@ hsbchiring_manager, hsbchead, salespoc, pricing_model, hsbctool_id, ctool_receiv
 ctool_location, ctool_rate, ctool_proposed_rate, recruiter_name, interview_evidences, offer_release_status, 
 hsbconboarding_date, tech_selection_date, dojreceived_date, ltionboarding_date, create_date, update_date) 
 VALUES
-(10820984, NULL, 'Sachin Shaha', 1, 11, 10825932, NULL, NULL, '2024-12-18', 
+(10820984, NULL, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2024-12-18', 
+"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 10893, '2025-12-02', "TM", 
+'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
+'2024-12-23', NULL, NULL, NULL,NOW() ,NOW()),
+(10715126, NULL, 'Sachin Shaha', 2, 22, 10825932, 10713037, 10713037, '2024-12-18', 
+"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 10893, '2025-12-02', "TM", 
+'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
+'2024-12-23', NULL, NULL, NULL,NOW() ,NOW()),
+(10825932, NULL, 'Sachin Shaha', 3, 36, 10825932, 10713037, 10713037, '2024-12-18', 
+"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 10893, '2025-12-02', "TM", 
+'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
+'2024-12-23', NULL, NULL, NULL,NOW() ,NOW()),
+(NULL,10829803, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2024-12-18', 
 "Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 10893, '2025-12-02', "TM", 
 'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
 '2024-12-23', NULL, NULL, NULL,NOW() ,NOW());
