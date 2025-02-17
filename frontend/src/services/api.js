@@ -120,4 +120,11 @@ export const fetchSubLobs = async (lobId) => {
   return response.json();
 };
 
+export const fetchEmployeeCandidates = async () => {
+  const response = await fetch("http://localhost:8080/employees/employee-candidates");
+  if (!response.ok) {
+    throw new Error('Failed to fetch employee candidates');
+  }
+  return response.json();
+};
 

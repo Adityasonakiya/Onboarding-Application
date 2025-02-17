@@ -1,16 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { fetchEmployeeCandidates } from '../services/api'; 
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [employeeCandidates, setEmployeeCandidates] = useState([]);
 
   const addNewSelection = () => {
-    navigate('/selection-tracker'); // Navigate to the Selection Tracker form
+    navigate('/selection-tracker');
   };
 
-  const handleEdit = () => {
-    navigate('/update-details'); // Navigate to the UpdateDetails page
+  const handleEdit = (id) => {
+    navigate(`/update-details/${id}`); // Navigate to the UpdateDetails page with NO ID
+    // navigate(`/update-details/${id}`);                 // Navigate to the UpdateDetails page with the selected ID
+
   };
+
+  useEffect(() => {
+    const getEmployeeCandidates = async () => {
+      try {
+        const data = await fetchEmployeeCandidates();
+        setEmployeeCandidates(data);
+      } catch (error) {
+        console.error('There was an error fetching the employee candidates!', error);
+      }
+    };
+
+    getEmployeeCandidates();
+  }, []);
 
   return (
     <div className='w-full px-4 py-6'>
@@ -33,21 +50,22 @@ const LandingPage = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className='p-2 border text-center'>Example PSID</td>
-                <td className='p-2 border text-center'>John Doe</td>
-                <td className='p-2 border text-center'>Example LOB</td>
-                <td className='p-2 border text-center'>Cleint Name</td>
-                <td className='p-2 border text-center'>CTool Pending</td>
-                <td className='p-2 border text-center'>BGV Initiated</td>
-                <td className='p-2 border text-center'>
-                  <div className="flex justify-center">
-                    <button className="bg-blue-500 text-white py-1 px-2 rounded mr-2" onClick={handleEdit}>Edit</button>
-                    {/* <button className="bg-red-500 text-white py-1 px-2 rounded">Delete</button> */}
-                  </div>
-                </td>
-              </tr>
-              {/* Add more rows as needed */}
+              {employeeCandidates.map(candidate => (
+                <tr key={candidate.id}>
+                  <td className='p-2 border text-center'>{candidate.id}</td>
+                  <td className='p-2 border text-center'>{candidate.firstName} {candidate.lastName}</td>
+                  <td className='p-2 border text-center'>{candidate.lobName}</td>
+                  <td className='p-2 border text-center'>{candidate.hsbchiringManager}</td>
+                  <td className='p-2 border text-center'>{candidate.onboardingStatus}</td>
+                  <td className='p-2 border text-center'>{candidate.bgvStatus}</td>
+                  <td className='p-2 border text-center'>
+                    <div className="flex justify-center">
+                      <button className="bg-blue-500 text-white py-1 px-2 rounded mr-2" onClick={() => handleEdit(candidate.id)}>Edit</button>
+                      {/* <button className="bg-red-500 text-white py-1 px-2 rounded">Delete</button> */}
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
