@@ -46,7 +46,7 @@ public class SelectionDetailsController {
     @PostMapping("/create")
     public ResponseEntity<SelectionDetails> createSelectionDetails(@RequestBody SelectionDetails details){
         SelectionDetails selectionDetails = selectionDetailsService.createSelectionDetails(details);
-        System.out.println(details);
+        System.out.println("details="+details);
         if(details!=null)
             return ResponseEntity.status(201).body(selectionDetails);
         return ResponseEntity.status(500).build();    
@@ -66,7 +66,7 @@ public class SelectionDetailsController {
     }
     
 
-    @PutMapping("/candidate/{candidateId}")
+    @PutMapping("/candidateId/{candidateId}")
     public ResponseEntity<SelectionDetails> updateSelectionDetailsByCandidateId(@PathVariable int candidateId,
             @RequestBody SelectionDetails updatedDetails) {
         SelectionDetails details = selectionDetailsService.updateSelectionDetailsByCandidateId(candidateId,
@@ -78,4 +78,6 @@ public class SelectionDetailsController {
         }
 
     }
+
+    
 }

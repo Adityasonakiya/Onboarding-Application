@@ -1,5 +1,6 @@
 package com.example.onboarding.service;
 
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class SelectionDetailsService {
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setCreateDate(updatedDetails.getCreateDate());
-            existingDetails.setUpdateDate(updatedDetails.getUpdateDate());
+            existingDetails.setUpdateDate(LocalDateTime.now());
             existingDetails.setLob(updatedDetails.getLob());
             existingDetails.setSubLob(updatedDetails.getSubLob());
             existingDetails.setIrm(updatedDetails.getIrm());
@@ -81,7 +82,7 @@ public class SelectionDetailsService {
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setCreateDate(updatedDetails.getCreateDate());
-            existingDetails.setUpdateDate(updatedDetails.getUpdateDate());
+            existingDetails.setUpdateDate(LocalDateTime.now());
             existingDetails.setLob(updatedDetails.getLob());
             existingDetails.setSubLob(updatedDetails.getSubLob());
             existingDetails.setIrm(updatedDetails.getIrm());
@@ -91,7 +92,20 @@ public class SelectionDetailsService {
         }
         return selectionDetailsRepository.save(updatedDetails);
     }
+
     public SelectionDetails createSelectionDetails(SelectionDetails details){
-        return selectionDetailsRepository.save(details);
+        
+        if(selectionDetailsRepository.existsByEmployee_Psid(details.getEmployee().getPsid()))
+            return updateSelectionDetailsByPsId(details.getEmployee().getPsid(), details);
+        
+        else
+        if(selectionDetailsRepository.existsByCandidate_CandidateId(details.getCandidate().getCandidateId()))
+            return updateSelectionDetailsByCandidateId(details.getCandidate().getCandidateId(), details);
+        
+        else{
+            details.setCreateDate(LocalDateTime.now());
+            details.setUpdateDate(LocalDateTime.now());
+            return selectionDetailsRepository.save(details);
+        }
     }
 }

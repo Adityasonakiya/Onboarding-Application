@@ -15,7 +15,7 @@ import com.example.onboarding.service.LOBService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("/users")
 public class LOBController {
     @Autowired
     LOBService service;
@@ -32,6 +32,6 @@ public class LOBController {
         List<LOB> lob =  service.findAll();
         if(!lob.isEmpty())
             return ResponseEntity.status(200).body(lob);
-        return ResponseEntity.status(404).build();
+        return ResponseEntity.status(400).build();
     }
 }

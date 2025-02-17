@@ -1,5 +1,7 @@
 package com.example.onboarding.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,15 +22,15 @@ public class SubLOB {
     private String subLobName;
 
     @ManyToOne
-    @JoinColumn(name = "createdBy")
-    private Candidate createdBy;
+    @JoinColumn(name = "createdByPsId")
+    private Employee createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "updateBy")
-    private Candidate updateBy;
+    @JoinColumn(name = "updateByPsId")
+    private Employee updatedBy;
 
-    private byte[] createDate;
-    private byte[] updateDate;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
     public int getSubLOBid() {
         return subLOBid;
@@ -42,36 +44,51 @@ public class SubLOB {
     public void setSubLobName(String subLobName) {
         this.subLobName = subLobName;
     }
-    public byte[] getCreateDate() {
-        return createDate;
-    }
-    public void setCreateDate(byte[] createDate) {
-        this.createDate = createDate;
-    }
-    public byte[] getUpdateDate() {
-        return updateDate;
-    }
-    public void setUpdateDate(byte[] updateDate) {
-        this.updateDate = updateDate;
-    }
+    
     public LOB getLob() {
         return lob;
     }
     public void setLob(LOB lob) {
         this.lob = lob;
     }
-    public Candidate getCreatedBy() {
-        return createdBy;
+    
+    public LocalDateTime getCreateDate() {
+        return createDate;
     }
-    public void setCreatedBy(Candidate createdBy) {
-        this.createdBy = createdBy;
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
     }
-    public Candidate getUpdateBy() {
-        return updateBy;
+    public LocalDateTime getUpdateDate() {
+        return updateDate;
     }
-    public void setUpdateBy(Candidate updateBy) {
-        this.updateBy = updateBy;
+    public void setUpdateDate(LocalDateTime updateDate) {
+        this.updateDate = updateDate;
     }
 
+    @Override
+    public String toString() {
+        return "TaggingDetails{" +
+                "subLOBId=" + subLOBid +
+                ", lob=" + lob +
+                ", createDate=" + createDate +
+                ", updateDate=" + updateDate +
+                ", subLOBName=" + subLobName +
+                ", createdBy=" + createdBy +
+                ", updatedBy=" + updatedBy +
+                '}';
+    }
+    public Employee getCreatedBy() {
+        return createdBy;
+    }
+    public void setCreatedBy(Employee createdBy) {
+        this.createdBy = createdBy;
+    }
+    public Employee getUpdatedBy() {
+        return updatedBy;
+    }
+    public void setUpdatedBy(Employee updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
     
 }

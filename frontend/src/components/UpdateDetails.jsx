@@ -50,8 +50,10 @@ function UpdateDetails() {
     const formattedTagDate = moment(form.tagDate, 'YYYY-MM-DD').toISOString();
     console.log("Formatted tagDate value:", formattedTagDate); // Log the formatted date
   
-    const createDate = encodeToBase64(formattedTagDate);
-    const updateDate = encodeToBase64(new Date().toISOString());
+    // const createDate = encodeToBase64(formattedTagDate);
+    // const updateDate = encodeToBase64(new Date().toISOString());
+    const createDate = (formattedTagDate);
+    const updateDate = (new Date().toISOString());
 
     const taggingDetails = {
       onboardingStatus: {
@@ -106,10 +108,14 @@ function UpdateDetails() {
           addRemark: taggingData.onboardingStatus?.remarks || '',
           bgvStatus: taggingData.bgvStatus?.bgvStatus || '',
           bgvRemark: taggingData.bgvStatus?.remarks || '',
-          tagDate: formatDate(taggingData.createDate) || '',
-          techSelectDate: formatDate(selectionData.techSelectionDate),
-          dojRecDate: formatDate(selectionData.dojreceivedDate),
-          onboardingDate: formatDate(selectionData.hsbconboardingDate)
+          // tagDate: formatDate(taggingData.createDate) || '',
+          // techSelectDate: formatDate(selectionData.techSelectionDate),
+          // dojRecDate: formatDate(selectionData.dojreceivedDate),
+          // onboardingDate: formatDate(selectionData.hsbconboardingDate)
+          tagDate: (taggingData.createDate) || '',
+          techSelectDate: (selectionData.techSelectionDate),
+          dojRecDate: (selectionData.dojreceivedDate),
+          onboardingDate: (selectionData.hsbconboardingDate)
         });
       }).catch(error => {
         console.error('Error fetching data by PsId:', error);
@@ -124,10 +130,14 @@ function UpdateDetails() {
           addRemark: taggingData.onboardingStatus?.remarks || '',
           bgvStatus: taggingData.bgvStatus?.bgvStatus || '',
           bgvRemark: taggingData.bgvStatus?.remarks || '',
-          tagDate: formatDate(taggingData.createDate) || '',
-          techSelectDate: formatDate(selectionData.techSelectionDate),
-          dojRecDate: formatDate(selectionData.dojreceivedDate),
-          onboardingDate: formatDate(selectionData.hsbconboardingDate)
+          // tagDate: formatDate(taggingData.createDate) || '',
+          // techSelectDate: formatDate(selectionData.techSelectionDate),
+          // dojRecDate: formatDate(selectionData.dojreceivedDate),
+          // onboardingDate: formatDate(selectionData.hsbconboardingDate)
+          tagDate: (taggingData.createDate) || '',
+          techSelectDate: (selectionData.techSelectionDate),
+          dojRecDate: (selectionData.dojreceivedDate),
+          onboardingDate: (selectionData.hsbconboardingDate)
         });
       }).catch(error => {
         console.error('Error fetching data by CandidateId:', error);

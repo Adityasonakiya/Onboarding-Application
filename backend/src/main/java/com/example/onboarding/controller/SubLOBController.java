@@ -14,7 +14,7 @@ import com.example.onboarding.model.SubLOB;
 import com.example.onboarding.service.SubLOBService;
 @CrossOrigin("*")
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("/users")
 public class SubLOBController {
     @Autowired
     SubLOBService subService;
