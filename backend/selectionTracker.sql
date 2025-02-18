@@ -25,8 +25,8 @@ VALUES
 INSERT INTO candidate
 (candidate_id, first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date) 
 VALUES
-(10829803, 'Harshita', NULL, 'Tripathi', '2024-09-23', 10713037, 10713037, '2024-09-23', NULL),
-(10820581, 'Komal', 'Vitthal', 'More', '2024-09-23', NULL, NULL, '2024-09-23', NULL);
+(10829803, 'Harshita', NULL, 'Tripathi', '2024-09-23', 10713037, 10713037, '2024-09-23', NOW()),
+(10820581, 'Komal', 'Vitthal', 'More', '2024-09-23', NULL, NULL, '2024-09-23', NOW());
 
 INSERT INTO onboarding_status 
 (status_id, onboarding_status, remarks) 
@@ -54,84 +54,84 @@ VALUES
 (7,"Interim Closed","Background verfication has been closed");
 
 INSERT INTO lob (lob_id, lob_name, remarks, created_by, updated_by, created_date, update_date) VALUES
-(1, 'Business & Data Architecture', 'Business & Data Architecture', NULL, NULL, NULL, NULL),
-(2, 'CTO', 'Chief Technology Officer', NULL, NULL, NULL, NULL),
-(3, 'Cybersecurity', 'Cybersecurity Assessment and testing', NULL, NULL, NULL, NULL),
-(4, 'Enterprise Technology', 'Finance & banking', NULL, NULL, NULL, NULL),
-(5, 'Global Ops & Automation Tech', 'Automation Technology', NULL, NULL, NULL, NULL),
-(6, 'Group Data Technology', 'Group data Technology', NULL, NULL, NULL, NULL),
-(7, 'HDPI', 'Pixel density', NULL, NULL, NULL, NULL),
-(8, 'INM', 'INM', NULL, NULL, NULL, NULL),
-(9, 'Markets & Sec Services Tech', 'Services', NULL, NULL, NULL, NULL),
-(10, 'MDS & DAO ESG', 'Data& Analytics', NULL, NULL, NULL, NULL),
-(11, 'Regional CIO - Europe', 'Regional CIO for Europe', NULL, NULL, NULL, NULL),
-(12, 'SAB Technology', 'SAB Tech', NULL, NULL, NULL, NULL),
-(13, 'Strategic Services Technology', 'SST Group', NULL, NULL, NULL, NULL),
-(14, 'Technology COO', 'Tech COO', NULL, NULL, NULL, NULL),
-(15, 'Wholesale Technology', 'WS Tech', NULL, NULL, NULL, NULL),
-(16, 'WPB Technology', 'WPB', NULL, NULL, NULL, NULL);
+(1, 'Business & Data Architecture', 'Business & Data Architecture', 10713037, 10713037, NOW(), NOW()),
+(2, 'CTO', 'Chief Technology Officer', 10713037, 10713037, NOW(), NOW()),
+(3, 'Cybersecurity', 'Cybersecurity Assessment and testing', 10713037, 10713037, NOW(), NOW()),
+(4, 'Enterprise Technology', 'Finance & banking', 10713037, 10713037, NOW(), NOW()),
+(5, 'Global Ops & Automation Tech', 'Automation Technology', 10713037, 10713037, NOW(), NOW()),
+(6, 'Group Data Technology', 'Group data Technology', 10713037, 10713037, NOW(), NOW()),
+(7, 'HDPI', 'Pixel density', 10713037, 10713037, NOW(), NOW()),
+(8, 'INM', 'INM', 10713037, 10713037, NOW(), NOW()),
+(9, 'Markets & Sec Services Tech', 'Services', 10713037, 10713037, NOW(), NOW()),
+(10, 'MDS & DAO ESG', 'Data& Analytics', 10713037, 10713037, NOW(), NOW()),
+(11, 'Regional CIO - Europe', 'Regional CIO for Europe', 10713037, 10713037, NOW(), NOW()),
+(12, 'SAB Technology', 'SAB Tech', 10713037, 10713037, NOW(), NOW()),
+(13, 'Strategic Services Technology', 'SST Group', 10713037, 10713037, NOW(), NOW()),
+(14, 'Technology COO', 'Tech COO', 10713037, 10713037, NOW(), NOW()),
+(15, 'Wholesale Technology', 'WS Tech', 10713037, 10713037, NOW(), NOW()),
+(16, 'WPB Technology', 'WPB', 10713037, 10713037, NOW(), NOW());
 
 INSERT INTO sublob 
 (sublobid, lob_id, sub_lob_name, created_by_ps_id, update_by_ps_id, create_date, update_date) 
 VALUES
-(11, 1, 'Architecture Stds & Gov', NULL, NULL, NULL, NULL),
-(12,2,'Colleague & Collaboration',NULL,NULl,NULL,NULL),
-(22,2,'Dev Ops Services',NULL,NULl,NULL,NULL),
-(32,2,'Engineering & PE',NULL,NULl,NULL,NULL),
-(42,2,'Enterprise Infrastructure',NULL,NULl,NULL,NULL),
-(13, 3, 'Cyber Assessment & Testing', NULL, NULL, NULL, NULL),
-(14,4,'Colleague Experience Tech',NULL,NULL,NULL,NULL),
-(24,4,'Core Banking',NULL,NULL,NULL,NULL),
-(34,4,'Cross Functions Technology',NULL,NULL,NULL,NULL),
-(44,4,'Finance Technology',NULL,NULL,NULL,NULL),
-(54,4,'Risk & Compliance Technology',NULL,NULL,NULL,NULL),
-(64,4,'Risk-Compliance Technology',NULL,NULL,NULL,NULL),
-(15,5,'Automation Platforms',NULL,NULL,NULL,NULL),
-(25,5,'Ops Management',NULL,NULL,NULL,NULL),
-(35,5,'Tech Change Delivery',NULL,NULL,NULL,NULL),
-(16,6,'GDT BI & Visualization Tech',NULL,NULL,NULL,NULL),
-(26,6,'GDT Data Asset Tech & Control',NULL,NULL,NULL,NULL),
-(36,6,'GDT Data Management Tech',NULL,NULL,NULL,NULL),
-(46,6,'GDT Data Provisioning Tech',NULL,NULL,NULL,NULL),
-(56,6,'GDT ET',NULL,NULL,NULL,NULL),
-(66,6,'GDT MENAT, EU & UK',NULL,NULL,NULL,NULL),
-(76,6,'GDT WPB',NULL,NULL,NULL,NULL),
-(86,6,'GDT WS, MSS and ESG',NULL,NULL,NULL,NULL),
-(17, 7, 'HDPI', NULL, NULL, NULL, NULL),
-(18, 8, 'INM', NULL, NULL, NULL, NULL),
-(19,9,'Equities Technology',NULL,NULL,NULL,NULL),
-(29,9,'Fin Data & Reg Reporting Tech',NULL,NULL,NULL,NULL),
-(39,9,'Global Debt Markets Tech',NULL,NULL,NULL,NULL),
-(49,9,'Markets Treasury Tech',NULL,NULL,NULL,NULL),
-(59,9,'MSS Central Services',NULL,NULL,NULL,NULL),
-(69,9,'MSS Operations Technology',NULL,NULL,NULL,NULL),
-(79,9,'Securities Financing Tech',NULL,NULL,NULL,NULL),
-(89,9,'Securities Services Tech',NULL,NULL,NULL,NULL),
-(99,9,'Surveillance & Supervision',NULL,NULL,NULL,NULL),
-(109,9,'Traded Risk',NULL,NULL,NULL,NULL),
-(110,10,'ESG Data & Analytics',NULL,NULL,NULL,NULL),
-(111,11,'Regional Tech - Europe',NULL,NULL,NULL,NULL),
-(112,12,'SAB Tech',NULL,NULL,NULL,NULL),
-(113,13,'SST Group Enterprise Arch',NULL,NULL,NULL,NULL),
-(114,14,'Tech COO - Enterprise Tech',NULL,NULL,NULL,NULL),
-(214,14,'Tech Third Party Mgmt',NULL,NULL,NULL,NULL),
-(115,15,'WS Global Payment Solutions',NULL,NULL,NULL,NULL),
-(215,15,'WS Tech Client Services',NULL,NULL,NULL,NULL),
-(315,15,'WS Tech Credit & Lending',NULL,NULL,NULL,NULL),
-(415,15,'WS Tech Digital',NULL,NULL,NULL,NULL),
-(515,15,'WS Tech FEM&S',NULL,NULL,NULL,NULL),
-(615,15,'WS Tech General',NULL,NULL,NULL,NULL),
-(715,15,'WS Tech Global Banking',NULL,NULL,NULL,NULL),
-(815,15,'WS Tech Global Trade and RF',NULL,NULL,NULL,NULL),
-(915,15,'WS Tech Regional',NULL,NULL,NULL,NULL),
-(1015,15,'WS Tech Shared Services',NULL,NULL,NULL,NULL),
-(1115,15,'WSIT General',NULL,NULL,NULL,NULL),
-(116,16,'Enabler Platforms',NULL,NULL,NULL,NULL),
-(216,16,'GPBW and AMG Tech',NULL,NULL,NULL,NULL),
-(316,16,'Insurance',NULL,NULL,NULL,NULL),
-(416,16,'Retail Banking Technology',NULL,NULL,NULL,NULL),
-(516,16,'WPB Technology Management',NULL,NULL,NULL,NULL),
-(616,16,'WPB UK Tech',NULL,NULL,NULL,NULL);
+(11, 1, 'Architecture Stds & Gov', 10713037, 10713037, NOW(), NOW()),
+(12,2,'Colleague & Collaboration',10713037,10713037,NOW(),NOW()),
+(22,2,'Dev Ops Services',10713037,10713037,NOW(),NOW()),
+(32,2,'Engineering & PE',10713037,10713037,NOW(),NOW()),
+(42,2,'Enterprise Infrastructure',10713037,10713037,NOW(),NOW()),
+(13, 3, 'Cyber Assessment & Testing', 10713037, 10713037, NOW(), NOW()),
+(14,4,'Colleague Experience Tech',10713037,10713037,NOW(),NOW()),
+(24,4,'Core Banking',10713037,10713037,NOW(),NOW()),
+(34,4,'Cross Functions Technology',10713037,10713037,NOW(),NOW()),
+(44,4,'Finance Technology',10713037,10713037,NOW(),NOW()),
+(54,4,'Risk & Compliance Technology',10713037,10713037,NOW(),NOW()),
+(64,4,'Risk-Compliance Technology',10713037,10713037,NOW(),NOW()),
+(15,5,'Automation Platforms',10713037,10713037,NOW(),NOW()),
+(25,5,'Ops Management',10713037,10713037,NOW(),NOW()),
+(35,5,'Tech Change Delivery',10713037,10713037,NOW(),NOW()),
+(16,6,'GDT BI & Visualization Tech',10713037,10713037,NOW(),NOW()),
+(26,6,'GDT Data Asset Tech & Control',10713037,10713037,NOW(),NOW()),
+(36,6,'GDT Data Management Tech',10713037,10713037,NOW(),NOW()),
+(46,6,'GDT Data Provisioning Tech',10713037,10713037,NOW(),NOW()),
+(56,6,'GDT ET',10713037,10713037,NOW(),NOW()),
+(66,6,'GDT MENAT, EU & UK',10713037,10713037,NOW(),NOW()),
+(76,6,'GDT WPB',10713037,10713037,NOW(),NOW()),
+(86,6,'GDT WS, MSS and ESG',10713037,10713037,NOW(),NOW()),
+(17, 7, 'HDPI', 10713037, 10713037, NOW(), NOW()),
+(18, 8, 'INM', 10713037, 10713037, NOW(), NOW()),
+(19,9,'Equities Technology',10713037,10713037,NOW(),NOW()),
+(29,9,'Fin Data & Reg Reporting Tech',10713037,10713037,NOW(),NOW()),
+(39,9,'Global Debt Markets Tech',10713037,10713037,NOW(),NOW()),
+(49,9,'Markets Treasury Tech',10713037,10713037,NOW(),NOW()),
+(59,9,'MSS Central Services',10713037,10713037,NOW(),NOW()),
+(69,9,'MSS Operations Technology',10713037,10713037,NOW(),NOW()),
+(79,9,'Securities Financing Tech',10713037,10713037,NOW(),NOW()),
+(89,9,'Securities Services Tech',10713037,10713037,NOW(),NOW()),
+(99,9,'Surveillance & Supervision',10713037,10713037,NOW(),NOW()),
+(109,9,'Traded Risk',10713037,10713037,NOW(),NOW()),
+(110,10,'ESG Data & Analytics',10713037,10713037,NOW(),NOW()),
+(111,11,'Regional Tech - Europe',10713037,10713037,NOW(),NOW()),
+(112,12,'SAB Tech',10713037,10713037,NOW(),NOW()),
+(113,13,'SST Group Enterprise Arch',10713037,10713037,NOW(),NOW()),
+(114,14,'Tech COO - Enterprise Tech',10713037,10713037,NOW(),NOW()),
+(214,14,'Tech Third Party Mgmt',10713037,10713037,NOW(),NOW()),
+(115,15,'WS Global Payment Solutions',10713037,10713037,NOW(),NOW()),
+(215,15,'WS Tech Client Services',10713037,10713037,NOW(),NOW()),
+(315,15,'WS Tech Credit & Lending',10713037,10713037,NOW(),NOW()),
+(415,15,'WS Tech Digital',10713037,10713037,NOW(),NOW()),
+(515,15,'WS Tech FEM&S',10713037,10713037,NOW(),NOW()),
+(615,15,'WS Tech General',10713037,10713037,NOW(),NOW()),
+(715,15,'WS Tech Global Banking',10713037,10713037,NOW(),NOW()),
+(815,15,'WS Tech Global Trade and RF',10713037,10713037,NOW(),NOW()),
+(915,15,'WS Tech Regional',10713037,10713037,NOW(),NOW()),
+(1015,15,'WS Tech Shared Services',10713037,10713037,NOW(),NOW()),
+(1115,15,'WSIT General',10713037,10713037,NOW(),NOW()),
+(116,16,'Enabler Platforms',10713037,10713037,NOW(),NOW()),
+(216,16,'GPBW and AMG Tech',10713037,10713037,NOW(),NOW()),
+(316,16,'Insurance',10713037,10713037,NOW(),NOW()),
+(416,16,'Retail Banking Technology',10713037,10713037,NOW(),NOW()),
+(516,16,'WPB Technology Management',10713037,10713037,NOW(),NOW()),
+(616,16,'WPB UK Tech',10713037,10713037,NOW(),NOW());
 
 
 INSERT INTO selection_details 
@@ -160,5 +160,22 @@ VALUES
 INSERT INTO tagging_details 
 (ps_id, candidate_id, onboarding_status_id, bgvstatus_id, created_by_psid, updated_by_psid, status_remarks, create_date, update_date) 
 VALUES
-(10820984, NULL, 2, 3, NULL, NULL, NULL, NULL, NULL),
-(NULL, 10829803, 1, 5, NULL, NULL, NULL, NULL, NULL);
+(10820984, NULL, 2, 3, 10713037, 10713037, NULL, NOW(), NOW()),
+(NULL, 10829803, 1, 5, 10713037, 10713037, NULL, NOW(), NOW());
+Select emp.psid as id ,emp.first_name,emp.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status from employee emp,lob lob,
+selection_details selection,onboarding_status obs,BGVStatus bgvs , tagging_details td
+where selection.created_by = 10713037
+      and selection.ps_id=emp.psid
+	  and selection.lob_id=lob.lob_id	  
+	  and emp.psid=td.ps_id
+	  and td.onboarding_status_id=obs.status_id
+	  and td.bgvstatus_id=bgvs.bgv_status_id
+Union	  
+Select cnd.candidate_id as id,cnd.first_name,cnd.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status from candidate cnd,lob lob,
+selection_details selection,onboarding_status obs,BGVStatus bgvs , tagging_details td
+where selection.created_by = 10713037
+      and selection.candidate_id=cnd.candidate_id
+      and selection.lob_id=lob.lob_id
+	  and cnd.candidate_id=td.candidate_id
+	  and td.onboarding_status_id=obs.status_id
+	  and td.bgvstatus_id=bgvs.bgv_status_id;

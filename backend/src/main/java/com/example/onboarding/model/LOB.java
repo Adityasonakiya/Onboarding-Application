@@ -16,11 +16,11 @@ public class LOB {
     private String remarks;
     @ManyToOne
     @JoinColumn(name = "createdBy")
-    private Candidate createdBy;
+    private Employee createdBy;
 
     @ManyToOne
     @JoinColumn(name = "updatedBy")
-    private Candidate updatedBy;
+    private Employee updatedBy;
     private byte[] createdDate;
     private byte[] updateDate;
     public int getLobId() {
@@ -54,16 +54,16 @@ public class LOB {
     public void setUpdateDate(byte[] updateDate) {
         this.updateDate = updateDate;
     }
-    public Candidate getCreatedBy() {
+    public Employee getCreatedBy() {
         return createdBy;
     }
-    public void setCreatedBy(Candidate createdBy) {
+    public void setCreatedBy(Employee createdBy) {
         this.createdBy = createdBy;
     }
-    public Candidate getUpdatedBy() {
+    public Employee getUpdatedBy() {
         return updatedBy;
     }
-    public void setUpdatedBy(Candidate updatedBy) {
+    public void setUpdatedBy(Employee updatedBy) {
         this.updatedBy = updatedBy;
     }
     
