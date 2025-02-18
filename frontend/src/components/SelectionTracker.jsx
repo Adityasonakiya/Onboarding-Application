@@ -8,6 +8,7 @@ import {
   fetchLobs,
   fetchSubLobs
 } from "../services/api";
+import UpdateDetails from "./UpdateDetails";
 
 function SelectionTracker() {
   const [form, setForm] = useState({});
@@ -18,6 +19,11 @@ function SelectionTracker() {
   const [lobs, setLobs] = useState([]);
   const [subLobs, setSubLobs] = useState([]);
   const [selectedLob, setSelectedLob] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleAccordion = () => {
+    setIsOpen(!isOpen);
+  };
 
   useEffect(() => {
     if (form.psId) {
@@ -295,7 +301,7 @@ function SelectionTracker() {
   //for submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const errors = validate();
     if (Object.keys(errors).length === 0) {
       try {
@@ -321,13 +327,13 @@ function SelectionTracker() {
           offerReleaseStatus: form.offerReleaseStatus,
           ltionboardingDate: form.ltiOnboardDate,
         };
-  
+
         if (form.psId) {
           requestBody.employee = { psid: form.psId };
         } else if (form.candidateId) {
           requestBody.candidate = { candidateId: form.candidateId };
         }
-  
+
         const response = await fetch("http://localhost:8080/selection-details/create", {
           method: "POST",
           headers: {
@@ -335,7 +341,7 @@ function SelectionTracker() {
           },
           body: JSON.stringify(requestBody),
         });
-  
+
         if (response.ok) {
           // Simulate successful creation of selection details for the employee or candidate
           localStorage.setItem("selectionDetails", JSON.stringify(requestBody));
@@ -676,7 +682,7 @@ function SelectionTracker() {
                     <option value="16">WPB Technology</option>
                   </select>
                 </td> */}
-                 <td className="p-2 w-full md:w-1/4">
+                <td className="p-2 w-full md:w-1/4">
                   <select
                     onChange={handleLobChange}
                     name="lob"
@@ -953,18 +959,42 @@ function SelectionTracker() {
                 <td colSpan="4" className="p-2">
                   <div className="flex justify-center space-x-4">
                     <button
-                      type="submit" onClick={handleSubmit} 
+                      type="submit"
+                      onClick={handleSubmit}
                       className="bg-blue-500 text-white py-2 px-10 rounded"
                     >
                       Submit
                     </button>
-                    
+
                     <button
                       type="button"
                       className="bg-gray-500 text-white py-2 px-10 rounded"
                     >
                       Cancel
                     </button>
+                  </div>
+                  <div className="mt-4">
+                    <div className="bg-gray-200 p-4 rounded-lg w-full">
+                      <button
+                        type="button"
+                        onClick={toggleAccordion}
+                        className="w-full flex items-center justify-between bg-gray-500 text-white py-2 px-4 rounded focus:outline-none"
+                      >
+                        <span className="flex items-center">
+                          <span
+                            className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+                          >
+                            ▲
+                          </span>
+                          <span className="ml-2">Update Tagging and Onboarding details</span>
+                        </span>
+                      </button>
+                      {isOpen && (
+                        <div className="mt-2 p-4 border-t border-gray-300 bg-white rounded">
+                          <UpdateDetails />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </td>
               </tr>
