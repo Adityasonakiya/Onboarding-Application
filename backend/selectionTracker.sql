@@ -52,7 +52,7 @@ VALUES
 (5,"Major Discrepancy","A major discrepancy was observed"),
 (6,"Offer Yet to be Released","Offer is under process and is not released yet"),
 (7,"Interim Closed","Background verfication has been closed");
-10713037
+
 INSERT INTO lob (lob_id, lob_name, remarks, created_by, updated_by, created_date, update_date) VALUES
 (1, 'Business & Data Architecture', 'Business & Data Architecture', 10713037, 10713037, NOW(), NOW()),
 (2, 'CTO', 'Chief Technology Officer', 10713037, 10713037, NOW(), NOW()),
@@ -162,3 +162,20 @@ INSERT INTO tagging_details
 VALUES
 (10820984, NULL, 2, 3, 10713037, 10713037, NULL, NOW(), NOW()),
 (NULL, 10829803, 1, 5, 10713037, 10713037, NULL, NOW(), NOW());
+Select emp.psid as id ,emp.first_name,emp.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status from employee emp,lob lob,
+selection_details selection,onboarding_status obs,BGVStatus bgvs , tagging_details td
+where selection.created_by = 10713037
+      and selection.ps_id=emp.psid
+	  and selection.lob_id=lob.lob_id	  
+	  and emp.psid=td.ps_id
+	  and td.onboarding_status_id=obs.status_id
+	  and td.bgvstatus_id=bgvs.bgv_status_id
+Union	  
+Select cnd.candidate_id as id,cnd.first_name,cnd.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status from candidate cnd,lob lob,
+selection_details selection,onboarding_status obs,BGVStatus bgvs , tagging_details td
+where selection.created_by = 10713037
+      and selection.candidate_id=cnd.candidate_id
+      and selection.lob_id=lob.lob_id
+	  and cnd.candidate_id=td.candidate_id
+	  and td.onboarding_status_id=obs.status_id
+	  and td.bgvstatus_id=bgvs.bgv_status_id;
