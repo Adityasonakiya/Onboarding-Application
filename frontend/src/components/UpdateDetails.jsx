@@ -25,33 +25,23 @@ function UpdateDetails() {
     setCandidateId(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const isValidDate = (dateString) => {
       return moment(dateString, 'YYYY-MM-DD', true).isValid();
     };
-
-    const encodeToBase64 = (str) => {
-      return btoa(unescape(encodeURIComponent(str)));
-    };
-
-    // Logging the raw tagDate value for debugging
-    console.log("Raw tagDate value:", form.tagDate);
-
-    // const formattedTagDate = moment(form.tagDate).toISOString();
     
     if (!isValidDate(form.tagDate)) {
       console.error("Invalid date format for tagDate");
       return;
     }
-    
-    // Correctly format tagDate
+
     const formattedTagDate = moment(form.tagDate, 'YYYY-MM-DD').toISOString();
-    console.log("Formatted tagDate value:", formattedTagDate); // Log the formatted date
-  
-    const createDate = encodeToBase64(formattedTagDate);
-    const updateDate = encodeToBase64(new Date().toISOString());
+    console.log("Formatted tagDate value:", formattedTagDate); 
+    
+    const createDate = formattedTagDate;
+    const updateDate = new Date().toISOString();
 
     const taggingDetails = {
       onboardingStatus: {
