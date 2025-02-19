@@ -9,6 +9,9 @@ import {
   fetchSubLobs
 } from "../services/api";
 import UpdateDetails from "./UpdateDetails";
+import { Slide, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function SelectionTracker() {
   const [form, setForm] = useState({});
@@ -344,13 +347,22 @@ function SelectionTracker() {
 
         if (response.ok) {
           // Simulate successful creation of selection details for the employee or candidate
+          toast.success('Details added successfully!', {
+            position: 'top-right',
+          });
           localStorage.setItem("selectionDetails", JSON.stringify(requestBody));
           navigate("/landing-page"); // Navigate to the dashboard after successful creation
         } else {
           const errorData = await response.json();
+          toast.error('Error adding details:', {
+            position: 'top-right',
+          });
           setErrors({ submit: errorData.message });
         }
       } catch (error) {
+        toast.error('Error adding details:', {
+          position: 'top-right',
+        });
         setErrors({ submit: "An error occurred while submitting the form" });
       }
     } else {
@@ -1002,6 +1014,18 @@ function SelectionTracker() {
           </table>
         </div>
       </form>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
     </div>
   );
 }

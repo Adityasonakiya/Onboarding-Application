@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getTaggingDetailsByCandidateId, getTaggingDetailsByPsId, updateTaggingDetailsByPsId, updateTaggingDetailsByCandidateId, updateSelectionDetailsByPsId, updateSelectionDetailsByCandidateId, getSelectionDetailsByCandidateId, getSelectionDetailsByPsId } from '../services/api';
 import moment from 'moment';
+import { Slide, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function UpdateDetails() {
   const [form, setForm] = useState({});
@@ -31,15 +33,15 @@ function UpdateDetails() {
     const isValidDate = (dateString) => {
       return moment(dateString, 'YYYY-MM-DD', true).isValid();
     };
-    
+
     if (!isValidDate(form.tagDate)) {
       console.error("Invalid date format for tagDate");
       return;
     }
 
     const formattedTagDate = moment(form.tagDate, 'YYYY-MM-DD').toISOString();
-    console.log("Formatted tagDate value:", formattedTagDate); 
-    
+    console.log("Formatted tagDate value:", formattedTagDate);
+
     const createDate = formattedTagDate;
     const updateDate = new Date().toISOString();
 
@@ -67,14 +69,28 @@ function UpdateDetails() {
     console.log("selection details: ", selectionDetails);
     if (isInternal && psId) {
       updateTaggingDetailsByPsId(psId, taggingDetails)
-        .then(() => updateSelectionDetailsByPsId(psId, selectionDetails))
+        .then(() => {
+          updateSelectionDetailsByPsId(psId, selectionDetails) && toast.success('Details updated successfully!', {
+            position:'top-right',
+          });
+        })
         .catch(error => {
+          toast.error('Error updating details:', {
+            position: 'top-right',
+          });
           console.error('Error updating details by PsId:', error);
         });
     } else if (!isInternal && candidateId) {
       updateTaggingDetailsByCandidateId(candidateId, taggingDetails)
-        .then(() => updateSelectionDetailsByCandidateId(candidateId, selectionDetails))
+        .then(() => {
+          updateSelectionDetailsByCandidateId(candidateId, selectionDetails) && toast.success('Details updated successfully!', {
+            position:'top-right',
+          });
+        })
         .catch(error => {
+          toast.error('Error updating details:', {
+            position: 'top-right',
+          });
           console.error('Error updating details by CandidateId:', error);
         });
     }
@@ -245,6 +261,18 @@ function UpdateDetails() {
           </table>
         </div>
       </form>
+      <ToastContainer 
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
     </div>
   );
 }
