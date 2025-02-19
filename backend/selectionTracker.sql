@@ -18,7 +18,7 @@ INSERT INTO employee
 VALUES
 (10713037,'Sachin',NULl,'Shaha','P6','Pune','Delivery Manager',20,'BB','sachin.shaha@ltimindtree.com',NULL,NULL,NOW(), NOW()),
 (10820984, 'Aditya', NULL, 'Sonakiya', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'aditya.sonakiya@ltimindtree.com',10713037,10713037,NOW(), NOW()),
-(108210014, 'Abhijeet', NULL, 'Verma', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'abhijeet.verma@ltimindtree.com',NULL,NULL,NOW(), NOW()),
+(10821014, 'Abhijeet', NULL, 'Verma', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'abhijeet.verma@ltimindtree.com',NULL,NULL,NOW(), NOW()),
 (10715126, 'Monali', NULL, 'Jangam', 'P4', 'Pune', 'Java Fullstack', 16, 'BB', 'monali.jangam@ltimindtree.com',10713037,10713037,NOW(), NOW()),
 (10825932, 'Bhakti', 'Anand', 'Kulkarni', 'M4', 'Pune', 'Scrum Mamagement', 1, 'BB', 'bhakti.kulkarni@ltimindtree.com',10713037,10713037,NOW(), NOW());
 
@@ -141,19 +141,19 @@ ctool_location, ctool_rate, ctool_proposed_rate, recruiter_name, interview_evide
 hsbconboarding_date, tech_selection_date, dojreceived_date, ltionboarding_date, create_date, update_date) 
 VALUES
 (10820984, NULL, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2024-12-18', 
-"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 10893, '2025-12-02', "TM", 
+"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 108933, '2025-12-02', "TM", 
 'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
 '2024-12-23', NULL, NULL, NULL,NOW() ,NOW()),
 (10715126, NULL, 'Sachin Shaha', 2, 22, 10825932, 10713037, 10713037, '2024-12-18', 
-"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 10893, '2025-12-02', "TM", 
+"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 108933, '2025-12-02', "TM", 
 'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
 '2024-12-23', NULL, NULL, NULL,NOW() ,NOW()),
 (10825932, NULL, 'Sachin Shaha', 3, 36, 10825932, 10713037, 10713037, '2024-12-18', 
-"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 10893, '2025-12-02', "TM", 
+"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 108933, '2025-12-02', "TM", 
 'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
 '2024-12-23', NULL, NULL, NULL,NOW() ,NOW()),
 (NULL,10829803, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2024-12-18', 
-"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 10893, '2025-12-02', "TM", 
+"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 108933, '2025-12-02', "TM", 
 'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
 '2024-12-23', NULL, NULL, NULL,NOW() ,NOW());
 
@@ -162,6 +162,7 @@ INSERT INTO tagging_details
 VALUES
 (10820984, NULL, 2, 3, 10713037, 10713037, NULL, NOW(), NOW()),
 (NULL, 10829803, 1, 5, 10713037, 10713037, NULL, NOW(), NOW());
+
 Select emp.psid as id ,emp.first_name,emp.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status from employee emp,lob lob,
 selection_details selection,onboarding_status obs,BGVStatus bgvs , tagging_details td
 where selection.created_by = 10713037

@@ -1,5 +1,7 @@
 package com.example.onboarding.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,8 +23,8 @@ public class LOB {
     @ManyToOne
     @JoinColumn(name = "updatedBy")
     private Employee updatedBy;
-    private byte[] createdDate;
-    private byte[] updateDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime updateDate;
     public int getLobId() {
         return lobId;
     }
@@ -42,16 +44,16 @@ public class LOB {
         this.remarks = remarks;
     }
     
-    public byte[] getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
-    public void setCreatedDate(byte[] createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
-    public byte[] getUpdateDate() {
+    public LocalDateTime getUpdateDate() {
         return updateDate;
     }
-    public void setUpdateDate(byte[] updateDate) {
+    public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
     }
     public Employee getCreatedBy() {
