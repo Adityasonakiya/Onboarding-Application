@@ -201,17 +201,17 @@ function UpdateDetails() {
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
                   <select name='status' value={form.status || ''} onChange={handleChange} className="p-2 mb-2 border rounded w-full" required>
-                    <option value="CTool Pending">CTool Pending</option>
-                    <option value="CTool Recieved">CTool Recieved</option>
-                    <option value="Tagging Completed">Tagging Completed</option>
-                    <option value="Tech Selection Done">Tech Selection Done</option>
-                    <option value="DOJ Recieved">DOJ Recieved</option>
-                    <option value="Onboarding Completed">Onboarding Completed</option>
-                    <option value="Tagging Error">Tagging Error</option>
-                    <option value="Rate Approval Pending">Rate Approval Pending</option>
-                    <option value="Rate to be changed">Rate To Be Changed</option>
-                    <option value="Candidate not yet joined">Candidate not yet joined</option>
-                    <option value="Drop out case">Drop Out Case</option>
+                    <option value="1">CTool Pending</option>
+                    <option value="2">CTool Recieved</option>
+                    <option value="3">Tagging Completed</option>
+                    <option value="4">Tech Selection Done</option>
+                    <option value="5">DOJ Recieved</option>
+                    <option value="6">Onboarding Completed</option>
+                    <option value="7">Tagging Error</option>
+                    <option value="8">Rate Approval Pending</option>
+                    <option value="9">Rate To Be Changed</option>
+                    <option value="10">Candidate not yet joined</option>
+                    <option value="11">Drop Out Case</option>
                   </select>
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
@@ -253,13 +253,13 @@ function UpdateDetails() {
                   <label className="font-bold">Tagging date:<span className="text-red-500">*</span></label>
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <input type='date' name='tagDate' value={form.tagDate || ''} required onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
+                  <input type='date' name='tagDate' value={form.tagDate || ''} required disabled={!form.tagDateEnabled} onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
                   <label className="font-bold">Tech Selection Date:<span className="text-red-500">*</span></label>
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <input type='date' name='techSelectDate' value={form.techSelectDate || ''} required onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
+                  <input type='date' name='techSelectDate' value={form.techSelectDate || ''} required disabled={!form.techSelectDateEnabled} onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
                 </td>
               </tr>
               <tr className='flex flex-wrap md:flex-nowrap'>
@@ -267,13 +267,13 @@ function UpdateDetails() {
                   <label className="font-bold">DOJ Recieved Date:<span className="text-red-500">*</span></label>
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <input type='date' name='dojRecDate' value={form.dojRecDate || ''} required onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
+                  <input type='date' name='dojRecDate' value={form.dojRecDate || ''} required disabled={!form.dojRecDateEnabled} onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
                   <label className="font-bold">Onboarding Date:<span className="text-red-500">*</span></label>
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <input type='date' name='onboardingDate' value={form.onboardingDate || ''} required onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
+                  <input type='date' name='onboardingDate' value={form.onboardingDate || ''} required disabled={!form.onboardingDateEnabled} onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
                 </td>
               </tr>
               <tr>
