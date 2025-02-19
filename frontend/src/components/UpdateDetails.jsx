@@ -71,7 +71,7 @@ function UpdateDetails() {
       updateTaggingDetailsByPsId(psId, taggingDetails)
         .then(() => {
           updateSelectionDetailsByPsId(psId, selectionDetails) && toast.success('Details updated successfully!', {
-            position:'top-right',
+            position: 'top-right',
           });
         })
         .catch(error => {
@@ -84,7 +84,7 @@ function UpdateDetails() {
       updateTaggingDetailsByCandidateId(candidateId, taggingDetails)
         .then(() => {
           updateSelectionDetailsByCandidateId(candidateId, selectionDetails) && toast.success('Details updated successfully!', {
-            position:'top-right',
+            position: 'top-right',
           });
         })
         .catch(error => {
@@ -151,48 +151,39 @@ function UpdateDetails() {
           <table className='w-full border-collapse'>
             <tbody>
               <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4"><label className="font-bold">Internal</label></td>
                 <td className="p-2 w-full md:w-1/4">
-                  <input type="checkbox"
-                    name="internal"
-                    checked={isInternal}
-                    onChange={handleChange}
-                    className="p-2" />
+                  <label className="font-bold">Internal</label>
                 </td>
-                <td className="p-2 w-full md:w-1/4"><label className="font-bold">External</label></td>
                 <td className="p-2 w-full md:w-1/4">
-                  <input type="checkbox"
-                    name="external"
-                    checked={!isInternal}
-                    onChange={handleChange}
-                    className="p-2" />
+                  <input type="checkbox" name="internal" checked={isInternal} onChange={handleChange} className="p-2" />
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-bold">External</label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input type="checkbox" name="external" checked={!isInternal} onChange={handleChange} className="p-2" />
                 </td>
               </tr>
               <tr className='flex flex-wrap md:flex-nowrap'>
-                <td className='p-2 w-full md:w-1/4'><label className="font-semibold">PS ID:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <input type='number'
-                    name='psId'
-                    value={psId}
-                    onChange={handlePsIdChange}
-                    required
-                    className='p-2 border rounded w-full'
-                    disabled={!isInternal} />
+                  <label className="font-semibold">PS ID:<span className="text-red-500">*</span></label>
                 </td>
-                <td className='p-2 w-full md:w-1/4'><label className="font-semibold">Candidate ID:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <input type='number'
-                    name='candidateId'
-                    value={candidateId}
-                    onChange={handleCandidateIdChange}
-                    className='p-2 border rounded w-full'
-                    disabled={isInternal} />
+                  <input type='number' name='psId' value={psId} onChange={handlePsIdChange} required className='p-2 border rounded w-full' disabled={!isInternal} />
+                </td>
+                <td className='p-2 w-full md:w-1/4'>
+                  <label className="font-semibold">Candidate ID:<span className="text-red-500">*</span></label>
+                </td>
+                <td className='p-2 w-full md:w-1/4'>
+                  <input type='number' name='candidateId' value={candidateId} onChange={handleCandidateIdChange} className='p-2 border rounded w-full' disabled={isInternal} />
                 </td>
               </tr>
               <tr className='flex flex-wrap md:flex-nowrap'>
-                <td className='p-2 w-full md:w-1/4'><label className="font-bold">Status:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <select name='status' value={form.status || ''} onChange={handleChange} className="p-2 mb-2 border rounded w-full">
+                  <label className="font-bold">Status:<span className="text-red-500">*</span></label>
+                </td>
+                <td className='p-2 w-full md:w-1/4'>
+                  <select name='status' value={form.status || ''} onChange={handleChange} className="p-2 mb-2 border rounded w-full" required>
                     <option value="CTool Pending">CTool Pending</option>
                     <option value="CTool Recieved">CTool Recieved</option>
                     <option value="Tagging Completed">Tagging Completed</option>
@@ -206,9 +197,11 @@ function UpdateDetails() {
                     <option value="Drop out case">Drop Out Case</option>
                   </select>
                 </td>
-                <td className='p-2 w-full md:w-1/4'><label className="font-bold">BGV Status:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <select name='bgvStatus' value={form.bgvStatus || ''} onChange={handleChange} className="p-2 mb-2 border rounded w-full">
+                  <label className="font-bold">BGV Status:<span className="text-red-500">*</span></label>
+                </td>
+                <td className='p-2 w-full md:w-1/4'>
+                  <select name='bgvStatus' value={form.bgvStatus || ''} onChange={handleChange} className="p-2 mb-2 border rounded w-full" required>
                     <option value="BGV Initiated">BGV Initiated</option>
                     <option value="In progress">In progress</option>
                     <option value="Minor Discrepancy">Minor Discrepancy</option>
@@ -220,31 +213,43 @@ function UpdateDetails() {
                 </td>
               </tr>
               <tr className='flex flex-wrap md:flex-nowrap'>
-                <td className='p-2 w-full md:w-1/4'><label className="font-bold">Status Additional Remark:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <textarea name='addRemark' value={form.addRemark || ''} onChange={handleChange} className="p-2 mb-2 border rounded w-full resize-none" />
+                  <label className="font-bold">Status Additional Remark:<span className="text-red-500">*</span></label>
                 </td>
-                <td className='p-2 w-full md:w-1/4'><label className="font-bold">BGV Additional Remark:</label></td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <textarea name='bgvRemark' value={form.bgvRemark || ''} onChange={handleChange} className="p-2 mb-2 border rounded w-full resize-none" />
+                  <textarea name='addRemark' value={form.addRemark || ''} onChange={handleChange} className="p-2 mb-2 border rounded w-full resize-none" required />
+                </td>
+                <td className='p-2 w-full md:w-1/4'>
+                  <label className="font-bold">BGV Additional Remark:<span className="text-red-500">*</span></label>
+                </td>
+                <td className='p-2 w-full md:w-1/4'>
+                  <textarea name='bgvRemark' value={form.bgvRemark || ''} onChange={handleChange} className="p-2 mb-2 border rounded w-full resize-none" required />
                 </td>
               </tr>
               <tr className='flex flex-wrap md:flex-nowrap'>
-                <td className='p-2 w-full md:w-1/4'><label className="font-bold">Tagging date:</label></td>
+                <td className='p-2 w-full md:w-1/4'>
+                  <label className="font-bold">Tagging date:<span className="text-red-500">*</span></label>
+                </td>
                 <td className='p-2 w-full md:w-1/4'>
                   <input type='date' name='tagDate' value={form.tagDate || ''} required onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
                 </td>
-                <td className='p-2 w-full md:w-1/4'><label className="font-bold">Tech Selection Date:</label></td>
+                <td className='p-2 w-full md:w-1/4'>
+                  <label className="font-bold">Tech Selection Date:<span className="text-red-500">*</span></label>
+                </td>
                 <td className='p-2 w-full md:w-1/4'>
                   <input type='date' name='techSelectDate' value={form.techSelectDate || ''} required onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
                 </td>
               </tr>
               <tr className='flex flex-wrap md:flex-nowrap'>
-                <td className='p-2 w-full md:w-1/4'><label className="font-bold">DOJ Recieved Date:</label></td>
+                <td className='p-2 w-full md:w-1/4'>
+                  <label className="font-bold">DOJ Recieved Date:<span className="text-red-500">*</span></label>
+                </td>
                 <td className='p-2 w-full md:w-1/4'>
                   <input type='date' name='dojRecDate' value={form.dojRecDate || ''} required onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
                 </td>
-                <td className='p-2 w-full md:w-1/4'><label className="font-bold">Onboarding Date:</label></td>
+                <td className='p-2 w-full md:w-1/4'>
+                  <label className="font-bold">Onboarding Date:<span className="text-red-500">*</span></label>
+                </td>
                 <td className='p-2 w-full md:w-1/4'>
                   <input type='date' name='onboardingDate' value={form.onboardingDate || ''} required onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
                 </td>
@@ -261,7 +266,7 @@ function UpdateDetails() {
           </table>
         </div>
       </form>
-      <ToastContainer 
+      <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}

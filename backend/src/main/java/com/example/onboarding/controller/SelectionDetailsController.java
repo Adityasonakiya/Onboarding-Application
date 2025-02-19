@@ -46,7 +46,7 @@ public class SelectionDetailsController {
     @PostMapping("/create")
     public ResponseEntity<SelectionDetails> createSelectionDetails(@RequestBody SelectionDetails details){
         SelectionDetails selectionDetails = selectionDetailsService.createSelectionDetails(details);
-        System.out.println("details="+details);
+        System.out.println("details="+selectionDetails.toString());
         if(details!=null)
             return ResponseEntity.status(201).body(selectionDetails);
         return ResponseEntity.status(500).build();    
