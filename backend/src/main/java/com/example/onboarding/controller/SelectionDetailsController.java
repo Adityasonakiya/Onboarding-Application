@@ -43,9 +43,18 @@ public class SelectionDetailsController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PostMapping("/create")
-    public ResponseEntity<SelectionDetails> createSelectionDetails(@RequestBody SelectionDetails details){
-        SelectionDetails selectionDetails = selectionDetailsService.createSelectionDetails(details);
+    @PostMapping("/create/employee")
+    public ResponseEntity<SelectionDetails> createSelectionDetails_Employee(@RequestBody SelectionDetails details){
+        SelectionDetails selectionDetails = selectionDetailsService.createSelectionDetails_Employee(details);
+        System.out.println("details="+details);
+        if(details!=null)
+            return ResponseEntity.status(201).body(selectionDetails);
+        return ResponseEntity.status(500).build();    
+    }
+
+    @PostMapping("/create/candidate")
+    public ResponseEntity<SelectionDetails> createSelectionDetails_Candidate(@RequestBody SelectionDetails details){
+        SelectionDetails selectionDetails = selectionDetailsService.createSelectionDetails_Candidate(details);
         System.out.println("details="+details);
         if(details!=null)
             return ResponseEntity.status(201).body(selectionDetails);
