@@ -477,7 +477,7 @@ function SelectionTracker() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">PS ID:</label>
+                  <label className="font-semibold">PS ID:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -491,7 +491,7 @@ function SelectionTracker() {
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Candidate ID:</label>
+                  <label className="font-semibold">Candidate ID:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -628,7 +628,7 @@ function SelectionTracker() {
             <tbody>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Selection Date:</label>
+                  <label className="font-semibold">Selection Date:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -655,7 +655,7 @@ function SelectionTracker() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">LOB:</label>
+                  <label className="font-semibold">LOB:<span className="text-red-500">*</span></label>
                 </td>
                 {/* <td className="p-2 w-full md:w-1/4">
                   <select
@@ -708,7 +708,7 @@ function SelectionTracker() {
                   </select>
                 </td> */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Sub LOB:</label>
+                  <label className="font-semibold">Sub LOB:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
@@ -725,7 +725,7 @@ function SelectionTracker() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">HSBC Hiring Manager:</label>
+                  <label className="font-semibold">HSBC Hiring Manager:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -738,7 +738,7 @@ function SelectionTracker() {
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">HSBC Head:</label>
+                  <label className="font-semibold">HSBC Head:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -753,7 +753,7 @@ function SelectionTracker() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Delivery Manager:</label>
+                  <label className="font-semibold">Delivery Manager:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
@@ -810,7 +810,7 @@ function SelectionTracker() {
                   </select>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">IRM:</label>
+                  <label className="font-semibold">IRM:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -833,6 +833,9 @@ function SelectionTracker() {
                     value={form.ctoolId || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    required
+                    pattern="\d{6}"
+                    title="HSBC CTOOL ID must be 6 digits"
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
