@@ -11,11 +11,11 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/landing-page" element={<LandingPage />} /> {/* Landing page route */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         
         {/* Wrap routes requiring Navbar with Layout */}
+        <Route path="/landing-page" element={<Layout><LandingPage /></Layout>} /> 
         <Route path="/selection-tracker" element={<Layout><SelectionTracker /></Layout>} />
         <Route path="/update-details" element={<Layout><UpdateDetails /></Layout>} />
         

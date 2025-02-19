@@ -154,7 +154,7 @@ export default function Navbar() {
                   />
                 </div>
                 <Link
-                  to='/dashboard'
+                  to='/landing-page'
                   className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
                 >
                   Dashboard
