@@ -9,6 +9,9 @@ import {
   fetchSubLobs
 } from "../services/api";
 import UpdateDetails from "./UpdateDetails";
+import { Slide, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function SelectionTracker() {
   const [form, setForm] = useState({});
@@ -368,8 +371,10 @@ function SelectionTracker() {
             setErrors({ submit: errorData.message });
           }
         }
-        
       } catch (error) {
+        toast.error('Error adding details:', {
+          position: 'top-right',
+        });
         setErrors({ submit: "An error occurred while submitting the form" });
       }
     } else {
@@ -416,7 +421,7 @@ function SelectionTracker() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">PS ID:</label>
+                  <label className="font-semibold">PS ID:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -430,7 +435,7 @@ function SelectionTracker() {
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Candidate ID:</label>
+                  <label className="font-semibold">Candidate ID:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -567,7 +572,7 @@ function SelectionTracker() {
             <tbody>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Selection Date:</label>
+                  <label className="font-semibold">Selection Date:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -594,7 +599,7 @@ function SelectionTracker() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">LOB:</label>
+                  <label className="font-semibold">LOB:<span className="text-red-500">*</span></label>
                 </td>
                 {/* <td className="p-2 w-full md:w-1/4">
                   <select
@@ -647,7 +652,7 @@ function SelectionTracker() {
                   </select>
                 </td> */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Sub LOB:</label>
+                  <label className="font-semibold">Sub LOB:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
@@ -664,7 +669,7 @@ function SelectionTracker() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">HSBC Hiring Manager:</label>
+                  <label className="font-semibold">HSBC Hiring Manager:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -677,7 +682,7 @@ function SelectionTracker() {
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">HSBC Head:</label>
+                  <label className="font-semibold">HSBC Head:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -692,7 +697,7 @@ function SelectionTracker() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Delivery Manager:</label>
+                  <label className="font-semibold">Delivery Manager:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
@@ -749,7 +754,7 @@ function SelectionTracker() {
                   </select>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">IRM:</label>
+                  <label className="font-semibold">IRM:<span className="text-red-500">*</span></label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -773,6 +778,9 @@ function SelectionTracker() {
                     minLength={6}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    required
+                    pattern="\d{6}"
+                    title="HSBC CTOOL ID must be 6 digits"
                   />
                   {errors.ctoolId && (
                     <div className="text-red-500 text-sm mt-1">
@@ -947,6 +955,18 @@ function SelectionTracker() {
           </table>
         </div>
       </form>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
     </div>
   );
 }
