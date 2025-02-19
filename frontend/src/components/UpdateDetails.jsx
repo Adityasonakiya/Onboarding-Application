@@ -158,7 +158,7 @@ function UpdateDetails() {
   return (
     <div className="w-full px-4 py-6">
       <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">
-        HSBC Selection Tracker Form
+        HSBC Updation Form
       </h1>
       <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
         Tagging and Onboarding Details
