@@ -11,10 +11,9 @@ const LandingPage = () => {
   };
 
   const handleEdit = (id) => {
-    navigate(`/update-details`); // Navigate to the UpdateDetails page with NO ID
-    // navigate(`/update-details/${id}`);                 // Navigate to the UpdateDetails page with the selected ID
-
+    navigate('/update-details', { state: { id } });
   };
+  
 
   useEffect(() => {
     const getEmployeeCandidates = async () => {
