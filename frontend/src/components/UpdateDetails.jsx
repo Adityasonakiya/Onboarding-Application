@@ -7,15 +7,27 @@ import 'react-toastify/dist/ReactToastify.css';
 function UpdateDetails() {
   const [form, setForm] = useState({});
   const [isInternal, setIsInternal] = useState(false);
-  const [psId, setPsId] = useState('');
-  const [candidateId, setCandidateId] = useState('');
+  const [psId, setPsId] = useState("");
+  const [candidateId, setCandidateId] = useState("");
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (type === 'checkbox') {
-      setIsInternal(name === 'internal' ? checked : !checked);
+    if (type === "checkbox") {
+      setIsInternal(name === "internal" ? checked : !checked);
     } else {
+
       setForm({ ...form, [name]: value });
+      if (name === "status") {
+        if (value === "3") {
+          setForm((prevForm) => ({ ...prevForm, tagDateEnabled: true }));
+        } else if (value === "4") {
+          setForm((prevForm) => ({ ...prevForm, techSelectDateEnabled: true }));
+        } else if (value === "5") {
+          setForm((prevForm) => ({ ...prevForm, dojRecDateEnabled: true }));
+        } else if (value === "6") {
+          setForm((prevForm) => ({ ...prevForm, onboardingDateEnabled: true }));
+        }
+      }
     }
   };
 
@@ -31,7 +43,7 @@ function UpdateDetails() {
     e.preventDefault();
 
     const isValidDate = (dateString) => {
-      return moment(dateString, 'YYYY-MM-DD', true).isValid();
+      return moment(dateString, "YYYY-MM-DD", true).isValid();
     };
 
     if (!isValidDate(form.tagDate)) {
@@ -56,13 +68,11 @@ function UpdateDetails() {
       },
       createDate: createDate,
       updateDate: updateDate,
-
     };
     const selectionDetails = {
       techSelectionDate: form.techSelectDate,
       dojreceivedDate: form.dojRecDate,
       hsbconboardingDate: form.onboardingDate,
-
     };
 
     console.log("tagging details: ", taggingDetails);
@@ -98,57 +108,64 @@ function UpdateDetails() {
 
   useEffect(() => {
     const formatDate = (date) => {
-      if (!date) return '';
-      return moment(date).format('YYYY-MM-DD');
+      if (!date) return "";
+      return moment(date).format("YYYY-MM-DD");
     };
 
     if (isInternal && psId) {
       Promise.all([
         getSelectionDetailsByPsId(psId),
-        getTaggingDetailsByPsId(psId)
-      ]).then(([selectionData, taggingData]) => {
-        setForm({
-          status: taggingData.onboardingStatus?.onboardingStatus || '',
-          addRemark: taggingData.onboardingStatus?.remarks || '',
-          bgvStatus: taggingData.bgvStatus?.bgvStatus || '',
-          bgvRemark: taggingData.bgvStatus?.remarks || '',
-          tagDate: formatDate(taggingData.createDate) || '',
-          techSelectDate: formatDate(selectionData.techSelectionDate),
-          dojRecDate: formatDate(selectionData.dojreceivedDate),
-          onboardingDate: formatDate(selectionData.hsbconboardingDate)
+        getTaggingDetailsByPsId(psId),
+      ])
+        .then(([selectionData, taggingData]) => {
+          setForm({
+            status: taggingData.onboardingStatus?.onboardingStatus || "",
+            addRemark: taggingData.onboardingStatus?.remarks || "",
+            bgvStatus: taggingData.bgvStatus?.bgvStatus || "",
+            bgvRemark: taggingData.bgvStatus?.remarks || "",
+            tagDate: formatDate(taggingData.createDate) || "",
+            techSelectDate: formatDate(selectionData.techSelectionDate),
+            dojRecDate: formatDate(selectionData.dojreceivedDate),
+            onboardingDate: formatDate(selectionData.hsbconboardingDate),
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching data by PsId:", error);
         });
-      }).catch(error => {
-        console.error('Error fetching data by PsId:', error);
-      });
     } else if (!isInternal && candidateId) {
       Promise.all([
         getSelectionDetailsByCandidateId(candidateId),
-        getTaggingDetailsByCandidateId(candidateId)
-      ]).then(([selectionData, taggingData]) => {
-        setForm({
-          status: taggingData.onboardingStatus?.onboardingStatus || '',
-          addRemark: taggingData.onboardingStatus?.remarks || '',
-          bgvStatus: taggingData.bgvStatus?.bgvStatus || '',
-          bgvRemark: taggingData.bgvStatus?.remarks || '',
-          tagDate: formatDate(taggingData.createDate) || '',
-          techSelectDate: formatDate(selectionData.techSelectionDate),
-          dojRecDate: formatDate(selectionData.dojreceivedDate),
-          onboardingDate: formatDate(selectionData.hsbconboardingDate)
+        getTaggingDetailsByCandidateId(candidateId),
+      ])
+        .then(([selectionData, taggingData]) => {
+          setForm({
+            status: taggingData.onboardingStatus?.onboardingStatus || "",
+            addRemark: taggingData.onboardingStatus?.remarks || "",
+            bgvStatus: taggingData.bgvStatus?.bgvStatus || "",
+            bgvRemark: taggingData.bgvStatus?.remarks || "",
+            tagDate: formatDate(taggingData.createDate) || "",
+            techSelectDate: formatDate(selectionData.techSelectionDate),
+            dojRecDate: formatDate(selectionData.dojreceivedDate),
+            onboardingDate: formatDate(selectionData.hsbconboardingDate),
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching data by CandidateId:", error);
         });
-      }).catch(error => {
-        console.error('Error fetching data by CandidateId:', error);
-      });
     }
   }, [psId, candidateId, isInternal]);
 
-
   return (
-    <div className='w-full px-4 py-6'>
-      <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">HSBC Selection Tracker Form</h1>
-      <h4 className='bg-gray-200 font-bold px-2 py-1 mt-4'>Tagging and Onboarding Details</h4>
+    <div className="w-full px-4 py-6">
+      <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">
+        HSBC Updation Form
+      </h1>
+      <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
+        Tagging and Onboarding Details
+      </h4>
       <form onSubmit={handleSubmit}>
-        <div className='overflow-x-auto'>
-          <table className='w-full border-collapse'>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
             <tbody>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
@@ -206,9 +223,14 @@ function UpdateDetails() {
                     <option value="In progress">In progress</option>
                     <option value="Minor Discrepancy">Minor Discrepancy</option>
                     <option value="Major Discrepancy">Major Discrepancy</option>
-                    <option value="Offer yet to be released">Offer Yet to be Released</option>
+                    <option value="Offer yet to be released">
+                      Offer Yet to be Released
+                    </option>
                     <option value="Interim Cleared">Interim Cleared</option>
-                    <option value="Pending with Employee">Pending with Employee</option>
+                    <option value="BGV Completed">BGV Completed</option>
+                    <option value="Pending with Employee">
+                      Pending with Employee
+                    </option>
                   </select>
                 </td>
               </tr>
@@ -255,10 +277,20 @@ function UpdateDetails() {
                 </td>
               </tr>
               <tr>
-                <td colSpan="4" className='p-2'>
-                  <div className='flex justify-center space-x-4'>
-                    <button type='submit' className="bg-blue-500 text-white py-2 px-10 rounded">Update</button>
-                    <button type='button' className="bg-gray-500 text-white py-2 px-10 rounded">Cancel</button>
+                <td colSpan="4" className="p-2">
+                  <div className="flex justify-center space-x-4">
+                    <button
+                      type="submit"
+                      className="bg-blue-500 text-white py-2 px-10 rounded"
+                    >
+                      Update
+                    </button>
+                    <button
+                      type="button"
+                      className="bg-gray-500 text-white py-2 px-10 rounded"
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </td>
               </tr>

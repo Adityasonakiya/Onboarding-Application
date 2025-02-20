@@ -15,7 +15,7 @@ import com.example.onboarding.repository.UserRepository;
 
 @Service
 public class UserService {
-
+    public User loggedUser;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
@@ -56,12 +56,13 @@ public class UserService {
 
         // Update lastLogin timestamp
         user.setLastLogin(Timestamp.from(Instant.now()));
+        user.setLastLogout(null);
+        loggedUser=user;
         userRepository.save(user);
         logger.info("User logged in successfully: {}", loginDTO.getPsid());
         return user;
     }
-
-    
+   
     public void logoutUser(User user) {
         if (user == null) {
             logger.error("User object is null");
@@ -70,8 +71,14 @@ public class UserService {
 
         // Update lastLogout timestamp
         user.setLastLogout(Timestamp.from(Instant.now()));
+        loggedUser = null;
         userRepository.save(user);
 
         logger.info("User logged out successfully: {}", user.getPsid());
     }
+
+    public User loggedUser(){
+        return loggedUser;
+    }
+    
 }

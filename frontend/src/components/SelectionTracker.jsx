@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   getCandidateById,
   getEmployeeByPsid,
@@ -73,6 +73,9 @@ function SelectionTracker() {
 
   const validate = () => {
     const errors = {};
+    if (form.ctoolId && form.ctoolId.toString().length !== 6) {
+      errors.ctoolId = "CTOOL ID must be 6 digits";
+    }
     return errors;
   };
 
@@ -310,7 +313,7 @@ function SelectionTracker() {
       try {
         const requestBody = {
           hsbcselectionDate: form.selectionDate,
-          baseBU: "BF",
+          baseBU: form.bu,
           lob: form.lob,
           sublob: form.subLob,
           hsbchiringManager: form.hiringManager,
@@ -333,31 +336,40 @@ function SelectionTracker() {
 
         if (form.psId) {
           requestBody.employee = { psid: form.psId };
+          const response = await fetch("http://localhost:8080/selection-details/create/employee", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+          });
+  
+          if (response.ok) {
+            // Simulate successful creation of selection details for the employee or candidate
+            localStorage.setItem("selectionDetails", JSON.stringify(requestBody));
+            navigate("/landing-page"); // Navigate to the dashboard after successful creation
+          } else {
+            const errorData = await response.json();
+            setErrors({ submit: errorData.message });
+          }
         } else if (form.candidateId) {
           requestBody.candidate = { candidateId: form.candidateId };
-        }
-
-        const response = await fetch("http://localhost:8080/selection-details/create", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        });
-
-        if (response.ok) {
-          // Simulate successful creation of selection details for the employee or candidate
-          toast.success('Details added successfully!', {
-            position: 'top-right',
+          const response = await fetch("http://localhost:8080/selection-details/create/candidate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
           });
-          localStorage.setItem("selectionDetails", JSON.stringify(requestBody));
-          navigate("/landing-page"); // Navigate to the dashboard after successful creation
-        } else {
-          const errorData = await response.json();
-          toast.error('Error adding details:', {
-            position: 'top-right',
-          });
-          setErrors({ submit: errorData.message });
+  
+          if (response.ok) {
+            // Simulate successful creation of selection details for the employee or candidate
+            localStorage.setItem("selectionDetails", JSON.stringify(requestBody));
+            navigate("/landing-page"); // Navigate to the dashboard after successful creation
+          } else {
+            const errorData = await response.json();
+            setErrors({ submit: errorData.message });
+          }
         }
       } catch (error) {
         toast.error('Error adding details:', {
@@ -369,87 +381,7 @@ function SelectionTracker() {
       setErrors(errors);
     }
   };
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   const errors = validate();
-  //   if (Object.keys(errors).length === 0) {
-  //     try {
-  //       const response = await fetch(
-  //         "http://localhost:8080/selection-details/create",
-  //         {
-  //           method: "POST",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify({
-  //             employee:{psid:form.psId}||null,
-  //             candidate:{candidateId:form.candidateId||null},
-  //             hsbcselectionDate: form.selectionDate,
-  //             baseBU: "BF",
-  //             lob: form.lob,
-  //             sublob: form.subLob,
-  //             hsbchiringManager: form.hiringManager,
-  //             hsbchead: form.head,
-  //             deliveryManager: form.deliveryManager,
-  //             salesPOC: form.salespoc,
-  //             pricingModel: form.pricingModel,
-  //             irm: form.irm,
-  //             hsbctoolId: form.ctoolId,
-  //             ctoolReceivedDate: form.ctoolRecDate,
-  //             ctoolJobCategory: form.ctoolJobCat,
-  //             ctoolLocation: form.ctoolLocation,
-  //             ctoolRate: form.ctoolRate,
-  //             ctoolProposedRate: form.ctoolPropRate,
-  //             recruiterName: form.recruiterName,
-  //             interviewEvidence: form.evidence,
-  //             offerReleaseStatus: form.offerReleaseStatus,
-  //             ltionboardingDate: form.ltiOnboardDate,
-  //           }),
-  //         }
-  //       );
-
-  //       if (response.ok) {
-  //         // Simulate successful creation of selection details for the employee
-  //         localStorage.setItem(
-  //           "selectionDetails",
-  //           JSON.stringify({
-  //             hsbcselectionDate: form.selectionDate,
-  //             baseBU: "BF",
-  //             lob: form.lob,
-  //             subLob: form.subLob,
-  //             hsbchiringManager: form.hiringManager,
-  //             hsbchead: form.head,
-  //             deliveryManager: form.deliveryManager,
-  //             salesPOC: form.salespoc,
-  //             pricingModel: form.pricingModel,
-  //             irm: form.irm,
-  //             hsbctoolId: form.ctoolId,
-  //             ctoolReceivedDate: form.ctoolRecDate,
-  //             ctoolJobCategory: form.ctoolJobCat,
-  //             ctoolLocation: form.ctoolLocation,
-  //             ctoolRate: form.ctoolRate,
-  //             ctoolProposedRate: form.ctoolPropRate,
-  //             recruiterName: form.recruiterName,
-  //             interviewEvidence: form.evidence,
-  //             offerReleaseStatus: form.offerReleaseStatus,
-  //             ltionboardingDate: form.ltiOnboardDate,
-  //           })
-  //         );
-
-  //         navigate("/selection-tracker"); // Navigate to the dashboard after successful creation
-  //       } else {
-  //         const errorData = await response.json();
-  //         setErrors({ submit: errorData.message });
-  //       }
-  //     } catch (error) {
-  //       setErrors({ submit: "An error occurred while submitting the form" });
-  //     }
-  //   } else {
-  //     setErrors(errors);
-  //   }
-  // };
-
+  
   return (
     <div className="w-full px-4 py-6">
       <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">
@@ -843,12 +775,18 @@ function SelectionTracker() {
                     type="number"
                     name="ctoolId"
                     value={form.ctoolId || ""}
+                    minLength={6}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                     required
                     pattern="\d{6}"
                     title="HSBC CTOOL ID must be 6 digits"
                   />
+                  {errors.ctoolId && (
+                    <div className="text-red-500 text-sm mt-1">
+                      {errors.ctoolId}
+                    </div>
+                  )}
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">CTOOL Received Date:</label>

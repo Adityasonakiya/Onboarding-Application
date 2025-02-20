@@ -246,4 +246,34 @@ public class SelectionDetails {
     public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
     }
+    @Override
+    public String toString() {
+        return "SelectionDetails [selectionId=" + selectionId + ", employee=" + employee + ", candidate=" + candidate
+                + ", deliveryManager=" + deliveryManager + ", lob=" + lob + ", subLob=" + subLob + ", irm=" + irm
+                + ", createdBy=" + createdBy + ", updatedBy=" + updatedBy + ", HSBCSelectionDate=" + HSBCSelectionDate
+                + ", HSBCHiringManager=" + HSBCHiringManager + ", HSBCHead=" + HSBCHead + ", salesPOC=" + salesPOC
+                + ", PricingModel=" + PricingModel + ", HSBCToolId=" + HSBCToolId + ", CToolReceivedDate="
+                + CToolReceivedDate + ", CToolJobCategory=" + CToolJobCategory + ", CToolLocation=" + CToolLocation
+                + ", CToolRate=" + CToolRate + ", CToolProposedRate=" + CToolProposedRate + ", recruiterName="
+                + recruiterName + ", InterviewEvidences=" + InterviewEvidences + ", offerReleaseStatus="
+                + offerReleaseStatus + ", HSBCOnboardingDate=" + HSBCOnboardingDate + ", techSelectionDate="
+                + techSelectionDate + ", DOJReceivedDate=" + DOJReceivedDate + ", LTIOnboardingDate="
+                + LTIOnboardingDate + ", createDate=" + createDate + ", updateDate=" + updateDate
+                + ", getSelectionId()=" + getSelectionId() + ", getHSBCSelectionDate()=" + getHSBCSelectionDate()
+                + ", getHSBCHiringManager()=" + getHSBCHiringManager() + ", getHSBCHead()=" + getHSBCHead()
+                + ", getClass()=" + getClass() + ", getSalesPOC()=" + getSalesPOC() + ", getPricingModel()="
+                + getPricingModel() + ", getHSBCToolId()=" + getHSBCToolId() + ", getCToolReceivedDate()="
+                + getCToolReceivedDate() + ", getCToolJobCategory()=" + getCToolJobCategory() + ", getCToolLocation()="
+                + getCToolLocation() + ", getCToolRate()=" + getCToolRate() + ", getCToolProposedRate()="
+                + getCToolProposedRate() + ", getRecruiterName()=" + getRecruiterName() + ", getInterviewEvidences()="
+                + getInterviewEvidences() + ", hashCode()=" + hashCode() + ", getOfferReleaseStatus()="
+                + getOfferReleaseStatus() + ", getHSBCOnboardingDate()=" + getHSBCOnboardingDate()
+                + ", getTechSelectionDate()=" + getTechSelectionDate() + ", getDOJReceivedDate()="
+                + getDOJReceivedDate() + ", getLTIOnboardingDate()=" + getLTIOnboardingDate() + ", getEmployee()="
+                + getEmployee() + ", getCandidate()=" + getCandidate() + ", getLob()=" + getLob() + ", getSubLob()="
+                + getSubLob() + ", getIrm()=" + getIrm() + ", getCreatedBy()=" + getCreatedBy() + ", getUpdatedBy()="
+                + getUpdatedBy() + ", getDeliveryManager()=" + getDeliveryManager() + ", getCreateDate()="
+                + getCreateDate() + ", getUpdateDate()=" + getUpdateDate() + ", toString()=" + super.toString() + "]";
+    }
+    
 }
