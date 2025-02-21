@@ -3,12 +3,17 @@ import { getTaggingDetailsByCandidateId, getTaggingDetailsByPsId, updateTaggingD
 import moment from 'moment';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function UpdateDetails() {
   const [form, setForm] = useState({});
   const [isInternal, setIsInternal] = useState(false);
   const [psId, setPsId] = useState("");
   const [candidateId, setCandidateId] = useState("");
+   const navigate = useNavigate();
+  const location = useLocation();
+  const { state } = location;
+  const id = state?.id;
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -83,6 +88,7 @@ function UpdateDetails() {
           updateSelectionDetailsByPsId(psId, selectionDetails) && toast.success('Details updated successfully!', {
             position: 'top-right',
           });
+          navigate('/landing-page');
         })
         .catch(error => {
           toast.error('Error updating details:', {
@@ -107,6 +113,10 @@ function UpdateDetails() {
   };
 
   useEffect(() => {
+    if(id){
+      setIsInternal(true);
+      setPsId(id);
+    }
     const formatDate = (date) => {
       if (!date) return "";
       return moment(date).format("YYYY-MM-DD");

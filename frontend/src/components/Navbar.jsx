@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaSearch, FaCheck, FaBell, FaUser, FaTimes } from 'react-icons/fa';
 import { FiAlignJustify } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
 import smallLogo from '../assets/images/logo2.png';
+import { getEmployeeByPsid } from '../services/api';
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activePopup, setActivePopup] = useState(null);
   const [errors,setErrors] = useState('');
+  const [form, setForm] = useState({});
   const navigate=useNavigate();
 
   const handleSearch = () => {
@@ -20,6 +22,33 @@ export default function Navbar() {
   const togglePopup = (popup) => {
     setActivePopup(activePopup === popup ? null : popup);
   };
+
+  const fetchEmployeeData = async (psid) => {
+    try {
+      const employee = await getEmployeeByPsid(psid);
+      setForm((prevForm) => ({
+        ...prevForm,
+        psid: psid,
+        fname: employee.firstName,
+        lname: employee.lastName,
+        grade: employee.grade,
+        location: employee.location,
+        pu: employee.pu,
+        totalExp: employee.totalExperience,
+        skill: employee.skill,
+        email: employee.mailID,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user')).psid;
+      if (user) {
+        fetchEmployeeData(user);
+      }
+    },[false]);
 
   
   const handleLogout = async () => {
@@ -125,14 +154,14 @@ export default function Navbar() {
                 </div>
                 <div className='flex flex-col items-center mb-4'>
                   <FaUser className='text-gray-800 text-4xl mb-2' />
-                  <h1 className='text-lg md:text-xl font-bold'>John Doe</h1>
-                  <p className='mb-2 text-gray-700'>PS ID: 123456</p>
-                  <p className='text-gray-700'>Designation: Software Engineer</p>
+                  <h1 className='text-lg md:text-l font-bold'>{form.fname}</h1>
+                  <p className='mb-2 text-gray-700'>PS ID: {form.psid}</p>
+                  {/* <p className='text-gray-700'>Designation: {form.skill}</p> */}
                 </div>
                 <div className='flex flex-col'>
-                  <p className='text-gray-700'><strong>Email:</strong> john.doe@example.com</p>
-                  <p className='text-gray-700'><strong>Phone:</strong> +1 234 567 890</p>
-                  <p className='text-gray-700'><strong>Work Location:</strong> Pune</p>
+                  <p className='text-gray-700'><strong>Email:</strong> {form.email}</p>
+                  <p className='text-gray-700'><strong>Grade:</strong> {form.grade}</p>
+                  <p className='text-gray-700'><strong>Work Location:</strong> {form.location}</p>
                   <p className='text-gray-700'><strong>Work Mode:</strong> Hybrid</p>
                 </div>
               </div>
