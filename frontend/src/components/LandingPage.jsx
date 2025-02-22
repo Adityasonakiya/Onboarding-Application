@@ -55,8 +55,8 @@ const LandingPage = () => {
                   <td className='p-2 border text-center'>{candidate.firstName} {candidate.lastName}</td>
                   <td className='p-2 border text-center'>{candidate.lobName}</td>
                   <td className='p-2 border text-center'>{candidate.hsbchiringManager}</td>
-                  <td className='p-2 border text-center'>{candidate.onboardingStatus}</td>
-                  <td className='p-2 border text-center'>{candidate.bgvStatus}</td>
+                  <td className='p-2 border text-center'>{candidate.onboardingStatus || '-'}</td>
+                  <td className='p-2 border text-center'>{candidate.bgvStatus || '-'}</td>
                   <td className='p-2 border text-center'>
                     <div className="flex justify-center">
                       <button className="bg-blue-500 text-white py-1 px-2 rounded mr-2" onClick={() => handleEdit(candidate.id)}>Edit</button>

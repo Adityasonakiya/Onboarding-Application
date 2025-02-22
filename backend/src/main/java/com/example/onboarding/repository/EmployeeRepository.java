@@ -14,13 +14,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     List<Employee> findByLocation(String location);
 
     @Query(value = "SELECT emp.psid as id, emp.first_name, emp.last_name, lob.lob_name, selection.hsbchiring_manager, obs.onboarding_status, bgvs.bgv_status " +
-                   "FROM employee emp, lob lob, selection_details selection, onboarding_status obs, BGVStatus bgvs, tagging_details td " +
-                   "WHERE selection.created_by = 10713037  AND emp.psid=td.ps_id AND selection.ps_id = emp.psid AND selection.lob_id = lob.lob_id " +
-                   "AND td.onboarding_status_id = obs.status_id AND td.bgvstatus_id = bgvs.bgv_status_id " +
-                   "UNION " +
-                   "SELECT cnd.candidate_id as id, cnd.first_name, cnd.last_name, lob.lob_name, selection.hsbchiring_manager, obs.onboarding_status, bgvs.bgv_status " +
-                   "FROM candidate cnd, lob lob, selection_details selection, onboarding_status obs, BGVStatus bgvs, tagging_details td " +
-                   "WHERE selection.created_by = 10713037 AND selection.candidate_id = cnd.candidate_id AND selection.lob_id = lob.lob_id " +
-                   "AND td.onboarding_status_id = obs.status_id AND td.bgvstatus_id = bgvs.bgv_status_id", nativeQuery = true)
+                   "FROM employee emp JOIN selection_details selection ON selection.ps_id = emp.psid " +
+                   "JOIN lob lob ON selection.lob_id = lob.lob_id LEFT JOIN tagging_details td ON emp.psid = td.ps_id LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id LEFT JOIN BGVStatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
+                   "WHERE selection.created_by = 10713037", nativeQuery = true)
     List<EmployeeCandidateDTO> findEmployeeCandidates();
 }
