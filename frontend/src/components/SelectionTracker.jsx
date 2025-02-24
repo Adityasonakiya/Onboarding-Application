@@ -62,7 +62,9 @@ function SelectionTracker() {
   const handleLobChange = async (event) => {
     const lobId = event.target.value;
     setSelectedLob(lobId);
-
+    console.log("LOB: ",lobId);
+    // form.lob=selectedLob;
+    
     try {
       const data = await fetchSubLobs(lobId);
       setSubLobs(data);
@@ -179,121 +181,6 @@ function SelectionTracker() {
     }
   };
 
-  // //Selection for LOB and SubLOB
-  // const bdArch = ["Architecture Stds & Gov"];
-  // const cto = [
-  //   "Colleague & Collaboration",
-  //   "Dev Ops Services",
-  //   "Engineering & PE",
-  //   "Enterprise Infrastructure",
-  // ];
-  // const cybersecurity = ["Cyber Assessment & Testing"];
-  // const enterprise = [
-  //   "Colleague Experience Tech",
-  //   "Core Banking",
-  //   "Cross Functions Technology",
-  //   "Finance Technology",
-  //   "Risk & Compliance Technology",
-  //   "Risk-Compliance Technology",
-  // ];
-  // const globalOps = [
-  //   "Automation Platforms",
-  //   "Ops Management",
-  //   "Tech Change Delivery",
-  // ];
-  // const groupData = [
-  //   "GDT BI & Visualization Tech",
-  //   "GDT Data Asset Tech & Control",
-  //   "GDT Data Management Tech",
-  //   "GDT Data Provisioning Tech",
-  //   "GDT ET",
-  //   "GDT MENAT, EU & UK",
-  //   "GDT WPB",
-  //   "GDT WS, MSS and ESG",
-  // ];
-  // const hdpi = ["HDPI"];
-  // const inm = ["INM"];
-  // const marketServ = [
-  //   "Equities Technology",
-  //   "Fin Data & Reg Reporting Tech",
-  //   "Global Debt Markets Tech",
-  //   "Markets Treasury Tech",
-  //   "MSS Central Services",
-  //   "MSS Operations Technology",
-  //   "Securities Financing Tech",
-  //   "Securities Services Tech",
-  //   "Surveillance & Supervision",
-  //   "Traded Risk",
-  // ];
-  // const mds = ["ESG Data & Analytics"];
-  // const cio_eur = ["Regional Tech - Europe"];
-  // const sab = ["SAB Tech"];
-  // const strataserv = ["SST Group Enterprise Arch"];
-  // const coo = ["Tech COO - Enterprise Tech", "Tech Third Party Mgmt"];
-  // const wholesale = [
-  //   "WS Global Payment Solutions",
-  //   "WS Tech Client Services",
-  //   "WS Tech Credit & Lending",
-  //   "WS Tech Digital",
-  //   "WS Tech FEM&S",
-  //   "WS Tech General",
-  //   "WS Tech Global Banking",
-  //   "WS Tech Global Trade and RF",
-  //   "WS Tech Regional",
-  //   "WS Tech Shared Services",
-  //   "WSIT General",
-  // ];
-  // const wpb = [
-  //   "Enabler Platforms",
-  //   "GPBW and AMG Tech",
-  //   "Insurance",
-  //   "Retail Banking Technology",
-  //   "WPB Technology Management",
-  //   "WPB UK Tech",
-  // ];
-  // /** Type variable to store different array for different dropdown */
-  // let type = null;
-
-  // /** This will be used to create set of options that user will see */
-  // let options = null;
-  // /** Setting Type variable according to dropdown */
-  // if (selected === "1") {
-  //   type = bdArch;
-  // } else if (selected === "2") {
-  //   type = cto;
-  // } else if (selected === "3") {
-  //   type = cybersecurity;
-  // } else if (selected === "4") {
-  //   type = enterprise;
-  // } else if (selected === "5") {
-  //   type = globalOps;
-  // } else if (selected === "6") {
-  //   type = groupData;
-  // } else if (selected === "7") {
-  //   type = hdpi;
-  // } else if (selected === "8") {
-  //   type = inm;
-  // } else if (selected === "9") {
-  //   type = marketServ;
-  // } else if (selected === "10") {
-  //   type = mds;
-  // } else if (selected === "11") {
-  //   type = cio_eur;
-  // } else if (selected === "12") {
-  //   type = sab;
-  // } else if (selected === "13") {
-  //   type = strataserv;
-  // } else if (selected === "14") {
-  //   type = coo;
-  // } else if (selected === "15") {
-  //   type = wholesale;
-  // } else if (selected === "16") {
-  //   type = wpb;
-  // }
-  // //defining type for the options
-  // if (type) {
-  //   options = type.map((el) => <option key={el}>{el}</option>);
-  // }
 
   //handle changes in form
   const handleChange = (e) => {
@@ -388,7 +275,7 @@ function SelectionTracker() {
         HSBC Selection Tracker Form
       </h1>
 
-      <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">Basic Info</h4>
+      
       <form onSubmit={handleSubmit}>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
@@ -448,6 +335,7 @@ function SelectionTracker() {
                   />
                 </td>
               </tr>
+              <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">Basic Info</h4>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">First Name:</label>
@@ -601,31 +489,6 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">LOB:<span className="text-red-500">*</span></label>
                 </td>
-                {/* <td className="p-2 w-full md:w-1/4">
-                  <select
-                    onChange={changeSelectOptionHandler}
-                    name="lob"
-                    className="p-2 bordered w-full"
-                  >
-                    <option value="">Select LOB</option>
-                    <option value="1">Business & Data Architecture</option>
-                    <option value="2">CTO</option>
-                    <option value="3">Cybersecurity</option>
-                    <option value="4">Enterprise Technology</option>
-                    <option value="5">Global Ops & Automation Tech</option>
-                    <option value="6">Group Data Technology</option>
-                    <option value="7">HDPI</option>
-                    <option value="8">INM</option>
-                    <option value="9">Markets & Sec Services Tech</option>
-                    <option value="10">MDS & DAO ESG</option>
-                    <option value="11">Regional CIO - Europe</option>
-                    <option value="12">SAB Technology</option>
-                    <option value="13">Strategic Services Technology</option>
-                    <option value="14">Technology COO</option>
-                    <option value="15">Wholesale Technology</option>
-                    <option value="16">WPB Technology</option>
-                  </select>
-                </td> */}
                 <td className="p-2 w-full md:w-1/4">
                   <select
                     onChange={handleLobChange}
@@ -638,19 +501,6 @@ function SelectionTracker() {
                     ))}
                   </select>
                 </td>
-                {/* <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Sub LOB:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <select
-                    className="p-2 bordered w-full"
-                    name="subLob"
-                    onChange={handleChange}
-                  >
-                    <option value="0">Choose SubLOB</option>
-                    {options}
-                  </select>
-                </td> */}
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">Sub LOB:<span className="text-red-500">*</span></label>
                 </td>
