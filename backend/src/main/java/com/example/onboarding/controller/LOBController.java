@@ -23,11 +23,13 @@ public class LOBController {
     @GetMapping("/lob/{lobId}")
     public ResponseEntity<LOB> findLob(@PathVariable int lobId){
         LOB lob =  service.findById(lobId);
+        System.out.println("lobId"+lobId);
+        System.out.println(lob);
         if(lob!=null)
             return ResponseEntity.status(200).body(lob);
         return ResponseEntity.status(404).build();
     }
-    @GetMapping("/lob")
+    @GetMapping("/lobs")
     public ResponseEntity<List<LOB>> findAllLob(){
         List<LOB> lob =  service.findAll();
         if(!lob.isEmpty())

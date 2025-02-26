@@ -5,13 +5,22 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.onboarding.model.LOB;
 import com.example.onboarding.model.SelectionDetails;
-import com.example.onboarding.model.User;
+import com.example.onboarding.model.SubLOB;
 import com.example.onboarding.repository.EmployeeRepository;
+import com.example.onboarding.repository.LOBRepository;
 import com.example.onboarding.repository.SelectionDetailsRepository;
+import com.example.onboarding.repository.SubLOBRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class SelectionDetailsService {
+
+    @Autowired
+    private SubLOBRepository subLOBRepository;
+    @Autowired
+    private LOBRepository lOBRepository;
     @Autowired
     private SelectionDetailsRepository selectionDetailsRepository;
 
@@ -20,6 +29,7 @@ public class SelectionDetailsService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
 
     public SelectionDetails getSelectionDetailsByPsid(int psid) {
         return selectionDetailsRepository.findByEmployee_Psid(psid);
@@ -60,11 +70,12 @@ public class SelectionDetailsService {
             // existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setUpdateDate(LocalDateTime.now());
-            // existingDetails.setLob(updatedDetails.getLob());
-            // existingDetails.setSubLob(updatedDetails.getSubLob());
-            // existingDetails.setIrm(updatedDetails.getIrm());
+            //existingDetails.setLob(updatedDetails.getLob());
+            //existingDetails.setSubLob(updatedDetails.getSubLob());
+            //existingDetails.setIrm(updatedDetails.getIrm());
             existingDetails.setCreatedBy(existingDetails.getCreatedBy());
             existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            System.out.println(existingDetails.getLob());
             return selectionDetailsRepository.save(existingDetails);
         }
         return selectionDetailsRepository.save(updatedDetails);
@@ -94,8 +105,8 @@ public class SelectionDetailsService {
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setUpdateDate(LocalDateTime.now());
-            existingDetails.setLob(updatedDetails.getLob());
-            existingDetails.setSubLob(updatedDetails.getSubLob());
+            //existingDetails.setLob(updatedDetails.getLob());
+            //existingDetails.setSubLob(updatedDetails.getSubLob());
             existingDetails.setIrm(updatedDetails.getIrm());
             existingDetails.setCreatedBy(existingDetails.getCreatedBy());
             existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
@@ -152,44 +163,38 @@ public class SelectionDetailsService {
     // }
     // userService.loggedUser().getPsid()).get()
 
+    @Transactional
     public SelectionDetails updateSelectionDetailsByPsId2(int psId, SelectionDetails updatedDetails) {
-        System.out.println("updated Details that is provided by frontend is here: " + updatedDetails);
-        System.out.println(
-                "updated Details that is provided by frontend is here 2: " + updatedDetails.getTechSelectionDate());
-        System.out.println(
-                "updated Details that is provided by frontend is here 3: " + updatedDetails.getDOJReceivedDate());
-        System.out.println(
-                "updated Details that is provided by frontend is here 4: " + updatedDetails.getHSBCOnboardingDate());
-        SelectionDetails existingDetails = selectionDetailsRepository.findByEmployee_Psid(psId);
-        if (existingDetails != null) {
-            existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());
-            existingDetails.setHSBCSelectionDate(updatedDetails.getHSBCSelectionDate());
-            existingDetails.setHSBCHiringManager(updatedDetails.getHSBCHiringManager());
-            existingDetails.setHSBCHead(updatedDetails.getHSBCHead());
-            existingDetails.setSalesPOC(updatedDetails.getSalesPOC());
-            existingDetails.setPricingModel(updatedDetails.getPricingModel());
-            existingDetails.setHSBCToolId(updatedDetails.getHSBCToolId());
-            existingDetails.setCToolReceivedDate(updatedDetails.getCToolReceivedDate());
-            existingDetails.setCToolJobCategory(updatedDetails.getCToolJobCategory());
-            existingDetails.setCToolLocation(updatedDetails.getCToolLocation());
-            existingDetails.setCToolRate(updatedDetails.getCToolRate());
-            existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
-            existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
-            existingDetails.setInterviewEvidences(updatedDetails.getInterviewEvidences());
-            existingDetails.setOfferReleaseStatus(updatedDetails.getOfferReleaseStatus());
-            existingDetails.setHSBCOnboardingDate(updatedDetails.getHSBCOnboardingDate());
-            existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
-            existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
-            existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
-            existingDetails.setCreateDate(existingDetails.getCreateDate());
-            existingDetails.setUpdateDate(LocalDateTime.now());
-            existingDetails.setLob(updatedDetails.getLob());
-            existingDetails.setSubLob(updatedDetails.getSubLob());
-            existingDetails.setIrm(updatedDetails.getIrm());
-            existingDetails.setCreatedBy(existingDetails.getCreatedBy());
-            existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
-            return selectionDetailsRepository.save(existingDetails);
-        }
-        return selectionDetailsRepository.save(updatedDetails);
+    SelectionDetails existingDetails = selectionDetailsRepository.findByEmployee_Psid(psId);
+    if(existingDetails!=null){
+        
+        existingDetails.setLob(updatedDetails.getLob());
+        existingDetails.setSubLob(updatedDetails.getSubLob());
+        existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());
+        existingDetails.setHSBCSelectionDate(updatedDetails.getHSBCSelectionDate());
+        existingDetails.setHSBCHiringManager(updatedDetails.getHSBCHiringManager());
+        existingDetails.setHSBCHead(updatedDetails.getHSBCHead());
+        existingDetails.setSalesPOC(updatedDetails.getSalesPOC());
+        existingDetails.setPricingModel(updatedDetails.getPricingModel());
+        existingDetails.setHSBCToolId(updatedDetails.getHSBCToolId());
+        existingDetails.setCToolReceivedDate(updatedDetails.getCToolReceivedDate());
+        existingDetails.setCToolJobCategory(updatedDetails.getCToolJobCategory());
+        existingDetails.setCToolLocation(updatedDetails.getCToolLocation());
+        existingDetails.setCToolRate(updatedDetails.getCToolRate());
+        existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
+        existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
+        existingDetails.setInterviewEvidences(updatedDetails.getInterviewEvidences());
+        existingDetails.setOfferReleaseStatus(updatedDetails.getOfferReleaseStatus());
+        existingDetails.setHSBCOnboardingDate(updatedDetails.getHSBCOnboardingDate());
+        existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
+        existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
+        existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
+        existingDetails.setCreateDate(existingDetails.getCreateDate());
+        existingDetails.setUpdateDate(LocalDateTime.now());
+        existingDetails.setCreatedBy(existingDetails.getCreatedBy());
+        existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        return selectionDetailsRepository.save(existingDetails);
     }
+    return selectionDetailsRepository.save(updatedDetails);
+}
 }
