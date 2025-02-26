@@ -23,13 +23,13 @@ function UpdateDetails() {
 
       setForm({ ...form, [name]: value });
       if (name === "status") {
-        if (value === "3") {
+        if (value === "Tagging Completed") {
           setForm((prevForm) => ({ ...prevForm, tagDateEnabled: true }));
-        } else if (value === "4") {
+        } else if (value === "Tech Selection Done") {
           setForm((prevForm) => ({ ...prevForm, techSelectDateEnabled: true }));
-        } else if (value === "5") {
+        } else if (value === "DOJ Recieved") {
           setForm((prevForm) => ({ ...prevForm, dojRecDateEnabled: true }));
-        } else if (value === "6") {
+        } else if (value === "Onboarding Completed") {
           setForm((prevForm) => ({ ...prevForm, onboardingDateEnabled: true }));
         }
       }
@@ -211,17 +211,17 @@ function UpdateDetails() {
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
                   <select name='status' value={form.status || ''} onChange={handleChange} className="p-2 mb-2 border rounded w-full" required>
-                    <option value="1">CTool Pending</option>
-                    <option value="2">CTool Recieved</option>
-                    <option value="3">Tagging Completed</option>
-                    <option value="4">Tech Selection Done</option>
-                    <option value="5">DOJ Recieved</option>
-                    <option value="6">Onboarding Completed</option>
-                    <option value="7">Tagging Error</option>
-                    <option value="8">Rate Approval Pending</option>
-                    <option value="9">Rate To Be Changed</option>
-                    <option value="10">Candidate not yet joined</option>
-                    <option value="11">Drop Out Case</option>
+                    <option value="CTool Pending">CTool Pending</option>
+                    <option value="CTool Recieved">CTool Recieved</option>
+                    <option value="Tagging Completed">Tagging Completed</option>
+                    <option value="Tech Selection Done">Tech Selection Done</option>
+                    <option value="DOJ Recieved">DOJ Recieved</option>
+                    <option value="Onboarding Completed">Onboarding Completed</option>
+                    <option value="Tagging Error">Tagging Error</option>
+                    <option value="Rate Approval Pending">Rate Approval Pending</option>
+                    <option value="Rate To Be Changed">Rate To Be Changed</option>
+                    <option value="Candidate not yet joined">Candidate not yet joined</option>
+                    <option value="Drop Out Case">Drop Out Case</option>
                   </select>
                 </td>
                 <td className='p-2 w-full md:w-1/4'>

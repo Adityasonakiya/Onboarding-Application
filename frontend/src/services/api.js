@@ -105,19 +105,35 @@ export const updateSelectionDetailsByCandidateId = async (candidateId, data) => 
 };
 
 export const fetchLobs = async () => {
-  const response = await fetch('http://localhost:8080/users/lob');
+  const response = await fetch('http://localhost:8080/users/lobs');
   if (!response.ok) {
     throw new Error('Failed to fetch LOBs');
   }
   return response.json();
 };
 
+export const fetchLob = async(lobId)=>{
+  const response = await fetch('https://localhost:8080/users/lob/'+ lobId);
+  if(!response.ok){
+    throw new Error('Failed to fetch lob');
+  }
+  return response.json();
+}
+
 export const fetchSubLobs = async (lobId) => {
-  const response = await fetch(`http://localhost:8080/users/sublob/${lobId}`);
+  const response = await fetch(`http://localhost:8080/users/sublobs/${lobId}`);
   if (!response.ok) {
     throw new Error('Failed to fetch SubLOBs');
   }
-  return response.json();
+    return response.json();
+};
+
+export const fetchSubLob = async(subLobId)=>{
+  const response = await fetch(`http://localhost:8080/users/sublob/${subLobId}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch sublob by Id');
+  }
+    return response.json();
 };
 
 export const fetchEmployeeCandidates = async () => {

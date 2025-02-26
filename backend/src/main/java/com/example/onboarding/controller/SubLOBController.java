@@ -19,10 +19,19 @@ public class SubLOBController {
     @Autowired
     SubLOBService subService;
 
-    @GetMapping("/sublob/{lobId}")
+    @GetMapping("/sublobs/{lobId}")
     public ResponseEntity<List<SubLOB>> findSubLob(@PathVariable int lobId){
         List<SubLOB> sublob =  subService.findByLobId(lobId);
         if(sublob.isEmpty())
+            return ResponseEntity.status(404).build();
+        return ResponseEntity.status(200).body(sublob);
+    }
+    @GetMapping("/sublob/{subLobId}")
+    public ResponseEntity<SubLOB> findSubLobById(@PathVariable int subLobId){
+        SubLOB sublob =  subService.findById(subLobId);
+        System.out.println(subLobId);
+        System.out.println("sublob"+sublob);
+        if(sublob==null)
             return ResponseEntity.status(404).build();
         return ResponseEntity.status(200).body(sublob);
     }

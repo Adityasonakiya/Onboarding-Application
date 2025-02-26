@@ -33,7 +33,7 @@ public class SubLOB {
     private LocalDateTime updateDate;
 
     public int getSubLOBid() {
-        return subLOBid;
+        return this.subLOBid;
     }
     public void setSubLOBid(int subLOBid) {
         this.subLOBid = subLOBid;
