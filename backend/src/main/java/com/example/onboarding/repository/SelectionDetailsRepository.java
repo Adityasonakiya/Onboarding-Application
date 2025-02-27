@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository;
 import com.example.onboarding.model.SelectionDetails;
 
 @Repository
-public interface SelectionDetailsRepository extends JpaRepository<SelectionDetails,Integer>{
-    SelectionDetails findByEmployeePsid(int psid);
-    SelectionDetails findByCandidateCandidateId(int candidateId);
+public interface SelectionDetailsRepository extends JpaRepository<SelectionDetails, Integer> {
+    SelectionDetails findByEmployee_Psid(int psid); 
+    SelectionDetails findByCandidate_CandidateId(int candidateId);
+    Boolean existsByEmployee_Psid(int psId);
+    Boolean existsByCandidate_CandidateId(int candidateId);
 }

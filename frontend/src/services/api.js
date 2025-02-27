@@ -1,32 +1,130 @@
 export const getEmployeeByPsid = async (psid) => {
-    const response = await fetch(`http://localhost:8080/employees/${psid}`);
-    if (response.ok) {
-        return response.json();
-    }
-    throw new Error('Failed to fetch employee data');
+  const response = await fetch(`http://localhost:8080/employees/${psid}`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error('Failed to fetch employee data');
 };
 
 export const getCandidateById = async (candidateId) => {
-    const response = await fetch(`http://localhost:8080/candidates/${candidateId}`);
-    if (response.ok) {
-        return response.json();
-    }
-    throw new Error('Failed to fetch candidate data');
+  const response = await fetch(`http://localhost:8080/candidates/${candidateId}`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error('Failed to fetch candidate data');
 };
 
-export const getSelectionDetailsByPsid = async (psid) => {
-    const response = await fetch(`http://localhost:8080/selection-details/psid/${psid}`);
-    if (response.ok) {
-      return response.json();
-    }
-    throw new Error('Failed to fetch selection details by psid');
-  };
-  
+export const getSelectionDetailsByPsId = async (psid) => {
+  const response = await fetch(`http://localhost:8080/selection-details/psid/${psid}`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error('Failed to fetch selection details by psid');
+};
+
 export const getSelectionDetailsByCandidateId = async (candidateId) => {
-    const response = await fetch(`http://localhost:8080/selection-details/candidateId/${candidateId}`);
-    if (response.ok) {
-      return response.json();
-    }
-    throw new Error('Failed to fetch selection details by candidateId');
-  };
-  
+  const response = await fetch(`http://localhost:8080/selection-details/candidateId/${candidateId}`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error('Failed to fetch selection details by candidateId');
+};
+
+export const getTaggingDetailsByPsId = async (psId) => {
+  const response = await fetch(`http://localhost:8080/api/tagging-details/psid/${psId}`);
+  if (response.ok) {
+    return await response.json();
+  }
+  throw new Error('Failed to fetch tagging details by psId');
+};
+
+export const getTaggingDetailsByCandidateId = async (candidateId) => {
+  const response = await fetch(`http://localhost:8080/api/tagging-details/candidate/${candidateId}`);
+  if (response.ok) {
+    return await response.json();
+  }
+  throw new Error('Failed to fetch tagging details by candidateId');
+};
+
+
+
+export const updateTaggingDetailsByPsId = async (psId, data) => {
+  const response = await fetch(`http://localhost:8080/api/tagging-details/psid/${psId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+};
+
+export const updateTaggingDetailsByCandidateId = async (candidateId, data) => {
+  const response = await fetch(`http://localhost:8080/api/tagging-details/candidate/${candidateId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+};
+
+export const updateSelectionDetailsByPsId = async (psId, data) => {
+  const response = await fetch(`http://localhost:8080/selection-details/psid/${psId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+};
+
+export const updateSelectionDetailsByCandidateId = async (candidateId, data) => {
+  const response = await fetch(`http://localhost:8080/selection-details/candidateId/${candidateId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+};
+
+export const fetchLobs = async () => {
+  const response = await fetch('http://localhost:8080/users/lob');
+  if (!response.ok) {
+    throw new Error('Failed to fetch LOBs');
+  }
+  return response.json();
+};
+
+export const fetchSubLobs = async (lobId) => {
+  const response = await fetch(`http://localhost:8080/users/sublob/${lobId}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch SubLOBs');
+  }
+  return response.json();
+};
+
+export const fetchEmployeeCandidates = async () => {
+  const response = await fetch("http://localhost:8080/employees/employee-candidates");
+  if (!response.ok) {
+    throw new Error('Failed to fetch employee candidates');
+  }
+  return response.json();
+};
+

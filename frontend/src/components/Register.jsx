@@ -24,8 +24,8 @@ const Register = () => {
   const validate = () => {
     const errors = {};
     if (!form.username) errors.username = 'Username is required';
-    if (!form.email) errors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(form.email)) errors.email = 'Email is invalid';
+    // if (!form.email) errors.email = 'Email is required';
+    // else if (!/\S+@\S+\.\S+/.test(form.email)) errors.email = 'Email is invalid';
     if (!form.password) errors.password = 'Password is required';
     else {
       if (form.password.length < 8) errors.password = 'Password must be at least 8 characters';
@@ -42,7 +42,7 @@ const Register = () => {
     e.preventDefault();
 
     const errors = validate();
-    if (true) {
+    if (Object.keys(errors).length === 0) {
       try {
         const response = await fetch('http://localhost:8080/api/users/create', {
           method: 'POST',

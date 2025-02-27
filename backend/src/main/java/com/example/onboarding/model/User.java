@@ -8,8 +8,8 @@ import jakarta.persistence.Entity;
 // import jakarta.persistence.GeneratedValue;
 // import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+// import jakarta.persistence.JoinColumn;
+// import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,9 +19,7 @@ public class User {
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int psid;
 
-    @ManyToOne
-    @JoinColumn(name = "roleId")
-    private Roles role;
+    Integer roleId;
 
     private int userManagerId;
 
@@ -55,18 +53,28 @@ public class User {
         this.lastLogout = lastLogout;
     }
     
-    public Roles getRole() {
-        return role;
-    }
-    public void setRole(Roles role) {
-        this.role = role;
-    }
     public int getUserManagerId() {
         return userManagerId;
     }
     public void setUserManagerId(int userManagerId) {
         this.userManagerId = userManagerId;
     }
+    public int getRoleId() {
+        return roleId;
+    }
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
     
+    @Override
+    public String toString() {
+        return "TaggingDetails{" +
+                "psid=" + psid +
+                ", roleId=" + roleId +
+                ", userManagerId=" + userManagerId +
+                ", lastLogin=" + lastLogin +
+                ", lastLogout=" + lastLogout+ 
+                '}';
+    }
 
 }

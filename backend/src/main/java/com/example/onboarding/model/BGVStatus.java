@@ -1,9 +1,13 @@
 package com.example.onboarding.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class BGVStatus {
@@ -13,6 +17,10 @@ public class BGVStatus {
     private String bgvStatus;
     private String remarks;
     
+    @OneToMany(mappedBy = "bgvStatus", cascade = CascadeType.ALL)
+    private List<TaggingDetails> taggingDetails;
+
+
     public int getBgvStatusId() {
         return bgvStatusId;
     }
@@ -31,5 +39,14 @@ public class BGVStatus {
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
- 
+
+    @Override
+    public String toString() {
+        return "TaggingDetails{" +
+                "bgvstatusId=" + bgvStatusId +
+                ", bgvStatus=" + bgvStatus +
+                ", remarks=" + remarks +
+                ", tagging details=" + taggingDetails +
+                '}';
+    }
 }
