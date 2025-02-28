@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 function UpdateDetails() {
   const [form, setForm] = useState({});
-  const [isInternal, setIsInternal] = useState(false);
+  const [isInternal, setIsInternal] = useState(true);
   const [psId, setPsId] = useState("");
   const [candidateId, setCandidateId] = useState("");
    const navigate = useNavigate();
