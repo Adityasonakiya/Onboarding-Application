@@ -32,14 +32,14 @@ const LandingPage = () => {
     <div className='w-full px-4 py-6'>
       <div className='mx-4'>
         <div className='flex justify-between flex-wrap'>
-          <h2 className="py-2 font-bold text-lg">My Selection</h2>
+          <h2 className="py-2 font-bold text-lg">My Selections</h2>
           <button className="bg-blue-500 text-white py-2 px-4 rounded mt-2 md:mt-0" onClick={addNewSelection}>Add New Selection</button>
         </div>
         <div className='overflow-x-auto mt-4'>
           <table className='w-full border-collapse'>
             <thead>
               <tr className='bg-gray-200'>
-                <th className='p-2 text-center'>PsId/External</th>
+                <th className='p-2 text-center'>PSId/External</th>
                 <th className='p-2 text-center'>Name</th>
                 <th className='p-2 text-center'>LOB</th>
                 <th className='p-2 text-center'>Client Name</th>

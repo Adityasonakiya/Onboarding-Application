@@ -16,7 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function SelectionTracker() {
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({bu: "" });
   const [errors, setErrors] = useState({});
   const [isInternal, setIsInternal] = useState(false);
   // const [selected, setSelected] = React.useState("");
@@ -114,12 +114,13 @@ function SelectionTracker() {
         ...prevForm,
         fname: employee.firstName,
         lname: employee.lastName,
+        pu: employee.pu,
         grade: employee.grade,
         location: employee.location,
-        pu: employee.pu,
         totalExp: employee.totalExperience,
         skill: employee.skill,
         email: employee.mailID,
+        bu: employee.baseBU
       }));
     } catch (error) {
       console.error(error);
@@ -133,6 +134,7 @@ function SelectionTracker() {
         ...prevForm,
         fname: candidate.firstName,
         lname: candidate.lastName,
+        baseBU: "",
         grade: "", // Assuming grade is not available for candidate
         location: "", // Assuming location is not available for candidate
         pu: "", // Assuming pu is not available for candidate
@@ -151,7 +153,7 @@ function SelectionTracker() {
       setForm((prevForm) => ({
         ...prevForm,
         selectionDate: selectionDetails.hsbcSelectionDate,
-        bu: selectionDetails.baseBU,
+        bu:"BF",
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
