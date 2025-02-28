@@ -14,6 +14,7 @@ function UpdateDetails() {
   const location = useLocation();
   const { state } = location;
   const id = state?.id;
+  const today = new Date().toISOString().split('T')[0];
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -88,7 +89,9 @@ function UpdateDetails() {
           updateSelectionDetailsByPsId(psId, selectionDetails) && toast.success('Details updated successfully!', {
             position: 'top-right',
           });
-          navigate('/landing-page');
+          setTimeout(() => {
+            navigate('/landing-page');
+          }, 2000);
         })
         .catch(error => {
           toast.error('Error updating details:', {
@@ -102,6 +105,9 @@ function UpdateDetails() {
           updateSelectionDetailsByCandidateId(candidateId, selectionDetails) && toast.success('Details updated successfully!', {
             position: 'top-right',
           });
+          setTimeout(() => {
+            navigate('/landing-page');
+          }, 2000);
         })
         .catch(error => {
           toast.error('Error updating details:', {
@@ -263,13 +269,13 @@ function UpdateDetails() {
                   <label className="font-bold">Tagging date:<span className="text-red-500">*</span></label>
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <input type='date' name='tagDate' value={form.tagDate || ''} required disabled={!form.tagDateEnabled} onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
+                  <input type='date' name='tagDate' value={form.tagDate || ''} required disabled={!form.tagDateEnabled} onChange={handleChange} className="p-2 mb-2 border rounded w-full" min={today} />
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
                   <label className="font-bold">Tech Selection Date:<span className="text-red-500">*</span></label>
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <input type='date' name='techSelectDate' value={form.techSelectDate || ''} required disabled={!form.techSelectDateEnabled} onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
+                  <input type='date' name='techSelectDate' value={form.techSelectDate || ''} required disabled={!form.techSelectDateEnabled} onChange={handleChange} className="p-2 mb-2 border rounded w-full" min={today}/>
                 </td>
               </tr>
               <tr className='flex flex-wrap md:flex-nowrap'>
@@ -277,13 +283,13 @@ function UpdateDetails() {
                   <label className="font-bold">DOJ Recieved Date:<span className="text-red-500">*</span></label>
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <input type='date' name='dojRecDate' value={form.dojRecDate || ''} required disabled={!form.dojRecDateEnabled} onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
+                  <input type='date' name='dojRecDate' value={form.dojRecDate || ''} required disabled={!form.dojRecDateEnabled} onChange={handleChange} className="p-2 mb-2 border rounded w-full" min={today}/>
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
                   <label className="font-bold">Onboarding Date:<span className="text-red-500">*</span></label>
                 </td>
                 <td className='p-2 w-full md:w-1/4'>
-                  <input type='date' name='onboardingDate' value={form.onboardingDate || ''} required disabled={!form.onboardingDateEnabled} onChange={handleChange} className="p-2 mb-2 border rounded w-full" />
+                  <input type='date' name='onboardingDate' value={form.onboardingDate || ''} required disabled={!form.onboardingDateEnabled} onChange={handleChange} className="p-2 mb-2 border rounded w-full" min={today}/>
                 </td>
               </tr>
               <tr>
