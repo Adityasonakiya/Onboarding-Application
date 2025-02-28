@@ -262,9 +262,14 @@ function SelectionTracker() {
 
           if (response.ok) {
             // Simulate successful creation of selection details for the employee or candidate
+            toast.success('Details updated successfully!', {
+              position: 'top-right',
+            });
             localStorage.setItem("selectionDetails", JSON.stringify(requestBody));
             console.log(requestBody);
-            navigate("/landing-page"); // Navigate to the dashboard after successful creation
+            setTimeout(() => {
+              navigate('/landing-page');
+            }, 2000); // Navigate to the dashboard after successful creation
           } else {
             const errorData = await response.json();
             setErrors({ submit: errorData.message });
@@ -281,8 +286,13 @@ function SelectionTracker() {
 
           if (response.ok) {
             // Simulate successful creation of selection details for the employee or candidate
+            toast.success('Details updated successfully!', {
+              position: 'top-right',
+            });
             localStorage.setItem("selectionDetails", JSON.stringify(requestBody));
-            navigate("/landing-page"); // Navigate to the dashboard after successful creation
+            setTimeout(() => {
+              navigate('/landing-page');
+            }, 2000); // Navigate to the dashboard after successful creation
           } else {
             const errorData = await response.json();
             setErrors({ submit: errorData.message });

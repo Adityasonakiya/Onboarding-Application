@@ -88,7 +88,9 @@ function UpdateDetails() {
           updateSelectionDetailsByPsId(psId, selectionDetails) && toast.success('Details updated successfully!', {
             position: 'top-right',
           });
-          navigate('/landing-page');
+          setTimeout(() => {
+            navigate('/landing-page');
+          }, 2000);
         })
         .catch(error => {
           toast.error('Error updating details:', {
@@ -102,6 +104,9 @@ function UpdateDetails() {
           updateSelectionDetailsByCandidateId(candidateId, selectionDetails) && toast.success('Details updated successfully!', {
             position: 'top-right',
           });
+          setTimeout(() => {
+            navigate('/landing-page');
+          }, 2000);
         })
         .catch(error => {
           toast.error('Error updating details:', {
