@@ -3,32 +3,42 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'GilroyLight';
-    src: url('./assets/fonts/Gilroy-Light.ttf') format('truetype');
-  }
-  
-  @font-face {
-    font-family: 'GilroyM';
-    src: url('./assets/fonts/Gilroy-Medium.ttf') format('truetype');
-  }
-  
-  @font-face {
-    font-family: 'GilroyB';
-    src: url('./assets/fonts/Gilroy-SemiBold.ttf') format('truetype');
-  }
-  
-  @font-face {
-    font-family: 'GilroyR';
-    src: url('./assets/fonts/Gilroy-Regular.ttf') format('truetype');
-  }
-  
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  html,
-  body {
-    font-family: 'GilroyLight';
-  }
+  font-family: "GilroyLight";
+  src: url("./assets/fonts/Gilroy-Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "GilroyM";
+  src: url("./assets/fonts/Gilroy-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "GilroyB";
+  src: url("./assets/fonts/Gilroy-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "GilroyR";
+  src: url("./assets/fonts/Gilroy-Regular.ttf") format("truetype");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: "GilroyLight";
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
