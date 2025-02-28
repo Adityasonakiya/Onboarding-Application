@@ -16,15 +16,15 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function SelectionTracker() {
-  const [form, setForm] = useState({bu: "" });
+  const [form, setForm] = useState({ bu: "" });
   const [errors, setErrors] = useState({});
-  const [isInternal, setIsInternal] = useState(false);
+  const [isInternal, setIsInternal] = useState(true);
   // const [selected, setSelected] = React.useState("");
   const navigate = useNavigate();
   const [lobs, setLobs] = useState([]);
   const [subLobs, setSubLobs] = useState([]);
-  const [Lob,setLob]=useState([]);
-  const [subLob,setSubLob]=useState([]);
+  const [Lob, setLob] = useState([]);
+  const [subLob, setSubLob] = useState([]);
   const [selectedLob, setSelectedLob] = useState('');
   const [selectedSubLob, setSelectedSubLob] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -67,15 +67,15 @@ function SelectionTracker() {
   const handleLobChange = async (event) => {
     const lobId = event.target.value;
     setSelectedLob(lobId);
-    try{
+    try {
       const data = await fetchLob(lobId);
       setLob(data);
-    }catch(error){
+    } catch (error) {
       console.error('There was an error fetching the LOB!', error);
     }
-    console.log("LOB: ",lobId);
+    console.log("LOB: ", lobId);
     //form.lob=selectedLob;
-    
+
     try {
       const data = await fetchSubLobs(lobId);
       setSubLobs(data);
@@ -84,17 +84,17 @@ function SelectionTracker() {
     }
   };
 
-  const handleSubLobChange = async(event) =>{
+  const handleSubLobChange = async (event) => {
     const subLobId = event.target.value;
     setSelectedSubLob(subLobId);
-    
-    console.log("subLOB: ",subLobId);
+
+    console.log("subLOB: ", subLobId);
     //form.subLob = selectedSubLob;
 
-    try{
+    try {
       const data = await fetchSubLob(subLobId);
       setSubLob(data);
-    }catch(error){
+    } catch (error) {
       console.error('There was an error fetching the SubLOB!', error);
     }
   }
@@ -153,7 +153,7 @@ function SelectionTracker() {
       setForm((prevForm) => ({
         ...prevForm,
         selectionDate: selectionDetails.hsbcSelectionDate,
-        bu:"BF",
+        bu: "BF",
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
@@ -259,7 +259,7 @@ function SelectionTracker() {
             },
             body: JSON.stringify(requestBody),
           });
-  
+
           if (response.ok) {
             // Simulate successful creation of selection details for the employee or candidate
             localStorage.setItem("selectionDetails", JSON.stringify(requestBody));
@@ -278,7 +278,7 @@ function SelectionTracker() {
             },
             body: JSON.stringify(requestBody),
           });
-  
+
           if (response.ok) {
             // Simulate successful creation of selection details for the employee or candidate
             localStorage.setItem("selectionDetails", JSON.stringify(requestBody));
@@ -298,14 +298,14 @@ function SelectionTracker() {
       setErrors(errors);
     }
   };
-  
+
   return (
     <div className="w-full px-4 py-6">
       <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">
         HSBC Selection Tracker Form
       </h1>
 
-      
+
       <form onSubmit={handleSubmit}>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
@@ -349,6 +349,7 @@ function SelectionTracker() {
                     required
                     className="p-2 border rounded w-full"
                     disabled={!isInternal}
+                    pattern="\d*"
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -521,7 +522,7 @@ function SelectionTracker() {
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
-                  value={selectedLob}
+                    value={selectedLob}
                     onChange={handleLobChange}
                     name="lob"
                     className="p-2 bordered w-full"
@@ -537,7 +538,7 @@ function SelectionTracker() {
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
-                   name="subLob"
+                    name="subLob"
                     className="p-2 bordered w-full"
                     onChange={handleSubLobChange}
                   >
