@@ -336,7 +336,7 @@ function SelectionTracker() {
                   />
                 </td>
               </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
+              <tr className="flex flex-wrap md:flex-nowrap ">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">PS ID:<span className="text-red-500">*</span></label>
                 </td>
