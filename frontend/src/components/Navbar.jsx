@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaSearch, FaCheck, FaBell, FaUser, FaTimes } from 'react-icons/fa';
+import { FaSearch, FaBell, FaUser, FaTimes } from 'react-icons/fa';
 import { FiAlignJustify } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
@@ -9,13 +9,27 @@ import { getEmployeeByPsid } from '../services/api';
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activePopup, setActivePopup] = useState(null);
-  const [errors,setErrors] = useState('');
+  const [hoverPopup, setHoverPopup] = useState(null);
+  const [errors, setErrors] = useState('');
   const [form, setForm] = useState({});
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const [searchResults, setSearchResults] = useState([]);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (searchQuery.trim()) {
-      console.log('Searching for:', searchQuery);
+      try {
+        const response = await fetch(`http://localhost:8080/employees/${searchQuery}`);
+        if (response.ok) {
+          const employee = await response.json();
+          setSearchResults([employee]); // Store the search result in the state
+        } else {
+          console.error('Employee not found');
+          setSearchResults([]); // Clear the search results if not found
+        }
+      } catch (error) {
+        console.error('Error searching for employee:', error);
+        setSearchResults([]); // Clear the search results on error
+      }
     }
   };
 
@@ -45,12 +59,24 @@ export default function Navbar() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user')).psid;
-      if (user) {
-        fetchEmployeeData(user);
-      }
-    },[false]);
+    if (user) {
+      fetchEmployeeData(user);
+    }
+  }, []);
 
-  
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.popup') && !event.target.closest('.popup-trigger')) {
+        setActivePopup(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const handleLogout = async () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
@@ -74,6 +100,10 @@ export default function Navbar() {
     }
   };
 
+  const handleResultClick = (employee) => {
+    navigate('/selection-tracker', { state: { employee } });
+  };
+
   return (
     <div className='shadow-md w-full p-2 fixed top-0 left-0 bg-white'>
       <div className='flex items-center justify-between py-2 px-4 md:py-4 md:px-7'>
@@ -89,42 +119,43 @@ export default function Navbar() {
               placeholder='Search...'
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearch();
+                }
+              }}
             />
             <FaSearch
               className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
               onClick={handleSearch}
             />
           </div>
-          <div className='relative'>
-            <div
-              className='p-1 md:p-2 rounded-full bg-gray-200 hover:bg-gray-300 duration-300 cursor-pointer'
-              onClick={() => togglePopup('tickMark')}
-            >
-              <FaCheck className='text-gray-800' />
-            </div>
-            {activePopup === 'tickMark' && (
-              <div className='absolute right-0 mt-2 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300'>
-                <div className='flex justify-end'>
-                  <FaTimes
-                    className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
-                    onClick={() => setActivePopup(null)}
-                  />
+          {searchResults.length > 0 && (
+            <div className='absolute mt-2 w-full bg-white rounded-lg shadow-lg p-4 border border-gray-300'>
+              {searchResults.map((employee) => (
+                <div
+                  key={employee.psid}
+                  className='p-2 hover:bg-gray-200 cursor-pointer'
+                  onClick={() => handleResultClick(employee)}
+                >
+                  {employee.fname} {employee.lname} (PS ID: {employee.psid})
                 </div>
-                <h1 className='text-lg md:text-xl font-bold mb-2'>Lorem Ipsum</h1>
-                <p className='text-gray-700 mb-2'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <p className='text-gray-700'>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-              </div>
-            )}
-          </div>
-          <div className='relative'>
+              ))}
+            </div>
+          )}
+          <div
+            className='relative popup-trigger'
+            onMouseEnter={() => setHoverPopup('notification')}
+            onMouseLeave={() => setHoverPopup(null)}
+            onClick={() => togglePopup('notification')}
+          >
             <div
               className='p-1 md:p-2 rounded-full bg-gray-200 hover:bg-gray-300 duration-300 cursor-pointer'
-              onClick={() => togglePopup('notification')}
             >
               <FaBell className='text-gray-800' />
             </div>
-            {activePopup === 'notification' && (
-              <div className='absolute right-0 mt-2 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300'>
+            {(activePopup === 'notification' || hoverPopup === 'notification') && (
+              <div className='absolute right-0 mt-1 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300 popup'>
                 <div className='flex justify-end'>
                   <FaTimes
                     className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
@@ -137,15 +168,19 @@ export default function Navbar() {
               </div>
             )}
           </div>
-          <div className='relative'>
+          <div
+            className='relative popup-trigger'
+            onMouseEnter={() => setHoverPopup('user')}
+            onMouseLeave={() => setHoverPopup(null)}
+            onClick={() => togglePopup('user')}
+          >
             <div
               className='p-1 md:p-2 rounded-full bg-gray-200 hover:bg-gray-300 duration-300 cursor-pointer'
-              onClick={() => togglePopup('user')}
             >
               <FaUser className='text-gray-800' />
             </div>
-            {activePopup === 'user' && (
-              <div className='absolute right-0 mt-2 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300'>
+            {(activePopup === 'user' || hoverPopup === 'user') && (
+              <div className='absolute right-0 mt-1 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300 popup'>
                 <div className='flex justify-end'>
                   <FaTimes
                     className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
@@ -167,15 +202,19 @@ export default function Navbar() {
               </div>
             )}
           </div>
-          <div className='relative'>
+          <div
+            className='relative popup-trigger'
+            onMouseEnter={() => setHoverPopup('menu')}
+            onMouseLeave={() => setHoverPopup(null)}
+            onClick={() => togglePopup('menu')}
+          >
             <div
               className='p-1 md:p-2 rounded-full bg-gray-200 hover:bg-gray-300 duration-300 cursor-pointer'
-              onClick={() => togglePopup('menu')}
             >
               <FiAlignJustify className='text-gray-800' />
             </div>
-            {activePopup === 'menu' && (
-              <div className='absolute right-0 mt-2 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300'>
+             {(activePopup === 'menu' || hoverPopup === 'menu') && (
+              <div className='absolute right-0 mt-1 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300 popup'>
                 <div className='flex justify-end'>
                   <FaTimes
                     className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
@@ -212,6 +251,19 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+      {searchResults.length > 0 && (
+        <div className='absolute mt-2 w-full bg-white rounded-lg shadow-lg p-4 border border-gray-300'>
+          {searchResults.map((employee) => (
+            <div
+              key={employee.psid}
+              className='p-2 hover:bg-gray-200 cursor-pointer'
+              onClick={() => handleResultClick(employee)}
+            >
+              {employee.fname} {employee.lname} (PS ID: {employee.psid})
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
