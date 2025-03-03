@@ -13,25 +13,6 @@ export default function Navbar() {
   const [errors, setErrors] = useState('');
   const [form, setForm] = useState({});
   const navigate = useNavigate();
-  const [searchResults, setSearchResults] = useState([]);
-
-  const handleSearch = async () => {
-    if (searchQuery.trim()) {
-      try {
-        const response = await fetch(`http://localhost:8080/employees/${searchQuery}`);
-        if (response.ok) {
-          const employee = await response.json();
-          setSearchResults([employee]); // Store the search result in the state
-        } else {
-          console.error('Employee not found');
-          setSearchResults([]); // Clear the search results if not found
-        }
-      } catch (error) {
-        console.error('Error searching for employee:', error);
-        setSearchResults([]); // Clear the search results on error
-      }
-    }
-  };
 
   const togglePopup = (popup) => {
     setActivePopup(activePopup === popup ? null : popup);
@@ -100,10 +81,6 @@ export default function Navbar() {
     }
   };
 
-  const handleResultClick = (employee) => {
-    navigate('/selection-tracker', { state: { employee } });
-  };
-
   return (
     <div className='shadow-md w-full p-2 fixed top-0 left-0 bg-white'>
       <div className='flex items-center justify-between py-2 px-4 md:py-4 md:px-7'>
@@ -112,37 +89,22 @@ export default function Navbar() {
           <img src={smallLogo} alt='Logo' className='block md:hidden h-6 mr-2' />
         </div>
         <div className='flex items-center space-x-2 md:space-x-4'>
-          <div className='flex items-center bg-gray-200 rounded-full px-2 py-1 md:px-3'>
+          <div className='flex items-center bg-gray-200 rounded-full px-2 py-1 md:px-3 relative'>
             <input
               type='text'
               className='bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2'
-              placeholder='Search...'
+              placeholder='PSId/ CandidateId'
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSearch();
-                }
-              }}
             />
             <FaSearch
               className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
-              onClick={handleSearch}
             />
-          </div>
-          {searchResults.length > 0 && (
-            <div className='absolute mt-2 w-full bg-white rounded-lg shadow-lg p-4 border border-gray-300'>
-              {searchResults.map((employee) => (
-                <div
-                  key={employee.psid}
-                  className='p-2 hover:bg-gray-200 cursor-pointer'
-                  onClick={() => handleResultClick(employee)}
-                >
-                  {employee.fname} {employee.lname} (PS ID: {employee.psid})
-                </div>
-              ))}
+            <div id='afterSearch' className='absolute top-9 left-1 bg-white p-1 w-56 border border-gray-300 rounded-md hidden'>
+                <p className='text-sm'>Name: </p>
+                <p >PSId/ CandidateId</p>
             </div>
-          )}
+          </div>
           <div
             className='relative popup-trigger'
             onMouseEnter={() => setHoverPopup('notification')}
@@ -213,7 +175,7 @@ export default function Navbar() {
             >
               <FiAlignJustify className='text-gray-800' />
             </div>
-             {(activePopup === 'menu' || hoverPopup === 'menu') && (
+            {(activePopup === 'menu' || hoverPopup === 'menu') && (
               <div className='absolute right-0 mt-1 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300 popup'>
                 <div className='flex justify-end'>
                   <FaTimes
@@ -251,19 +213,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-      {searchResults.length > 0 && (
-        <div className='absolute mt-2 w-full bg-white rounded-lg shadow-lg p-4 border border-gray-300'>
-          {searchResults.map((employee) => (
-            <div
-              key={employee.psid}
-              className='p-2 hover:bg-gray-200 cursor-pointer'
-              onClick={() => handleResultClick(employee)}
-            >
-              {employee.fname} {employee.lname} (PS ID: {employee.psid})
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
