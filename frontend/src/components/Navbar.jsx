@@ -101,8 +101,8 @@ export default function Navbar() {
               className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
             />
             <div id='afterSearch' className='absolute top-9 left-1 bg-white p-1 w-56 border border-gray-300 rounded-md hidden'>
-                <p className='text-sm'>Name: </p>
-                <p >PSId/ CandidateId</p>
+              <p className='text-sm'>Name: </p>
+              <p className='text-sm'>PSId/ CandidateId:</p>
             </div>
           </div>
           <div
