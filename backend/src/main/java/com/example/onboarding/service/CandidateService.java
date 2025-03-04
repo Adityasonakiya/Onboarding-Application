@@ -1,5 +1,6 @@
 package com.example.onboarding.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,5 +18,9 @@ public class CandidateService {
     public Candidate getCandidateById(int candidateId) {
         Optional<Candidate> candidate = candidateRepository.findById(candidateId);
         return candidate.orElse(null);
+    }
+
+    public List<Candidate> getAllCandidates(){
+        return candidateRepository.findAll();
     }
 }

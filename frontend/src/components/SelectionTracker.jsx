@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   getCandidateById,
   getEmployeeByPsid,
@@ -16,7 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function SelectionTracker() {
-  const [form, setForm] = useState({ bu: "" });
+  const [form, setForm] = useState({ bu: "" , psId: "", candidateId: ""});
   const [errors, setErrors] = useState({});
   const [isInternal, setIsInternal] = useState(true);
   // const [selected, setSelected] = React.useState("");
@@ -28,6 +28,68 @@ function SelectionTracker() {
   const [selectedLob, setSelectedLob] = useState('');
   const [selectedSubLob, setSelectedSubLob] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  const { state } = location;
+  const id = state?.id;
+
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        try {
+          // Attempt to fetch employee data by psid
+          const employee = await getEmployeeByPsid(id);
+          if (employee && employee.psid) {
+            // If employee data is found, set the form state with employee data
+            setForm((prevForm) => ({
+              ...prevForm,
+              psId: employee.psid,
+              fname: employee.firstName,
+              lname: employee.lastName,
+              pu: employee.pu,
+              grade: employee.grade,
+              location: employee.location,
+              totalExp: employee.totalExperience,
+              skill: employee.skill,
+              email: employee.mailID,
+              bu: employee.baseBU
+            }));
+            setIsInternal(true); // Set isInternal to true for employees
+            // Fetch selection details for the employee
+            await fetchSelectionDetailsByPsid(employee.psid);
+          }
+        } catch (error) {
+          // If error occurs (e.g., employee not found), attempt to fetch candidate data by candidateId
+          try {
+            const candidate = await getCandidateById(id);
+            if (candidate && candidate.candidateId) {
+              // Set the form state with candidate data
+              setForm((prevForm) => ({
+                ...prevForm,
+                candidateId: candidate.candidateId,
+                fname: candidate.firstName,
+                lname: candidate.lastName,
+                baseBU: "",
+                grade: "", // Assuming grade is not available for candidate
+                location: "", // Assuming location is not available for candidate
+                pu: "", // Assuming pu is not available for candidate
+                totalExp: "", // Assuming totalExperience is not available for candidate
+                skill: "", // Assuming skill is not available for candidate
+                email: "", // Assuming email is not available for candidate
+              }));
+              setIsInternal(false); // Set isInternal to false for candidates
+              // Fetch selection details for the candidate
+              await fetchSelectionDetailsByCandidateId(candidate.candidateId);
+            }
+          } catch (candidateError) {
+            console.error('Error fetching candidate data:', candidateError);
+          }
+        }
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
@@ -219,6 +281,8 @@ function SelectionTracker() {
       setForm({ ...form, [name]: value });
     }
   };
+
+  
   //for submit
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -314,8 +378,6 @@ function SelectionTracker() {
       <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">
         HSBC Selection Tracker Form
       </h1>
-
-
       <form onSubmit={handleSubmit}>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
