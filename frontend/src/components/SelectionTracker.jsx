@@ -8,9 +8,10 @@ import {
   fetchLobs,
   fetchSubLobs,
   fetchSubLob,
-  fetchLob
+  //fetchLob
 } from "../services/api";
-import UpdateDetails from "./UpdateDetails";
+//import UpdateDetails from "./UpdateDetails";
+import moment from "moment";
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -23,15 +24,15 @@ function SelectionTracker() {
   const navigate = useNavigate();
   const [lobs, setLobs] = useState([]);
   const [subLobs, setSubLobs] = useState([]);
-  const [Lob, setLob] = useState([]);
+  //const [Lob, setLob] = useState([]);
   const [subLob, setSubLob] = useState([]);
   const [selectedLob, setSelectedLob] = useState('');
   const [selectedSubLob, setSelectedSubLob] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
+  //const [isOpen, setIsOpen] = useState(false);
 
-  const toggleAccordion = () => {
-    setIsOpen(!isOpen);
-  };
+  // const toggleAccordion = () => {
+  //   setIsOpen(!isOpen);
+  // };
 
   useEffect(() => {
     if (form.psId) {
@@ -67,12 +68,12 @@ function SelectionTracker() {
   const handleLobChange = async (event) => {
     const lobId = event.target.value;
     setSelectedLob(lobId);
-    try {
-      const data = await fetchLob(lobId);
-      setLob(data);
-    } catch (error) {
-      console.error('There was an error fetching the LOB!', error);
-    }
+    // try {
+    //   const data = await fetchLob(lobId);
+    //   setLob(data);
+    // } catch (error) {
+    //   console.error('There was an error fetching the LOB!', error);
+    // }
     console.log("LOB: ", lobId);
     //form.lob=selectedLob;
 
@@ -147,12 +148,18 @@ function SelectionTracker() {
     }
   };
 
+  
+  const formatDate = (date) => {
+    if (!date) return "";
+    return moment(date).format("YYYY-MM-DD");
+  };
+
   const fetchSelectionDetailsByPsid = async (psid) => {
     try {
       const selectionDetails = await getSelectionDetailsByPsId(psid);
       setForm((prevForm) => ({
         ...prevForm,
-        selectionDate: selectionDetails.hsbcSelectionDate,
+        selectionDate: formatDate(selectionDetails.hsbcselectionDate),
         bu: "BF",
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
@@ -163,14 +170,14 @@ function SelectionTracker() {
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
         ctoolId: selectionDetails.hsbctoolId,
-        ctoolRecDate: selectionDetails.ctoolReceivedDate,
+        ctoolRecDate: formatDate(selectionDetails.ctoolReceivedDate),
         ctoolJobCat: selectionDetails.ctoolJobCategory,
         ctoolLocation: selectionDetails.ctoolLocation,
         ctoolRate: selectionDetails.ctoolRate,
         ctoolPropRate: selectionDetails.ctoolProposedRate,
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
-        ltiOnboardDate: selectionDetails.ltionboardingDate,
+        ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
       }));
     } catch (error) {
       console.error(error);
@@ -184,7 +191,7 @@ function SelectionTracker() {
       );
       setForm((prevForm) => ({
         ...prevForm,
-        selectionDate: selectionDetails.hsbcSelectionDate,
+        selectionDate: formatDate(selectionDetails.hsbcselectionDate),
         bu: selectionDetails.baseBU,
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
@@ -195,14 +202,14 @@ function SelectionTracker() {
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
         ctoolId: selectionDetails.hsbctoolId,
-        ctoolRecDate: selectionDetails.ctoolReceivedDate,
+        ctoolRecDate: formatDate(selectionDetails.ctoolReceivedDate),
         ctoolJobCat: selectionDetails.ctoolJobCategory,
         ctoolLocation: selectionDetails.ctoolLocation,
         ctoolRate: selectionDetails.ctoolRate,
         ctoolPropRate: selectionDetails.ctoolProposedRate,
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
-        ltiOnboardDate: selectionDetails.ltionboardingDate,
+        ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
       }));
     } catch (error) {
       console.error(error);
@@ -532,7 +539,7 @@ function SelectionTracker() {
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
-                    value={selectedLob}
+                    value={form.lob || ""}
                     onChange={handleLobChange}
                     name="lob"
                     className="p-2 bordered w-full"
@@ -549,6 +556,7 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <select
                     name="subLob"
+                    value={form.subLob || ""}
                     className="p-2 bordered w-full"
                     onChange={handleSubLobChange}
                   >
@@ -594,6 +602,7 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <select
                     name="deliveryManager"
+                    value={form.deliveryManager ||""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                   >
@@ -619,6 +628,7 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <select
                     name="salespoc"
+                    value={form.salespoc||""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                   >
@@ -637,6 +647,7 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <select
                     name="pricingModel"
+                    value={form.pricingModel || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                   >
@@ -777,6 +788,7 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <select
                     name="offerReleaseStatus"
+                    value={form.offerReleaseStatus||""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                   >
@@ -818,7 +830,7 @@ function SelectionTracker() {
                       Cancel
                     </button>
                   </div>
-                  <div className="mt-4">
+                  {/* <div className="mt-4">
                     <div className="bg-gray-200 p-4 rounded-lg w-full">
                       <button
                         type="button"
@@ -840,7 +852,7 @@ function SelectionTracker() {
                         </div>
                       )}
                     </div>
-                  </div>
+                  </div> */}
                 </td>
               </tr>
             </tbody>
