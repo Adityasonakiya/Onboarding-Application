@@ -1,18 +1,78 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaSearch, FaBell, FaUser, FaTimes } from 'react-icons/fa';
 import { FiAlignJustify } from 'react-icons/fi';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
 import smallLogo from '../assets/images/logo2.png';
-import { getEmployeeByPsid } from '../services/api';
+import { getAllCandidates, getAllEmployees, getEmployeeByPsid } from '../services/api';
 
 export default function Navbar() {
-  const [searchQuery, setSearchQuery] = useState('');
   const [activePopup, setActivePopup] = useState(null);
   const [hoverPopup, setHoverPopup] = useState(null);
   const [errors, setErrors] = useState('');
   const [form, setForm] = useState({});
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [allEmployees, setAllEmployees] = useState([]);
+  const [allCandidates, setAllCandidates] = useState([]);
+  const suggestionsRef = useRef(null);
+  const location = useLocation();
+
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query === '') {
+      setSuggestions([...allEmployees, ...allCandidates]); 
+    } else {
+      const filteredEmployees = allEmployees.filter(employee =>
+        employee.psid.toString().includes(query)
+      ).map(employee => ({ ...employee, type: 'employee' }));
+
+      const filteredCandidates = allCandidates.filter(candidate =>
+        candidate.candidateId.toString().includes(query)
+      ).map(candidate => ({ ...candidate, type: 'candidate' }));
+
+      const combinedSuggestions = [...filteredEmployees, ...filteredCandidates];
+      setSuggestions(combinedSuggestions);
+    }
+  };
+
+
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const allEmployees = await getAllEmployees();
+        const allCandidates = await getAllCandidates();
+        setAllEmployees(allEmployees);
+        setAllCandidates(allCandidates);
+        console.log("Employees: ", allEmployees);
+        console.log("Candidates: ", allCandidates);
+      } catch (error) {
+        console.error('Error while fetching all data:', error);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
+
+
+  const handleSuggestionClick = (psid) => {
+    const currentRoute = location.pathname;
+    if (currentRoute === '/selection-tracker') {
+      navigate('/selection-tracker', { state: { id: psid } });
+    } else {
+      navigate('/landing-page', { state: { id: psid } });
+    }
+    setSuggestions([]); // Close the suggestion box
+  };
+
+
+
 
   const togglePopup = (popup) => {
     setActivePopup(activePopup === popup ? null : popup);
@@ -50,7 +110,11 @@ export default function Navbar() {
       if (!event.target.closest('.popup') && !event.target.closest('.popup-trigger')) {
         setActivePopup(null);
       }
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
+        setSuggestions([]);
+      }
     };
+
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -90,13 +154,30 @@ export default function Navbar() {
         </div>
         <div className='flex items-center space-x-2 md:space-x-4'>
           <div className='flex items-center bg-gray-200 rounded-full px-2 py-1 md:px-3 relative'>
-            <input
-              type='text'
-              className='bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2'
-              placeholder='PSId/ CandidateId'
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            <div className='relative'>
+              <input
+                type='text'
+                className='bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2'
+                placeholder='PSId/ CandidateId'
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              {suggestions.length > 0 && (
+                <div ref={suggestionsRef} className='absolute top-9 left-1 bg-white p-1 w-56 border border-gray-300 rounded-md'>
+                  {suggestions.map((suggestion) => (
+                    <div
+                      key={suggestion.psid || suggestion.candidateId}
+                      className='cursor-pointer'
+                      onClick={() => handleSuggestionClick(suggestion.psid || suggestion.candidateId)}
+                    >
+                      <p className='text-sm'>Name: {suggestion.firstName} {suggestion.lastName}</p>
+                      <p className='text-sm'>PSId/ CandidateId: {suggestion.psid || suggestion.candidateId}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <FaSearch
               className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
             />

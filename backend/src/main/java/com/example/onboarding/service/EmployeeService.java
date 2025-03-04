@@ -24,6 +24,10 @@ public class EmployeeService {
         return employee.orElse(null);
     }
 
+    public List<Employee> getAllEmployees(){
+        return employeeRepository.findAll();
+    }
+
     public List<EmployeeCandidateDTO> getEmployeeCandidates() {
         return employeeRepository.findEmployeeCandidates();
     }

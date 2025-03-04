@@ -6,6 +6,22 @@ export const getEmployeeByPsid = async (psid) => {
   throw new Error('Failed to fetch employee data');
 };
 
+export const getAllEmployees = async (psid) => {
+  const response = await fetch(`http://localhost:8080/employees`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error('Failed to fetch employees data');
+};
+
+export const getAllCandidates = async (psid) => {
+  const response = await fetch(`http://localhost:8080/candidates`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error('Failed to fetch candidates data');
+};
+
 export const getCandidateById = async (candidateId) => {
   const response = await fetch(`http://localhost:8080/candidates/${candidateId}`);
   if (response.ok) {

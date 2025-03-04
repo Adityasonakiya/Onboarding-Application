@@ -33,6 +33,17 @@ public class EmployeeController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<List<Employee>> getAllEmployees(){
+        List<Employee> employees = employeeService.getAllEmployees();
+        if (employees!=null) {
+            return new ResponseEntity<>(employees, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     @GetMapping("/employee-candidates")
     public ResponseEntity<List<EmployeeCandidateDTO>> getEmployeeCandidates() {
         List<EmployeeCandidateDTO> employeeCandidates = employeeService.getEmployeeCandidates();
