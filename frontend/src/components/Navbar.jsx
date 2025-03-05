@@ -158,7 +158,7 @@ export default function Navbar() {
               <input
                 type='text'
                 className='bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2'
-                placeholder='PSId/ CandidateId'
+                placeholder='PSID/ CandidateId'
                 value={searchQuery}
                 onChange={handleSearchChange}
               />
@@ -171,7 +171,7 @@ export default function Navbar() {
                       onClick={() => handleSuggestionClick(suggestion.psid || suggestion.candidateId)}
                     >
                       <p className='text-sm'>Name: {suggestion.firstName} {suggestion.lastName}</p>
-                      <p className='text-sm'>PSId/ CandidateId: {suggestion.psid || suggestion.candidateId}</p>
+                      <p className='text-sm'>PSID/ CandidateId: {suggestion.psid || suggestion.candidateId}</p>
                     </div>
                   ))}
                 </div>
@@ -183,7 +183,7 @@ export default function Navbar() {
             />
             <div id='afterSearch' className='absolute top-9 left-1 bg-white p-1 w-56 border border-gray-300 rounded-md hidden'>
               <p className='text-sm'>Name: </p>
-              <p className='text-sm'>PSId/ CandidateId:</p>
+              <p className='text-sm'>PSID/ CandidateId:</p>
             </div>
           </div>
           <div
@@ -275,6 +275,12 @@ export default function Navbar() {
                   className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
                 >
                   Selection Tracker
+                </Link>
+                <Link
+                  to='/selection-tracker-dashboard'
+                  className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
+                >
+                  Selection Tracker Dashboard
                 </Link>
                 <Link
                   to='/update-details'

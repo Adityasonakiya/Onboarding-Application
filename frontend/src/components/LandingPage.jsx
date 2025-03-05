@@ -59,12 +59,12 @@ const LandingPage = () => {
           <table className='w-full border-collapse'>
             <thead>
               <tr className='bg-gray-200'>
-                <th className='p-2 text-center'>PSId/External</th>
+                <th className='p-2 text-center'>PSID/External</th>
                 <th className='p-2 text-center'>Name</th>
                 <th className='p-2 text-center'>LOB</th>
                 <th className='p-2 text-center'>Client Name</th>
                 <th className='p-2 text-center'>CTool Status</th>
-                <th className='p-2 text-center'>BVG Status</th>
+                <th className='p-2 text-center'>BGV Status</th>
                 <th className='p-2 text-center'>Action</th>
               </tr>
             </thead>
