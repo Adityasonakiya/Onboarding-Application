@@ -1,11 +1,13 @@
 package com.example.onboarding.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.onboarding.model.LOB;
+import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
 import com.example.onboarding.model.SubLOB;
 import com.example.onboarding.repository.EmployeeRepository;
@@ -192,7 +194,12 @@ public class SelectionDetailsService {
         existingDetails.setCreatedBy(existingDetails.getCreatedBy());
         existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
         return selectionDetailsRepository.save(existingDetails);
-    }
+        }
     return selectionDetailsRepository.save(updatedDetails);
-}
+    }   
+
+    public List<SelectionDTO> findSelections(){
+        return selectionDetailsRepository.findSelections();
+    }
+
 }

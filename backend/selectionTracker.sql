@@ -180,3 +180,14 @@ where selection.created_by = 10713037
 	  and cnd.candidate_id=td.candidate_id
 	  and td.onboarding_status_id=obs.status_id
 	  and td.bgvstatus_id=bgvs.bgv_status_id;
+
+select count(*),lb.lob_name,sd.pricing_model from selectiontracker.selection_details sd,selectiontracker.lob lb 
+where sd.lob_id=lb.lob_id  
+group by lb.lob_id,sd.pricing_model;
+
+select count(*),os.onboarding_status,bs.bgv_status from selection_details sd , tagging_details td, onboarding_status os, BGVStatus bs
+where sd.ps_id = td.ps_id
+and td.onboarding_status_id = os.status_id
+and td.bgvstatus_id = bs.bgv_status_id
+group by os.status_id,bs.bgv_status_id;
+

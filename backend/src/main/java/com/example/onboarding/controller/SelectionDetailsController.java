@@ -1,5 +1,7 @@
 package com.example.onboarding.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
 import com.example.onboarding.service.SelectionDetailsService;
 
@@ -88,5 +91,9 @@ public class SelectionDetailsController {
 
     }
 
-    
+    @GetMapping("/selections")
+    public ResponseEntity<List<SelectionDTO>> findSelections(){
+        List<SelectionDTO> selections = selectionDetailsService.findSelections();
+        return ResponseEntity.ok(selections);
+    }
 }
