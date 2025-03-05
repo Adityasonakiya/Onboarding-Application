@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.onboarding.model.CtoolDto;
 import com.example.onboarding.model.LOB;
 import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
@@ -200,6 +201,10 @@ public class SelectionDetailsService {
 
     public List<SelectionDTO> findSelections(){
         return selectionDetailsRepository.findSelections();
+    }
+
+    public List<CtoolDto> findCtool(){
+        return selectionDetailsRepository.findCtool();
     }
 
 }
