@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   getCandidateById,
   getEmployeeByPsid,
@@ -17,7 +17,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function SelectionTracker() {
-  const [form, setForm] = useState({ bu: "" });
+  const [form, setForm] = useState({ bu: "" , psId: "", candidateId: ""});
   const [errors, setErrors] = useState({});
   const [isInternal, setIsInternal] = useState(true);
   // const [selected, setSelected] = React.useState("");
@@ -226,6 +226,8 @@ function SelectionTracker() {
       setForm({ ...form, [name]: value });
     }
   };
+
+  
   //for submit
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -321,8 +323,6 @@ function SelectionTracker() {
       <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">
         HSBC Selection Tracker Form
       </h1>
-
-
       <form onSubmit={handleSubmit}>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
