@@ -131,7 +131,7 @@ function SelectionTracker() {
     //   console.error('There was an error fetching the LOB!', error);
     // }
     console.log("LOB: ", lobId);
-    //form.lob=selectedLob;
+    form.lob=subLob.lob;
 
     try {
       const data = await fetchSubLobs(lobId);
@@ -146,7 +146,7 @@ function SelectionTracker() {
     setSelectedSubLob(subLobId);
 
     console.log("subLOB: ", subLobId);
-    //form.subLob = selectedSubLob;
+    form.subLob = subLob;
 
     try {
       const data = await fetchSubLob(subLobId);
