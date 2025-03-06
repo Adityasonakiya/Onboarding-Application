@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.onboarding.model.AwaitedCases;
 import com.example.onboarding.model.CtoolDto;
 import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
@@ -104,5 +105,10 @@ public class SelectionDetailsController {
         return ResponseEntity.ok(ctool);
     }
 
+    @GetMapping("/awaited-cases")
+    public ResponseEntity<List<AwaitedCases>> findAwaitedCases(){
+        List<AwaitedCases> awaitedCases = selectionDetailsService.findAwaitedCases();
+        return ResponseEntity.ok(awaitedCases);
+    }
 
 }
