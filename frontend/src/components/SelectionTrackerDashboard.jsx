@@ -63,12 +63,23 @@ const SelectionTrackerDashboard = ({ user }) => {
             };
           }
 
-          if (bgv_status === 'Completed') acc[delivery_manager].bgvCompleted += awaited_count;
-          if (onboarding_status === 'Completed' && bgv_status === 'In progress') acc[delivery_manager].inProgressCompleted += awaited_count;
-          if (onboarding_status !== 'Completed' && bgv_status === 'In progress') acc[delivery_manager].inProgressNotCompleted += awaited_count;
-          if (bgv_status === 'Offer Yet to be Released') acc[delivery_manager].offerYetToBeReleased += awaited_count;
-          acc[delivery_manager].total += awaited_count;
-
+          if (bgv_status === 'BGV Completed') {
+            acc[delivery_manager].bgvCompleted += awaited_count;
+            acc[delivery_manager].total += awaited_count;
+          }
+          if (onboarding_status === 'Onboarding Completed' && bgv_status === 'In progress'){
+            acc[delivery_manager].inProgressCompleted += awaited_count;
+            acc[delivery_manager].total += awaited_count;
+          }
+          if (onboarding_status !== 'Onboarding Completed' && bgv_status === 'In progress') {
+            acc[delivery_manager].inProgressNotCompleted += awaited_count;
+            acc[delivery_manager].total += awaited_count;
+          }
+          if (bgv_status === 'Offer Yet to be Released') {
+            acc[delivery_manager].offerYetToBeReleased += awaited_count;
+            acc[delivery_manager].total += awaited_count;
+          }
+          
           return acc;
         }, {});
 
@@ -96,7 +107,7 @@ const SelectionTrackerDashboard = ({ user }) => {
         console.log('CTool data:', data); // Check if data is fetched correctly
 
         const counts = data.reduce((acc, item) => {
-          const { lobName, onboarding_status, bgv_status, ctoolCount } = item;
+          const { lobName, onboarding_status, bgv_status } = item;
 
           if (!acc[lobName]) {
             acc[lobName] = {
@@ -110,12 +121,27 @@ const SelectionTrackerDashboard = ({ user }) => {
           }
 
 
-          if (onboarding_status === 'CTool Pending' || onboarding_status === 'CTool Recieved') acc[lobName].taggingPending++;
-          if (onboarding_status === 'Tagging Completed') acc[lobName].techSelectPending++;
-          if (bgv_status === "In progress" || bgv_status === 'BGV Initiated') acc[lobName].bgvPending++;
-          if (onboarding_status === 'Tech Selection Done') acc[lobName].hsbcDojAwaited++;
-          if (onboarding_status === 'DOJ Recieved') acc[lobName].hsbcDojConfirmed++;
-          acc[lobName].total++;
+          if (onboarding_status === 'CTool Pending' || onboarding_status === 'CTool Recieved') {
+            acc[lobName].taggingPending++;
+            acc[lobName].total++;
+          }
+          if (onboarding_status === 'Tagging Completed') {
+            acc[lobName].techSelectPending++;
+            acc[lobName].total++;
+          }
+          if (bgv_status === "In progress" || bgv_status === 'BGV Initiated') {
+            acc[lobName].bgvPending++;
+            acc[lobName].total++;
+          }
+          if (onboarding_status === 'Tech Selection Done') {
+            acc[lobName].hsbcDojAwaited++;
+            acc[lobName].total++;
+          }
+          if (onboarding_status === 'DOJ Recieved'){ 
+            acc[lobName].hsbcDojConfirmed++;
+            acc[lobName].total++;
+          }
+          
 
           return acc;
         }, {});
@@ -197,9 +223,9 @@ const SelectionTrackerDashboard = ({ user }) => {
                     )}
                     <tr className="bg-blue-100">
                       <td className="p-1 border font-semibold ">Total</td>
-                      <td className="p-1 border"></td>
-                      <td className="p-1 border"></td>
-                      <td className="p-1 border"></td>
+                      <td className="p-1 border">{selections.reduce((acc, selection) => acc + selection.fp, 0)}</td>
+                      <td className="p-1 border">{selections.reduce((acc, selection) => acc + selection.tnm, 0)}</td>
+                      <td className="p-1 border">{selections.reduce((acc, selection) => acc + selection.total, 0)}</td>
                     </tr>
                   </tbody>
                 </table>
