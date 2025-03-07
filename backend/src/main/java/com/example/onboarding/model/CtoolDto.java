@@ -2,14 +2,16 @@ package com.example.onboarding.model;
 
 public class CtoolDto {
     Long ctool_count;
+    String lobName;
     String onboarding_status;
     String bgv_status;
 
     public CtoolDto() {
     }
 
-    public CtoolDto(Long ctool_count, String onboarding_status, String bgv_status) {
+    public CtoolDto(Long ctool_count, String lobName, String onboarding_status, String bgv_status) {
         this.ctool_count = ctool_count;
+        this.lobName = lobName;
         this.onboarding_status = onboarding_status;
         this.bgv_status = bgv_status;
     }
@@ -36,6 +38,14 @@ public class CtoolDto {
 
     public void setBgv_status(String bgv_status) {
         this.bgv_status = bgv_status;
+    }
+
+    public String getLobName() {
+        return lobName;
+    }
+
+    public void setLobName(String lobName) {
+        this.lobName = lobName;
     }
 
 }
