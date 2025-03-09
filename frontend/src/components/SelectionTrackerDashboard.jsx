@@ -177,7 +177,6 @@ const SelectionTrackerDashboard = ({ user }) => {
                       <th className="p-1 border border-gray-500">LOB</th>
                       <th className="p-1 border border-gray-500">FP</th>
                       <th className="p-1 border border-gray-500">TnM</th>
-                      <th className="p-1 border border-gray-500">Total</th>
                     </tr>
                   </thead>
                   <tbody>
