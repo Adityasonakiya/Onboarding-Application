@@ -197,28 +197,27 @@ const SelectionTrackerDashboard = ({ user }) => {
           <div className="flex">
             <section className="mb-4 w-1/2">
               <div className="overflow-x-auto">
-                <table className="w-full border-collapse border-2">
+                <table className="w-full border-collapse border-2 border-gray-400 text-center">
                   <thead>
                     <tr className="bg-blue-100">
-                      <th className="p-1 border">LOB</th>
-                      <th className="p-1 border">FP</th>
-                      <th className="p-1 border">TnM</th>
-                      <th className="p-1 border">Total</th>
+                      <th className="p-1 border border-gray-500">LOB</th>
+                      <th className="p-1 border border-gray-500">FP</th>
+                      <th className="p-1 border border-gray-500">TnM</th>
                     </tr>
                   </thead>
                   <tbody>
                     {selections.length > 0 ? (
                       selections.map((selection, index) => (
                         <tr key={index}>
-                          <td className="p-1 border">{selection.lobName}</td>
-                          <td className="p-1 border">{selection.fp}</td>
-                          <td className="p-1 border">{selection.tnm}</td>
-                          <td className="p-1 border">{selection.total}</td>
+                          <td className="p-1 border border-gray-500">{selection.lobName}</td>
+                          <td className="p-1 border border-gray-500">{selection.fp}</td>
+                          <td className="p-1 border border-gray-500">{selection.tnm}</td>
+                          <td className="p-1 border border-gray-500">{selection.total}</td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td className="p-1 border" colSpan="4">No data available</td>
+                        <td className="p-1 border border-gray-500" colSpan="4">No data available</td>
                       </tr>
                     )}
                     <tr className="bg-blue-100">
@@ -238,44 +237,44 @@ const SelectionTrackerDashboard = ({ user }) => {
           <section className="mb-8">
             <h2 className="py-2 font-semibold text-lg">CTool Clear Cases</h2>
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse border-2">
+              <table className="w-full border-collapse border-2 border-gray-400 text-center">
                 <thead>
                   <tr className="bg-blue-100">
-                    <th className="p-1 border">LOB</th>
-                    <th className="p-1 border">Tagging Pending</th>
-                    <th className="p-1 border">Tech Select Pending</th>
-                    <th className="p-1 border">BGV Pending</th>
-                    <th className="p-1 border">HSBC DOJ Awaited</th>
-                    <th className="p-1 border">HSBC DOJ Confirmed</th>
-                    <th className="p-1 border">Total</th>
+                    <th className="p-1 border border-gray-500">LOB</th>
+                    <th className="p-1 border border-gray-500">Tagging Pending</th>
+                    <th className="p-1 border border-gray-500">Tech Select Pending</th>
+                    <th className="p-1 border border-gray-500">BGV Pending</th>
+                    <th className="p-1 border border-gray-500">HSBC DOJ Awaited</th>
+                    <th className="p-1 border border-gray-500">HSBC DOJ Confirmed</th>
+                    <th className="p-1 border border-gray-500">Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   {ctool.length > 0 ? (
                     ctool.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-3 border">{item.lobName}</td>
-                        <td className="p-3 border">{item.taggingPending}</td>
-                        <td className="p-3 border">{item.techSelectPending}</td>
-                        <td className="p-3 border">{item.bgvPending}</td>
-                        <td className="p-3 border">{item.hsbcDojAwaited}</td>
-                        <td className="p-3 border">{item.hsbcDojConfirmed}</td>
-                        <td className="p-3 border">{item.total}</td>
+                        <td className="p-3 border border-gray-500">{item.lobName}</td>
+                        <td className="p-3 border border-gray-500">{item.taggingPending}</td>
+                        <td className="p-3 border border-gray-500">{item.techSelectPending}</td>
+                        <td className="p-3 border border-gray-500">{item.bgvPending}</td>
+                        <td className="p-3 border border-gray-500">{item.hsbcDojAwaited}</td>
+                        <td className="p-3 border border-gray-500">{item.hsbcDojConfirmed}</td>
+                        <td className="p-3 border border-gray-500">{item.total}</td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td className="p-1 border" colSpan="7">No data available</td>
+                      <td className="p-1 border border-gray-500" colSpan="7">No data available</td>
                     </tr>
                   )}
                   <tr>
-                    <td className="p-1 border bg-blue-100 font-semibold">Total</td>
-                    <td className="p-1 border bg-blue-100">{ctool.reduce((acc, item) => acc + item.taggingPending, 0)}</td>
-                    <td className="p-1 border bg-blue-100">{ctool.reduce((acc, item) => acc + item.techSelectPending, 0)}</td>
-                    <td className="p-1 border bg-blue-100">{ctool.reduce((acc, item) => acc + item.bgvPending, 0)}</td>
-                    <td className="p-1 border bg-blue-100">{ctool.reduce((acc, item) => acc + item.hsbcDojAwaited, 0)}</td>
-                    <td className="p-1 border bg-blue-100">{ctool.reduce((acc, item) => acc + item.hsbcDojConfirmed, 0)}</td>
-                    <td className="p-1 border bg-blue-100">{ctool.reduce((acc, item) => acc + item.total, 0)}</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100 font-semibold">Total</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.taggingPending, 0)}</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.techSelectPending, 0)}</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.bgvPending, 0)}</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.hsbcDojAwaited, 0)}</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.hsbcDojConfirmed, 0)}</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.total, 0)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -285,51 +284,51 @@ const SelectionTrackerDashboard = ({ user }) => {
           <section>
             <h2 className="py-2 font-semibold text-lg">CTool Awaited Cases</h2>
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse border-2">
+              <table className="w-full border-collapse border-2 border-gray-400 text-center">
                 <thead>
                   <tr className="bg-blue-100">
-                    <th className="p-1 border"></th>
-                    <th className="p-1 border"></th>
-                    <th colSpan="2" className="p-1 border">Joined</th>
-                    <th colSpan="2" className="p-1 border">YTJ</th>
-                    <th className="p-1 border ">Grand Total</th>
+                    <th className="p-1 border border-gray-500"></th>
+                    <th className="p-1 border border-gray-500"></th>
+                    <th colSpan="2" className="p-1 border border-gray-500">Joined</th>
+                    <th colSpan="2" className="p-1 border border-gray-500">YTJ</th>
+                    <th className="p-1 border border-gray-500 ">Grand Total</th>
                   </tr>
                   <tr className="bg-blue-100">
-                    <th className="p-1 border">DM</th>
-                    <th className="p-1 border">Pricing Model</th>
-                    <th className="p-1 border">BGV Completed</th>
-                    <th className="p-1 border">In progress</th>
-                    <th className="p-1 border">In progress</th>
-                    <th className="p-1 border">Offer Yet to be Released</th>
-                    <th className="p-1 border"></th>
+                    <th className="p-1 border border-gray-500">DM</th>
+                    <th className="p-1 border border-gray-500">Pricing Model</th>
+                    <th className="p-1 border border-gray-500">BGV Completed</th>
+                    <th className="p-1 border border-gray-500">In progress</th>
+                    <th className="p-1 border border-gray-500">In progress</th>
+                    <th className="p-1 border border-gray-500">Offer Yet to be Released</th>
+                    <th className="p-1 border border-gray-500 "></th>
                   </tr>
                 </thead>
                 <tbody>
                   {awaitedCases.length > 0 ? (
                     awaitedCases.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-3 border">{item.delivery_manager}</td>
-                        <td className="p-3 border">{item.pricing_model}</td>
-                        <td className="p-3 border">{item.bgvCompleted}</td>
-                        <td className="p-3 border">{item.inProgressCompleted}</td>
-                        <td className="p-3 border">{item.inProgressNotCompleted}</td>
-                        <td className="p-3 border">{item.offerYetToBeReleased}</td>
-                        <td className="p-3 border">{item.total}</td>
+                        <td className="p-3 border border-gray-500">{item.delivery_manager}</td>
+                        <td className="p-3 border border-gray-500">{item.pricing_model}</td>
+                        <td className="p-3 border border-gray-500">{item.bgvCompleted}</td>
+                        <td className="p-3 border border-gray-500">{item.inProgressCompleted}</td>
+                        <td className="p-3 border border-gray-500">{item.inProgressNotCompleted}</td>
+                        <td className="p-3 border border-gray-500">{item.offerYetToBeReleased}</td>
+                        <td className="p-3 border border-gray-500">{item.total}</td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td className="p-1 border" colSpan="7">No data available</td>
+                      <td className="p-1 border border-gray-500" colSpan="7">No data available</td>
                     </tr>
                   )}
                   <tr>
-                    <td className="p-1 border bg-blue-100 font-semibold">Grand Total</td>
-                    <td className="p-1 border bg-blue-100"></td>
-                    <td className="p-1 border bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.bgvCompleted, 0)}</td>
-                    <td className="p-1 border bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.inProgressCompleted, 0)}</td>
-                    <td className="p-1 border bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.inProgressNotCompleted, 0)}</td>
-                    <td className="p-1 border bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.offerYetToBeReleased, 0)}</td>
-                    <td className="p-1 border bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.total, 0)}</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100 font-semibold">Grand Total</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100"></td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.bgvCompleted, 0)}</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.inProgressCompleted, 0)}</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.inProgressNotCompleted, 0)}</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.offerYetToBeReleased, 0)}</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.total, 0)}</td>
                   </tr>
                 </tbody>
               </table>
