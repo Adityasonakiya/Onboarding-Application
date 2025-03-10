@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.onboarding.model.AwaitedCases;
+import com.example.onboarding.model.AwaitedCasesDTO;
 import com.example.onboarding.model.CtoolDto;
 import com.example.onboarding.model.LOB;
 import com.example.onboarding.model.SelectionDTO;
@@ -208,7 +208,7 @@ public class SelectionDetailsService {
         return selectionDetailsRepository.findCtool();
     }
 
-    public List<AwaitedCases> findAwaitedCases(){
+    public List<AwaitedCasesDTO> findAwaitedCases(){
         return selectionDetailsRepository.findAwaitedCases();
     }
 

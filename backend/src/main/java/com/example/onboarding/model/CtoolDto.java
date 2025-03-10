@@ -1,10 +1,13 @@
 package com.example.onboarding.model;
 
+import java.time.LocalDateTime;
+
 public class CtoolDto {
     Long ctool_count;
     String lobName;
     String onboarding_status;
     String bgv_status;
+    LocalDateTime createdDate;
 
     public CtoolDto() {
     }
@@ -14,6 +17,7 @@ public class CtoolDto {
         this.lobName = lobName;
         this.onboarding_status = onboarding_status;
         this.bgv_status = bgv_status;
+        this.createdDate=LocalDateTime.now();
     }
 
     public Long getCtool_count() {
@@ -48,4 +52,12 @@ public class CtoolDto {
         this.lobName = lobName;
     }
 
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+    
 }
