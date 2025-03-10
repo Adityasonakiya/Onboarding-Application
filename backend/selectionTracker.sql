@@ -14,33 +14,43 @@ INSERT INTO user (psid, role_id, user_manager_id, password, last_login, last_log
 (10820984, 1, 10713037, 'Adity@12', NOW(), NOW());
 
 INSERT INTO employee 
-(psid, first_name, middle_name, last_name, grade, location, skill, total_experience, pu, mailid,created_by_ps_id,updated_by_ps_id,created_date,updated_date) 
+(psid, first_name, middle_name, last_name, grade, location, skill, total_experience, pu, mailid, created_by_ps_id, updated_by_ps_id, created_date, updated_date) 
 VALUES
-(10713037,'Sachin',NULl,'Shaha','P6','Pune','Delivery Manager',20,'BB','sachin.shaha@ltimindtree.com',NULL,NULL,NOW(), NOW()),
-(10820984, 'Aditya', NULL, 'Sonakiya', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'aditya.sonakiya@ltimindtree.com',10713037,10713037,NOW(), NOW()),
-(10821014, 'Abhijeet', NULL, 'Verma', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'abhijeet.verma@ltimindtree.com',NULL,NULL,NOW(), NOW()),
-(10715126, 'Monali', NULL, 'Jangam', 'P4', 'Pune', 'Java Fullstack', 16, 'BB', 'monali.jangam@ltimindtree.com',10713037,10713037,NOW(), NOW()),
-(10825932, 'Bhakti', 'Anand', 'Kulkarni', 'M4', 'Pune', 'Scrum Mamagement', 1, 'BB', 'bhakti.kulkarni@ltimindtree.com',10713037,10713037,NOW(), NOW());
+(10713037, 'Sachin', NULL, 'Shaha', 'P6', 'Pune', 'Delivery Manager', 20, 'BB', 'sachin.shaha@ltimindtree.com', NULL, NULL, NOW(), NOW()),
+(10820984, 'Aditya', NULL, 'Sonakiya', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'aditya.sonakiya@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
+(10821014, 'Abhijeet', NULL, 'Verma', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'abhijeet.verma@ltimindtree.com', NULL, NULL, NOW(), NOW()),
+(10715126, 'Monali', NULL, 'Jangam', 'P4', 'Pune', 'Java Fullstack', 16, 'BB', 'monali.jangam@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
+(10825932, 'Bhakti', 'Anand', 'Kulkarni', 'M4', 'Pune', 'Scrum Management', 1, 'BB', 'bhakti.kulkarni@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
+(10830001, 'Rohit', NULL, 'Sharma', 'P2', 'Mumbai', 'Data Analyst', 2, 'BB', 'rohit.sharma@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
+(10830002, 'Priya', NULL, 'Singh', 'P3', 'Bangalore', 'Project Manager', 5, 'BB', 'priya.singh@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
+(10830003, 'Amit', NULL, 'Patel', 'P2', 'Hyderabad', 'QA Engineer', 3, 'BB', 'amit.patel@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
+(10830004, 'Neha', NULL, 'Gupta', 'P1', 'Chennai', 'Software Developer', 1, 'BB', 'neha.gupta@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
+(10830005, 'Vikas', NULL, 'Kumar', 'P4', 'Delhi', 'System Analyst', 8, 'BB', 'vikas.kumar@ltimindtree.com', 10713037, 10713037, NOW(), NOW());
 
 INSERT INTO candidate
 (candidate_id, first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date) 
 VALUES
 (10829803, 'Harshita', NULL, 'Tripathi', '2024-09-23', 10713037, 10713037, '2024-09-23', NOW()),
-(10820581, 'Komal', 'Vitthal', 'More', '2024-09-23', NULL, NULL, '2024-09-23', NOW());
+(10820581, 'Komal', 'Vitthal', 'More', '2024-09-23', NULL, NULL, '2024-09-23', NOW()),
+(10830006, 'Ankit', NULL, 'Jain', '2024-10-01', 10713037, 10713037, '2024-10-01', NOW()),
+(10830007, 'Sneha', NULL, 'Reddy', '2024-10-05', 10713037, 10713037, '2024-10-05', NOW()),
+(10830008, 'Rahul', NULL, 'Mehta', '2024-10-10', 10713037, 10713037, '2024-10-10', NOW());
+
 
 INSERT INTO onboarding_status 
 (status_id, onboarding_status, remarks) 
 VALUES
 (1, 'CTool Pending', 'The onboarding process has not yet started.'),
-(2, 'CTool Recieved', 'Recieved'),
+(2, 'CTool Recieved', 'Received'),
 (3, 'Tagging Completed', 'Successfully tagged'),
-(4, 'DOJ Recieved', 'DOJ has been recieved by the candidate'),
-(5, 'Onboarding', 'Onboarding process going on'),
-(6, 'Completed', 'The onboarding process is successfully completed.'),
+(4, 'Tech Selection Done', 'Tech selection completed'),
+(5, 'DOJ Recieved', 'DOJ has been received by the candidate'),
+(6, 'Onboarding Completed', 'The onboarding process is successfully completed.'),
 (7, 'Tagging Error', 'Issue during onboarding process'),
-(8, 'Rate Approval', 'Rate has been approved'),
-(9, 'Pending', 'Onboarding process is pending'),
-(10, 'Rate to be Changed', 'In case the rate needs to be changed');
+(8, 'Rate Approval Pending', 'Rate approval is pending'),
+(9, 'Rate To Be Changed', 'In case the rate needs to be changed'),
+(10, 'Candidate not yet joined', 'Candidate has not yet joined'),
+(11, 'Drop Out Case', 'Candidate dropped out');
 
 INSERT INTO BGVStatus
 (bgv_status_id,bgv_status,remarks) 
@@ -141,28 +151,63 @@ ctool_location, ctool_rate, ctool_proposed_rate, recruiter_name, interview_evide
 hsbconboarding_date, tech_selection_date, dojreceived_date, ltionboarding_date, create_date, update_date) 
 VALUES
 (10820984, NULL, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2024-12-18', 
-"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 108933, '2025-12-02', "TM", 
-'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
-'2024-12-23', NULL, NULL, NULL,NOW() ,NOW()),
-(10715126, NULL, 'Sachin Shaha', 2, 22, 10825932, 10713037, 10713037, '2024-12-18', 
-"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 108933, '2025-12-02', "TM", 
-'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
-'2024-12-23', NULL, NULL, NULL,NOW() ,NOW()),
-(10825932, NULL, 'Sachin Shaha', 3, 36, 10825932, 10713037, 10713037, '2024-12-18', 
-"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 108933, '2025-12-02', "TM", 
-'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
-'2024-12-23', NULL, NULL, NULL,NOW() ,NOW()),
-(NULL,10829803, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2024-12-18', 
-"Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 108933, '2025-12-02', "TM", 
-'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
-'2024-12-23', NULL, NULL, NULL,NOW() ,NOW());
-(10825932,)
+'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'T&M', 108933, '2025-12-02', 'TM', 
+'Pune', 30, 30, 'Nishant Sharma', NULL, 'Pending', 
+'2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
+(10715126, NULL, 'Abhijeet Sureshchandra More', 2, 22, 10825932, 10713037, 10713037, '2024-12-18', 
+'Sachin Shaha', 'Sachin Shaha', 'Nishant sharma', 'FP', 108933, '2025-12-02', 'TM', 
+'Pune', 30, 30, 'Nishant Sharma', NULL, 'On Hold', 
+'2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
+(10825932, NULL, 'Aniruddha Deshpande', 3, 36, 10825932, 10713037, 10713037, '2024-12-18', 
+'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'T&M', 108933, '2025-12-02', 'TM', 
+'Pune', 30, 30, 'Nishant Sharma', NULL, 'Release', 
+'2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
+(NULL, 10829803, 'Arvind Deogade', 1, 11, 10825932, 10713037, 10713037, '2024-12-18', 
+'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'FP', 108933, '2025-12-02', 'TM', 
+'Pune', 30, 30, 'Nishant Sharma', NULL, 'WIP', 
+'2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
+(10830001, NULL, 'Chinni Krishna Nakka', 4, 44, 10825932, 10713037, 10713037, '2024-12-18', 
+'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108934, '2025-12-02', 'TM', 
+'Mumbai', 40, 40, 'Nishant Sharma', NULL, 'Pending', 
+'2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
+(10830002, NULL, 'Mayuresh Nirantar', 5, 54, 10825932, 10713037, 10713037, '2024-12-18', 
+'Sachin Shaha', 'Sachin Shaha', 'Nishant sharma', 'T&M', 108935, '2025-12-02', 'TM', 
+'Bangalore', 50, 50, 'Nishant Sharma', NULL, 'On Hold', 
+'2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
+(10830003, NULL, 'Saber Sarode', 6, 66, 10825932, 10713037, 10713037, '2024-12-18', 
+'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108936, '2025-12-02', 'TM', 
+'Hyderabad', 60, 60, 'Nishant Sharma', NULL, 'Release', 
+'2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
+(NULL, 10830006, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2024-12-18', 
+'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'T&M', 108933, '2025-12-02', 'TM', 
+'Pune', 30, 30, 'Nishant Sharma', NULL, 'WIP', 
+'2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
+(10830004, NULL, 'Abhijeet Sureshchandra More', 7, 76, 10825932, 10713037, 10713037, '2024-12-18', 
+'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108937, '2025-12-02', 'TM', 
+'Chennai', 70, 70, 'Nishant Sharma', NULL, 'Pending', 
+'2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
+(10830005, NULL, 'Aniruddha Deshpande', 8, 86, 10825932, 10713037, 10713037, '2024-12-18', 
+'Sachin Shaha', 'Sachin Shaha', 'Nishant sharma', 'FP', 108938, '2025-12-02', 'TM', 
+'Delhi', 80, 80, 'Nishant Sharma', NULL, 'On Hold', 
+'2024-12-23', NULL, NULL, NULL, NOW(), NOW());
+
+
 
 INSERT INTO tagging_details 
 (ps_id, candidate_id, onboarding_status_id, bgvstatus_id, created_by_psid, updated_by_psid, status_remarks, create_date, update_date) 
 VALUES
-(10820984, NULL, 2, 3, 10713037, 10713037, NULL, NOW(), NOW()),
-(NULL, 10829803, 1, 5, 10713037, 10713037, NULL, NOW(), NOW());
+(10820984, NULL, 1, 2, 10713037, 10713037, 'Initial tagging', '2025-03-10 21:50:21', '2025-03-10 21:50:21'),
+(NULL, 10829803, 2, 3, 10713037, 10713037, 'BGV in progress', '2025-03-10 21:50:21', '2025-03-10 21:50:21'),
+(10821014, NULL, 3, 2, 10713037, 10713037, 'Minor discrepancy found', '2025-03-10 21:50:21', '2025-03-10 21:50:21'),
+(10715126, NULL, 12, 8, 10713037, 10713037, 'Major discrepancy found', '2025-03-10 16:23:19', '2025-03-10 21:50:21'),
+(10825932, NULL, 5, 6, 10713037, 10713037, 'Offer yet to be released', '2025-03-10 21:50:21', '2025-03-10 21:50:21'),
+(10830001, NULL, 6, 6, 10713037, 10713037, 'Interim cleared', '2025-03-10 21:50:21', '2025-03-10 21:50:21'),
+(10830002, NULL, 14, 10, 10713037, 10713037, 'Pending with employee', '2025-03-10 16:26:09', '2025-03-10 21:50:21'),
+(10830003, NULL, 13, 9, 10713037, 10713037, 'BGV initiated', '2025-03-10 16:24:59', '2025-03-10 21:50:21'),
+(NULL, 10830006, 9, 2, 10713037, 10713037, 'BGV in progress', '2025-03-10 21:50:21', '2025-03-10 21:50:21'),
+(10830004, NULL, 4, 10, 10713037, 10713037, 'Minor discrepancy found', '2025-03-10 21:50:21', '2025-03-10 21:50:21');
+
+
 
 Select emp.psid as id ,emp.first_name,emp.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status from employee emp,lob lob,
 selection_details selection,onboarding_status obs,BGVStatus bgvs , tagging_details td
