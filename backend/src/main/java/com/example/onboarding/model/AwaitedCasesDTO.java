@@ -1,17 +1,22 @@
 package com.example.onboarding.model;
 
-public class AwaitedCases {
+import java.time.LocalDateTime;
+
+public class AwaitedCasesDTO {
     Long awaited_count;
     String delivery_manager,pricing_model,bgv_status,onboarding_status;
-    public AwaitedCases() {
+    LocalDateTime createdDate;
+
+    public AwaitedCasesDTO() {
     }
-    public AwaitedCases(Long awaited_count, String delivery_manager, String pricing_model, String bgv_status,
+    public AwaitedCasesDTO(Long awaited_count, String delivery_manager, String pricing_model, String bgv_status,
             String onboarding_status) {
         this.awaited_count = awaited_count;
         this.delivery_manager = delivery_manager;
         this.pricing_model = pricing_model;
         this.bgv_status = bgv_status;
         this.onboarding_status = onboarding_status;
+        this.createdDate=LocalDateTime.now();
     }
     public Long getAwaited_count() {
         return awaited_count;
@@ -43,7 +48,13 @@ public class AwaitedCases {
     public void setOnboarding_status(String onboarding_status) {
         this.onboarding_status = onboarding_status;
     }
-
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+    
     
 }
 

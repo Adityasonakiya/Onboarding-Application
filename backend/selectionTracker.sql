@@ -156,6 +156,7 @@ VALUES
 "Sachin Shaha", "Sachin Shaha", 'Anand Devi', 'T&M', 108933, '2025-12-02', "TM", 
 'Pune', 30, 30, "Nishant Sharma", NULL, 'WIP', 
 '2024-12-23', NULL, NULL, NULL,NOW() ,NOW());
+(10825932,)
 
 INSERT INTO tagging_details 
 (ps_id, candidate_id, onboarding_status_id, bgvstatus_id, created_by_psid, updated_by_psid, status_remarks, create_date, update_date) 
@@ -185,10 +186,17 @@ select count(*),lb.lob_name,sd.pricing_model from selectiontracker.selection_det
 where sd.lob_id=lb.lob_id  
 group by lb.lob_id,sd.pricing_model;
 
-select count(*),lb,lob_name,os.onboarding_status,bs.bgv_status from selection_details sd , lob lb, tagging_details td, onboarding_status os, BGVStatus bs
+select count(*),lb.lob_name,os.onboarding_status,bs.bgv_status 
+from selection_details sd , lob lb, tagging_details td, onboarding_status os, BGVStatus bs
 where sd.ps_id = td.ps_id
 and sd.lob_id=lb.lob_id
 and td.onboarding_status_id = os.status_id
 and td.bgvstatus_id = bs.bgv_status_id
-group by os.status_id,bs.bgv_status_id;
+group by lb.lob_id,os.status_id,bs.bgv_status_id;
 
+SELECT count(*) as awaited_count,sd.delivery_manager,sd.pricing_model,bs.bgv_status,os.onboarding_status 
+from selection_details sd,tagging_details td,BGVStatus bs,onboarding_status os 
+where sd.ps_id = td.ps_id 
+and td.bgvstatus_id = bs.bgv_status_id 
+and td.onboarding_status_id = os.status_id 
+group by bs.bgv_status_id,sd.pricing_model,sd.delivery_manager,os.status_id;
