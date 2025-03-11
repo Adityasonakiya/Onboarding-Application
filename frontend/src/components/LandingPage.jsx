@@ -7,8 +7,20 @@ const LandingPage = () => {
   const location = useLocation();
   const { state } = location;
   const id = state?.id;
+  const searchType = state?.searchType;
+  const status = state?.status;
   const [employeeCandidates, setEmployeeCandidates] = useState([]);
   const [filteredCandidates, setFilteredCandidates] = useState([]);
+
+  useEffect(() => {
+    console.log('State object:', state); // Log the state object to debug
+    console.log('ID:', id);
+    console.log('Search Type:', searchType);
+    console.log('Status:', status);
+  }, [state]);
+
+  
+  
 
   const addNewSelection = () => {
     navigate('/selection-tracker');
@@ -24,15 +36,30 @@ const LandingPage = () => {
 
   useEffect(() => {
     const getEmployeeCandidates = async () => {
-      console.log('id: ', id);
+      console.log('State object:', state); // Log the state object
+      console.log('ID:', id);
+      console.log('Search Type:', searchType);
+      console.log('Status:', status);
       try {
         const data = await fetchEmployeeCandidates();
         setEmployeeCandidates(data);
         console.log('dashboard data: ', data);
+
         if (id) {
           const filtered = data.filter(candidate => candidate.id === id);
           setFilteredCandidates(filtered);
-          console.log('displaying filtered');
+          console.log('displaying filtered by ID');
+        } else if (searchType && status) {
+          const filtered = data.filter(candidate => {
+            if (searchType === 'ctool') {
+              return candidate.onboardingStatus === status;
+            } else if (searchType === 'bgv') {
+              return candidate.bgvStatus === status;
+            }
+            return false;
+          });
+          setFilteredCandidates(filtered);
+          console.log('displaying filtered by status');
         } else {
           setFilteredCandidates(data);
           console.log('displaying All');
@@ -43,7 +70,7 @@ const LandingPage = () => {
     };
 
     getEmployeeCandidates();
-  }, [id]);
+  }, [id, searchType, status]);
 
   return (
     <div className='w-full px-4 py-6'>

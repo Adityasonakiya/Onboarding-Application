@@ -14,6 +14,22 @@ export const getAllEmployees = async (psid) => {
   throw new Error('Failed to fetch employees data');
 };
 
+export const getCToolStatuses = async () => {
+  const response = await fetch(`http://localhost:8080/OnboardingStatuses`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error('Failed to fetch employees data');
+};
+
+export const getBgvStatuses = async () => {
+  const response = await fetch(`http://localhost:8080/Bgvs`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error('Failed to fetch employees data');
+};
+
 export const getAllCandidates = async (psid) => {
   const response = await fetch(`http://localhost:8080/candidates`);
   if (response.ok) {
