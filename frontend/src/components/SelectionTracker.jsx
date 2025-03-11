@@ -595,7 +595,7 @@ function SelectionTracker() {
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
-                    value={form.lob || ""}
+                    //value={form.lob || ""}
                     onChange={handleLobChange}
                     name="lob"
                     className="p-2 bordered w-full"
@@ -612,7 +612,7 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <select
                     name="subLob"
-                    value={form.subLob || ""}
+                    //value={form.subLob || ""}
                     className="p-2 bordered w-full"
                     onChange={handleSubLobChange}
                   >
