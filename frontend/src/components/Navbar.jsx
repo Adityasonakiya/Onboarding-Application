@@ -193,14 +193,16 @@ export default function Navbar() {
               <option value='BgvStatus'>BgvStatus</option>
             </select>
             <div className='relative'>
-              <input
-                type='text'
-                className='bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2'
-                placeholder={selectedOption}
-                value={searchQuery}
-                onChange={handleSearchChange}
-                disabled={selectedOption !== 'PSID/CandidateID'}
-              />
+              {selectedOption === 'PSID/CandidateID' && (
+                <input
+                  type="text"
+                  className="bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2"
+                  placeholder={selectedOption}
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  disabled={selectedOption !== 'PSID/CandidateID'}
+                />
+              )}
               {selectedOption !== 'PSID/CandidateID' && (
                 <>
                   <select
