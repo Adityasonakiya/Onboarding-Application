@@ -21,10 +21,10 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
 
         Boolean existsByCandidate_CandidateId(int candidateId);
 
-        @Query(value = "SELECT count(*) AS selection_count ,lb.lob_name,sd.pricing_model " +
-                        "FROM selectiontracker.selection_details sd,selectiontracker.lob lb " +
-                        "WHERE sd.lob_id=lb.lob_id " +
-                        "GROUP BY lb.lob_id,sd.pricing_model", nativeQuery = true)
+        @Query(value = "SELECT count(*) AS selection_count, lb.lob_name, sd.pricing_model, sd.hsbcselection_date " +
+                        "FROM selectiontracker.selection_details sd, selectiontracker.lob lb " +
+                        "WHERE sd.lob_id = lb.lob_id " +
+                        "GROUP BY lb.lob_id, sd.pricing_model, sd.hsbcselection_date", nativeQuery = true)
         List<SelectionDTO> findSelections();
 
         @Query(value = "SELECT COUNT(*) as ctool_count,lb.lob_name, os.onboarding_status, bs.bgv_status " +
@@ -34,7 +34,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
                         "and td.onboarding_status_id = os.status_id " +
                         "and td.bgvstatus_id = bs.bgv_status_id " +
                         "GROUP BY lb.lob_id, os.status_id, bs.bgv_status_id", nativeQuery = true)
-        List<CtoolDto> findCtool();  
+        List<CtoolDto> findCtool();
 
         @Query(value = "SELECT count(*) as awaited_count,sd.delivery_manager,sd.pricing_model,bs.bgv_status,os.onboarding_status "
                         +

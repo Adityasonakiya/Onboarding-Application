@@ -6,187 +6,188 @@ const SelectionTrackerDashboard = ({ user }) => {
   const [ctool, setCtool] = useState([]);
   const [awaitedCases, setAwaitedCases] = useState([]);
   const [filter, setFilter] = useState(''); // State for selected filter
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+
+  const fetchData = () => {
+    // Fetch selections data
+    fetch('http://localhost:8080/selection-details/selections')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Selections data:', data); // Check if data is fetched correctly
+
+        // Process data to map counts based on pricing model
+        const lobCounts = data.reduce((acc, selection) => {
+          const { lobName, pricingModel, selectionCount, hsbcselectionDate } = selection;
+          if (!acc[lobName]) {
+            acc[lobName] = { FP: 0, TnM: 0, total: 0, hsbcselectionDate };
+          }
+          if (pricingModel === 'FP') {
+            acc[lobName].FP = selectionCount;
+          } else if (pricingModel === 'T&M') {
+            acc[lobName].TnM = selectionCount;
+          }
+          acc[lobName].total += selectionCount;
+          return acc;
+        }, {});
+
+        // Convert the counts object to an array for rendering
+        const processedSelections = Object.keys(lobCounts).map(lobName => ({
+          lobName,
+          fp: lobCounts[lobName].FP,
+          tnm: lobCounts[lobName].TnM,
+          total: lobCounts[lobName].total,
+          hsbcselectionDate: lobCounts[lobName].hsbcselectionDate,
+        }));
+
+        const filteredSelections = applyFilter(processedSelections, filter, fromDate, toDate);
+        setSelections(filteredSelections);
+      })
+      .catch(error => {
+        console.error('Error fetching selections data:', error);
+      });
+
+    // Fetch awaited cases data
+    fetch('http://localhost:8080/selection-details/awaited-cases')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Awaited Cases data:', data); // Check if data is fetched correctly
+
+        const counts = data.reduce((acc, item) => {
+          const { delivery_manager, pricing_model, bgv_status, onboarding_status, awaited_count, createdDate } = item;
+
+          if (!acc[delivery_manager]) {
+            acc[delivery_manager] = {
+              pricingModel: pricing_model,
+              bgvCompleted: 0,
+              inProgressCompleted: 0,
+              inProgressNotCompleted: 0,
+              offerYetToBeReleased: 0,
+              total: 0,
+              createdDate
+            };
+          }
+
+          if (bgv_status === 'BGV Completed') {
+            acc[delivery_manager].bgvCompleted += awaited_count;
+            acc[delivery_manager].total += awaited_count;
+          }
+          if (onboarding_status === 'Onboarding Completed' && bgv_status === 'In progress') {
+            acc[delivery_manager].inProgressCompleted += awaited_count;
+            acc[delivery_manager].total += awaited_count;
+          }
+          if (onboarding_status !== 'Onboarding Completed' && bgv_status === 'In progress') {
+            acc[delivery_manager].inProgressNotCompleted += awaited_count;
+            acc[delivery_manager].total += awaited_count;
+          }
+          if (bgv_status === 'Offer yet to be released') {
+            acc[delivery_manager].offerYetToBeReleased += awaited_count;
+            acc[delivery_manager].total += awaited_count;
+          }
+
+          return acc;
+        }, {});
+
+        const processedData = Object.keys(counts).map(dm => ({
+          delivery_manager: dm,
+          pricing_model: counts[dm].pricingModel,
+          bgvCompleted: counts[dm].bgvCompleted,
+          inProgressCompleted: counts[dm].inProgressCompleted,
+          inProgressNotCompleted: counts[dm].inProgressNotCompleted,
+          offerYetToBeReleased: counts[dm].offerYetToBeReleased,
+          total: counts[dm].total,
+          createdDate: counts[dm].createdDate
+        }));
+
+        const filteredAwaitedCases = applyFilter(processedData, filter, fromDate, toDate);
+        setAwaitedCases(filteredAwaitedCases);
+      })
+      .catch(error => {
+        console.error('Error fetching awaited cases data:', error);
+      });
+
+    // Fetch ctool data
+    fetch('http://localhost:8080/selection-details/ctool')
+      .then(response => response.json())
+      .then(data => {
+        console.log('CTool data:', data); // Check if data is fetched correctly
+
+        const counts = data.reduce((acc, item) => {
+          const { lobName, onboarding_status, bgv_status, createdDate } = item;
+
+          if (!acc[lobName]) {
+            acc[lobName] = {
+              taggingPending: 0,
+              techSelectPending: 0,
+              bgvPending: 0,
+              hsbcDojAwaited: 0,
+              hsbcDojConfirmed: 0,
+              total: 0,
+              createdDate
+            };
+          }
+
+          if (onboarding_status === 'CTool Pending' || onboarding_status === 'CTool Recieved') {
+            acc[lobName].taggingPending++;
+            acc[lobName].total++;
+          }
+          if (onboarding_status === 'Tagging Completed') {
+            acc[lobName].techSelectPending++;
+            acc[lobName].total++;
+          }
+          if (bgv_status === "In progress" || bgv_status === 'BGV Initiated') {
+            acc[lobName].bgvPending++;
+            acc[lobName].total++;
+          }
+          if (onboarding_status === 'Tech Selection Done') {
+            acc[lobName].hsbcDojAwaited++;
+            acc[lobName].total++;
+          }
+          if (onboarding_status === 'DOJ Recieved') {
+            acc[lobName].hsbcDojConfirmed++;
+            acc[lobName].total++;
+          }
+
+          return acc;
+        }, {});
+
+        const processedData = Object.keys(counts).map(lobName => ({
+          lobName,
+          ...counts[lobName]
+        }));
+
+        const filteredCtool = applyFilter(processedData, filter, fromDate, toDate);
+        setCtool(filteredCtool);
+      })
+      .catch(error => {
+        console.error('Error fetching ctool data:', error);
+      });
+  };
 
   useEffect(() => {
-    const fetchData = () => {
-      // Fetch selections data
-      fetch('http://localhost:8080/selection-details/selections')
-        .then(response => response.json())
-        .then(data => {
-          console.log('Selections data:', data); // Check if data is fetched correctly
-
-          // Process data to map counts based on pricing model
-          const lobCounts = data.reduce((acc, selection) => {
-            const { lobName, pricingModel, selectionCount, createdDate } = selection;
-            if (!acc[lobName]) {
-              acc[lobName] = { FP: 0, TnM: 0, total: 0, createdDate };
-            }
-            if (pricingModel === 'FP') {
-              acc[lobName].FP = selectionCount;
-            } else if (pricingModel === 'T&M') {
-              acc[lobName].TnM = selectionCount;
-            }
-            acc[lobName].total += selectionCount;
-            return acc;
-          }, {});
-
-          // Convert the counts object to an array for rendering
-          const processedSelections = Object.keys(lobCounts).map(lobName => ({
-            lobName,
-            fp: lobCounts[lobName].FP,
-            tnm: lobCounts[lobName].TnM,
-            total: lobCounts[lobName].total,
-            createdDate: lobCounts[lobName].createdDate,
-          }));
-
-          const filteredSelections = applyFilter(processedSelections, filter);
-          setSelections(filteredSelections);
-        })
-        .catch(error => {
-          console.error('Error fetching selections data:', error);
-        });
-
-      // Fetch awaited cases data
-      fetch('http://localhost:8080/selection-details/awaited-cases')
-        .then(response => response.json())
-        .then(data => {
-          console.log('Awaited Cases data:', data); // Check if data is fetched correctly
-
-          const counts = data.reduce((acc, item) => {
-            const { delivery_manager, pricing_model, bgv_status, onboarding_status, awaited_count, createdDate } = item;
-
-            if (!acc[delivery_manager]) {
-              acc[delivery_manager] = {
-                pricingModel: pricing_model,
-                bgvCompleted: 0,
-                inProgressCompleted: 0,
-                inProgressNotCompleted: 0,
-                offerYetToBeReleased: 0,
-                total: 0,
-                createdDate
-              };
-            }
-
-            if (bgv_status === 'BGV Completed') {
-              acc[delivery_manager].bgvCompleted += awaited_count;
-              acc[delivery_manager].total += awaited_count;
-            }
-            if (onboarding_status === 'Onboarding Completed' && bgv_status === 'In progress'){
-              acc[delivery_manager].inProgressCompleted += awaited_count;
-              acc[delivery_manager].total += awaited_count;
-            }
-            if (onboarding_status !== 'Onboarding Completed' && bgv_status === 'In progress') {
-              acc[delivery_manager].inProgressNotCompleted += awaited_count;
-              acc[delivery_manager].total += awaited_count;
-            }
-            if (bgv_status === 'Offer yet to be released') {
-              acc[delivery_manager].offerYetToBeReleased += awaited_count;
-              acc[delivery_manager].total += awaited_count;
-            }
-            
-            return acc;
-          }, {});
-
-          const processedData = Object.keys(counts).map(dm => ({
-            delivery_manager: dm,
-            pricing_model: counts[dm].pricingModel,
-            bgvCompleted: counts[dm].bgvCompleted,
-            inProgressCompleted: counts[dm].inProgressCompleted,
-            inProgressNotCompleted: counts[dm].inProgressNotCompleted,
-            offerYetToBeReleased: counts[dm].offerYetToBeReleased,
-            total: counts[dm].total,
-            createdDate: counts[dm].createdDate
-          }));
-
-          const filteredAwaitedCases = applyFilter(processedData, filter);
-          setAwaitedCases(filteredAwaitedCases);
-        })
-        .catch(error => {
-          console.error('Error fetching awaited cases data:', error);
-        });
-
-      // Fetch ctool data
-      fetch('http://localhost:8080/selection-details/ctool')
-        .then(response => response.json())
-        .then(data => {
-          console.log('CTool data:', data); // Check if data is fetched correctly
-
-          const counts = data.reduce((acc, item) => {
-            const { lobName, onboarding_status, bgv_status, createdDate } = item;
-
-            if (!acc[lobName]) {
-              acc[lobName] = {
-                taggingPending: 0,
-                techSelectPending: 0,
-                bgvPending: 0,
-                hsbcDojAwaited: 0,
-                hsbcDojConfirmed: 0,
-                total: 0,
-                createdDate
-              };
-            }
-
-            if (onboarding_status === 'CTool Pending' || onboarding_status === 'CTool Recieved') {
-              acc[lobName].taggingPending++;
-              acc[lobName].total++;
-            }
-            if (onboarding_status === 'Tagging Completed') {
-              acc[lobName].techSelectPending++;
-              acc[lobName].total++;
-            }
-            if (bgv_status === "In progress" || bgv_status === 'BGV Initiated') {
-              acc[lobName].bgvPending++;
-              acc[lobName].total++;
-            }
-            if (onboarding_status === 'Tech Selection Done') {
-              acc[lobName].hsbcDojAwaited++;
-              acc[lobName].total++;
-            }
-            if (onboarding_status === 'DOJ Recieved'){ 
-              acc[lobName].hsbcDojConfirmed++;
-              acc[lobName].total++;
-            }
-
-            return acc;
-          }, {});
-
-          const processedData = Object.keys(counts).map(lobName => ({
-            lobName,
-            ...counts[lobName]
-          }));
-
-          const filteredCtool = applyFilter(processedData, filter);
-          setCtool(filteredCtool);
-        })
-        .catch(error => {
-          console.error('Error fetching ctool data:', error);
-        });
-    };
-
     fetchData();
     const intervalId = setInterval(fetchData, 60000); // Poll every 60 seconds
-
     return () => clearInterval(intervalId); // Cleanup interval on component unmount
-  }, [filter]);
+  }, [filter, fromDate, toDate]);
 
-  const applyFilter = (data, filter) => {
-    if (!filter) {
+  const applyFilter = (data, filter, fromDate, toDate) => {
+    if (!filter && !fromDate && !toDate) {
       return data; // Return all data if no filter is selected
     }
 
     const currentDate = new Date();
     return data.filter(item => {
-      const itemDate = new Date(item.createdDate); // Use createdDate field for filtering
-      if (filter === '30days') {
-        const past30Days = new Date(currentDate);
-        past30Days.setDate(currentDate.getDate() - 30);
-        return itemDate >= past30Days && itemDate <= currentDate;
+      const itemDate = new Date(item.hsbcselectionDate); // Use hsbcselectionDate field for filtering
+      if (filter === '7days') {
+        const past7Days = new Date(currentDate);
+        past7Days.setDate(currentDate.getDate() - 7);
+        return itemDate >= past7Days && itemDate <= currentDate;
       } else if (filter === 'currentMonth') {
         return itemDate.getMonth() === currentDate.getMonth() && itemDate.getFullYear() === currentDate.getFullYear();
-      } else if (filter === 'currentQuarter') {
-        const currentQuarter = Math.floor((currentDate.getMonth() + 3) / 3);
-        const itemQuarter = Math.floor((itemDate.getMonth() + 3) / 3);
-        return itemQuarter === currentQuarter && itemDate.getFullYear() === currentDate.getFullYear();
+      } else if (fromDate && toDate) {
+        const from = new Date(fromDate);
+        const to = new Date(toDate);
+        return itemDate >= from && itemDate <= to;
       }
       return true;
     });
@@ -194,6 +195,31 @@ const SelectionTrackerDashboard = ({ user }) => {
 
   const handleFilterChange = (event) => {
     setFilter(event.target.id);
+    setFromDate('');
+    setToDate('');
+  };
+
+  const handleDateChange = (event) => {
+    const { name, value } = event.target;
+    if (name === 'fromDate') {
+      setFromDate(value);
+      setToDate(''); // Reset toDate when fromDate changes
+    } else if (name === 'toDate') {
+      setToDate(value);
+    }
+  };
+
+  useEffect(() => {
+    if (fromDate && toDate) {
+      setFilter('custom');
+    }
+  }, [fromDate, toDate]);
+
+  const handleRefresh = () => {
+    setFilter('');
+    setFromDate('');
+    setToDate('');
+    fetchData();
   };
 
   return (
@@ -206,12 +232,12 @@ const SelectionTrackerDashboard = ({ user }) => {
         <div className="mx-4">
           <div className="flex items-center justify-between mt-9 mb-1">
             <div className="flex items-center">
-              <h2 className=" font-semibold text-lg">Current Selections</h2>
+              <h2 className="font-semibold text-lg">Current Selections</h2>
               <div className="flex items-center ml-8 mx-4 font-medium text-sm">
-                <input type="checkbox" id="30days" className="hidden" onChange={handleFilterChange} checked={filter === '30days'} />
-                <label htmlFor="30days" className="flex items-center cursor-pointer text-black font-semibold">
-                <span className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${filter === '30days' ? 'bg-blue-500' : ''}`}></span>
-                  30 Days
+                <input type="checkbox" id="7days" className="hidden" onChange={handleFilterChange} checked={filter === '7days'} />
+                <label htmlFor="7days" className="flex items-center cursor-pointer text-black font-semibold">
+                  <span className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${filter === '7days' ? 'bg-blue-500' : ''}`}></span>
+                  7 Days
                 </label>
               </div>
               <div className="flex items-center ml-8 mx-4 font-medium text-sm">
@@ -222,12 +248,16 @@ const SelectionTrackerDashboard = ({ user }) => {
                 </label>
               </div>
               <div className="flex items-center ml-8 mx-4 font-medium text-sm">
-                <input type="checkbox" id="currentQuarter" className="hidden" onChange={handleFilterChange} checked={filter === 'currentQuarter'} />
-                <label htmlFor="currentQuarter" className="flex items-center cursor-pointer text-black font-semibold">
-                  <span className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${filter === 'currentQuarter' ? 'bg-blue-500' : ''}`}></span>
-                  Current Quarter
+                <label className="flex items-center cursor-pointer text-black font-semibold">
+                  <span className="mr-2">From:</span>
+                  <input type="date" name="fromDate" value={fromDate} onChange={handleDateChange} className="p-2 mb-2 border rounded" />
+                </label>
+                <label className="flex items-center cursor-pointer text-black font-semibold ml-4">
+                  <span className="mr-2">To:</span>
+                  <input type="date" name="toDate" value={toDate} onChange={handleDateChange} className="p-2 mb-2 border rounded" disabled={!fromDate} />
                 </label>
               </div>
+              <button onClick={handleRefresh} className="ml-8 px-4 py-2 bg-blue-500 text-white rounded">Refresh</button>
             </div>
           </div>
         </div>
@@ -248,7 +278,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                     {selections.length > 0 ? (
                       selections.map((selection, index) => (
                         <tr key={index}>
-                          <td className="p-1 border border-gray-500">{selection.lobName}</td>
+                          <td className="p-1 border border-gray-500 text-left">{selection.lobName}</td>
                           <td className="p-1 border border-gray-500">{selection.fp}</td>
                           <td className="p-1 border border-gray-500">{selection.tnm}</td>
                           <td className="p-1 border border-gray-500">{selection.total}</td>
@@ -269,10 +299,8 @@ const SelectionTrackerDashboard = ({ user }) => {
                 </table>
               </div>
             </section>
-
             <div className="flex-grow"></div> {/* Spacer */}
           </div>
-
           <section className="mb-8">
             <h2 className="py-2 font-semibold text-lg">CTool Clear Cases</h2>
             <div className="overflow-x-auto">
@@ -292,7 +320,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                   {ctool.length > 0 ? (
                     ctool.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-3 border border-gray-500">{item.lobName}</td>
+                        <td className="p-3 border border-gray-500 text-left">{item.lobName}</td>
                         <td className="p-3 border border-gray-500">{item.taggingPending}</td>
                         <td className="p-3 border border-gray-500">{item.techSelectPending}</td>
                         <td className="p-3 border border-gray-500">{item.bgvPending}</td>
@@ -307,7 +335,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                     </tr>
                   )}
                   <tr>
-                    <td className="p-1 border border-gray-500 bg-blue-100 font-semibold">Total</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100 font-semibold text-left">Total</td>
                     <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.taggingPending, 0)}</td>
                     <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.techSelectPending, 0)}</td>
                     <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.bgvPending, 0)}</td>
@@ -339,14 +367,14 @@ const SelectionTrackerDashboard = ({ user }) => {
                     <th className="p-1 border border-gray-500">In progress</th>
                     <th className="p-1 border border-gray-500">In progress</th>
                     <th className="p-1 border border-gray-500">Offer Yet to be Released</th>
-                    <th className="p-1 border border-gray-500 "></th>
+                    <th className="p-1 border border-gray-500 ">Grand Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   {awaitedCases.length > 0 ? (
                     awaitedCases.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-3 border border-gray-500">{item.delivery_manager}</td>
+                        <td className="p-3 border border-gray-500 text-left">{item.delivery_manager}</td>
                         <td className="p-3 border border-gray-500">{item.pricing_model}</td>
                         <td className="p-3 border border-gray-500">{item.bgvCompleted}</td>
                         <td className="p-3 border border-gray-500">{item.inProgressCompleted}</td>
@@ -361,7 +389,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                     </tr>
                   )}
                   <tr>
-                    <td className="p-1 border border-gray-500 bg-blue-100 font-semibold">Grand Total</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100 font-semibold text-left">Grand Total</td>
                     <td className="p-1 border border-gray-500 bg-blue-100"></td>
                     <td className="p-1 border border-gray-500 bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.bgvCompleted, 0)}</td>
                     <td className="p-1 border border-gray-500 bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.inProgressCompleted, 0)}</td>
