@@ -12,24 +12,91 @@ import {
 } from "../services/api";
 //import UpdateDetails from "./UpdateDetails";
 import moment from "moment";
-import { Slide, ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { Slide, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function SelectionTracker() {
-  const [form, setForm] = useState({ bu: "" , psId: "", candidateId: ""});
+  const [form, setForm] = useState({ bu: "", psId: "", candidateId: "" });
   const [errors, setErrors] = useState({});
   const [isInternal, setIsInternal] = useState(true);
   // const [selected, setSelected] = React.useState("");
+  const [isReadOnly, setIsReadOnly] = useState(false);
   const navigate = useNavigate();
   const [lobs, setLobs] = useState([]);
   const [subLobs, setSubLobs] = useState([]);
   //const [Lob, setLob] = useState([]);
   const [subLob, setSubLob] = useState([]);
-  const [selectedLob, setSelectedLob] = useState('');
-  const [selectedSubLob, setSelectedSubLob] = useState('');
-  
-  
+  const [selectedLob, setSelectedLob] = useState("");
+  const [selectedSubLob, setSelectedSubLob] = useState("");
+  const location = useLocation();
+  const { state } = location;
+  // const id = state?.id;
+  const { id, readOnly } = state || {};
+
+  useEffect(() => {
+    if (readOnly) {
+      setIsReadOnly(true);
+    }
+  }, [readOnly]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        try {
+          // Attempt to fetch employee data by psid
+          const employee = await getEmployeeByPsid(id);
+          if (employee && employee.psid) {
+            // If employee data is found, set the form state with employee data
+            setForm((prevForm) => ({
+              ...prevForm,
+              psId: employee.psid,
+              fname: employee.firstName,
+              lname: employee.lastName,
+              pu: employee.pu,
+              grade: employee.grade,
+              location: employee.location,
+              totalExp: employee.totalExperience,
+              skill: employee.skill,
+              email: employee.mailID,
+              bu: employee.baseBU,
+            }));
+            setIsInternal(true); // Set isInternal to true for employees
+            // Fetch selection details for the employee
+            await fetchSelectionDetailsByPsid(employee.psid);
+          }
+        } catch (error) {
+          // If error occurs (e.g., employee not found), attempt to fetch candidate data by candidateId
+          try {
+            const candidate = await getCandidateById(id);
+            if (candidate && candidate.candidateId) {
+              // Set the form state with candidate data
+              setForm((prevForm) => ({
+                ...prevForm,
+                candidateId: candidate.candidateId,
+                fname: candidate.firstName,
+                lname: candidate.lastName,
+                baseBU: "",
+                grade: "", // Assuming grade is not available for candidate
+                location: "", // Assuming location is not available for candidate
+                pu: "", // Assuming pu is not available for candidate
+                totalExp: "", // Assuming totalExperience is not available for candidate
+                skill: "", // Assuming skill is not available for candidate
+                email: "", // Assuming email is not available for candidate
+              }));
+              setIsInternal(false); // Set isInternal to false for candidates
+              // Fetch selection details for the candidate
+              await fetchSelectionDetailsByCandidateId(candidate.candidateId);
+            }
+          } catch (candidateError) {
+            console.error("Error fetching candidate data:", candidateError);
+          }
+        }
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
 
   useEffect(() => {
     if (form.psId) {
@@ -51,7 +118,7 @@ function SelectionTracker() {
         const data = await fetchLobs();
         setLobs(data);
       } catch (error) {
-        console.error('There was an error fetching the LOBs!', error);
+        console.error("There was an error fetching the LOBs!", error);
       }
     };
 
@@ -72,13 +139,13 @@ function SelectionTracker() {
     //   console.error('There was an error fetching the LOB!', error);
     // }
     console.log("LOB: ", lobId);
-    form.lob=subLob.lob;
+    form.lob = subLob.lob;
 
     try {
       const data = await fetchSubLobs(lobId);
       setSubLobs(data);
     } catch (error) {
-      console.error('There was an error fetching the SubLOBs!', error);
+      console.error("There was an error fetching the SubLOBs!", error);
     }
   };
 
@@ -93,9 +160,9 @@ function SelectionTracker() {
       const data = await fetchSubLob(subLobId);
       setSubLob(data);
     } catch (error) {
-      console.error('There was an error fetching the SubLOB!', error);
+      console.error("There was an error fetching the SubLOB!", error);
     }
-  }
+  };
 
   const validate = () => {
     const errors = {};
@@ -118,7 +185,7 @@ function SelectionTracker() {
         totalExp: employee.totalExperience,
         skill: employee.skill,
         email: employee.mailID,
-        bu: employee.baseBU
+        bu: employee.baseBU,
       }));
     } catch (error) {
       console.error(error);
@@ -145,7 +212,6 @@ function SelectionTracker() {
     }
   };
 
-  
   const formatDate = (date) => {
     if (!date) return "";
     return moment(date).format("YYYY-MM-DD");
@@ -213,7 +279,6 @@ function SelectionTracker() {
     }
   };
 
-
   //handle changes in form
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -224,7 +289,6 @@ function SelectionTracker() {
     }
   };
 
-  
   //for submit
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -258,23 +322,29 @@ function SelectionTracker() {
 
         if (form.psId) {
           requestBody.employee = { psid: form.psId };
-          const response = await fetch("http://localhost:8080/selection-details/create/employee", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
-          });
+          const response = await fetch(
+            "http://localhost:8080/selection-details/create/employee",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(requestBody),
+            }
+          );
 
           if (response.ok) {
             // Simulate successful creation of selection details for the employee or candidate
-            toast.success('Details updated successfully!', {
-              position: 'top-right',
+            toast.success("Details updated successfully!", {
+              position: "top-right",
             });
-            localStorage.setItem("selectionDetails", JSON.stringify(requestBody));
+            localStorage.setItem(
+              "selectionDetails",
+              JSON.stringify(requestBody)
+            );
             console.log(requestBody);
             setTimeout(() => {
-              navigate('/landing-page');
+              navigate("/landing-page");
             }, 2000); // Navigate to the dashboard after successful creation
           } else {
             const errorData = await response.json();
@@ -282,22 +352,28 @@ function SelectionTracker() {
           }
         } else if (form.candidateId) {
           requestBody.candidate = { candidateId: form.candidateId };
-          const response = await fetch("http://localhost:8080/selection-details/create/candidate", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
-          });
+          const response = await fetch(
+            "http://localhost:8080/selection-details/create/candidate",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(requestBody),
+            }
+          );
 
           if (response.ok) {
             // Simulate successful creation of selection details for the employee or candidate
-            toast.success('Details updated successfully!', {
-              position: 'top-right',
+            toast.success("Details updated successfully!", {
+              position: "top-right",
             });
-            localStorage.setItem("selectionDetails", JSON.stringify(requestBody));
+            localStorage.setItem(
+              "selectionDetails",
+              JSON.stringify(requestBody)
+            );
             setTimeout(() => {
-              navigate('/landing-page');
+              navigate("/landing-page");
             }, 2000); // Navigate to the dashboard after successful creation
           } else {
             const errorData = await response.json();
@@ -305,8 +381,8 @@ function SelectionTracker() {
           }
         }
       } catch (error) {
-        toast.error('Error adding details:', {
-          position: 'top-right',
+        toast.error("Error adding details:", {
+          position: "top-right",
         });
         setErrors({ submit: "An error occurred while submitting the form" });
       }
@@ -335,6 +411,7 @@ function SelectionTracker() {
                     checked={isInternal}
                     onChange={handleChange}
                     className="p-2"
+                    disabled={isReadOnly}
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -347,12 +424,15 @@ function SelectionTracker() {
                     checked={!isInternal}
                     onChange={handleChange}
                     className="p-2"
+                    disabled={isReadOnly}
                   />
                 </td>
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap ">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">PS ID:<span className="text-red-500">*</span></label>
+                  <label className="font-semibold">
+                    PS ID:<span className="text-red-500">*</span>
+                  </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -362,12 +442,14 @@ function SelectionTracker() {
                     onChange={handleChange}
                     required
                     className="p-2 border rounded w-full"
-                    disabled={!isInternal}
+                    disabled={!isInternal || readOnly}
                     pattern="\d*"
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Candidate ID:<span className="text-red-500">*</span></label>
+                  <label className="font-semibold">
+                    Candidate ID:<span className="text-red-500">*</span>
+                  </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -380,7 +462,9 @@ function SelectionTracker() {
                   />
                 </td>
               </tr>
-              <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">Basic Info</h4>
+              <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
+                Basic Info
+              </h4>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">First Name:</label>
@@ -505,7 +589,9 @@ function SelectionTracker() {
             <tbody>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Selection Date:<span className="text-red-500">*</span></label>
+                  <label className="font-semibold">
+                    Selection Date:<span className="text-red-500">*</span>
+                  </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -515,6 +601,7 @@ function SelectionTracker() {
                     value={form.selectionDate || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={readOnly}
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -527,12 +614,15 @@ function SelectionTracker() {
                     value={form.bu || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   />
                 </td>
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">LOB:<span className="text-red-500">*</span></label>
+                  <label className="font-semibold">
+                    LOB:<span className="text-red-500">*</span>
+                  </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
@@ -540,15 +630,20 @@ function SelectionTracker() {
                     onChange={handleLobChange}
                     name="lob"
                     className="p-2 bordered w-full"
+                    disabled={isReadOnly}
                   >
                     <option value="">Select LOB</option>
-                    {lobs.map(lob => (
-                      <option key={lob.lobId} value={lob.lobId}>{lob.lobName}</option>
+                    {lobs.map((lob) => (
+                      <option key={lob.lobId} value={lob.lobId}>
+                        {lob.lobName}
+                      </option>
                     ))}
                   </select>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Sub LOB:<span className="text-red-500">*</span></label>
+                  <label className="font-semibold">
+                    Sub LOB:<span className="text-red-500">*</span>
+                  </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
@@ -556,17 +651,22 @@ function SelectionTracker() {
                     //value={form.subLob || ""}
                     className="p-2 bordered w-full"
                     onChange={handleSubLobChange}
+                    disabled={isReadOnly}
                   >
                     <option value="0">Choose SubLOB</option>
-                    {subLobs.map(subLob => (
-                      <option key={subLob.subLOBid} value={subLob.subLOBid}>{subLob.subLobName}</option>
+                    {subLobs.map((subLob) => (
+                      <option key={subLob.subLOBid} value={subLob.subLOBid}>
+                        {subLob.subLobName}
+                      </option>
                     ))}
                   </select>
                 </td>
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">HSBC Hiring Manager:<span className="text-red-500">*</span></label>
+                  <label className="font-semibold">
+                    HSBC Hiring Manager:<span className="text-red-500">*</span>
+                  </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -576,10 +676,13 @@ function SelectionTracker() {
                     value={form.hiringManager || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">HSBC Head:<span className="text-red-500">*</span></label>
+                  <label className="font-semibold">
+                    HSBC Head:<span className="text-red-500">*</span>
+                  </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -589,19 +692,23 @@ function SelectionTracker() {
                     value={form.head || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   />
                 </td>
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Delivery Manager:<span className="text-red-500">*</span></label>
+                  <label className="font-semibold">
+                    Delivery Manager:<span className="text-red-500">*</span>
+                  </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
                     name="deliveryManager"
-                    value={form.deliveryManager ||""}
+                    value={form.deliveryManager || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   >
                     <option value="0">Choose..</option>
                     <option value="Abhijeet Sureshchandra More">
@@ -625,9 +732,10 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <select
                     name="salespoc"
-                    value={form.salespoc||""}
+                    value={form.salespoc || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   >
                     <option value="0">Choose..</option>
                     <option value="Anand Devi">Anand Devi</option>
@@ -647,6 +755,7 @@ function SelectionTracker() {
                     value={form.pricingModel || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   >
                     <option value="0">Choose..</option>
                     <option value="T&M">T&M</option>
@@ -654,7 +763,9 @@ function SelectionTracker() {
                   </select>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">IRM:<span className="text-red-500">*</span></label>
+                  <label className="font-semibold">
+                    IRM:<span className="text-red-500">*</span>
+                  </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -663,6 +774,7 @@ function SelectionTracker() {
                     value={form.irm || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   />
                 </td>
               </tr>
@@ -681,6 +793,7 @@ function SelectionTracker() {
                     required
                     pattern="\d{6}"
                     title="HSBC CTOOL ID must be 6 digits"
+                    disabled={isReadOnly}
                   />
                   {errors.ctoolId && (
                     <div className="text-red-500 text-sm mt-1">
@@ -698,6 +811,7 @@ function SelectionTracker() {
                     value={form.ctoolRecDate || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   />
                 </td>
               </tr>
@@ -712,6 +826,7 @@ function SelectionTracker() {
                     value={form.ctoolJobCat || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -724,6 +839,7 @@ function SelectionTracker() {
                     value={form.ctoolLocation || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   />
                 </td>
               </tr>
@@ -738,6 +854,7 @@ function SelectionTracker() {
                     value={form.ctoolRate || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -750,6 +867,7 @@ function SelectionTracker() {
                     value={form.ctoolPropRate || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   />
                 </td>
               </tr>
@@ -764,6 +882,7 @@ function SelectionTracker() {
                     value={form.recruiterName || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -785,9 +904,10 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <select
                     name="offerReleaseStatus"
-                    value={form.offerReleaseStatus||""}
+                    value={form.offerReleaseStatus || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
                   >
                     <option value="">Choose...</option>
                     <option value="Pending">Pending</option>
@@ -809,7 +929,7 @@ function SelectionTracker() {
                   />
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td colSpan="4" className="p-2">
                   <div className="flex justify-center space-x-4">
                     <button
@@ -819,7 +939,6 @@ function SelectionTracker() {
                     >
                       Submit
                     </button>
-
                     <button
                       type="button"
                       className="bg-gray-500 text-white py-2 px-10 rounded"
@@ -827,31 +946,29 @@ function SelectionTracker() {
                       Cancel
                     </button>
                   </div>
-                  {/* <div className="mt-4">
-                    <div className="bg-gray-200 p-4 rounded-lg w-full">
+                </td>
+              </tr> */}
+              {!isReadOnly && (
+                <tr>
+                  <td colSpan="4" className="p-2">
+                    <div className="flex justify-center space-x-4">
+                      <button
+                        type="submit"
+                        onClick={handleSubmit}
+                        className="bg-blue-500 text-white py-2 px-10 rounded"
+                      >
+                        Submit
+                      </button>
                       <button
                         type="button"
-                        onClick={toggleAccordion}
-                        className="w-full flex items-center justify-between bg-gray-500 text-white py-2 px-4 rounded focus:outline-none"
+                        className="bg-gray-500 text-white py-2 px-10 rounded"
                       >
-                        <span className="flex items-center">
-                          <span
-                            className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
-                          >
-                            ▲
-                          </span>
-                          <span className="ml-2">Update Tagging and Onboarding details</span>
-                        </span>
+                        Cancel
                       </button>
-                      {isOpen && (
-                        <div className="mt-2 p-4 border-t border-gray-300 bg-white rounded">
-                          <UpdateDetails />
-                        </div>
-                      )}
                     </div>
-                  </div> */}
-                </td>
-              </tr>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

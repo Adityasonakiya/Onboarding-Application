@@ -7,10 +7,10 @@ const LandingPage = () => {
   const location = useLocation();
   const { state } = location;
   const id = state?.id;
-  const searchType = state?.searchType;
-  const status = state?.status;
   const [employeeCandidates, setEmployeeCandidates] = useState([]);
   const [filteredCandidates, setFilteredCandidates] = useState([]);
+  const searchType = state?.searchType;
+  const status = state?.status;
 
   useEffect(() => {
     console.log('State object:', state); // Log the state object to debug
@@ -18,9 +18,6 @@ const LandingPage = () => {
     console.log('Search Type:', searchType);
     console.log('Status:', status);
   }, [state]);
-
-  
-  
 
   const addNewSelection = () => {
     navigate('/selection-tracker');
@@ -31,8 +28,13 @@ const LandingPage = () => {
   };
 
   const handleRefresh = () => {
-    navigate('/landing-page'); 
+    navigate('/landing-page');
   };
+  
+  const handleViewOnly = (id) => {
+    navigate('/selection-tracker', { state: { id, readOnly: true } }); // Pass the readOnly flag
+  };
+  
 
   useEffect(() => {
     const getEmployeeCandidates = async () => {
@@ -46,7 +48,7 @@ const LandingPage = () => {
         console.log('dashboard data: ', data);
 
         if (id) {
-          const filtered = data.filter(candidate => candidate.id === id);
+          const filtered = data.filter((candidate) => candidate.id === id);
           setFilteredCandidates(filtered);
           console.log('displaying filtered by ID');
         } else if (searchType && status) {
@@ -68,7 +70,6 @@ const LandingPage = () => {
         console.error('There was an error fetching the employee candidates!', error);
       }
     };
-
     getEmployeeCandidates();
   }, [id, searchType, status]);
 
@@ -78,8 +79,18 @@ const LandingPage = () => {
         <div className='flex justify-between flex-wrap'>
           <h2 className='py-2 font-bold text-lg'>My Selections</h2>
           <div className='flex'>
-            <button className='bg-blue-500 text-white py-2 px-4 rounded mt-2 md:mt-0 mr-2' onClick={addNewSelection}>Add New Selection</button>
-            <button className='bg-gray-500 text-white py-2 px-4 rounded mt-2 md:mt-0' onClick={handleRefresh}>Refresh</button>
+            <button
+              className='bg-blue-500 text-white py-2 px-4 rounded mt-2 md:mt-0 mr-2'
+              onClick={addNewSelection}
+            >
+              Add New Selection
+            </button>
+            <button
+              className='bg-gray-500 text-white py-2 px-4 rounded mt-2 md:mt-0'
+              onClick={handleRefresh}
+            >
+              Refresh
+            </button>
           </div>
         </div>
         <div className='overflow-x-auto mt-4'>
@@ -96,18 +107,32 @@ const LandingPage = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredCandidates.map(candidate => (
+              {filteredCandidates.map((candidate) => (
                 <tr key={candidate.id}>
-                  <td className='p-2 border text-center'>{candidate.id}</td>
-                  <td className='p-2 border text-center'>{candidate.firstName} {candidate.lastName}</td>
+                  <td className='p-2 border text-center'>
+                    {/* Link for view-only page */}
+                    <button
+                      className='text-blue-500 underline'
+                      onClick={() => handleViewOnly(candidate.id)}
+                    >
+                      {candidate.id}
+                    </button>
+                  </td>
+                  <td className='p-2 border text-center'>
+                    {candidate.firstName} {candidate.lastName}
+                  </td>
                   <td className='p-2 border text-center'>{candidate.lobName}</td>
                   <td className='p-2 border text-center'>{candidate.hsbchiringManager}</td>
                   <td className='p-2 border text-center'>{candidate.onboardingStatus || '-'}</td>
                   <td className='p-2 border text-center'>{candidate.bgvStatus || '-'}</td>
                   <td className='p-2 border text-center'>
                     <div className='flex justify-center'>
-                      <button className='bg-blue-500 text-white py-1 px-2 rounded mr-2' onClick={() => handleEdit(candidate.id)}>Edit</button>
-                      {/* <button className="bg-red-500 text-white py-1 px-2 rounded">Delete</button> */}
+                      <button
+                        className='bg-blue-500 text-white py-1 px-2 rounded mr-2'
+                        onClick={() => handleEdit(candidate.id)}
+                      >
+                        Edit
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -119,5 +144,5 @@ const LandingPage = () => {
     </div>
   );
 };
-
 export default LandingPage;
+
