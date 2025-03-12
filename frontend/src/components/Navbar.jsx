@@ -4,7 +4,7 @@ import { FiAlignJustify } from 'react-icons/fi';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
 import smallLogo from '../assets/images/logo2.png';
-import { getAllCandidates, getAllEmployees, getEmployeeByPsid } from '../services/api';
+import { getAllCandidates, getAllEmployees, getBgvStatuses, getCToolStatuses, getEmployeeByPsid } from '../services/api';
 
 export default function Navbar() {
   const [activePopup, setActivePopup] = useState(null);
@@ -18,14 +18,16 @@ export default function Navbar() {
   const [allCandidates, setAllCandidates] = useState([]);
   const suggestionsRef = useRef(null);
   const location = useLocation();
-
+  const [selectedOption, setSelectedOption] = useState('PSID/CandidateID');
+  const [statusOptions, setStatusOptions] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState('');
 
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
 
     if (query === '') {
-      setSuggestions([...allEmployees, ...allCandidates]); 
+      setSuggestions([...allEmployees, ...allCandidates]);
     } else {
       const filteredEmployees = allEmployees.filter(employee =>
         employee.psid.toString().includes(query)
@@ -40,6 +42,18 @@ export default function Navbar() {
     }
   };
 
+  const handleOptionChange = (e) => {
+    setSelectedOption(e.target.value);
+    setSearchQuery('');
+    setSuggestions([]);
+    setSelectedStatus('');
+    console.log('Selected Option Changed:', e.target.value);
+  };
+
+  const handleStatusChange = (e) => {
+    setSelectedStatus(e.target.value);
+    console.log('Selected Status Changed:', e.target.value);
+  };
 
 
   useEffect(() => {
@@ -59,20 +73,35 @@ export default function Navbar() {
     fetchAllData();
   }, []);
 
+  useEffect(() => {
+    const fetchStatusOptions = async () => {
+      if (selectedOption === 'CTool Status') {
+        const statuses = await getCToolStatuses();
+        setStatusOptions(statuses.map(status => status.onboardingStatus));
+      } else if (selectedOption === 'BgvStatus') {
+        const statuses = await getBgvStatuses();
+        setStatusOptions(statuses.map(status => status.bgvStatus));
+      } else {
+        setStatusOptions([]);
+      }
+    };
+    fetchStatusOptions();
+  }, [selectedOption]);
 
 
-  const handleSuggestionClick = (psid) => {
-    const currentRoute = location.pathname;
-    if (currentRoute === '/selection-tracker') {
-      navigate('/selection-tracker', { state: { id: psid } });
-    } else {
-      navigate('/landing-page', { state: { id: psid } });
-    }
+  const handleSuggestionClick = (psidOrStatus) => {
+    console.log('Selected Option:', selectedOption);
+    console.log('PSID or Status:', psidOrStatus);
+    navigate('/landing-page', { state: { id: psidOrStatus } });
+
     setSuggestions([]); // Close the suggestion box
   };
 
-
-
+  const handleSearch = () => {
+    const searchType = selectedOption === 'CTool Status' ? 'ctool' : 'bgv';
+    console.log('Navigating with searchType:', searchType, 'and status:', selectedStatus);
+    navigate('/landing-page', { state: { searchType, status: selectedStatus } });
+  };
 
   const togglePopup = (popup) => {
     setActivePopup(activePopup === popup ? null : popup);
@@ -154,39 +183,66 @@ export default function Navbar() {
         </div>
         <div className='flex items-center space-x-2 md:space-x-4'>
           <div className='flex items-center bg-gray-200 rounded-full px-2 py-1 md:px-3 relative'>
+            <select
+              value={selectedOption}
+              onChange={handleOptionChange}
+              className='bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2'
+            >
+              <option value='PSID/CandidateID'>PSID/CandidateID</option>
+              <option value='CTool Status'>CTool Status</option>
+              <option value='BgvStatus'>BgvStatus</option>
+            </select>
             <div className='relative'>
               <input
                 type='text'
                 className='bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2'
-                placeholder='PSID/ CandidateId'
+                placeholder={selectedOption}
                 value={searchQuery}
                 onChange={handleSearchChange}
+                disabled={selectedOption !== 'PSID/CandidateID'}
               />
+              {selectedOption !== 'PSID/CandidateID' && (
+                <>
+                  <select
+                    value={selectedStatus}
+                    onChange={handleStatusChange}
+                    className='bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2'
+                  >
+                    <option value=''>Select Status</option>
+                    {statusOptions.map((status, index) => (
+                      <option key={index} value={status}>{status}</option>
+                    ))}
+                  </select>
+                </>
+              )}
               {suggestions.length > 0 && (
                 <div ref={suggestionsRef} className='absolute top-9 left-1 bg-white p-1 w-56 border border-gray-300 rounded-md'>
                   {suggestions.map((suggestion) => (
                     <div
-                      key={suggestion.psid || suggestion.candidateId}
+                      key={suggestion.psid || suggestion.candidateId || suggestion.onboardingStatus}
                       className='cursor-pointer'
-                      onClick={() => handleSuggestionClick(suggestion.psid || suggestion.candidateId)}
+                      onClick={() => handleSuggestionClick(suggestion.psid || suggestion.candidateId || suggestion.onboardingStatus)}
                     >
                       <p className='text-sm'>Name: {suggestion.firstName} {suggestion.lastName}</p>
-                      <p className='text-sm'>PSID/ CandidateId: {suggestion.psid || suggestion.candidateId}</p>
+                      {selectedOption === 'PSID/CandidateID' && (
+                        <p className='text-sm'>PSID/CandidateId: {suggestion.psid || suggestion.candidateId}</p>
+                      )}
+                      {(selectedOption === 'CTool Status' || selectedOption === 'BgvStatus') && (
+                        <p className='text-sm'>Status: {suggestion.onboardingStatus}</p>
+                      )}
                     </div>
                   ))}
                 </div>
               )}
             </div>
-
             <FaSearch
-              className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
+              className={`text-gray-800 hover:text-gray-400 duration-300 cursor-pointer ${selectedOption === 'PSID/CandidateID' && 'cursor-not-allowed'}`}
+              onClick={selectedOption === 'PSID/CandidateID' ? null : handleSearch}
             />
-            <div id='afterSearch' className='absolute top-9 left-1 bg-white p-1 w-56 border border-gray-300 rounded-md hidden'>
-              <p className='text-sm'>Name: </p>
-              <p className='text-sm'>PSID/ CandidateId:</p>
-            </div>
           </div>
-          <div
+
+
+          {/* <div
             className='relative popup-trigger'
             onMouseEnter={() => setHoverPopup('notification')}
             onMouseLeave={() => setHoverPopup(null)}
@@ -210,7 +266,7 @@ export default function Navbar() {
                 <p className='text-gray-700'>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
               </div>
             )}
-          </div>
+          </div> */}
           <div
             className='relative popup-trigger'
             onMouseEnter={() => setHoverPopup('user')}
@@ -274,7 +330,7 @@ export default function Navbar() {
                   to='/selection-tracker'
                   className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
                 >
-                  Selection Tracker
+                  Add new Selection
                 </Link>
                 <Link
                   to='/selection-tracker-dashboard'
@@ -282,12 +338,12 @@ export default function Navbar() {
                 >
                   Selection Tracker Dashboard
                 </Link>
-                <Link
+                {/* <Link
                   to='/update-details'
                   className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
                 >
                   Update
-                </Link>
+                </Link> */}
                 <Link
                   to='/login'
                   className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
