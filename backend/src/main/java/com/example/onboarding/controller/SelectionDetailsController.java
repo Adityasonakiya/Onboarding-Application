@@ -26,8 +26,14 @@ import com.example.onboarding.service.SelectionDetailsService;
 @RequestMapping("/selection-details")
 public class SelectionDetailsController {
 
+    private final BGVStatusController BGVStatusController;
+
     @Autowired
     private SelectionDetailsService selectionDetailsService;
+
+    SelectionDetailsController(BGVStatusController BGVStatusController) {
+        this.BGVStatusController = BGVStatusController;
+    }
 
     @GetMapping("/psid/{psid}")
     public ResponseEntity<SelectionDetails> getSelectionDetailsByPsid(@PathVariable int psid) {
@@ -49,21 +55,25 @@ public class SelectionDetailsController {
         }
     }
     @PostMapping("/create/employee")
-    public ResponseEntity<SelectionDetails> createSelectionDetails_Employee(@RequestBody SelectionDetails details){
-        SelectionDetails selectionDetails = selectionDetailsService.createSelectionDetails_Employee(details);
+    public ResponseEntity<String> createSelectionDetails_Employee(@RequestBody SelectionDetails details){
+        try{
+        selectionDetailsService.createSelectionDetails_Employee(details);
         System.out.println("details="+details);
-        if(details!=null)
-            return ResponseEntity.status(201).body(selectionDetails);
-        return ResponseEntity.status(500).build();    
+            return ResponseEntity.status(201).body("Selection created successfully");
+        }catch(RuntimeException e){
+            return ResponseEntity.status(400).body(e.getMessage());    
+        }
     }
 
     @PostMapping("/create/candidate")
-    public ResponseEntity<SelectionDetails> createSelectionDetails_Candidate(@RequestBody SelectionDetails details){
-        SelectionDetails selectionDetails = selectionDetailsService.createSelectionDetails_Candidate(details);
+    public ResponseEntity<String> createSelectionDetails_Candidate(@RequestBody SelectionDetails details){
+        try{
+        selectionDetailsService.createSelectionDetails_Candidate(details);
         System.out.println("details="+details);
-        if(details!=null)
-            return ResponseEntity.status(201).body(selectionDetails);
-        return ResponseEntity.status(500).build();    
+            return ResponseEntity.status(201).body("Selection created successfully");
+        }catch(RuntimeException e){
+            return ResponseEntity.status(400).body(e.getMessage());  
+        }
     }
 
     @PutMapping("/psid/{psId}")

@@ -28,6 +28,7 @@ function SelectionTracker() {
   const [subLob, setSubLob] = useState([]);
   const [selectedLob, setSelectedLob] = useState("");
   const [selectedSubLob, setSelectedSubLob] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
   const location = useLocation();
   const { state } = location;
   // const id = state?.id;
@@ -96,7 +97,6 @@ function SelectionTracker() {
 
     fetchData();
   }, [id]);
-
 
   useEffect(() => {
     if (form.psId) {
@@ -242,6 +242,12 @@ function SelectionTracker() {
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
       }));
+      // toast.success("Selection details fetched successfully!", {
+      //   position: "top-right",
+      // });
+      toast.error("Selection already exists for this ID.", {
+        position: "top-right",
+      });
     } catch (error) {
       console.error(error);
     }
@@ -274,8 +280,57 @@ function SelectionTracker() {
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
       }));
+      toast.error("Selection already exists for this ID.", {
+        position: "top-right",
+      });
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  //to check if selection details already exists
+  const handleIdCheck = async (name, value) => {
+    if (!value) return; // Prevent empty values
+
+    try {
+      let selectionDetails;
+      if (name === "psId") {
+        selectionDetails = await fetchSelectionDetailsByPsid(value);
+      } else if (name === "candidateId") {
+        selectionDetails = await fetchSelectionDetailsByCandidateId(value);
+      }
+
+      // Populate the form with fetched selection details
+      setForm((prevForm) => ({
+        ...prevForm,
+        ...selectionDetails, // Assume the API returns matching keys for form fields
+      }));
+
+      // Show an error that the selection already exists
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "Selection already exists for this ID.",
+      }));
+
+      toast.error("Selection already exists for this ID.", {
+        position: "top-right",
+      });
+    } catch (error) {
+      // If no selection exists or other issues, clear the error and inform the user
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: error.message.includes("not found") ? "" : error.message,
+      }));
+
+      if (error.message.includes("not found")) {
+        toast.success("No existing selection found. Ready to create new!", {
+          position: "top-right",
+        });
+      } else {
+        toast.error("An unexpected error occurred. Please try again.", {
+          position: "top-right",
+        });
+      }
     }
   };
 
@@ -439,12 +494,21 @@ function SelectionTracker() {
                     type="number"
                     name="psId"
                     value={form.psId || ""}
-                    onChange={handleChange}
+                    //onChange={handleChange}
+                    onChange={(e) => handleChange(e)}
+                    onBlur={(e) => fetchSelectionDetailsByPsid(e.target.value)}
                     required
-                    className="p-2 border rounded w-full"
+                    className={`p-2 border rounded w-full ${
+                      errors.psId ? "border-red-500" : ""
+                    }`}
+                    //required
+                    //className="p-2 border rounded w-full"
                     disabled={!isInternal || readOnly}
                     pattern="\d*"
                   />
+                  {errors.psId && (
+                    <p className="text-red-500 text-sm mb-4">{errors.psId}</p>
+                  )}
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">
@@ -456,10 +520,20 @@ function SelectionTracker() {
                     type="number"
                     name="candidateId"
                     value={form.candidateId || ""}
-                    onChange={handleChange}
-                    className="p-2 border rounded w-full"
+                    //onChange={handleChange}
+                    onChange={(e) => handleChange(e)}
+                    onBlur={(e) => fetchSelectionDetailsByCandidateId( e.target.value)}
+                    className={`p-2 border rounded w-full ${
+                      errors.candidateId ? "border-red-500" : ""
+                    }`}
+                    //className="p-2 border rounded w-full"
                     disabled={isInternal}
                   />
+                  {errors.candidateId && (
+                    <p className="text-red-500 text-sm mb-4">
+                      {errors.candidateId}
+                    </p>
+                  )}
                 </td>
               </tr>
               <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
