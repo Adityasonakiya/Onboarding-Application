@@ -168,11 +168,13 @@ export const fetchSubLob = async(subLobId)=>{
     return response.json();
 };
 
-export const fetchEmployeeCandidates = async () => {
-  const response = await fetch("http://localhost:8080/employees/employee-candidates");
+export const fetchEmployeeCandidates = async (createdBy) => {
+  const response = await fetch(`http://localhost:8080/employees/employee-candidates?createdBy=${createdBy}`);
   if (!response.ok) {
     throw new Error('Failed to fetch employee candidates');
   }
   return response.json();
 };
+
+
 

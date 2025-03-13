@@ -28,8 +28,8 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public List<EmployeeCandidateDTO> getEmployeeCandidates() {
-        return employeeRepository.findEmployeeCandidates();
+    public List<EmployeeCandidateDTO> getEmployeeCandidates(Integer createdBy) {
+        return employeeRepository.findEmployeeCandidates(createdBy);
     }
 
 

@@ -38,12 +38,9 @@ const LandingPage = () => {
 
   useEffect(() => {
     const getEmployeeCandidates = async () => {
-      console.log('State object:', state); // Log the state object
-      console.log('ID:', id);
-      console.log('Search Type:', searchType);
-      console.log('Status:', status);
+      const user = JSON.parse(localStorage.getItem('user')).psid;
       try {
-        const data = await fetchEmployeeCandidates();
+        const data = await fetchEmployeeCandidates(user);
         setEmployeeCandidates(data);
         console.log('dashboard data: ', data);
 
