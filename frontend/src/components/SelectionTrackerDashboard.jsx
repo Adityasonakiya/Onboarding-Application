@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PieChart from './PieChart';
 import Navbar from './Navbar';
 
 const SelectionTrackerDashboard = ({ user }) => {
@@ -8,6 +9,7 @@ const SelectionTrackerDashboard = ({ user }) => {
   const [filter, setFilter] = useState(''); // State for selected filter
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
+  const [chartData, setChartData] = useState({ labels: [], values: [] });
 
   const fetchData = () => {
     // Fetch selections data
@@ -42,6 +44,11 @@ const SelectionTrackerDashboard = ({ user }) => {
 
         const filteredSelections = applyFilter(processedSelections, filter, fromDate, toDate);
         setSelections(filteredSelections);
+        const pieChartData = {
+          labels: filteredSelections.map(selection => selection.lobName),
+          values: filteredSelections.map(selection => selection.total),
+        };
+        setChartData(pieChartData);
       })
       .catch(error => {
         console.error('Error fetching selections data:', error);
@@ -300,6 +307,9 @@ const SelectionTrackerDashboard = ({ user }) => {
               </div>
             </section>
             <div className="flex-grow"></div> {/* Spacer */}
+            <section className="w-1/3">
+              <PieChart data={chartData} />
+            </section>
           </div>
           <section className="mb-8">
             <h2 className="py-2 font-semibold text-lg">CTool Clear Cases</h2>
