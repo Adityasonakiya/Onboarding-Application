@@ -11,6 +11,7 @@ const LandingPage = () => {
   const [filteredCandidates, setFilteredCandidates] = useState([]);
   const searchType = state?.searchType;
   const status = state?.status;
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,11 +44,11 @@ const LandingPage = () => {
     const getEmployeeCandidates = async () => {
       const user = JSON.parse(localStorage.getItem('user')).psid;
       try {
-        const { content, totalPages } = await fetchEmployeeCandidates(user, currentPage);
+        const { content, totalPages } = await fetchEmployeeCandidates(user, currentPage, rowsPerPage);
         setEmployeeCandidates(content);
-        setTotalPages(totalPages);
+        setTotalPages(totalPages - 1);
         console.log('dashboard data: ', content);
-
+  
         if (id) {
           const filtered = content.filter((candidate) => candidate.id === id);
           setFilteredCandidates(filtered);
@@ -72,8 +73,8 @@ const LandingPage = () => {
       }
     };
     getEmployeeCandidates();
-  }, [id, searchType, status, currentPage]);
-
+  }, [id, searchType, status, currentPage, rowsPerPage]);
+  
   return (
     <div className='w-full px-4 py-6'>
       <div className='mx-4'>
@@ -93,6 +94,20 @@ const LandingPage = () => {
               Refresh
             </button>
           </div>
+        </div>
+        <div>
+          <label htmlFor="rowsPerPage">Select rows: </label>
+          <select
+            id="rowsPerPage"
+            value={rowsPerPage}
+            onChange={(e) => setRowsPerPage(Number(e.target.value))}
+          >
+            {[...Array(10).keys()].map((num) => (
+              <option key={num + 1} value={num + 1}>
+                {num + 1}
+              </option> 
+            ))}
+          </select>
         </div>
         <div className='overflow-x-auto mt-4'>
           <table className='w-full border-collapse'>
