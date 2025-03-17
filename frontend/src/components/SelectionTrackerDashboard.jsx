@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PieChart from './PieChart';
 import Navbar from './Navbar';
+import * as XLSX from "xlsx";
 
 const SelectionTrackerDashboard = ({ user }) => {
   const [selections, setSelections] = useState([]);
@@ -10,6 +11,19 @@ const SelectionTrackerDashboard = ({ user }) => {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [chartData, setChartData] = useState({ labels: [], values: [] });
+
+  const handleExportToExcel = () => {
+    if (!selections || selections.length === 0) {
+      alert("No data to export!");
+      return;
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(selections);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "selections");
+  
+    XLSX.writeFile(workbook, "selections.xlsx");
+  };
 
   const fetchData = () => {
     // Fetch selections data
@@ -240,6 +254,13 @@ const SelectionTrackerDashboard = ({ user }) => {
           <div className="flex items-center justify-between mt-9 mb-1">
             <div className="flex items-center">
               <h2 className="font-semibold text-lg">Current Selections</h2>
+              <button
+                onClick={handleExportToExcel}
+                className="ml-8 px-4 py-2 bg-green-500 text-white rounded"
+              >
+                Export to Excel
+              </button>
+
               <div className="flex items-center ml-8 mx-4 font-medium text-sm">
                 <input type="checkbox" id="7days" className="hidden" onChange={handleFilterChange} checked={filter === '7days'} />
                 <label htmlFor="7days" className="flex items-center cursor-pointer text-black font-semibold">
