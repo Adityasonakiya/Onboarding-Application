@@ -12,6 +12,10 @@ const LandingPage = () => {
   const searchType = state?.searchType;
   const status = state?.status;
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   useEffect(() => {
     console.log('State object:', state); // Log the state object to debug
     console.log('ID:', id);
@@ -34,22 +38,22 @@ const LandingPage = () => {
   const handleViewOnly = (id) => {
     navigate('/selection-tracker', { state: { id, readOnly: true } }); // Pass the readOnly flag
   };
-  
 
   useEffect(() => {
     const getEmployeeCandidates = async () => {
       const user = JSON.parse(localStorage.getItem('user')).psid;
       try {
-        const data = await fetchEmployeeCandidates(user);
-        setEmployeeCandidates(data);
-        console.log('dashboard data: ', data);
+        const { content, totalPages } = await fetchEmployeeCandidates(user, currentPage);
+        setEmployeeCandidates(content);
+        setTotalPages(totalPages);
+        console.log('dashboard data: ', content);
 
         if (id) {
-          const filtered = data.filter((candidate) => candidate.id === id);
+          const filtered = content.filter((candidate) => candidate.id === id);
           setFilteredCandidates(filtered);
           console.log('displaying filtered by ID');
         } else if (searchType && status) {
-          const filtered = data.filter(candidate => {
+          const filtered = content.filter(candidate => {
             if (searchType === 'ctool') {
               return candidate.onboardingStatus === status;
             } else if (searchType === 'bgv') {
@@ -60,7 +64,7 @@ const LandingPage = () => {
           setFilteredCandidates(filtered);
           console.log('displaying filtered by status');
         } else {
-          setFilteredCandidates(data);
+          setFilteredCandidates(content);
           console.log('displaying All');
         }
       } catch (error) {
@@ -68,7 +72,7 @@ const LandingPage = () => {
       }
     };
     getEmployeeCandidates();
-  }, [id, searchType, status]);
+  }, [id, searchType, status, currentPage]);
 
   return (
     <div className='w-full px-4 py-6'>
@@ -137,9 +141,27 @@ const LandingPage = () => {
             </tbody>
           </table>
         </div>
+        {/* Pagination Controls */}
+        <div className='flex justify-between mt-4'>
+          <button
+            className='bg-gray-500 text-white py-2 px-4 rounded'
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span className='py-2 px-4'>Page {currentPage} of {totalPages}</span>
+          <button
+            className='bg-gray-500 text-white py-2 px-4 rounded'
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
 };
-export default LandingPage;
 
+export default LandingPage;
