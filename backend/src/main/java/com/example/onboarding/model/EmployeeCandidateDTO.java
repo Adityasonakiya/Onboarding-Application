@@ -1,5 +1,8 @@
 package com.example.onboarding.model;
 
+import lombok.ToString;
+
+@ToString
 public class EmployeeCandidateDTO {
 
     private int id;
