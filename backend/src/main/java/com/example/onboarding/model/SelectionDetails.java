@@ -1,8 +1,6 @@
 package com.example.onboarding.model;
 
-import java.time.LocalDateTime;
 import java.util.Date;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -64,8 +62,10 @@ public class SelectionDetails {
     private Date techSelectionDate;
     private Date DOJReceivedDate;
     private Date LTIOnboardingDate;
-    private LocalDateTime createDate;
-    private LocalDateTime updateDate;
+    private Date createDate;
+    private Date updateDate;
+
+    // Getters and Setters
 
     public int getSelectionId() {
         return selectionId;
@@ -283,19 +283,19 @@ public class SelectionDetails {
         return deliveryManager;
     }
 
-    public LocalDateTime getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
-    public LocalDateTime getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(LocalDateTime updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 
@@ -315,7 +315,7 @@ public class SelectionDetails {
                 + ", getSelectionId()=" + getSelectionId() + ", getHSBCSelectionDate()=" + getHSBCSelectionDate()
                 + ", getHSBCHiringManager()=" + getHSBCHiringManager() + ", getHSBCHead()=" + getHSBCHead()
                 + ", getClass()=" + getClass() + ", getSalesPOC()=" + getSalesPOC() + ", getPricingModel()="
-                + getPricingModel() + ", getHSBCToolId()=" + getHSBCToolId() + ", getCToolReceivedDate()="
+                + getPricingModel() + getHSBCToolId() + ", getCToolReceivedDate()="
                 + getCToolReceivedDate() + ", getCToolJobCategory()=" + getCToolJobCategory() + ", getCToolLocation()="
                 + getCToolLocation() + ", getCToolRate()=" + getCToolRate() + ", getCToolProposedRate()="
                 + getCToolProposedRate() + ", getRecruiterName()=" + getRecruiterName() + ", getInterviewEvidences()="
@@ -328,5 +328,4 @@ public class SelectionDetails {
                 + getUpdatedBy() + ", getDeliveryManager()=" + getDeliveryManager() + ", getCreateDate()="
                 + getCreateDate() + ", getUpdateDate()=" + getUpdateDate() + ", toString()=" + super.toString() + "]";
     }
-
 }

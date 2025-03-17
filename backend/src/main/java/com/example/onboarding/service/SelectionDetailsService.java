@@ -1,6 +1,6 @@
 package com.example.onboarding.service;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.onboarding.model.AwaitedCasesDTO;
 import com.example.onboarding.model.CtoolDto;
-import com.example.onboarding.model.LOB;
 import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
-import com.example.onboarding.model.SubLOB;
 import com.example.onboarding.repository.EmployeeRepository;
-import com.example.onboarding.repository.LOBRepository;
 import com.example.onboarding.repository.SelectionDetailsRepository;
-import com.example.onboarding.repository.SubLOBRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 public class SelectionDetailsService {
@@ -29,7 +24,6 @@ public class SelectionDetailsService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
-
 
     public SelectionDetails getSelectionDetailsByPsid(int psid) {
         return selectionDetailsRepository.findByEmployee_Psid(psid);
@@ -71,7 +65,7 @@ public class SelectionDetailsService {
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
-            existingDetails.setUpdateDate(LocalDateTime.now());
+            existingDetails.setUpdateDate(new Date());
             existingDetails.setCreatedBy(existingDetails.getCreatedBy());
             existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             return selectionDetailsRepository.save(existingDetails);
@@ -102,9 +96,7 @@ public class SelectionDetailsService {
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
-            existingDetails.setUpdateDate(LocalDateTime.now());
-            //existingDetails.setLob(updatedDetails.getLob());
-            //existingDetails.setSubLob(updatedDetails.getSubLob());
+            existingDetails.setUpdateDate(new Date());
             existingDetails.setIrm(updatedDetails.getIrm());
             existingDetails.setCreatedBy(existingDetails.getCreatedBy());
             existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
@@ -115,11 +107,11 @@ public class SelectionDetailsService {
 
     public SelectionDetails createSelectionDetails_Employee(SelectionDetails details) {
         if (selectionDetailsRepository.existsByEmployee_Psid(details.getEmployee().getPsid())) {
-            System.out.println("Selection already exists for Employee: "+ details.getEmployee().getPsid());
+            System.out.println("Selection already exists for Employee: " + details.getEmployee().getPsid());
             throw new RuntimeException("Selection already exists");
         } else {
-            details.setCreateDate(LocalDateTime.now());
-            details.setUpdateDate(LocalDateTime.now());
+            details.setCreateDate(new Date());
+            details.setUpdateDate(new Date());
             details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             System.out.println("Dates" + details.getCreateDate() + details.getUpdateDate());
@@ -129,10 +121,10 @@ public class SelectionDetailsService {
 
     public SelectionDetails createSelectionDetails_Candidate(SelectionDetails details) {
         if (selectionDetailsRepository.existsByCandidate_CandidateId(details.getCandidate().getCandidateId())) {
-            throw new RuntimeException("Selection already exists for Candidate: "+details.getCandidate().getCandidateId());
+            throw new RuntimeException("Selection already exists for Candidate: " + details.getCandidate().getCandidateId());
         } else {
-            details.setCreateDate(LocalDateTime.now());
-            details.setUpdateDate(LocalDateTime.now());
+            details.setCreateDate(new Date());
+            details.setUpdateDate(new Date());
             details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             System.out.println("Dates" + details.getCreateDate() + details.getUpdateDate());
@@ -140,16 +132,15 @@ public class SelectionDetailsService {
         }
     }
 
-    public List<SelectionDTO> findSelections(){
+    public List<SelectionDTO> findSelections() {
         return selectionDetailsRepository.findSelections();
     }
 
-    public List<CtoolDto> findCtool(){
+    public List<CtoolDto> findCtool() {
         return selectionDetailsRepository.findCtool();
     }
 
-    public List<AwaitedCasesDTO> findAwaitedCases(){
+    public List<AwaitedCasesDTO> findAwaitedCases() {
         return selectionDetailsRepository.findAwaitedCases();
     }
-
 }

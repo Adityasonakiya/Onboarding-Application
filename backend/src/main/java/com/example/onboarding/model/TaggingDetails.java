@@ -1,6 +1,6 @@
 package com.example.onboarding.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -30,7 +30,7 @@ public class TaggingDetails {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "BGVStatusId")
-     BGVStatus bgvStatus;
+    private BGVStatus bgvStatus;
 
     @ManyToOne
     private User createdBy;
@@ -39,8 +39,8 @@ public class TaggingDetails {
     private User updatedBy;
 
     private String statusRemarks;
-    private LocalDateTime createDate;
-    private LocalDateTime updateDate;
+    private Date createDate;
+    private Date updateDate;
 
     @Override
     public String toString() {
@@ -74,19 +74,19 @@ public class TaggingDetails {
         this.statusRemarks = statusRemarks;
     }
 
-    public LocalDateTime getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
-    public LocalDateTime getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(LocalDateTime updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 

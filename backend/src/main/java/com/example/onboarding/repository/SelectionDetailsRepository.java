@@ -27,22 +27,22 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
                         "GROUP BY lb.lob_id, sd.pricing_model, sd.hsbcselection_date", nativeQuery = true)
         List<SelectionDTO> findSelections();
 
-        @Query(value = "SELECT COUNT(*) as ctool_count,lb.lob_name, os.onboarding_status, bs.bgv_status " +
+        @Query(value = "SELECT COUNT(*) as ctool_count,lb.lob_name, os.onboarding_status, bs.bgv_status, td.update_date " +
                         "FROM selection_details sd, lob lb,tagging_details td,onboarding_status os, BGVStatus bs " +
                         "where sd.ps_id = td.ps_id " +
                         "and sd.lob_id=lb.lob_id " +
                         "and td.onboarding_status_id = os.status_id " +
                         "and td.bgvstatus_id = bs.bgv_status_id " +
-                        "GROUP BY lb.lob_id, os.status_id, bs.bgv_status_id", nativeQuery = true)
+                        "GROUP BY lb.lob_id, os.status_id, bs.bgv_status_id, td.update_date", nativeQuery = true)
         List<CtoolDto> findCtool();
 
-        @Query(value = "SELECT count(*) as awaited_count,sd.delivery_manager,sd.pricing_model,bs.bgv_status,os.onboarding_status "
+        @Query(value = "SELECT count(*) as awaited_count,sd.delivery_manager,sd.pricing_model,bs.bgv_status,os.onboarding_status, td.update_date "
                         +
                         "from selection_details sd,tagging_details td,BGVStatus bs,onboarding_status os " +
                         "where sd.ps_id = td.ps_id " +
                         "and td.bgvstatus_id = bs.bgv_status_id " +
                         "and td.onboarding_status_id = os.status_id " +
-                        "group by bs.bgv_status_id,sd.pricing_model,sd.delivery_manager,os.status_id", nativeQuery = true)
+                        "group by bs.bgv_status_id,sd.pricing_model,sd.delivery_manager,os.status_id, td.update_date", nativeQuery = true)
         List<AwaitedCasesDTO> findAwaitedCases();
 }
 
