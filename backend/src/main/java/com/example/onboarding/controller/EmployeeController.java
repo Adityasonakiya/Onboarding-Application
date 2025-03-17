@@ -3,6 +3,7 @@ package com.example.onboarding.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,9 +17,13 @@ import com.example.onboarding.model.Employee;
 import com.example.onboarding.model.EmployeeCandidateDTO;
 import com.example.onboarding.service.EmployeeService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @CrossOrigin("*")
+// @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/employees")
+@Slf4j
 public class EmployeeController {
 
     @Autowired
@@ -45,10 +50,19 @@ public class EmployeeController {
     }
 
 
-    @GetMapping("/employee-candidates")
-    public ResponseEntity<List<EmployeeCandidateDTO>> getEmployeeCandidates(@RequestParam Integer createdBy) {
-        List<EmployeeCandidateDTO> employeeCandidates = employeeService.getEmployeeCandidates(createdBy);
-        return ResponseEntity.ok(employeeCandidates);
+    // @GetMapping("/employee-candidates")
+    // public ResponseEntity<List<EmployeeCandidateDTO>> getEmployeeCandidates(@RequestParam Integer createdBy) {
+    //     List<EmployeeCandidateDTO> employeeCandidates = employeeService.getEmployeeCandidates(createdBy);
+    //     return ResponseEntity.ok(employeeCandidates);
+    // }
+    @GetMapping("/api/employee-candidates")
+    public Page<EmployeeCandidateDTO> getEmployeeCandidates(
+        @RequestParam Integer createdBy,
+        @RequestParam int page,
+        @RequestParam int size
+    ) {
+        return employeeService.getEmployeeCandidates(createdBy, page, size);       
     }
+
 }
 
