@@ -12,17 +12,17 @@ const SelectionTrackerDashboard = ({ user }) => {
   const [toDate, setToDate] = useState('');
   const [chartData, setChartData] = useState({ labels: [], values: [] });
 
-  const handleExportToExcel = () => {
-    if (!selections || selections.length === 0) {
+  const handleExportToExcel = (data, sheetName, fileName) => {
+    if (!data || data.length === 0) {
       alert("No data to export!");
       return;
     }
+    const worksheet = XLSX.utils.json_to_sheet(data);
 
-    const worksheet = XLSX.utils.json_to_sheet(selections);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "selections");
-  
-    XLSX.writeFile(workbook, "selections.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+
+    XLSX.writeFile(workbook, fileName);
   };
 
   const fetchData = () => {
@@ -56,7 +56,7 @@ const SelectionTrackerDashboard = ({ user }) => {
           hsbcselectionDate: lobCounts[lobName].hsbcselectionDate,
         }));
 
-        const filteredSelections = applyFilter(processedSelections, filter, fromDate, toDate, 'hsbcselectionDate');
+        const filteredSelections = applyFilter(processedSelections, filter, fromDate, toDate);
         setSelections(filteredSelections);
         const pieChartData = {
           labels: filteredSelections.map(selection => selection.lobName),
@@ -75,7 +75,7 @@ const SelectionTrackerDashboard = ({ user }) => {
         console.log('Awaited Cases data:', data); // Check if data is fetched correctly
 
         const counts = data.reduce((acc, item) => {
-          const { delivery_manager, pricing_model, bgv_status, onboarding_status, awaited_count, updateDate } = item;
+          const { delivery_manager, pricing_model, bgv_status, onboarding_status, awaited_count, createdDate } = item;
 
           if (!acc[delivery_manager]) {
             acc[delivery_manager] = {
@@ -85,7 +85,7 @@ const SelectionTrackerDashboard = ({ user }) => {
               inProgressNotCompleted: 0,
               offerYetToBeReleased: 0,
               total: 0,
-              updateDate
+              createdDate
             };
           }
 
@@ -117,10 +117,10 @@ const SelectionTrackerDashboard = ({ user }) => {
           inProgressNotCompleted: counts[dm].inProgressNotCompleted,
           offerYetToBeReleased: counts[dm].offerYetToBeReleased,
           total: counts[dm].total,
-          updateDate: counts[dm].updateDate
+          createdDate: counts[dm].createdDate
         }));
 
-        const filteredAwaitedCases = applyFilter(processedData, filter, fromDate, toDate, 'updateDate');
+        const filteredAwaitedCases = applyFilter(processedData, filter, fromDate, toDate);
         setAwaitedCases(filteredAwaitedCases);
       })
       .catch(error => {
@@ -134,7 +134,7 @@ const SelectionTrackerDashboard = ({ user }) => {
         console.log('CTool data:', data); // Check if data is fetched correctly
 
         const counts = data.reduce((acc, item) => {
-          const { lobName, onboarding_status, bgv_status, updateDate } = item;
+          const { lobName, onboarding_status, bgv_status, createdDate } = item;
 
           if (!acc[lobName]) {
             acc[lobName] = {
@@ -144,7 +144,7 @@ const SelectionTrackerDashboard = ({ user }) => {
               hsbcDojAwaited: 0,
               hsbcDojConfirmed: 0,
               total: 0,
-              updateDate
+              createdDate
             };
           }
 
@@ -177,7 +177,7 @@ const SelectionTrackerDashboard = ({ user }) => {
           ...counts[lobName]
         }));
 
-        const filteredCtool = applyFilter(processedData, filter, fromDate, toDate, 'updateDate');
+        const filteredCtool = applyFilter(processedData, filter, fromDate, toDate);
         setCtool(filteredCtool);
       })
       .catch(error => {
@@ -191,14 +191,14 @@ const SelectionTrackerDashboard = ({ user }) => {
     return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, [filter, fromDate, toDate]);
 
-  const applyFilter = (data, filter, fromDate, toDate, dateField) => {
+  const applyFilter = (data, filter, fromDate, toDate) => {
     if (!filter && !fromDate && !toDate) {
       return data; // Return all data if no filter is selected
     }
 
     const currentDate = new Date();
     return data.filter(item => {
-      const itemDate = new Date(item[dateField]); // Use the specified date field for filtering
+      const itemDate = new Date(item.hsbcselectionDate); // Use hsbcselectionDate field for filtering
       if (filter === '7days') {
         const past7Days = new Date(currentDate);
         past7Days.setDate(currentDate.getDate() - 7);
@@ -255,11 +255,18 @@ const SelectionTrackerDashboard = ({ user }) => {
             <div className="flex items-center">
               <h2 className="font-semibold text-lg">Current Selections</h2>
               <button
-                onClick={handleExportToExcel}
-                className="ml-8 px-4 py-2 bg-green-500 text-white rounded"
+                onClick={() =>
+                  handleExportToExcel(
+                    selections,
+                    "FilteredSelections",
+                    "FilteredSelections.xlsx"
+                  )
+                }
+                className="ml-4 px-4 py-2 bg-green-500 text-white rounded"
               >
-                Export to Excel
+                Export Selections
               </button>
+
 
               <div className="flex items-center ml-8 mx-4 font-medium text-sm">
                 <input type="checkbox" id="7days" className="hidden" onChange={handleFilterChange} checked={filter === '7days'} />
@@ -333,7 +340,17 @@ const SelectionTrackerDashboard = ({ user }) => {
             </section>
           </div>
           <section className="mb-8">
-            <h2 className="py-2 font-semibold text-lg">CTool Clear Cases</h2>
+            <div className="flex items-center py-2">
+              <h2 className="font-semibold text-lg">CTool Clear Cases</h2>
+              <button
+                onClick={() =>
+                  handleExportToExcel(ctool, "CTool", "CTool.xlsx")
+                }
+                className="ml-2 px-4 py-2 bg-green-500 text-white rounded"
+              >
+                Export CTool
+              </button>
+            </div>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border-2 border-gray-400 text-center">
                 <thead>
@@ -380,7 +397,21 @@ const SelectionTrackerDashboard = ({ user }) => {
           </section>
 
           <section>
-            <h2 className="py-2 font-semibold text-lg">CTool Awaited Cases</h2>
+            <div className="flex items-center py-2">
+              <h2 className="font-semibold text-lg">CTool Awaited Cases</h2>
+              <button
+                onClick={() =>
+                  handleExportToExcel(
+                    awaitedCases,
+                    "AwaitedCases",
+                    "AwaitedCases.xlsx"
+                  )
+                }
+                className="ml-2 px-4 py-2 bg-green-500 text-white rounded"
+              >
+                Export Awaited Cases
+              </button>
+            </div>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border-2 border-gray-400 text-center">
                 <thead>
@@ -389,7 +420,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                     <th className="p-1 border border-gray-500"></th>
                     <th colSpan="2" className="p-1 border border-gray-500">Joined</th>
                     <th colSpan="2" className="p-1 border border-gray-500">YTJ</th>
-                    <th className="p-1 border border-gray-500">Grand Total</th>
+                    <th className="p-1 border border-gray-500 ">Grand Total</th>
                   </tr>
                   <tr className="bg-blue-100">
                     <th className="p-1 border border-gray-500">DM</th>
@@ -398,7 +429,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                     <th className="p-1 border border-gray-500">In progress</th>
                     <th className="p-1 border border-gray-500">In progress</th>
                     <th className="p-1 border border-gray-500">Offer Yet to be Released</th>
-                    <th className="p-1 border border-gray-500">Grand Total</th>
+                    <th className="p-1 border border-gray-500 ">Grand Total</th>
                   </tr>
                 </thead>
                 <tbody>
