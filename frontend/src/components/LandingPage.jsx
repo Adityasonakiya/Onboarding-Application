@@ -14,7 +14,7 @@ const LandingPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
@@ -23,6 +23,10 @@ const LandingPage = () => {
     console.log('Search Type:', searchType);
     console.log('Status:', status);
   }, [state]);
+
+  useEffect(() => {
+  setCurrentPage(0);
+}, [rowsPerPage]);
 
   const addNewSelection = () => {
     navigate('/selection-tracker');
@@ -46,7 +50,7 @@ const LandingPage = () => {
       try {
         const { content, totalPages } = await fetchEmployeeCandidates(user, currentPage, rowsPerPage);
         setEmployeeCandidates(content);
-        setTotalPages(totalPages - 1);
+        setTotalPages(totalPages);
         console.log('dashboard data: ', content);
   
         if (id) {
@@ -95,7 +99,7 @@ const LandingPage = () => {
             </button>
           </div>
         </div>
-        <div>
+        {/* <div>
           <label htmlFor="rowsPerPage">Select rows: </label>
           <select
             id="rowsPerPage"
@@ -108,7 +112,24 @@ const LandingPage = () => {
               </option> 
             ))}
           </select>
+        </div> */}
+        
+        <div>
+          <label htmlFor="rowsPerPage">Select rows: </label>
+          <select
+            id="rowsPerPage"
+            value={rowsPerPage}
+            onChange={(e) => setRowsPerPage(Number(e.target.value))}
+            className="select-button"
+          >
+            {[5, 10, 20, 50, 100].map((num) => (
+              <option key={num} value={num}>
+                {num}
+              </option>
+            ))}
+          </select>
         </div>
+
         <div className='overflow-x-auto mt-4'>
           <table className='w-full border-collapse'>
             <thead>
@@ -165,7 +186,7 @@ const LandingPage = () => {
           >
             Previous
           </button>
-          <span className='py-2 px-4'>Page {currentPage} of {totalPages}</span>
+          <span className='py-2 px-4'>Page {currentPage+1} of {totalPages}</span>
           <button
             className='bg-gray-500 text-white py-2 px-4 rounded'
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
