@@ -56,7 +56,7 @@ const SelectionTrackerDashboard = ({ user }) => {
           hsbcselectionDate: lobCounts[lobName].hsbcselectionDate,
         }));
 
-        const filteredSelections = applyFilter(processedSelections, filter, fromDate, toDate);
+        const filteredSelections = applyFilter(processedSelections, filter, fromDate, toDate, 'hsbcselectionDate');
         setSelections(filteredSelections);
         const pieChartData = {
           labels: filteredSelections.map(selection => selection.lobName),
@@ -75,7 +75,7 @@ const SelectionTrackerDashboard = ({ user }) => {
         console.log('Awaited Cases data:', data); // Check if data is fetched correctly
 
         const counts = data.reduce((acc, item) => {
-          const { delivery_manager, pricing_model, bgv_status, onboarding_status, awaited_count, createdDate } = item;
+          const { delivery_manager, pricing_model, bgv_status, onboarding_status, awaited_count, updateDate } = item;
 
           if (!acc[delivery_manager]) {
             acc[delivery_manager] = {
@@ -85,7 +85,7 @@ const SelectionTrackerDashboard = ({ user }) => {
               inProgressNotCompleted: 0,
               offerYetToBeReleased: 0,
               total: 0,
-              createdDate
+              updateDate
             };
           }
 
@@ -117,10 +117,10 @@ const SelectionTrackerDashboard = ({ user }) => {
           inProgressNotCompleted: counts[dm].inProgressNotCompleted,
           offerYetToBeReleased: counts[dm].offerYetToBeReleased,
           total: counts[dm].total,
-          createdDate: counts[dm].createdDate
+          updateDate: counts[dm].updateDate
         }));
 
-        const filteredAwaitedCases = applyFilter(processedData, filter, fromDate, toDate);
+        const filteredAwaitedCases = applyFilter(processedData, filter, fromDate, toDate, 'updateDate');
         setAwaitedCases(filteredAwaitedCases);
       })
       .catch(error => {
@@ -134,7 +134,7 @@ const SelectionTrackerDashboard = ({ user }) => {
         console.log('CTool data:', data); // Check if data is fetched correctly
 
         const counts = data.reduce((acc, item) => {
-          const { lobName, onboarding_status, bgv_status, createdDate } = item;
+          const { lobName, onboarding_status, bgv_status, updateDate } = item;
 
           if (!acc[lobName]) {
             acc[lobName] = {
@@ -144,7 +144,7 @@ const SelectionTrackerDashboard = ({ user }) => {
               hsbcDojAwaited: 0,
               hsbcDojConfirmed: 0,
               total: 0,
-              createdDate
+              updateDate
             };
           }
 
@@ -177,7 +177,7 @@ const SelectionTrackerDashboard = ({ user }) => {
           ...counts[lobName]
         }));
 
-        const filteredCtool = applyFilter(processedData, filter, fromDate, toDate);
+        const filteredCtool = applyFilter(processedData, filter, fromDate, toDate, 'updateDate');
         setCtool(filteredCtool);
       })
       .catch(error => {
@@ -191,14 +191,14 @@ const SelectionTrackerDashboard = ({ user }) => {
     return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, [filter, fromDate, toDate]);
 
-  const applyFilter = (data, filter, fromDate, toDate) => {
+  const applyFilter = (data, filter, fromDate, toDate, dateField) => {
     if (!filter && !fromDate && !toDate) {
       return data; // Return all data if no filter is selected
     }
 
     const currentDate = new Date();
     return data.filter(item => {
-      const itemDate = new Date(item.hsbcselectionDate); // Use hsbcselectionDate field for filtering
+      const itemDate = new Date(item[dateField]); // Use the specified date field for filtering
       if (filter === '7days') {
         const past7Days = new Date(currentDate);
         past7Days.setDate(currentDate.getDate() - 7);
