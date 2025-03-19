@@ -28,7 +28,6 @@ function SelectionTracker() {
   const [subLob, setSubLob] = useState([]);
   const [selectedLob, setSelectedLob] = useState("");
   const [selectedSubLob, setSelectedSubLob] = useState("");
-  const [isFetching, setIsFetching] = useState(false);
   const location = useLocation();
   const { state } = location;
   // const id = state?.id;
@@ -37,6 +36,9 @@ function SelectionTracker() {
   useEffect(() => {
     if (readOnly) {
       setIsReadOnly(true);
+      toast.success("Selection details fetched successfully!", {
+        position: "top-right",
+      });
     }
   }, [readOnly]);
 
@@ -124,10 +126,6 @@ function SelectionTracker() {
 
     getLobs();
   }, []);
-
-  // const changeSelectOptionHandler = (event) => {
-  //   setSelected(event.target.value);
-  // };
 
   const handleLobChange = async (event) => {
     const lobId = event.target.value;
@@ -220,34 +218,37 @@ function SelectionTracker() {
   const fetchSelectionDetailsByPsid = async (psid) => {
     try {
       const selectionDetails = await getSelectionDetailsByPsId(psid);
-      setForm((prevForm) => ({
-        ...prevForm,
-        selectionDate: formatDate(selectionDetails.hsbcselectionDate),
-        bu: "BF",
-        lob: selectionDetails.lob,
-        subLob: selectionDetails.sublob,
-        hiringManager: selectionDetails.hsbchiringManager,
-        head: selectionDetails.hsbchead,
-        deliveryManager: selectionDetails.deliveryManager,
-        salespoc: selectionDetails.salesPOC,
-        pricingModel: selectionDetails.pricingModel,
-        irm: selectionDetails.irm,
-        ctoolId: selectionDetails.hsbctoolId,
-        ctoolRecDate: formatDate(selectionDetails.ctoolReceivedDate),
-        ctoolJobCat: selectionDetails.ctoolJobCategory,
-        ctoolLocation: selectionDetails.ctoolLocation,
-        ctoolRate: selectionDetails.ctoolRate,
-        ctoolPropRate: selectionDetails.ctoolProposedRate,
-        recruiterName: selectionDetails.recruiterName,
-        offerReleaseStatus: selectionDetails.offerReleaseStatus,
-        ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
-      }));
-      // toast.success("Selection details fetched successfully!", {
-      //   position: "top-right",
-      // });
-      toast.error("Selection already exists for this ID.", {
-        position: "top-right",
-      });
+      if (readOnly) {
+        setForm((prevForm) => ({
+          ...prevForm,
+          selectionDate: formatDate(selectionDetails.hsbcselectionDate),
+          bu: "BF",
+          lob: selectionDetails.lob,
+          subLob: selectionDetails.sublob,
+          hiringManager: selectionDetails.hsbchiringManager,
+          head: selectionDetails.hsbchead,
+          deliveryManager: selectionDetails.deliveryManager,
+          salespoc: selectionDetails.salesPOC,
+          pricingModel: selectionDetails.pricingModel,
+          irm: selectionDetails.irm,
+          ctoolId: selectionDetails.hsbctoolId,
+          ctoolRecDate: formatDate(selectionDetails.ctoolReceivedDate),
+          ctoolJobCat: selectionDetails.ctoolJobCategory,
+          ctoolLocation: selectionDetails.ctoolLocation,
+          ctoolRate: selectionDetails.ctoolRate,
+          ctoolPropRate: selectionDetails.ctoolProposedRate,
+          recruiterName: selectionDetails.recruiterName,
+          offerReleaseStatus: selectionDetails.offerReleaseStatus,
+          ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
+        }));
+      } else {
+        toast.error("Selection already exists for this ID.", {
+          position: "top-right",
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 2500);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -258,79 +259,39 @@ function SelectionTracker() {
       const selectionDetails = await getSelectionDetailsByCandidateId(
         candidateId
       );
-      setForm((prevForm) => ({
-        ...prevForm,
-        selectionDate: formatDate(selectionDetails.hsbcselectionDate),
-        bu: selectionDetails.baseBU,
-        lob: selectionDetails.lob,
-        subLob: selectionDetails.sublob,
-        hiringManager: selectionDetails.hsbchiringManager,
-        head: selectionDetails.hsbchead,
-        deliveryManager: selectionDetails.deliveryManager,
-        salespoc: selectionDetails.salesPOC,
-        pricingModel: selectionDetails.pricingModel,
-        irm: selectionDetails.irm,
-        ctoolId: selectionDetails.hsbctoolId,
-        ctoolRecDate: formatDate(selectionDetails.ctoolReceivedDate),
-        ctoolJobCat: selectionDetails.ctoolJobCategory,
-        ctoolLocation: selectionDetails.ctoolLocation,
-        ctoolRate: selectionDetails.ctoolRate,
-        ctoolPropRate: selectionDetails.ctoolProposedRate,
-        recruiterName: selectionDetails.recruiterName,
-        offerReleaseStatus: selectionDetails.offerReleaseStatus,
-        ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
-      }));
-      toast.error("Selection already exists for this ID.", {
-        position: "top-right",
-      });
+      if (readOnly) {
+        setForm((prevForm) => ({
+          ...prevForm,
+          selectionDate: formatDate(selectionDetails.hsbcselectionDate),
+          bu: selectionDetails.baseBU,
+          lob: selectionDetails.lob,
+          subLob: selectionDetails.sublob,
+          hiringManager: selectionDetails.hsbchiringManager,
+          head: selectionDetails.hsbchead,
+          deliveryManager: selectionDetails.deliveryManager,
+          salespoc: selectionDetails.salesPOC,
+          pricingModel: selectionDetails.pricingModel,
+          irm: selectionDetails.irm,
+          ctoolId: selectionDetails.hsbctoolId,
+          ctoolRecDate: formatDate(selectionDetails.ctoolReceivedDate),
+          ctoolJobCat: selectionDetails.ctoolJobCategory,
+          ctoolLocation: selectionDetails.ctoolLocation,
+          ctoolRate: selectionDetails.ctoolRate,
+          ctoolPropRate: selectionDetails.ctoolProposedRate,
+          recruiterName: selectionDetails.recruiterName,
+          offerReleaseStatus: selectionDetails.offerReleaseStatus,
+          ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
+        }));
+      } else {
+        toast.error("Selection already exists for this ID.", {
+          position: "top-right",
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 2500);
+      }
     } catch (error) {
       console.error(error);
-    }
-  };
-
-  //to check if selection details already exists
-  const handleIdCheck = async (name, value) => {
-    if (!value) return; // Prevent empty values
-
-    try {
-      let selectionDetails;
-      if (name === "psId") {
-        selectionDetails = await fetchSelectionDetailsByPsid(value);
-      } else if (name === "candidateId") {
-        selectionDetails = await fetchSelectionDetailsByCandidateId(value);
-      }
-
-      // Populate the form with fetched selection details
-      setForm((prevForm) => ({
-        ...prevForm,
-        ...selectionDetails, // Assume the API returns matching keys for form fields
-      }));
-
-      // Show an error that the selection already exists
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: "Selection already exists for this ID.",
-      }));
-
-      toast.error("Selection already exists for this ID.", {
-        position: "top-right",
-      });
-    } catch (error) {
-      // If no selection exists or other issues, clear the error and inform the user
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: error.message.includes("not found") ? "" : error.message,
-      }));
-
-      if (error.message.includes("not found")) {
-        toast.success("No existing selection found. Ready to create new!", {
-          position: "top-right",
-        });
-      } else {
-        toast.error("An unexpected error occurred. Please try again.", {
-          position: "top-right",
-        });
-      }
     }
   };
 
@@ -494,9 +455,7 @@ function SelectionTracker() {
                     type="number"
                     name="psId"
                     value={form.psId || ""}
-                    //onChange={handleChange}
-                    onChange={(e) => handleChange(e)}
-                    onBlur={(e) => fetchSelectionDetailsByPsid(e.target.value)}
+                    onChange={handleChange}
                     required
                     className={`p-2 border rounded w-full ${
                       errors.psId ? "border-red-500" : ""
@@ -522,7 +481,9 @@ function SelectionTracker() {
                     value={form.candidateId || ""}
                     //onChange={handleChange}
                     onChange={(e) => handleChange(e)}
-                    onBlur={(e) => fetchSelectionDetailsByCandidateId( e.target.value)}
+                    onBlur={(e) =>
+                      fetchSelectionDetailsByCandidateId(e.target.value)
+                    }
                     className={`p-2 border rounded w-full ${
                       errors.candidateId ? "border-red-500" : ""
                     }`}
@@ -1022,6 +983,7 @@ function SelectionTracker() {
                   </div>
                 </td>
               </tr> */}
+
               {!isReadOnly && (
                 <tr>
                   <td colSpan="4" className="p-2">
@@ -1030,6 +992,7 @@ function SelectionTracker() {
                         type="submit"
                         onClick={handleSubmit}
                         className="bg-blue-500 text-white py-2 px-10 rounded"
+                        disabled={form.invalid}
                       >
                         Submit
                       </button>
