@@ -242,8 +242,6 @@ export default function Navbar() {
               onClick={selectedOption === 'PSID/CandidateID' ? null : handleSearch}
             />
           </div>
-
-
           {/* <div
             className='relative popup-trigger'
             onMouseEnter={() => setHoverPopup('notification')}
@@ -292,7 +290,6 @@ export default function Navbar() {
                   <FaUser className='text-gray-800 text-4xl mb-2' />
                   <h1 className='text-lg md:text-l font-bold'>{form.fname}</h1>
                   <p className='mb-2 text-gray-700'>PS ID: {form.psid}</p>
-                  {/* <p className='text-gray-700'>Designation: {form.skill}</p> */}
                 </div>
                 <div className='flex flex-col'>
                   <p className='text-gray-700'><strong>Email:</strong> {form.email}</p>
@@ -340,12 +337,6 @@ export default function Navbar() {
                 >
                   Selection Tracker Dashboard
                 </Link>
-                {/* <Link
-                  to='/update-details'
-                  className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
-                >
-                  Update
-                </Link> */}
                 <Link
                   to='/login'
                   className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'

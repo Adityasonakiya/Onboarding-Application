@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { fetchEmployeeCandidates } from '../services/api';
+import { fetchEmployeeCandidates, getCandidateById, getEmployeeByPsid, getEmployeeCandidateByPsid } from '../services/api';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -18,15 +18,8 @@ const LandingPage = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    console.log('State object:', state); // Log the state object to debug
-    console.log('ID:', id);
-    console.log('Search Type:', searchType);
-    console.log('Status:', status);
-  }, [state]);
-
-  useEffect(() => {
-  setCurrentPage(0);
-}, [rowsPerPage]);
+    setCurrentPage(0);
+  }, [rowsPerPage]);
 
   const addNewSelection = () => {
     navigate('/selection-tracker');
@@ -39,7 +32,7 @@ const LandingPage = () => {
   const handleRefresh = () => {
     navigate('/landing-page');
   };
-  
+
   const handleViewOnly = (id) => {
     navigate('/selection-tracker', { state: { id, readOnly: true } }); // Pass the readOnly flag
   };
@@ -52,11 +45,13 @@ const LandingPage = () => {
         setEmployeeCandidates(content);
         setTotalPages(totalPages);
         console.log('dashboard data: ', content);
-  
+
         if (id) {
-          const filtered = content.filter((candidate) => candidate.id === id);
-          setFilteredCandidates(filtered);
-          console.log('displaying filtered by ID');
+          const employee = await getEmployeeCandidateByPsid(id);
+          if (employee && employee.id) {
+            setFilteredCandidates([employee]);
+            console.log("searched emp2:",employee);
+          }
         } else if (searchType && status) {
           const filtered = content.filter(candidate => {
             if (searchType === 'ctool') {
@@ -78,7 +73,7 @@ const LandingPage = () => {
     };
     getEmployeeCandidates();
   }, [id, searchType, status, currentPage, rowsPerPage]);
-  
+
   return (
     <div className='w-full px-4 py-6'>
       <div className='mx-4'>
@@ -113,7 +108,7 @@ const LandingPage = () => {
             ))}
           </select>
         </div> */}
-        
+
         <div>
           <label htmlFor="rowsPerPage">Select rows: </label>
           <select
@@ -186,7 +181,7 @@ const LandingPage = () => {
           >
             Previous
           </button>
-          <span className='py-2 px-4'>Page {currentPage+1} of {totalPages}</span>
+          <span className='py-2 px-4'>Page {currentPage + 1} of {totalPages}</span>
           <button
             className='bg-gray-500 text-white py-2 px-4 rounded'
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}

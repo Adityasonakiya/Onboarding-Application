@@ -17,6 +17,7 @@ import com.example.onboarding.model.Employee;
 import com.example.onboarding.model.EmployeeCandidateDTO;
 import com.example.onboarding.service.EmployeeService;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @CrossOrigin("*")
@@ -64,5 +65,14 @@ public class EmployeeController {
         return employeeService.getEmployeeCandidates(createdBy, page, size);       
     }
 
+    @GetMapping("/api/employee-candidates/{id}")
+    public ResponseEntity<EmployeeCandidateDTO> getEmployeeCandidateById(@PathVariable int id) {
+        try {
+            EmployeeCandidateDTO employeeCandidateDTO = employeeService.getEmployeeCandidateById(id);
+            return ResponseEntity.ok(employeeCandidateDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 }
 
