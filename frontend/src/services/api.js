@@ -116,7 +116,7 @@ export const updateTaggingDetailsByCandidateId = async (candidateId, data) => {
 };
 
 export const updateSelectionDetailsByPsId = async (psId, data) => {
-  const response = await fetch(`http://localhost:8080/selection-details/psid/${psId}`, {
+  const response = await fetch(`http://localhost:8080/selection-details/put/psid/${psId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ export const updateSelectionDetailsByPsId = async (psId, data) => {
 };
 
 export const updateSelectionDetailsByCandidateId = async (candidateId, data) => {
-  const response = await fetch(`http://localhost:8080/selection-details/candidateId/${candidateId}`, {
+  const response = await fetch(`http://localhost:8080/selection-details/put/candidateId/${candidateId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

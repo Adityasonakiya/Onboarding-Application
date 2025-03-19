@@ -26,14 +26,8 @@ import com.example.onboarding.service.SelectionDetailsService;
 @RequestMapping("/selection-details")
 public class SelectionDetailsController {
 
-    private final BGVStatusController BGVStatusController;
-
     @Autowired
     private SelectionDetailsService selectionDetailsService;
-
-    SelectionDetailsController(BGVStatusController BGVStatusController) {
-        this.BGVStatusController = BGVStatusController;
-    }
 
     @GetMapping("/psid/{psid}")
     public ResponseEntity<SelectionDetails> getSelectionDetailsByPsid(@PathVariable int psid) {
@@ -76,7 +70,7 @@ public class SelectionDetailsController {
         }
     }
 
-    @PutMapping("/psid/{psId}")
+    @PutMapping("put/psid/{psId}")
     public ResponseEntity<?> updateSelectionDetailsByPsId(@PathVariable int psId, @RequestBody SelectionDetails updatedDetails) {
         System.out.println("Incoming request payload: " + updatedDetails);
         System.out.println("CToolJobCategory in payload: " + updatedDetails.getCToolJobCategory());
@@ -90,7 +84,7 @@ public class SelectionDetailsController {
     }
     
 
-    @PutMapping("/candidateId/{candidateId}")
+    @PutMapping("put/candidateId/{candidateId}")
     public ResponseEntity<SelectionDetails> updateSelectionDetailsByCandidateId(@PathVariable int candidateId,
             @RequestBody SelectionDetails updatedDetails) {
         SelectionDetails details = selectionDetailsService.updateSelectionDetailsByCandidateId(candidateId,
