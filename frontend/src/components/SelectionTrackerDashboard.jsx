@@ -9,7 +9,7 @@ const SelectionTrackerDashboard = ({ user }) => {
   const [selections, setSelections] = useState([]);
   const [ctool, setCtool] = useState([]);
   const [awaitedCases, setAwaitedCases] = useState([]);
-  const [filter, setFilter] = useState(''); // State for selected filter
+  const [filter, setFilter] = useState('7days'); // State for selected filter
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [chartData, setChartData] = useState({ labels: [], values: [] });

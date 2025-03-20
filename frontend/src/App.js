@@ -7,6 +7,7 @@ import UpdateDetails from './components/UpdateDetails';
 import LandingPage from './components/LandingPage'; 
 import Layout from './components/Layout';
 import SelectionTrackerDashboard from './components/SelectionTrackerDashboard'; // Import SelectionTrackerDashboard component
+import Loader from './components/Loader';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path='/selection-tracker-dashboard' element={<SelectionTrackerDashboard />} />
+        <Route path="/Loader" element={<Loader />} />
         
         {/* Wrap routes requiring Navbar with Layout */}
         <Route path="/landing-page" element={<Layout><LandingPage /></Layout>} /> 
