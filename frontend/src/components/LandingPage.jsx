@@ -25,8 +25,8 @@ const LandingPage = () => {
   }, [state]);
 
   useEffect(() => {
-  setCurrentPage(0);
-}, [rowsPerPage]);
+    setCurrentPage(0);
+  }, [rowsPerPage]);
 
   const addNewSelection = () => {
     navigate('/selection-tracker');
@@ -39,7 +39,7 @@ const LandingPage = () => {
   const handleRefresh = () => {
     navigate('/landing-page');
   };
-  
+
   const handleViewOnly = (id) => {
     navigate('/selection-tracker', { state: { id, readOnly: true } }); // Pass the readOnly flag
   };
@@ -52,7 +52,7 @@ const LandingPage = () => {
         setEmployeeCandidates(content);
         setTotalPages(totalPages);
         console.log('dashboard data: ', content);
-  
+
         if (id) {
           const filtered = content.filter((candidate) => candidate.id === id);
           setFilteredCandidates(filtered);
@@ -78,7 +78,7 @@ const LandingPage = () => {
     };
     getEmployeeCandidates();
   }, [id, searchType, status, currentPage, rowsPerPage]);
-  
+
   return (
     <div className='w-full px-4 py-6'>
       <div className='mx-4'>
@@ -99,21 +99,6 @@ const LandingPage = () => {
             </button>
           </div>
         </div>
-        {/* <div>
-          <label htmlFor="rowsPerPage">Select rows: </label>
-          <select
-            id="rowsPerPage"
-            value={rowsPerPage}
-            onChange={(e) => setRowsPerPage(Number(e.target.value))}
-          >
-            {[...Array(10).keys()].map((num) => (
-              <option key={num + 1} value={num + 1}>
-                {num + 1}
-              </option> 
-            ))}
-          </select>
-        </div> */}
-        
         <div>
           <label htmlFor="rowsPerPage">Select rows: </label>
           <select
@@ -180,17 +165,17 @@ const LandingPage = () => {
         {/* Pagination Controls */}
         <div className='flex justify-between mt-4'>
           <button
-            className='bg-gray-500 text-white py-2 px-4 rounded'
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
+            className='bg-gray-500 text-white py-2 px-4 rounded disabled:opacity-50'
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+            disabled={currentPage === 0} 
           >
             Previous
           </button>
-          <span className='py-2 px-4'>Page {currentPage+1} of {totalPages}</span>
+          <span className='py-2 px-4'>Page {currentPage + 1} of {totalPages}</span>
           <button
-            className='bg-gray-500 text-white py-2 px-4 rounded'
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
+            className='bg-gray-500 text-white py-2 px-4 rounded disabled:opacity-50'
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
+            disabled={currentPage === totalPages - 1} 
           >
             Next
           </button>
@@ -199,5 +184,4 @@ const LandingPage = () => {
     </div>
   );
 };
-
 export default LandingPage;
