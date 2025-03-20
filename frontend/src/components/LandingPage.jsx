@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { fetchEmployeeCandidates } from '../services/api';
+import { fetchEmployeeCandidates, getCandidateById, getEmployeeByPsid, getEmployeeCandidateByPsid } from '../services/api';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -54,9 +54,11 @@ const LandingPage = () => {
         console.log('dashboard data: ', content);
 
         if (id) {
-          const filtered = content.filter((candidate) => candidate.id === id);
-          setFilteredCandidates(filtered);
-          console.log('displaying filtered by ID');
+          const employee = await getEmployeeCandidateByPsid(id);
+          if (employee && employee.id) {
+            setFilteredCandidates([employee]);
+            console.log("searched emp2:",employee);
+          }
         } else if (searchType && status) {
           const filtered = content.filter(candidate => {
             if (searchType === 'ctool') {
