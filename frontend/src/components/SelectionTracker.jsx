@@ -8,6 +8,7 @@ import {
   fetchLobs,
   fetchSubLobs,
   fetchSubLob,
+  getTaggingDetailsByPsId,
   //fetchLob
 } from "../services/api";
 //import UpdateDetails from "./UpdateDetails";
@@ -218,7 +219,7 @@ function SelectionTracker() {
   const fetchSelectionDetailsByPsid = async (psid) => {
     try {
       const selectionDetails = await getSelectionDetailsByPsId(psid);
-      if (readOnly) {
+      const taggingDetails = await getTaggingDetailsByPsId(psid);
         setForm((prevForm) => ({
           ...prevForm,
           selectionDate: formatDate(selectionDetails.hsbcselectionDate),
@@ -241,7 +242,7 @@ function SelectionTracker() {
           offerReleaseStatus: selectionDetails.offerReleaseStatus,
           ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
         }));
-      } else {
+        if(!readOnly && (taggingDetails.onboardingStatus.onboardingStatus !== 'Onboarding Completed')) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
         });
@@ -348,7 +349,6 @@ function SelectionTracker() {
               body: JSON.stringify(requestBody),
             }
           );
-
           if (response.ok) {
             // Simulate successful creation of selection details for the employee or candidate
             toast.success("Details updated successfully!", {

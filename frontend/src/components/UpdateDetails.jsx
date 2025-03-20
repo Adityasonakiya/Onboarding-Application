@@ -172,9 +172,9 @@ function UpdateDetails() {
     console.log("tagging details: ", taggingDetails);
     console.log("selection details: ", selectionDetails);
     if (isInternal && psId) {
-      updateTaggingDetailsByPsId(psId, taggingDetails)
+      updateSelectionDetailsByPsId(psId, selectionDetails)
         .then(() => {
-          updateSelectionDetailsByPsId(psId, selectionDetails) &&
+          updateTaggingDetailsByPsId(psId, taggingDetails)&&
             toast.success("Details updated successfully!", {
               position: "top-right",
             });
@@ -189,9 +189,9 @@ function UpdateDetails() {
           console.error("Error updating details by PsId:", error);
         });
     } else if (!isInternal && candidateId) {
-      updateTaggingDetailsByCandidateId(candidateId, taggingDetails)
+      updateSelectionDetailsByCandidateId(candidateId, selectionDetails)
         .then(() => {
-          updateSelectionDetailsByCandidateId(candidateId, selectionDetails) &&
+          updateTaggingDetailsByCandidateId(candidateId, taggingDetails) &&
             toast.success("Details updated successfully!", {
               position: "top-right",
             });
@@ -220,52 +220,60 @@ function UpdateDetails() {
     };
     if (isInternal && psId) {
       Promise.all([
-        getEmployeeByPsid(psId),
-        getSelectionDetailsByPsId(psId),
-        getTaggingDetailsByPsId(psId),
+        getEmployeeByPsid(psId).catch((err) => {
+          console.error("Error fetching employee data:", err);
+          return {}; // Fallback to an empty object
+        }),
+        getSelectionDetailsByPsId(psId).catch((err) => {
+          console.error("Error fetching selection details:", err);
+          return {}; // Fallback to an empty object
+        }),
+        getTaggingDetailsByPsId(psId).catch((err) => {
+          console.error("Error fetching tagging details:", err);
+          return {}; // Fallback to an empty object
+        }),
       ])
         .then(([employee, selectionData, taggingData]) => {
           setForm({
-            fname: employee.firstName,
-            lname: employee.lastName,
-            pu: employee.pu,
-            grade: employee.grade,
-            location: employee.location,
-            totalExp: employee.totalExperience,
-            skill: employee.skill,
-            email: employee.mailID,
+            fname: employee.firstName || "",
+            lname: employee.lastName || "",
+            pu: employee.pu || "",
+            grade: employee.grade || "",
+            location: employee.location || "",
+            totalExp: employee.totalExperience || "",
+            skill: employee.skill || "",
+            email: employee.mailID || "",
             selectionDate: formatDate(selectionData.hsbcselectionDate),
             bu: "BF",
-            lob: selectionData.lob,
-            subLob: selectionData.sublob,
-            hiringManager: selectionData.hsbchiringManager,
-            head: selectionData.hsbchead,
-            deliveryManager: selectionData.deliveryManager,
-            salespoc: selectionData.salesPOC,
-            pricingModel: selectionData.pricingModel,
-            irm: selectionData.irm,
-            ctoolId: selectionData.hsbctoolId,
+            lob: selectionData.lob || "",
+            subLob: selectionData.sublob || "",
+            hiringManager: selectionData.hsbchiringManager || "",
+            head: selectionData.hsbchead || "",
+            deliveryManager: selectionData.deliveryManager || "",
+            salespoc: selectionData.salesPOC || "",
+            pricingModel: selectionData.pricingModel || "",
+            irm: selectionData.irm || "",
+            ctoolId: selectionData.hsbctoolId || "",
             ctoolRecDate: formatDate(selectionData.ctoolReceivedDate),
-            ctoolJobCat: selectionData.ctoolJobCategory,
-            ctoolLocation: selectionData.ctoolLocation,
-            ctoolRate: selectionData.ctoolRate,
-            ctoolPropRate: selectionData.ctoolProposedRate,
-            recruiterName: selectionData.recruiterName,
-            offerReleaseStatus: selectionData.offerReleaseStatus,
+            ctoolJobCat: selectionData.ctoolJobCategory || "",
+            ctoolLocation: selectionData.ctoolLocation || "",
+            ctoolRate: selectionData.ctoolRate || "",
+            ctoolPropRate: selectionData.ctoolProposedRate || "",
+            recruiterName: selectionData.recruiterName || "",
+            offerReleaseStatus: selectionData.offerReleaseStatus || "",
             ltiOnboardDate: formatDate(selectionData.ltionboardingDate),
             status: taggingData.onboardingStatus?.onboardingStatus || "",
             addRemark: taggingData.onboardingStatus?.remarks || "",
             bgvStatus: taggingData.bgvStatus?.bgvStatus || "",
             bgvRemark: taggingData.bgvStatus?.remarks || "",
             tagDate: formatDate(taggingData.createDate) || "",
-            techSelectDate: formatDate(selectionData.techSelectionDate)||'',
-            dojRecDate: formatDate(selectionData.dojreceivedDate)||'',
-            onboardingDate: formatDate(selectionData.hsbconboardingDate)||'',
+            techSelectDate: formatDate(selectionData.techSelectionDate) || "",
+            dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
+            onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
           });
-          console.log();
         })
         .catch((error) => {
-          console.error("Error fetching data by PsId:", error);
+          console.error("Error in Promise.all:", error);
         });
     } else if (!isInternal && candidateId) {
       Promise.all([

@@ -50,13 +50,15 @@ public class SelectionDetailsController {
     }
     @PostMapping("/create/employee")
     public ResponseEntity<String> createSelectionDetails_Employee(@RequestBody SelectionDetails details){
-        try{
+        //try{
         selectionDetailsService.createSelectionDetails_Employee(details);
         System.out.println("details="+details);
+        if(details!=null)
             return ResponseEntity.status(201).body("Selection created successfully");
-        }catch(RuntimeException e){
-            return ResponseEntity.status(400).body(e.getMessage());    
-        }
+        return ResponseEntity.status(500).build();    
+        //}catch(RuntimeException e){
+        //    return ResponseEntity.status(400).body(e.getMessage());    
+        //}
     }
 
     @PostMapping("/create/candidate")

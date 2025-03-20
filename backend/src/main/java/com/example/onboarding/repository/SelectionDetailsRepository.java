@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.onboarding.model.AwaitedCasesDTO;
@@ -13,7 +14,9 @@ import com.example.onboarding.model.SelectionDetails;
 
 @Repository
 public interface SelectionDetailsRepository extends JpaRepository<SelectionDetails, Integer> {
-        SelectionDetails findByEmployee_Psid(int psid);
+
+        @Query(value = "SELECT * FROM selection_details sd WHERE sd.ps_id = :psId ORDER BY sd.create_date DESC LIMIT 1", nativeQuery = true)
+        SelectionDetails findSelectionDetailsByPsId(@Param("psId") Integer psId);
 
         SelectionDetails findByCandidate_CandidateId(int candidateId);
 
