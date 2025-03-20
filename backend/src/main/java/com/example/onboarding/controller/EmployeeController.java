@@ -74,5 +74,11 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<EmployeeCandidateDTO>> searchById(@RequestParam("query") int query) {
+        List<EmployeeCandidateDTO> results = employeeService.searchById(query);
+        return ResponseEntity.ok(results);
+    }
 }
 

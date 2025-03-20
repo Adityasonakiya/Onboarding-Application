@@ -5,6 +5,7 @@ export const getEmployeeByPsid = async (psid) => {
   }
   throw new Error('Failed to fetch employee data');
 };
+
 export const getEmployeeCandidateByPsid = async (psid) => {
   const response = await fetch(`http://localhost:8080/employees/api/employee-candidates/${psid}`);
   if (response.ok) {

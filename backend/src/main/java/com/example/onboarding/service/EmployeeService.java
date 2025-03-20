@@ -60,4 +60,8 @@ public class EmployeeService {
         }
     }
 
+    public List<EmployeeCandidateDTO> searchById(int query) {
+        return employeeRepository.searchByPsidOrCandidateId(query);
+    }
+
 }

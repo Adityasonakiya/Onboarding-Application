@@ -22,25 +22,38 @@ export default function Navbar() {
   const [statusOptions, setStatusOptions] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('');
 
-  const handleSearchChange = (e) => {
-    const query = e.target.value;
+  
+  const handleSearchChange = (event) => {
+    const query = event.target.value;
     setSearchQuery(query);
-
-    if (query === '') {
-      setSuggestions([...allEmployees, ...allCandidates]);
-    } else {
-      const filteredEmployees = allEmployees.filter(employee =>
-        employee.psid.toString().includes(query)
-      ).map(employee => ({ ...employee, type: 'employee' }));
-
-      const filteredCandidates = allCandidates.filter(candidate =>
-        candidate.candidateId.toString().includes(query)
-      ).map(candidate => ({ ...candidate, type: 'candidate' }));
-
-      const combinedSuggestions = [...filteredEmployees, ...filteredCandidates];
-      setSuggestions(combinedSuggestions);
-    }
+  
+    handleSearchChangeDebounced(query);
   };
+  
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
+  
+  const handleSearchChangeDebounced = debounce(async (query) => {
+    if (query.length > 3) {
+      try {
+        const response = await fetch(`http://localhost:8080/employees/search?query=${query}`);
+        const data = await response.json();
+        setSuggestions(data);
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+      }
+    } else {
+      setSuggestions([]);
+    }
+  }, 300);
+  
 
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
@@ -195,13 +208,13 @@ export default function Navbar() {
             <div className='relative'>
               {selectedOption === 'PSID/CandidateID' && (
                 <input
-                  type="text"
-                  className="bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2"
-                  placeholder={selectedOption}
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  disabled={selectedOption !== 'PSID/CandidateID'}
-                />
+                type="text"
+                className="bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2"
+                placeholder={selectedOption}
+                value={searchQuery}
+                onChange={handleSearchChange} // Use the non-debounced wrapper
+                disabled={selectedOption !== 'PSID/CandidateID'}
+              />              
               )}
               {selectedOption !== 'PSID/CandidateID' && (
                 <>
@@ -221,13 +234,13 @@ export default function Navbar() {
                 <div ref={suggestionsRef} className='absolute top-9 left-1 bg-white p-1 w-56 border border-gray-300 rounded-md'>
                   {suggestions.map((suggestion) => (
                     <div
-                      key={suggestion.psid || suggestion.candidateId || suggestion.onboardingStatus}
+                      key={suggestion.id || suggestion.id || suggestion.onboardingStatus}
                       className='cursor-pointer'
-                      onClick={() => handleSuggestionClick(suggestion.psid || suggestion.candidateId || suggestion.onboardingStatus)}
+                      onClick={() => handleSuggestionClick(suggestion.id || suggestion.id || suggestion.onboardingStatus)}
                     >
                       <p className='text-sm'>Name: {suggestion.firstName} {suggestion.lastName}</p>
                       {selectedOption === 'PSID/CandidateID' && (
-                        <p className='text-sm'>PSID/CandidateId: {suggestion.psid || suggestion.candidateId}</p>
+                        <p className='text-sm'>PSID/CandidateId: {suggestion.id || suggestion.id}</p>
                       )}
                       {(selectedOption === 'CTool Status' || selectedOption === 'BgvStatus') && (
                         <p className='text-sm'>Status: {suggestion.onboardingStatus}</p>
