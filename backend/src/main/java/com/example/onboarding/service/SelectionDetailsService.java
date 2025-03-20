@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.onboarding.model.AwaitedCasesDTO;
+import com.example.onboarding.model.BGVStatus;
 import com.example.onboarding.model.CtoolDto;
+import com.example.onboarding.model.OnboardingStatus;
 import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
+import com.example.onboarding.model.TaggingDetails;
 import com.example.onboarding.repository.EmployeeRepository;
 import com.example.onboarding.repository.SelectionDetailsRepository;
 
@@ -25,8 +28,13 @@ public class SelectionDetailsService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private TaggingDetailsService taggingDetailsService;
+
+    BGVStatus bs; OnboardingStatus os;
+
     public SelectionDetails getSelectionDetailsByPsid(int psid) {
-        return selectionDetailsRepository.findByEmployee_Psid(psid);
+        return selectionDetailsRepository.findSelectionDetailsByPsId(psid);
     }
 
     public SelectionDetails getSelectionDetailsByCandidateId(int candidateId) {
@@ -41,7 +49,7 @@ public class SelectionDetailsService {
                 "updated Details that is provided by frontend is here 3: " + updatedDetails.getDOJReceivedDate());
         System.out.println(
                 "updated Details that is provided by frontend is here 4: " + updatedDetails.getHSBCOnboardingDate());
-        SelectionDetails existingDetails = selectionDetailsRepository.findByEmployee_Psid(psId);
+        SelectionDetails existingDetails = selectionDetailsRepository.findSelectionDetailsByPsId(psId);
         if (existingDetails != null) {
             existingDetails.setLob(updatedDetails.getLob());
             existingDetails.setSubLob(updatedDetails.getSubLob());
@@ -106,21 +114,28 @@ public class SelectionDetailsService {
     }
 
     public SelectionDetails createSelectionDetails_Employee(SelectionDetails details) {
-        if (selectionDetailsRepository.existsByEmployee_Psid(details.getEmployee().getPsid())) {
-            System.out.println("Selection already exists for Employee: " + details.getEmployee().getPsid());
-            throw new RuntimeException("Selection already exists");
-        } else {
+        // int psid = details.getEmployee().getPsid();
+        // if (selectionDetailsRepository.existsByEmployee_Psid(psid) && taggingDetailsService.getTaggingDetailsByPsId(psid).getOnboardingStatus().getStatusId()!=6) {
+        //     throw new RuntimeException("Selection already exists");
+        // } else {
+            // TaggingDetails td = taggingDetailsService.getTaggingDetailsByPsId(psid);
+            // bs.setBgvStatusId(1);os.setStatusId(1);
+            // td.setBgvStatus(bs);
+            // td.setOnboardingStatus(os);;
+            // taggingDetailsService.updateTaggingDetailsByPsId(psid, td);
+            // taggingDetailsService.getTaggingDetailsByPsId(psid).getOnboardingStatus().setStatusId(1);
             details.setCreateDate(new Date());
             details.setUpdateDate(new Date());
             details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             System.out.println("Dates" + details.getCreateDate() + details.getUpdateDate());
             return selectionDetailsRepository.save(details);
-        }
+        //}
     }
 
     public SelectionDetails createSelectionDetails_Candidate(SelectionDetails details) {
-        if (selectionDetailsRepository.existsByCandidate_CandidateId(details.getCandidate().getCandidateId())) {
+        int candidateId = details.getCandidate().getCandidateId();
+        if (selectionDetailsRepository.existsByCandidate_CandidateId(candidateId) && taggingDetailsService.getTaggingDetailsByCandidateId(candidateId).getOnboardingStatus().getStatusId()!=6) {
             throw new RuntimeException("Selection already exists for Candidate: " + details.getCandidate().getCandidateId());
         } else {
             details.setCreateDate(new Date());
