@@ -22,14 +22,12 @@ export default function Navbar() {
   const [statusOptions, setStatusOptions] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('');
 
-  
   const handleSearchChange = (event) => {
     const query = event.target.value;
     setSearchQuery(query);
-  
     handleSearchChangeDebounced(query);
   };
-  
+
   const debounce = (func, delay) => {
     let timeoutId;
     return (...args) => {
@@ -39,7 +37,7 @@ export default function Navbar() {
       }, delay);
     };
   };
-  
+
   const handleSearchChangeDebounced = debounce(async (query) => {
     if (query.length > 3) {
       try {
@@ -53,7 +51,6 @@ export default function Navbar() {
       setSuggestions([]);
     }
   }, 300);
-  
 
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
@@ -67,7 +64,6 @@ export default function Navbar() {
     setSelectedStatus(e.target.value);
     console.log('Selected Status Changed:', e.target.value);
   };
-
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -101,12 +97,10 @@ export default function Navbar() {
     fetchStatusOptions();
   }, [selectedOption]);
 
-
   const handleSuggestionClick = (psidOrStatus) => {
     console.log('Selected Option:', selectedOption);
     console.log('PSID or Status:', psidOrStatus);
     navigate('/landing-page', { state: { id: psidOrStatus } });
-
     setSuggestions([]); // Close the suggestion box
   };
 
@@ -157,7 +151,6 @@ export default function Navbar() {
       }
     };
 
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -191,37 +184,39 @@ export default function Navbar() {
     <div className='shadow-md w-full p-2 fixed top-0 left-0 bg-white'>
       <div className='flex items-center justify-between py-2 px-4 md:py-4 md:px-7'>
         <div className='flex items-center'>
-          <img src={logo} alt='Logo' className='hidden md:block h-8 mr-2' />
-          <img src={smallLogo} alt='Logo' className='block md:hidden h-6 mr-2' />
+          <Link to="/landing-page">
+            <img src={logo} alt='Logo' className='hidden md:block h-8 mr-2' />
+            <img src={smallLogo} alt='Logo' className='block md:hidden h-6 mr-2' />
+          </Link>
         </div>
         <div className='flex items-center space-x-2 md:space-x-4'>
-          <div className='flex items-center bg-gray-200 rounded-full px-2 py-1 md:px-3 relative'>
+          <div className='flex items-center bg-gray-200 rounded-full px-2 py-1 md:px-3 relative w-full md:w-auto'>
             <select
               value={selectedOption}
               onChange={handleOptionChange}
-              className='bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2'
+              className='bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2 w-full sm:w-1/2 md:w-1/3 lg:w-auto'
             >
               <option value='PSID/CandidateID'>PSID/CandidateID</option>
               <option value='CTool Status'>CTool Status</option>
               <option value='BgvStatus'>BgvStatus</option>
             </select>
-            <div className='relative'>
+            <div className='relative w-2/3 md:w-auto'>
               {selectedOption === 'PSID/CandidateID' && (
                 <input
-                type="text"
-                className="bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2"
-                placeholder={selectedOption}
-                value={searchQuery}
-                onChange={handleSearchChange} // Use the non-debounced wrapper
-                disabled={selectedOption !== 'PSID/CandidateID'}
-              />              
+                  type="text"
+                  className="bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2 w-full"
+                  placeholder={selectedOption}
+                  value={searchQuery}
+                  onChange={handleSearchChange} // Use the non-debounced wrapper
+                  disabled={selectedOption !== 'PSID/CandidateID'}
+                />
               )}
               {selectedOption !== 'PSID/CandidateID' && (
                 <>
                   <select
                     value={selectedStatus}
                     onChange={handleStatusChange}
-                    className='bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2'
+                    className='bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2 w-full'
                   >
                     <option value=''>Select Status</option>
                     {statusOptions.map((status, index) => (
@@ -231,11 +226,11 @@ export default function Navbar() {
                 </>
               )}
               {suggestions.length > 0 && (
-                <div ref={suggestionsRef} className='absolute top-9 left-1 bg-white p-1 w-56 border border-gray-300 rounded-md'>
+                <div ref={suggestionsRef} className='absolute top-9 left-1 bg-white p-1 w-full md:w-56 border border-gray-300 rounded-md'>
                   {suggestions.map((suggestion) => (
                     <div
                       key={suggestion.id || suggestion.id || suggestion.onboardingStatus}
-                      className='cursor-pointer'
+                      className='cursor-pointer border-b-2 border-gray-400 p-1'
                       onClick={() => handleSuggestionClick(suggestion.id || suggestion.id || suggestion.onboardingStatus)}
                     >
                       <p className='text-sm'>Name: {suggestion.firstName} {suggestion.lastName}</p>
@@ -255,31 +250,6 @@ export default function Navbar() {
               onClick={selectedOption === 'PSID/CandidateID' ? null : handleSearch}
             />
           </div>
-          {/* <div
-            className='relative popup-trigger'
-            onMouseEnter={() => setHoverPopup('notification')}
-            onMouseLeave={() => setHoverPopup(null)}
-            onClick={() => togglePopup('notification')}
-          >
-            <div
-              className='p-1 md:p-2 rounded-full bg-gray-200 hover:bg-gray-300 duration-300 cursor-pointer'
-            >
-              <FaBell className='text-gray-800' />
-            </div>
-            {(activePopup === 'notification' || hoverPopup === 'notification') && (
-              <div className='absolute right-0 mt-1 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300 popup'>
-                <div className='flex justify-end'>
-                  <FaTimes
-                    className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
-                    onClick={() => setActivePopup(null)}
-                  />
-                </div>
-                <h1 className='text-lg md:text-xl font-bold mb-2'>Lorem Ipsum</h1>
-                <p className='text-gray-700 mb-2'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <p className='text-gray-700'>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-              </div>
-            )}
-          </div> */}
           <div
             className='relative popup-trigger'
             onMouseEnter={() => setHoverPopup('user')}
@@ -292,7 +262,7 @@ export default function Navbar() {
               <FaUser className='text-gray-800' />
             </div>
             {(activePopup === 'user' || hoverPopup === 'user') && (
-              <div className='absolute right-0 mt-1 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300 popup'>
+              <div className='absolute right-[-1vw] mt-[0.15vw] w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300 popup'>
                 <div className='flex justify-end'>
                   <FaTimes
                     className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
@@ -325,7 +295,7 @@ export default function Navbar() {
               <FiAlignJustify className='text-gray-800' />
             </div>
             {(activePopup === 'menu' || hoverPopup === 'menu') && (
-              <div className='absolute right-0 mt-1 w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300 popup'>
+              <div className='absolute right-[-1vw] mt-[0.15vw] w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300 popup'>
                 <div className='flex justify-end'>
                   <FaTimes
                     className='text-gray-800 hover:text-gray-400 duration-300 cursor-pointer'
