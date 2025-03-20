@@ -18,6 +18,13 @@ const LandingPage = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
+    console.log('State object:', state); // Log the state object to debug
+    console.log('ID:', id);
+    console.log('Search Type:', searchType);
+    console.log('Status:', status);
+  }, [state]);
+
+  useEffect(() => {
     setCurrentPage(0);
   }, [rowsPerPage]);
 
@@ -94,21 +101,6 @@ const LandingPage = () => {
             </button>
           </div>
         </div>
-        {/* <div>
-          <label htmlFor="rowsPerPage">Select rows: </label>
-          <select
-            id="rowsPerPage"
-            value={rowsPerPage}
-            onChange={(e) => setRowsPerPage(Number(e.target.value))}
-          >
-            {[...Array(10).keys()].map((num) => (
-              <option key={num + 1} value={num + 1}>
-                {num + 1}
-              </option> 
-            ))}
-          </select>
-        </div> */}
-
         <div>
           <label htmlFor="rowsPerPage">Select rows: </label>
           <select
@@ -175,17 +167,17 @@ const LandingPage = () => {
         {/* Pagination Controls */}
         <div className='flex justify-between mt-4'>
           <button
-            className='bg-gray-500 text-white py-2 px-4 rounded'
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
+            className='bg-gray-500 text-white py-2 px-4 rounded disabled:opacity-50'
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+            disabled={currentPage === 0} 
           >
             Previous
           </button>
           <span className='py-2 px-4'>Page {currentPage + 1} of {totalPages}</span>
           <button
-            className='bg-gray-500 text-white py-2 px-4 rounded'
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
+            className='bg-gray-500 text-white py-2 px-4 rounded disabled:opacity-50'
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
+            disabled={currentPage === totalPages - 1} 
           >
             Next
           </button>
@@ -194,5 +186,4 @@ const LandingPage = () => {
     </div>
   );
 };
-
 export default LandingPage;
