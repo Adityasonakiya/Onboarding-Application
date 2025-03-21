@@ -59,13 +59,27 @@ const SelectionTrackerDashboard = ({ user }) => {
         }));
 
         const filteredSelections = applyFilter(processedSelections, filter, fromDate, toDate, 'hsbcselectionDate');
+        const sortedSelections = filteredSelections.sort((a, b) => b.total - a.total);
+        
+        if (filteredSelections.length > 0) {
+        const topSelections = sortedSelections.slice(0, 4);
+        const otherSelections = sortedSelections.slice(4);
+        const otherTotal = otherSelections.reduce((sum, selection) => sum + selection.total, 0);
+
         setSelections(filteredSelections);
         const pieChartData = {
-          labels: filteredSelections.map(selection => selection.lobName),
-          values: filteredSelections.map(selection => selection.total),
+          labels: [
+            ...topSelections.map(selection => selection.lobName),
+            'Other',
+          ],
+          values: [
+            ...topSelections.map(selection => selection.total),
+            otherTotal,
+          ],
         };
+    
         setChartData(pieChartData);
-      })
+      }})
       .catch(error => {
         console.error('Error fetching selections data:', error);
       });
@@ -295,7 +309,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                   <input type="date" name="toDate" value={toDate} onChange={handleDateChange} className="p-2 border h-[2.2vw] border-gray-400 rounded-full" disabled={!fromDate} />
                 </label>
               </div>
-              
+
             </div>
           </div>
         </div>
@@ -344,7 +358,7 @@ const SelectionTrackerDashboard = ({ user }) => {
           </div>
           <section className="mb-8">
             <div className="flex items-center py-2 gap-[1vw]">
-              
+
               <h2 className="font-semibold text-lg">CTool Clear Cases</h2>
               <button
                 onClick={() =>
