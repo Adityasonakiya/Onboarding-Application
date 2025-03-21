@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchEmployeeCandidates, getCandidateById, getEmployeeByPsid, getEmployeeCandidateByPsid } from '../services/api';
+import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -42,6 +43,30 @@ const LandingPage = () => {
 
   const handleViewOnly = (id) => {
     navigate('/selection-tracker', { state: { id, readOnly: true } }); // Pass the readOnly flag
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    const startPage = Math.max(0, currentPage - 2);
+    const endPage = Math.min(totalPages - 1, currentPage + 2);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          className={`py-2 px-4 ${i === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+          onClick={() => handlePageChange(i)}
+        >
+          {i + 1}
+        </button>
+      );
+    }
+
+    return pageNumbers;
   };
 
   useEffect(() => {
@@ -165,21 +190,35 @@ const LandingPage = () => {
           </table>
         </div>
         {/* Pagination Controls */}
-        <div className='flex justify-between mt-4'>
+        <div className='flex justify-center mt-4 space-x-2'>
           <button
-            className='bg-gray-500 text-white py-2 px-4 rounded disabled:opacity-50'
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
-            disabled={currentPage === 0} 
+            className='bg-gray-500 text-white py-2 px-4 rounded-full hover:bg-gray-600'
+            onClick={() => handlePageChange(0)}
+            disabled={currentPage === 0}
           >
-            Previous
+            <FaAngleDoubleLeft />
           </button>
-          <span className='py-2 px-4'>Page {currentPage + 1} of {totalPages}</span>
           <button
-            className='bg-gray-500 text-white py-2 px-4 rounded disabled:opacity-50'
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
-            disabled={currentPage === totalPages - 1} 
+            className='bg-gray-500 text-white py-2 px-4 rounded-full hover:bg-gray-600'
+            onClick={() => handlePageChange(Math.max(currentPage - 1, 0))}
+            disabled={currentPage === 0}
           >
-            Next
+            <FaAngleLeft />
+          </button>
+          {renderPageNumbers()}
+          <button
+            className='bg-gray-500 text-white py-2 px-4 rounded-full hover:bg-gray-600'
+            onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages - 1))}
+            disabled={currentPage === totalPages - 1}
+          >
+            <FaAngleRight />
+          </button>
+          <button
+            className='bg-gray-500 text-white py-2 px-4 rounded-full hover:bg-gray-600'
+            onClick={() => handlePageChange(totalPages - 1)}
+            disabled={currentPage === totalPages - 1}
+          >
+            <FaAngleDoubleRight />
           </button>
         </div>
       </div>
