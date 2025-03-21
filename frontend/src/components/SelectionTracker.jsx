@@ -219,7 +219,10 @@ function SelectionTracker() {
   const fetchSelectionDetailsByPsid = async (psid) => {
     try {
       const selectionDetails = await getSelectionDetailsByPsId(psid);
-      const taggingDetails = await getTaggingDetailsByPsId(psid);
+      const taggingDetails = await getTaggingDetailsByPsId(psid).catch((err) => {
+                console.error("Error fetching tagging details:", err);
+                return {}; // Fallback to an empty object
+              })
         setForm((prevForm) => ({
           ...prevForm,
           selectionDate: formatDate(selectionDetails.hsbcselectionDate),
