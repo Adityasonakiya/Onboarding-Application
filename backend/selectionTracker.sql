@@ -32,7 +32,7 @@ VALUES
 (10830009, 'Kiran', NULL, 'Patil', 'P2', 'Bangalore', 'Backend Developer', 2, 'BB', 'kiran.patil@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
 (10830010, 'Megha', NULL, 'Sharma', 'P3', 'Chennai', 'Fullstack Developer', 3, 'BB', 'megha.sharma@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
 (10830011, 'Suresh', NULL, 'Kumar', 'P4', 'Delhi', 'Network Engineer', 5, 'BB', 'suresh.kumar@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
-(10830012, 'Anjali', NULL, 'Verma', 'P1', 'Pune', 'QA Tester', 1, 'BB', 'anjali.verma@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
+-- (10830012, 'Anjali', NULL, 'Verma', 'P1', 'Pune', 'QA Tester', 1, 'BB', 'anjali.verma@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
 (10830013, 'Vivek', NULL, 'Singh', 'P2', 'Hyderabad', 'Database Administrator', 2, 'BB', 'vivek.singh@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
 (10830014, 'Pooja', NULL, 'Rao', 'P3', 'Mumbai', 'UI/UX Designer', 3, 'BB', 'pooja.rao@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
 (10830015, 'Aakash', NULL, 'Mishra', 'P4', 'Bangalore', 'Cloud Engineer', 4, 'BB', 'aakash.mishra@ltimindtree.com', 10713037, 10713037, NOW(), NOW());
@@ -48,7 +48,7 @@ VALUES
 (10830009, 'Kiran', NULL, 'Patil', '2024-10-15', 10713037, 10713037, '2024-10-15', NOW()),
 (10830010, 'Megha', NULL, 'Sharma', '2024-10-20', 10713037, 10713037, '2024-10-20', NOW()),
 (10830011, 'Suresh', NULL, 'Kumar', '2024-10-25', 10713037, 10713037, '2024-10-25', NOW()),
-(10830012, 'Anjali', NULL, 'Verma', '2024-10-30', 10713037, 10713037, '2024-10-30', NOW()),
+-- (10830012, 'Anjali', NULL, 'Verma', '2024-10-30', 10713037, 10713037, '2024-10-30', NOW()),
 (10830013, 'Vivek', NULL, 'Singh', '2024-11-05', 10713037, 10713037, '2024-11-05', NOW());
 
 
@@ -225,10 +225,10 @@ VALUES
 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108943, '2025-12-02', 'TM', 
 'Delhi', 130, 130, 'Nishant Sharma', NULL, 'Release', 
 '2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
-(10830012, NULL, 'Mayuresh Nirantar', 14, 114, 10825932, 10713037, 10713037, '2025-03-21', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108944, '2025-12-02', 'TM', 
-'Bangalore', 140, 140, 'Nishant Sharma', NULL, 'WIP', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
+-- (10830012, NULL, 'Mayuresh Nirantar', 14, 114, 10825932, 10713037, 10713037, '2025-03-21', 
+-- 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108944, '2025-12-02', 'TM', 
+-- 'Bangalore', 140, 140, 'Nishant Sharma', NULL, 'WIP', 
+-- '2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
 (10830013, NULL, 'Saber Sarode', 15, 115, 10825932, 10713037, 10713037, '2025-03-18', 
 'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108945, '2025-12-02', 'TM', 
 'Hyderabad', 150, 150, 'Nishant Sharma', NULL, 'Pending', 
@@ -249,10 +249,10 @@ VALUES
 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108949, '2025-12-02', 'TM', 
 'Bangalore', 190, 190, 'Nishant Sharma', NULL, 'Release', 
 '2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
-(10830012, NULL, 'Saber Sarode', 9, 79, 10825932, 10713037, 10713037, '2025-01-20', 
-'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108950, '2025-12-02', 'TM', 
-'Hyderabad', 200, 200, 'Nishant Sharma', NULL, 'WIP', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW());
+-- (10830012, NULL, 'Saber Sarode', 9, 79, 10825932, 10713037, 10713037, '2025-01-20', 
+-- 'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108950, '2025-12-02', 'TM', 
+-- 'Hyderabad', 200, 200, 'Nishant Sharma', NULL, 'WIP', 
+-- '2024-12-23', NULL, NULL, NULL, NOW(), NOW());
 
 
 INSERT INTO tagging_details 
@@ -274,7 +274,7 @@ VALUES
 (10830009, NULL, 4, 4, 10713037, 10713037, 'Major discrepancy found', NOW(), '2025-02-28'),
 (10830010, NULL, 5, 6, 10713037, 10713037, 'Offer yet to be released', NOW(), '2025-01-01'),
 (10830011, NULL, 6, 6, 10713037, 10713037, 'Interim cleared', NOW(), '2025-01-22'),
-(10830012, NULL, 7, 3, 10713037, 10713037, 'Pending with employee', NOW(), '2025-01-05'),
+-- (10830012, NULL, 7, 3, 10713037, 10713037, 'Pending with employee', NOW(), '2025-01-05'),
 (10830013, NULL, 8, 5, 10713037, 10713037, 'BGV initiated', NOW(), '2025-02-11'),
 (NULL, 10830008, 9, 2, 10713037, 10713037, 'BGV in progress', NOW(), '2025-01-18'),
 (10830014, NULL, 10, 7, 10713037, 10713037, 'Minor discrepancy found', NOW(), '2025-02-02');
