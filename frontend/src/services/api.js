@@ -176,7 +176,8 @@ export const fetchSubLob = async(subLobId)=>{
     return response.json();
 };
 export const fetchEmployeeCandidates = async (createdBy, page = 0, size = 5) => {
-  const response = await fetch(`http://localhost:8080/employees/api/employee-candidates?createdBy=${createdBy}&page=${page}&size=${size}`);
+  const validPage=Math.max(0,page)
+  const response = await fetch(`http://localhost:8080/employees/api/employee-candidates?createdBy=${createdBy}&page=${validPage}&size=${size}`);
   if (!response.ok) {
     throw new Error('Failed to fetch employee candidates');
   }
