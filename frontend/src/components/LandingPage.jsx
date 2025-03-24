@@ -75,7 +75,7 @@ const LandingPage = () => {
           const employee = await getEmployeeCandidateByPsid(id);
           if (employee && employee.id) {
             setFilteredCandidates([employee]);
-            setTotalPages(1)
+            setTotalPages(1);
             console.log("searched emp2:", employee);
           }
         } else if (searchType && status) {
@@ -92,7 +92,6 @@ const LandingPage = () => {
           console.log("displaying filtered by status");
         } else {
           setFilteredCandidates(content);
-          // setTotalPages(Math.ceil(content.length/rowsPerPage))
           console.log("displaying All");
         }
       } catch (error) {
@@ -106,20 +105,19 @@ const LandingPage = () => {
   }, [id, searchType, status, currentPage, rowsPerPage]);
 
   const handlePageClick = (page) => {
-    if(page!==0){
+    if (page !== 0) {
       setCurrentPage(page - 1);
-  };
     }
+  };
 
   useEffect(() => {
     if (currentPage >= totalPages) {
-      if(currentPage!==0){
+      if (currentPage !== 0) {
         setCurrentPage(totalPages - 1);
-    };
+      }
     }
     console.log("CurrentPage", currentPage);
     console.log("TotalPages", totalPages);
-    // console.log("Select Row", rowsPerPage);
   }, [totalPages, currentPage]);
 
   const renderPagination = () => {
@@ -141,10 +139,9 @@ const LandingPage = () => {
     }
     return pages;
   };
-
   return (
     <div className="w-full px-4 py-6">
-      <div className="mx-4">
+      <div className="mx-4 h-full flex flex-col">
         <div className="flex justify-between flex-wrap">
           <h2 className="py-2 font-bold text-lg">My Selections</h2>
           <div className="flex">
@@ -162,25 +159,12 @@ const LandingPage = () => {
             </button>
           </div>
         </div>
-        <div>
-          <label htmlFor="rowsPerPage">Select rows: </label>
-          <select
-            id="rowsPerPage"
-            value={rowsPerPage}
-            // onChange={(e) => setRowsPerPage(Number(e.target.value))}
-            onChange={handleRowPerChange}
-            className="select-button"
-          >
-            {[5, 10, 20, 50, 100].map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="overflow-x-auto mt-4">
+        <div
+          className="overflow-x-auto mt-4 flex-grow"
+          style={{ maxHeight: "calc(100vh - 200px)", overflowY: "auto" }}
+        >
           <table className="w-full border-collapse">
-            <thead className="bg-gray-200 top-0 z-0">
+            <thead className="bg-gray-200 top-0 z-0 sticky">
               <tr>
                 <th className="p-2 text-center">PSID/External</th>
                 <th className="p-2 text-center">Name</th>
@@ -192,10 +176,9 @@ const LandingPage = () => {
               </tr>
             </thead>
             <tbody>
-            {filteredCandidates.map((candidate) => (
+              {filteredCandidates.map((candidate) => (
                 <tr key={candidate.id}>
                   <td className="p-2 border text-center">
-                    {/* Link for view-only page */}
                     <button
                       className="text-blue-500 underline"
                       onClick={() => handleViewOnly(candidate.id)}
@@ -233,33 +216,54 @@ const LandingPage = () => {
             </tbody>
           </table>
         </div>
-        {/* Pagination Controls */}
-        <div className="flex justify-center mt-4 bottom-0 bg-white py-2 z-10">
-          <button
-            className={`px-3 py-1 mx-1  ${
-              currentPage === 0 ? "text-black font-bold" : "text-gray-900"
-            }`}
-            onClick={() => handlePageClick(1)}
-            disabled={currentPage === 0}
-          >
-            {"<<"}
-          </button>
-          <Pagination
-            count={totalPages}
-            page={currentPage + 1}
-            onChange={(e, value) => handlePageClick(value)}
-            siblingCount={1}
-            boundaryCount={1}
-          />
-          <button
-            className={`px-3 py-1 mx-1 ${
-              currentPage === totalPages-1 ? " text-black font-bold" : "text-gray-900"
-            }`}
-            onClick={() => handlePageClick(totalPages)}
-            disabled={currentPage === totalPages - 1}
-          >
-            {">>"}
-          </button>
+        {/* Pagination and Select Rows Controls */}
+        <div className="fixed bottom-0 left-0 w-full bg-white py-2 z-10 flex justify-between items-center px-4">
+          <div className="flex justify-center flex-grow">
+            <button
+              className={`px-3 py-1 mx-1 ${
+                currentPage === 0 ? "text-black font-bold" : "text-gray-900"
+              }`}
+              onClick={() => handlePageClick(1)}
+              disabled={currentPage === 0}
+            >
+              {"<<"}
+            </button>
+            <Pagination
+              count={totalPages}
+              page={currentPage + 1}
+              onChange={(e, value) => handlePageClick(value)}
+              siblingCount={1}
+              boundaryCount={1}
+            />
+            <button
+              className={`px-3 py-1 mx-1 ${
+                currentPage === totalPages - 1
+                  ? " text-black font-bold"
+                  : "text-gray-900"
+              }`}
+              onClick={() => handlePageClick(totalPages)}
+              disabled={currentPage === totalPages - 1}
+            >
+              {">>"}
+            </button>
+          </div>
+          <div className="flex items-center ml-auto mr-8">
+            <label htmlFor="rowsPerPage" className="mr-5 font-bold">
+              Select rows:
+            </label>
+            <select
+              id="rowsPerPage"
+              value={rowsPerPage}
+              onChange={handleRowPerChange}
+              className="select-button p-1 border border-gray-300 rounded shadow"
+            >
+              {[5, 10, 20, 50, 100].map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
     </div>
