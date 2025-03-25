@@ -27,10 +27,8 @@ function UpdateDetails() {
   const [lobs, setLobs] = useState([]);
   const [errors, setErrors] = useState({});
   const [subLobs, setSubLobs] = useState([]);
-  // const [Lob, setLob] = useState([]);
   const [subLob, setSubLob] = useState([]);
-  const [selectedLob, setSelectedLob] = useState("");
-  const [selectedSubLob, setSelectedSubLob] = useState("");
+  const [selectedSubLobTemp,setSelectedSubLobTemp]=useState({});
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
@@ -68,13 +66,28 @@ function UpdateDetails() {
     };
 
     getLobs();
+    
   }, []);
 
-  const handleLobChange = async (event) => {
-    const lobId = event.target.value;
-    setSelectedLob(lobId);
-    console.log("LOB: ", lobId);
+  useEffect(() => {
+      const getSubLobs = async () => {
+        try {
+          const data = await fetchSubLobs(form.lob.lobId);
+          setSubLobs(data);         
+          form.subLob = selectedSubLobTemp;
+        } catch (error) {
+              console.error("There was an error fetching the SubLOBs!", error);
+        }
+      };
+      getSubLobs();
+    
+  }, [form.lob]);
 
+  const handleLobChange = async (event) => {
+    setSelectedSubLobTemp({});
+    const lobId = event.target.value;
+    console.log("LOB: ", lobId);
+    form.lob.lobId = event.target.value;
 
     try {
       const data = await fetchSubLobs(lobId);
@@ -86,8 +99,8 @@ function UpdateDetails() {
 
   const handleSubLobChange = async (event) => {
     const subLobId = event.target.value;
-    setSelectedSubLob(subLobId);
     console.log("subLOB: ", subLobId);
+    form.subLob.subLOBid = event.target.value;
 
     try {
       const data = await fetchSubLob(subLobId);
@@ -116,9 +129,9 @@ function UpdateDetails() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const isValidDate = (dateString) => {
-      return moment(dateString, "YYYY-MM-DD", true).isValid();
-    };
+    // const isValidDate = (dateString) => {
+    //   return moment(dateString, "YYYY-MM-DD", true).isValid();
+    // };
 
     // if (!isValidDate(form.tagDate)) {
     //   console.error("Invalid date format for tagDate");
@@ -146,7 +159,7 @@ function UpdateDetails() {
     const selectionDetails = {
       hsbcselectionDate: form.selectionDate,
       baseBU: form.bu,
-      lob: subLob.lob,
+      lob: form.lob,
       subLob: subLob,
       hsbchiringManager: form.hiringManager,
       hsbchead: form.head,
@@ -174,7 +187,7 @@ function UpdateDetails() {
     if (isInternal && psId) {
       updateSelectionDetailsByPsId(psId, selectionDetails)
         .then(() => {
-          updateTaggingDetailsByPsId(psId, taggingDetails)&&
+          updateTaggingDetailsByPsId(psId, taggingDetails) &&
             toast.success("Details updated successfully!", {
               position: "top-right",
             });
@@ -271,6 +284,8 @@ function UpdateDetails() {
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
           });
+          console.log(selectionData);
+          setSelectedSubLobTemp(selectionData.subLob);
         })
         .catch((error) => {
           console.error("Error in Promise.all:", error);
@@ -294,7 +309,7 @@ function UpdateDetails() {
             selectionDate: formatDate(selectionData.hsbcselectionDate),
             bu: "BF",
             lob: selectionData.lob,
-            subLob: selectionData.sublob,
+            subLob: selectionData.subLob,
             hiringManager: selectionData.hsbchiringManager,
             head: selectionData.hsbchead,
             deliveryManager: selectionData.deliveryManager,
@@ -518,8 +533,6 @@ function UpdateDetails() {
                 Selection Details
               </h4>
               <div className="overflow-x-auto">
-                {/* <table className="w-full border-collapse">
-            <tbody> */}
                 <tr className="flex flex-wrap md:flex-nowrap">
                   <td className="p-2 w-full md:w-1/4">
                     <label className="font-semibold">
@@ -557,12 +570,12 @@ function UpdateDetails() {
                   </td>
                   <td className="p-2 w-full md:w-1/4">
                     <select
-                      //value={form.lob || ""}
+                      value={form.lob?.lobId || ""}
                       onChange={handleLobChange}
                       name="lob"
                       className="p-2 bordered w-full"
                     >
-                      <option value="">Select LOB</option>
+                      <option value="">Choose...</option>
                       {lobs.map((lob) => (
                         <option key={lob.lobId} value={lob.lobId}>
                           {lob.lobName}
@@ -578,11 +591,11 @@ function UpdateDetails() {
                   <td className="p-2 w-full md:w-1/4">
                     <select
                       name="subLob"
-                      //value={subLob || ""}
+                      value={form.subLob?.subLOBid ||''}
                       className="p-2 bordered w-full"
                       onChange={handleSubLobChange}
                     >
-                      <option value="0">Choose SubLOB</option>
+                      <option value="">Choose...</option>
                       {subLobs.map((subLob) => (
                         <option key={subLob.subLOBid} value={subLob.subLOBid}>
                           {subLob.subLobName}
