@@ -248,7 +248,7 @@ VALUES
 (NULL, 10830011, 'Mayuresh Nirantar', 8, 18, 10825932, 10713037, 10713037, '2025-01-30', 
 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108949, '2025-12-02', 'TM', 
 'Bangalore', 190, 190, 'Nishant Sharma', NULL, 'Release', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
+'2024-12-23', NULL, NULL, NULL, NOW(), NOW());
 -- (10830012, NULL, 'Saber Sarode', 9, 79, 10825932, 10713037, 10713037, '2025-01-20', 
 -- 'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108950, '2025-12-02', 'TM', 
 -- 'Hyderabad', 200, 200, 'Nishant Sharma', NULL, 'WIP', 

@@ -114,23 +114,17 @@ public class SelectionDetailsService {
     }
 
     public SelectionDetails createSelectionDetails_Employee(SelectionDetails details) {
-        // int psid = details.getEmployee().getPsid();
-        // if (selectionDetailsRepository.existsByEmployee_Psid(psid) && taggingDetailsService.getTaggingDetailsByPsId(psid).getOnboardingStatus().getStatusId()!=6) {
-        //     throw new RuntimeException("Selection already exists");
-        // } else {
-            // TaggingDetails td = taggingDetailsService.getTaggingDetailsByPsId(psid);
-            // bs.setBgvStatusId(1);os.setStatusId(1);
-            // td.setBgvStatus(bs);
-            // td.setOnboardingStatus(os);;
-            // taggingDetailsService.updateTaggingDetailsByPsId(psid, td);
-            // taggingDetailsService.getTaggingDetailsByPsId(psid).getOnboardingStatus().setStatusId(1);
+        int psid = details.getEmployee().getPsid();
+        if (selectionDetailsRepository.existsByEmployee_Psid(psid) && taggingDetailsService.getTaggingDetailsByPsId(psid).getOnboardingStatus().getStatusId()!=6) {
+            throw new RuntimeException("Selection already exists");
+        } else {
             details.setCreateDate(new Date());
             details.setUpdateDate(new Date());
             details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             System.out.println("Dates" + details.getCreateDate() + details.getUpdateDate());
             return selectionDetailsRepository.save(details);
-        //}
+        }
     }
 
     public SelectionDetails createSelectionDetails_Candidate(SelectionDetails details) {

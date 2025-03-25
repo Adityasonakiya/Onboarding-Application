@@ -27,8 +27,7 @@ function SelectionTracker() {
   const [subLobs, setSubLobs] = useState([]);
   //const [Lob, setLob] = useState([]);
   const [subLob, setSubLob] = useState([]);
-  const [selectedLob, setSelectedLob] = useState("");
-  const [selectedSubLob, setSelectedSubLob] = useState("");
+  const [selectedSubLobTemp,setSelectedSubLobTemp]=useState({});
   const location = useLocation();
   const { state } = location;
   // const id = state?.id;
@@ -128,40 +127,47 @@ function SelectionTracker() {
     getLobs();
   }, []);
 
+    useEffect(() => {
+        const getSubLobs = async () => {
+          try {
+            const data = await fetchSubLobs(form.lob.lobId);
+            setSubLobs(data);         
+            form.subLob = selectedSubLobTemp;
+          } catch (error) {
+                console.error("There was an error fetching the SubLOBs!", error);
+          }
+        };
+        getSubLobs();
+      
+    }, [form.lob]);
+
   const handleLobChange = async (event) => {
-    const lobId = event.target.value;
-    setSelectedLob(lobId);
-    // try {
-    //   const data = await fetchLob(lobId);
-    //   setLob(data);
-    // } catch (error) {
-    //   console.error('There was an error fetching the LOB!', error);
-    // }
-    console.log("LOB: ", lobId);
-    form.lob = subLob.lob;
+      setSelectedSubLobTemp({});
+      const lobId = event.target.value;
+      console.log("LOB: ", lobId);
+      form.lob.lobId = lobId;
+    
+      try {
+        const data = await fetchSubLobs(lobId);
+        setSubLobs(data);
+      } catch (error) {
+        console.error("There was an error fetching the SubLOBs!", error);
+      }
+    };
+  
+    const handleSubLobChange = async (event) => {
+      const subLobId = event.target.value;
+      console.log("subLOB: ", subLobId);
+      form.subLob.subLOBid = subLobId;
 
-    try {
-      const data = await fetchSubLobs(lobId);
-      setSubLobs(data);
-    } catch (error) {
-      console.error("There was an error fetching the SubLOBs!", error);
-    }
-  };
-
-  const handleSubLobChange = async (event) => {
-    const subLobId = event.target.value;
-    setSelectedSubLob(subLobId);
-
-    console.log("subLOB: ", subLobId);
-    form.subLob = subLob;
-
-    try {
-      const data = await fetchSubLob(subLobId);
-      setSubLob(data);
-    } catch (error) {
-      console.error("There was an error fetching the SubLOB!", error);
-    }
-  };
+      try {
+        const data = await fetchSubLob(subLobId);
+        setSubLob(data);
+      } catch (error) {
+        console.error("There was an error fetching the SubLOB!", error);
+      }
+    };
+  
 
   const validate = () => {
     const errors = {};
@@ -227,8 +233,8 @@ function SelectionTracker() {
           ...prevForm,
           selectionDate: formatDate(selectionDetails.hsbcselectionDate),
           bu: "BF",
-          lob: selectionDetails.lob,
-          subLob: selectionDetails.sublob,
+          lob: selectionDetails.lob || "",
+          subLob: selectionDetails.sublob || "",
           hiringManager: selectionDetails.hsbchiringManager,
           head: selectionDetails.hsbchead,
           deliveryManager: selectionDetails.deliveryManager,
@@ -245,6 +251,7 @@ function SelectionTracker() {
           offerReleaseStatus: selectionDetails.offerReleaseStatus,
           ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
         }));
+        setSelectedSubLobTemp(selectionDetails.subLob);
         if(!readOnly && (taggingDetails.onboardingStatus.onboardingStatus !== 'Onboarding Completed')) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -261,13 +268,15 @@ function SelectionTracker() {
   const fetchSelectionDetailsByCandidateId = async (candidateId) => {
     try {
       const selectionDetails = await getSelectionDetailsByCandidateId(
-        candidateId
-      );
-      if (readOnly) {
+        candidateId);
+        const taggingDetails = await getTaggingDetailsByPsId(candidateId).catch((err) => {
+          console.error("Error fetching tagging details:", err);
+          return {}; // Fallback to an empty object
+        })
         setForm((prevForm) => ({
           ...prevForm,
           selectionDate: formatDate(selectionDetails.hsbcselectionDate),
-          bu: selectionDetails.baseBU,
+          bu: "BF",
           lob: selectionDetails.lob,
           subLob: selectionDetails.sublob,
           hiringManager: selectionDetails.hsbchiringManager,
@@ -286,14 +295,15 @@ function SelectionTracker() {
           offerReleaseStatus: selectionDetails.offerReleaseStatus,
           ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
         }));
-      } else {
-        toast.error("Selection already exists for this ID.", {
-          position: "top-right",
-        });
-        setTimeout(() => {
-          window.location.reload();
-        }, 2500);
-      }
+        setSelectedSubLobTemp(selectionDetails.subLob);
+        if(!readOnly && (taggingDetails.onboardingStatus.onboardingStatus !== 'Onboarding Completed')) {
+          toast.error("Selection already exists for this ID.", {
+            position: "top-right",
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 2500);
+        }
     } catch (error) {
       console.error(error);
     }
@@ -315,7 +325,6 @@ function SelectionTracker() {
 
     const errors = validate();
     if (Object.keys(errors).length === 0) {
-      console.log(selectedLob);
       try {
         const requestBody = {
           hsbcselectionDate: form.selectionDate,
@@ -339,7 +348,7 @@ function SelectionTracker() {
           offerReleaseStatus: form.offerReleaseStatus,
           ltionboardingDate: form.ltiOnboardDate,
         };
-
+        console.log(requestBody);
         if (form.psId) {
           requestBody.employee = { psid: form.psId };
           const response = await fetch(
@@ -352,6 +361,7 @@ function SelectionTracker() {
               body: JSON.stringify(requestBody),
             }
           );
+          console.log(response);
           if (response.ok) {
             // Simulate successful creation of selection details for the employee or candidate
             toast.success("Details updated successfully!", {
@@ -368,6 +378,9 @@ function SelectionTracker() {
           } else {
             const errorData = await response.json();
             setErrors({ submit: errorData.message });
+            toast.error("Error adding details:", {
+              position: "top-right",
+            });
           }
         } else if (form.candidateId) {
           requestBody.candidate = { candidateId: form.candidateId };
@@ -397,16 +410,22 @@ function SelectionTracker() {
           } else {
             const errorData = await response.json();
             setErrors({ submit: errorData.message });
+            toast.error("Error adding details:", {
+              position: "top-right",
+            });
           }
         }
       } catch (error) {
+        setErrors({ submit: "An error occurred while submitting the form" });
         toast.error("Error adding details:", {
           position: "top-right",
         });
-        setErrors({ submit: "An error occurred while submitting the form" });
       }
     } else {
       setErrors(errors);
+      toast.error("Error adding details:", {
+        position: "top-right",
+      });
     }
   };
 
@@ -463,8 +482,6 @@ function SelectionTracker() {
                     className={`p-2 border rounded w-full ${
                       errors.psId ? "border-red-500" : ""
                     }`}
-                    //required
-                    //className="p-2 border rounded w-full"
                     disabled={!isInternal || readOnly}
                     pattern="\d*"
                   />
@@ -482,7 +499,6 @@ function SelectionTracker() {
                     type="number"
                     name="candidateId"
                     value={form.candidateId || ""}
-                    //onChange={handleChange}
                     onChange={(e) => handleChange(e)}
                     onBlur={(e) =>
                       fetchSelectionDetailsByCandidateId(e.target.value)
@@ -490,7 +506,6 @@ function SelectionTracker() {
                     className={`p-2 border rounded w-full ${
                       errors.candidateId ? "border-red-500" : ""
                     }`}
-                    //className="p-2 border rounded w-full"
                     disabled={isInternal}
                   />
                   {errors.candidateId && (
@@ -664,13 +679,13 @@ function SelectionTracker() {
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
-                    //value={form.lob || ""}
+                    value={form.lob?.lobId || ""}
                     onChange={handleLobChange}
                     name="lob"
                     className="p-2 bordered w-full"
                     disabled={isReadOnly}
                   >
-                    <option value="">Select LOB</option>
+                    <option value="">Choose...</option>
                     {lobs.map((lob) => (
                       <option key={lob.lobId} value={lob.lobId}>
                         {lob.lobName}
@@ -686,12 +701,12 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <select
                     name="subLob"
-                    //value={form.subLob || ""}
+                    value={form.subLob?.subLOBid ||''}
                     className="p-2 bordered w-full"
                     onChange={handleSubLobChange}
                     disabled={isReadOnly}
                   >
-                    <option value="0">Choose SubLOB</option>
+                    <option value="0">Choose...</option>
                     {subLobs.map((subLob) => (
                       <option key={subLob.subLOBid} value={subLob.subLOBid}>
                         {subLob.subLobName}
