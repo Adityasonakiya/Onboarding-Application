@@ -6,6 +6,8 @@ import {
   fetchEmployeeCandidates,
   getCandidateById,
   getEmployeeByPsid,
+  getEmployeeCandidateByBgv,
+  getEmployeeCandidateByCtool,
   getEmployeeCandidateByPsid,
 } from "../services/api";
 
@@ -58,19 +60,30 @@ const LandingPage = () => {
     const getEmployeeCandidates = async () => {
       const user = JSON.parse(localStorage.getItem("user")).psid;
       try {
-        const { content, totalPages } = await fetchEmployeeCandidates(
-          user,
-          currentPage,
-          rowsPerPage
-        );
+        let content = [];
+        let totalPages = 0;
+  
+        if (searchType === "ctool" && status) {
+          const response = await getEmployeeCandidateByCtool(status);
+          content = response;
+          totalPages = response.totalPages;
+        } else if (searchType === "bgv" && status) {
+          const response = await getEmployeeCandidateByBgv(status);
+          content = response;
+          totalPages = response.totalPages;
+        } else {
+          const response = await fetchEmployeeCandidates(user, currentPage, rowsPerPage);
+          content = response.content;
+          totalPages = response.totalPages;
+        }
+  
         setEmployeeCandidates(content);
         setTotalPages(totalPages);
         setFilteredCandidates(content);
         console.log("dashboard data: ", content);
-
+  
         if (id) {
           const filtered = content.filter((candidate) => candidate.id === id);
-          // setFilteredCandidates(filtered);
           console.log("displaying filtered by ID");
           const employee = await getEmployeeCandidateByPsid(id);
           if (employee && employee.id) {
@@ -78,27 +91,13 @@ const LandingPage = () => {
             setTotalPages(1);
             console.log("searched emp2:", employee);
           }
-        } else if (searchType && status) {
-          const filtered = content.filter((candidate) => {
-            if (searchType === "ctool") {
-              return candidate.onboardingStatus === status;
-            } else if (searchType === "bgv") {
-              return candidate.bgvStatus === status;
-            }
-            return false;
-          });
-          setFilteredCandidates(filtered);
-          // setTotalPages(Math.ceil(filtered.length/rowsPerPage))
-          console.log("displaying filtered by status");
-        } else {
+        } 
+        else {
           setFilteredCandidates(content);
           console.log("displaying All");
         }
       } catch (error) {
-        console.error(
-          "There was an error fetching the employee candidates!",
-          error
-        );
+        console.error("There was an error fetching the employee candidates!", error);
       }
     };
     getEmployeeCandidates();
