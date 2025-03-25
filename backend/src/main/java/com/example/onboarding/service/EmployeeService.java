@@ -64,4 +64,12 @@ public class EmployeeService {
         return employeeRepository.searchByPsidOrCandidateId(query);
     }
 
+    public List<EmployeeCandidateDTO> getCandidatesByOnboardingStatus(String onboardingStatus) {
+        return employeeRepository.findByOnboardingStatus(onboardingStatus);
+    }
+
+    public List<EmployeeCandidateDTO> getCandidatesByBgvStatus(String bgvStatus) {
+        return employeeRepository.findByBgvStatus(bgvStatus);
+    }
+
 }
