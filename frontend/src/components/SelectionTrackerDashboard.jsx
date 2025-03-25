@@ -60,26 +60,27 @@ const SelectionTrackerDashboard = ({ user }) => {
 
         const filteredSelections = applyFilter(processedSelections, filter, fromDate, toDate, 'hsbcselectionDate');
         const sortedSelections = filteredSelections.sort((a, b) => b.total - a.total);
-        
-        if (filteredSelections.length > 0) {
-        const topSelections = sortedSelections.slice(0, 4);
-        const otherSelections = sortedSelections.slice(4);
-        const otherTotal = otherSelections.reduce((sum, selection) => sum + selection.total, 0);
 
-        setSelections(filteredSelections);
-        const pieChartData = {
-          labels: [
-            ...topSelections.map(selection => selection.lobName),
-            'Other',
-          ],
-          values: [
-            ...topSelections.map(selection => selection.total),
-            otherTotal,
-          ],
-        };
-    
-        setChartData(pieChartData);
-      }})
+        if (filteredSelections.length > 0) {
+          const topSelections = sortedSelections.slice(0, 4);
+          const otherSelections = sortedSelections.slice(4);
+          const otherTotal = otherSelections.reduce((sum, selection) => sum + selection.total, 0);
+
+          setSelections(filteredSelections);
+          const pieChartData = {
+            labels: [
+              ...topSelections.map(selection => selection.lobName),
+              'Other',
+            ],
+            values: [
+              ...topSelections.map(selection => selection.total),
+              otherTotal,
+            ],
+          };
+          console.log("pieChartData", pieChartData);
+          setChartData(pieChartData);
+        }
+      })
       .catch(error => {
         console.error('Error fetching selections data:', error);
       });
@@ -261,7 +262,7 @@ const SelectionTrackerDashboard = ({ user }) => {
 
   return (
     <div>
-      <Navbar user={user} />
+      <Navbar user={user} className="navbar" />
       <div className="w-full px-8 py-16">
         <h1 className="mt-8 py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">
           HSBC Selection Tracker Dashboard
@@ -352,9 +353,10 @@ const SelectionTrackerDashboard = ({ user }) => {
               </div>
             </section>
             <div className="flex-grow"></div> {/* Spacer */}
-            <section className="w-1/3">
+            <section className="w-1/3" style={{ zIndex: 1, position: "relative" }}>
               <PieChart data={chartData} />
             </section>
+
           </div>
           <section className="mb-8">
             <div className="flex items-center py-2 gap-[1vw]">
