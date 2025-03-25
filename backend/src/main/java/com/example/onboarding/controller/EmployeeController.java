@@ -80,5 +80,19 @@ public class EmployeeController {
         List<EmployeeCandidateDTO> results = employeeService.searchById(query);
         return ResponseEntity.ok(results);
     }
+
+    @GetMapping("/onboarding-status")
+    public ResponseEntity<List<EmployeeCandidateDTO>> getCandidatesByOnboardingStatus(
+            @RequestParam("status") String onboardingStatus) {
+        List<EmployeeCandidateDTO> candidates = employeeService.getCandidatesByOnboardingStatus(onboardingStatus);
+        return ResponseEntity.ok(candidates);
+    }
+
+    @GetMapping("/bgv-status")
+    public ResponseEntity<List<EmployeeCandidateDTO>> getCandidatesByBgvStatus(
+            @RequestParam("status") String bgvStatus) {
+        List<EmployeeCandidateDTO> candidates = employeeService.getCandidatesByBgvStatus(bgvStatus);
+        return ResponseEntity.ok(candidates);
+    }
 }
 
