@@ -184,3 +184,18 @@ export const fetchEmployeeCandidates = async (createdBy, page = 0, size = 5) => 
   return response.json();
 };
 
+export const getEmployeeCandidateByCtool = async (ctool) => {
+  const response = await fetch(`http://localhost:8080/employees/onboarding-status?status=${ctool}`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error('Failed to fetch Employees by Ctool');
+};
+
+export const getEmployeeCandidateByBgv = async (bgv) => {
+  const response = await fetch(`http://localhost:8080/employees/bgv-status?status=${bgv}`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error('Failed to fetch Employees by Bgv');
+};
