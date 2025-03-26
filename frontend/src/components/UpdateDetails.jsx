@@ -160,7 +160,7 @@ function UpdateDetails() {
       hsbcselectionDate: form.selectionDate,
       baseBU: form.bu,
       lob: form.lob,
-      subLob: subLob,
+      subLob: form.subLob,
       hsbchiringManager: form.hiringManager,
       hsbchead: form.head,
       deliveryManager: form.deliveryManager,
