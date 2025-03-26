@@ -181,7 +181,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className='shadow-md w-full p-2 fixed top-0 left-0 bg-white'>
+    <div className='shadow-md w-full p-2 fixed top-0 left-0 bg-white' style={{zIndex:2}}>
       <div className='flex items-center justify-between py-2 px-4 md:py-4 md:px-7'>
         <div className='flex items-center'>
           <Link to="/landing-page">

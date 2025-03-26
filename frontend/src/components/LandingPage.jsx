@@ -10,6 +10,7 @@ import {
   getEmployeeCandidateByCtool,
   getEmployeeCandidateByPsid,
 } from "../services/api";
+import zIndex from "@mui/material/styles/zIndex";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -159,11 +160,11 @@ const LandingPage = () => {
           </div>
         </div>
         <div
-          className="overflow-x-auto mt-4 flex-grow"
+          className=" overflow-x-auto mt-4 flex-grow"
           style={{ maxHeight: "calc(100vh - 200px)", overflowY: "auto" }}
         >
           <table className="w-full border-collapse">
-            <thead className="bg-gray-200 top-0 z-0 sticky">
+            <thead className="bg-gray-200 top-0 sticky" style={{zIndex:1}}>
               <tr>
                 <th className="p-2 text-center">PSID/External</th>
                 <th className="p-2 text-center">Name</th>
@@ -216,7 +217,7 @@ const LandingPage = () => {
           </table>
         </div>
         {/* Pagination and Select Rows Controls */}
-        <div className="fixed bottom-0 left-0 w-full bg-white py-2 z-10 flex justify-between items-center px-4">
+        <div className="fixed bottom-0 left-0 w-full bg-white py-2 z-0 flex justify-between items-center px-4">
           <div className="flex justify-center flex-grow">
             <button
               className={`px-3 py-1 mx-1 ${
