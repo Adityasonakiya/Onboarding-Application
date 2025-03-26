@@ -20,9 +20,12 @@ const PieChart3D = ({ data }) => {
     chart.angle = 30; // Tilt the pie chart for better 3D perspective
 
     // Add data and assign colors consistently
+    const totalValue = data.values.reduce((sum, val) => sum + val, 0); // Calculate total value
+
     chart.data = data.labels.map((label, index) => ({
       category: label,
-      value: data.values[index],
+      value: ((data.values[index] / totalValue) * 100).toFixed(2), // Percentage
+      realValue: data.values[index], // Actual value
     })).filter(d => d.value > 0); // Exclude values that are 0
 
     // Create series
@@ -36,16 +39,15 @@ const PieChart3D = ({ data }) => {
 
     // Slice appearance settings
     series.slices.template.cornerRadius = 10; // Rounded corners for slices
-    series.slices.template.tooltipText = "[bold]{category}[/]: {value}";
-
+    series.slices.template.tooltipText = "[bold]{category}[/]: {value}% ({realValue})";
     // Properly display labels inside pie slices
-    series.labels.template.text = "{category}: {value}";
+    series.labels.template.text = "{category}: {value}% ({realValue})"; // Include percentage and real value
     series.labels.template.fill = am4core.color("#ffffff"); // White text for better contrast
     series.labels.template.fontSize = 12; // Smaller font size to fit within slices
     series.labels.template.radius = am4core.percent(40); // Position labels inside slices
     series.labels.template.wrap = true; // Wrap long text
     series.labels.template.maxWidth = 120; // Constrain label width
-
+    
     // Hide ticks (not needed if labels are inside)
     series.ticks.template.disabled = true;
 
