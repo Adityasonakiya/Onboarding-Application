@@ -247,6 +247,10 @@ const SelectionTrackerDashboard = ({ user }) => {
     }
   };
 
+  const handleRadioChange = (e) => {
+    setFilter(e.target.value);
+  };
+
   useEffect(() => {
     if (fromDate && toDate) {
       setFilter('custom');
@@ -287,29 +291,41 @@ const SelectionTrackerDashboard = ({ user }) => {
 
 
               <div className="flex items-center font-medium text-sm">
-                <input type="checkbox" id="7days" className="hidden" onChange={handleFilterChange} checked={filter === '7days'} />
-                <label htmlFor="7days" className="flex items-center cursor-pointer text-black font-semibold">
-                  <span className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${filter === '7days' ? 'bg-blue-500' : ''}`}></span>
-                  7 Days
-                </label>
+                <div className="flex items-center mr-4">
+                  <input type="radio" id="7days" className="hidden" value="7days" name="filter" onChange={handleRadioChange} checked={filter === '7days'} />
+                  <label htmlFor="7days" className="flex items-center cursor-pointer text-black font-semibold">
+                    <span className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${filter === '7days' ? 'bg-blue-500' : ''}`}></span>
+                    7 Days
+                  </label>
+                </div>
+                <div className="flex items-center mr-4">
+                  <input type="radio" id="currentMonth" className="hidden" value="currentMonth" name="filter" onChange={handleRadioChange} checked={filter === 'currentMonth'} />
+                  <label htmlFor="currentMonth" className="flex items-center cursor-pointer text-black font-semibold">
+                    <span className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${filter === 'currentMonth' ? 'bg-blue-500' : ''}`}></span>
+                    Current Month
+                  </label>
+                </div>
+                <div className="flex items-center mr-4">
+                  <input type="radio" id="custom" className="hidden" value="custom" name="filter" onChange={handleRadioChange} checked={filter === 'custom'} />
+                  <label htmlFor="custom" className="flex items-center cursor-pointer text-black font-semibold">
+                    <span className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${filter === 'custom' ? 'bg-blue-500' : ''}`}></span>
+                    Custom
+                  </label>
+                </div>
+                {filter === 'custom' && (
+                  <div className="flex items-center ml-4">
+                    <label className="flex items-center cursor-pointer text-black font-semibold mr-4">
+                      <span className="mr-2">From:</span>
+                      <input type="date" name="fromDate" value={fromDate} onChange={handleDateChange} className="p-2 border h-[2.2vw] border-gray-400 rounded-full" />
+                    </label>
+                    <label className="flex items-center cursor-pointer text-black font-semibold">
+                      <span className="mr-2">To:</span>
+                      <input type="date" name="toDate" value={toDate} onChange={handleDateChange} className="p-2 border h-[2.2vw] border-gray-400 rounded-full" disabled={!fromDate} />
+                    </label>
+                  </div>
+                )}
               </div>
-              <div className="flex items-center font-medium text-sm ">
-                <input type="checkbox" id="currentMonth" className="hidden" onChange={handleFilterChange} checked={filter === 'currentMonth'} />
-                <label htmlFor="currentMonth" className="flex items-center cursor-pointer text-black font-semibold">
-                  <span className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${filter === 'currentMonth' ? 'bg-blue-500' : ''}`}></span>
-                  Current Month
-                </label>
-              </div>
-              <div className="flex items-center font-medium text-sm">
-                <label className="flex items-center cursor-pointer text-black font-semibold">
-                  <span className="mr-2">From:</span>
-                  <input type="date" name="fromDate" value={fromDate} onChange={handleDateChange} className="p-2 border h-[2.2vw] border-gray-400 rounded-full" />
-                </label>
-                <label className="flex items-center cursor-pointer text-black font-semibold ml-4">
-                  <span className="mr-2">To:</span>
-                  <input type="date" name="toDate" value={toDate} onChange={handleDateChange} className="p-2 border h-[2.2vw] border-gray-400 rounded-full" disabled={!fromDate} />
-                </label>
-              </div>
+
 
             </div>
           </div>

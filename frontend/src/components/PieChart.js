@@ -40,16 +40,15 @@ const PieChart3D = ({ data }) => {
     // Slice appearance settings
     series.slices.template.cornerRadius = 10; // Rounded corners for slices
     series.slices.template.tooltipText = "[bold]{category}[/]: {value}% ({realValue})";
-    // Properly display labels inside pie slices
-    series.labels.template.text = "{category}: {value}% ({realValue})"; // Include percentage and real value
-    series.labels.template.fill = am4core.color("#ffffff"); // White text for better contrast
-    series.labels.template.fontSize = 12; // Smaller font size to fit within slices
-    series.labels.template.radius = am4core.percent(40); // Position labels inside slices
-    series.labels.template.wrap = true; // Wrap long text
-    series.labels.template.maxWidth = 120; // Constrain label width
-    
-    // Hide ticks (not needed if labels are inside)
-    series.ticks.template.disabled = true;
+    // Ensure the labels are always visible and positioned correctly
+    series.labels.template.disabled = false; // Enable labels
+    series.labels.template.text = "{value}%"; // Display only percentages
+    series.labels.template.fill = am4core.color("#000000"); // Set label color to black
+    series.labels.template.fontSize = 14; // Font size for readability
+    series.labels.template.radius = am4core.percent(-40); // Position inside the slice
+    series.labels.template.horizontalCenter = "middle"; // Center horizontally over the slice
+    series.labels.template.verticalCenter = "middle"; // Center vertically over the slice
+
 
     // ** Ensure Proper Legend Layering **
     // Clear the label container before adding new labels
