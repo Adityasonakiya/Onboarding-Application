@@ -231,8 +231,14 @@ const SelectionTrackerDashboard = ({ user }) => {
     });
   };
 
-  const handleFilterChange = (event) => {
-    setFilter(event.target.id);
+  // const handleFilterChange = (event) => {
+  //   setFilter(event.target.id);
+  //   setFromDate('');
+  //   setToDate('');
+  // };
+
+  const handleRadioChange = (e) => {
+    setFilter(e.target.id);
     setFromDate('');
     setToDate('');
   };
@@ -247,9 +253,6 @@ const SelectionTrackerDashboard = ({ user }) => {
     }
   };
 
-  const handleRadioChange = (e) => {
-    setFilter(e.target.value);
-  };
 
   useEffect(() => {
     if (fromDate && toDate) {
