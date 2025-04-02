@@ -21,7 +21,7 @@ public class BGVStatusController {
     @GetMapping("/Bgvs")
     public ResponseEntity<List<BGVStatus>> getAll(){
         List<BGVStatus> bgvs=bgvStatusService.getAllBgv();
-        if(bgvs!=null)
+        if(bgvs!=null && !bgvs.isEmpty())
             return new ResponseEntity<>(bgvs,HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

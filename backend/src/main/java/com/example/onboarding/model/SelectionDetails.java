@@ -64,8 +64,17 @@ public class SelectionDetails {
     private Date LTIOnboardingDate;
     private Date createDate;
     private Date updateDate;
+    private Date candidateStatusDate;
 
     // Getters and Setters
+
+    public Date getCandidateStatusDate() {
+        return candidateStatusDate;
+    }
+
+    public void setCandidateStatusDate(Date candidateStatusDate) {
+        this.candidateStatusDate = candidateStatusDate;
+    }
 
     public int getSelectionId() {
         return selectionId;
