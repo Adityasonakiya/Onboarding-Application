@@ -32,6 +32,10 @@ public class TaggingDetails {
     @JoinColumn(name = "BGVStatusId")
     private BGVStatus bgvStatus;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "CandidateStatusId")
+    private CandidateStatus candidateStatus;
+
     @ManyToOne
     private User createdBy;
 
@@ -136,6 +140,14 @@ public class TaggingDetails {
 
     public void setUpdatedBy(User updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    public CandidateStatus getCandidateStatus() {
+        return candidateStatus;
+    }
+
+    public void setCandidateStatus(CandidateStatus candidateStatus) {
+        this.candidateStatus = candidateStatus;
     }
 
 }
