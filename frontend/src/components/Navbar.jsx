@@ -97,12 +97,23 @@ export default function Navbar() {
     fetchStatusOptions();
   }, [selectedOption]);
 
-  const handleSuggestionClick = (psidOrStatus) => {
-    console.log('Selected Option:', selectedOption);
-    console.log('PSID or Status:', psidOrStatus);
-    navigate('/landing-page', { state: { id: psidOrStatus } });
-    setSuggestions([]); // Close the suggestion box
+  useEffect(() => {
+    if (selectedOption !== 'PSID/CandidateID' && selectedStatus) {
+      handleSearch(); // Ensure handleSearch triggers only after selectedStatus updates
+    }
+  }, [selectedStatus, selectedOption]);
+  
+  const handleSuggestionClick = (value) => {
+    console.log('Suggestion clicked:', value);
+    if (selectedOption === 'PSID/CandidateID') {
+      setSearchQuery(value); // Update the input value
+      navigate('/landing-page', { state: { id: value } });
+      setSuggestions([]);
+    } else {
+      setSelectedStatus(value); // Update the selected status for statuses
+    }
   };
+  
 
   const handleSearch = () => {
     const searchType = selectedOption === 'CTool Status' ? 'ctool' : 'bgv';
@@ -181,7 +192,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className='shadow-md w-full p-2 fixed top-0 left-0 bg-white' style={{zIndex:2}}>
+    <div className='shadow-md w-full p-2 fixed top-0 left-0 bg-white' style={{ zIndex: 2 }}>
       <div className='flex items-center justify-between py-2 px-4 md:py-4 md:px-7'>
         <div className='flex items-center'>
           <Link to="/landing-page">
@@ -207,7 +218,7 @@ export default function Navbar() {
                   className="bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2 w-full"
                   placeholder={selectedOption}
                   value={searchQuery}
-                  onChange={handleSearchChange} // Use the non-debounced wrapper
+                  onChange={handleSearchChange}
                   disabled={selectedOption !== 'PSID/CandidateID'}
                 />
               )}
@@ -228,20 +239,29 @@ export default function Navbar() {
               {suggestions.length > 0 && (
                 <div ref={suggestionsRef} className='absolute top-9 left-1 bg-white p-1 w-full md:w-56 border border-gray-300 rounded-md'>
                   {suggestions.map((suggestion) => (
-                    <div
-                      key={suggestion.id || suggestion.id || suggestion.onboardingStatus}
-                      className='cursor-pointer border-b-2 border-gray-400 p-1'
-                      onClick={() => handleSuggestionClick(suggestion.id || suggestion.id || suggestion.onboardingStatus)}
-                    >
-                      <p className='text-sm'>Name: {suggestion.firstName} {suggestion.lastName}</p>
-                      {selectedOption === 'PSID/CandidateID' && (
-                        <p className='text-sm'>PSID/CandidateId: {suggestion.id || suggestion.id}</p>
-                      )}
-                      {(selectedOption === 'CTool Status' || selectedOption === 'BgvStatus') && (
-                        <p className='text-sm'>Status: {suggestion.onboardingStatus}</p>
-                      )}
-                    </div>
+                   <div
+                   key={suggestion.id || suggestion.onboardingStatus || suggestion.bgvStatus}
+                   className='cursor-pointer border-b-2 border-gray-400 p-1'
+                   onClick={() => {
+                     if (selectedOption === 'PSID/CandidateID') {
+                       handleSuggestionClick(suggestion.id); // Update the input value for PSID/CandidateID
+                     } else {
+                       handleSuggestionClick(suggestion.onboardingStatus || suggestion.bgvStatus); // Update state for status
+                       handleSearch(); // Trigger search only for statuses
+                     }
+                   }}
+                 >
+                   <p className='text-sm'>Name: {suggestion.firstName} {suggestion.lastName}</p>
+                   {selectedOption === 'PSID/CandidateID' && (
+                     <p className='text-sm'>PSID/CandidateId: {suggestion.id}</p>
+                   )}
+                   {(selectedOption === 'CTool Status' || selectedOption === 'BgvStatus') && (
+                     <p className='text-sm'>Status: {suggestion.onboardingStatus}</p>
+                   )}
+                 </div>
+                 
                   ))}
+
                 </div>
               )}
             </div>
