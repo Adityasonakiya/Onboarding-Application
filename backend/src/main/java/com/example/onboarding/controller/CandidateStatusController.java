@@ -1,6 +1,8 @@
 package com.example.onboarding.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +20,13 @@ public class CandidateStatusController {
     private CandidateStatusService candidateStatusService;
 
     @GetMapping("/all")
-    public List<CandidateStatus> getAllCandidateStatus() {
-        return candidateStatusService.getAllcandiadteStatus();
+    public ResponseEntity<List<CandidateStatus>> getAllCandidateStatus() {
+        List<CandidateStatus> statuses = candidateStatusService.getAllcandiadteStatus();
+        if(statuses!=null){
+            return new ResponseEntity<>(statuses, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+        }    
     }
 }
