@@ -3,9 +3,9 @@ package com.example.onboarding.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.onboarding.model.Vendor;
+import com.example.onboarding.model.VendorCandidate;
 
 @Repository
-public interface VendorRepository extends JpaRepository<Vendor, Integer> {
+public interface VendorCandidateRepository extends JpaRepository<VendorCandidate, Integer> {
 
 }
