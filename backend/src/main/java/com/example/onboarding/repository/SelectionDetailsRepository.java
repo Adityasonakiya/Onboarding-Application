@@ -20,9 +20,13 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
 
         SelectionDetails findByCandidate_CandidateId(int candidateId);
 
+        SelectionDetails findByVendorCandidate_VendorCandidateId(int candidateId);
+
         Boolean existsByEmployee_Psid(int psId);
 
         Boolean existsByCandidate_CandidateId(int candidateId);
+
+        Boolean existsByVendorCandidate_VendorCandidateId(int vendorCandidateId);
 
         @Query(value = "SELECT count(*) AS selection_count, lb.lob_name, sd.pricing_model, sd.hsbcselection_date " +
                         "FROM selectiontracker.selection_details sd, selectiontracker.lob lb " +

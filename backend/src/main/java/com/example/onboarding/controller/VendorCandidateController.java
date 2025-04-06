@@ -9,14 +9,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.onboarding.model.Vendor;
 import com.example.onboarding.model.VendorCandidate;
 import com.example.onboarding.service.VendorCandidateSerivce;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @CrossOrigin("*")
 @RestController
@@ -68,7 +67,9 @@ public class VendorCandidateController {
 
     @PostMapping("/vendor-candidates/create")
     public ResponseEntity<VendorCandidate> createVendorCandidate(@RequestBody VendorCandidate vendorCandidate) {
+        System.out.println("Object sent"+ vendorCandidate);
         VendorCandidate createdVendorCandidate = vendorCandiateService.createVendorCandidate(vendorCandidate);
+        System.out.println("Object recieved"+ createdVendorCandidate);
         return new ResponseEntity<>(createdVendorCandidate, HttpStatus.CREATED);
     }
 

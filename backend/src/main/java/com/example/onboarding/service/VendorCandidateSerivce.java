@@ -38,6 +38,7 @@ public class VendorCandidateSerivce {
     }
 
     public VendorCandidate createVendorCandidate(VendorCandidate vendorCandidate) {
+        System.out.println("VendorServicePoint "+ vendorCandidate);
         return vendorCandidateRepository.save(vendorCandidate);
     }
 

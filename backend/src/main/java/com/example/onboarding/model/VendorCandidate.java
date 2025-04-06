@@ -2,7 +2,11 @@ package com.example.onboarding.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
+//import jakarta.persistence.GeneratedValue;
+//import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -14,7 +18,10 @@ public class VendorCandidate {
     private String firstName;
     private String middleName;
     private String lastName;
+
+    @JsonProperty("ltionboardingDate")
     private Date LTIOnboardingDate;
+
     @ManyToOne
     @JoinColumn(name = "createdByPsId")
     private Employee createdBy;
@@ -30,7 +37,8 @@ public class VendorCandidate {
     private Date createDate;
     private Date updateDate;
 
-    public VendorCandidate() {
+    public VendorCandidate(){
+        
     }
 
     public VendorCandidate(int vendorCandidateId, String firstName, String middleName, String lastName,
@@ -127,5 +135,15 @@ public class VendorCandidate {
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
+
+    @Override
+    public String toString() {
+        return "VendorCandidate [vendorCandidateId=" + vendorCandidateId + ", firstName=" + firstName + ", middleName="
+                + middleName + ", lastName=" + lastName + ", LTIOnboardingDate=" + LTIOnboardingDate + ", createdBy="
+                + createdBy + ", updatedBy=" + updatedBy + ", vendor=" + vendor + ", createDate=" + createDate
+                + ", updateDate=" + updateDate + "]";
+    }
+
+    
 
 }

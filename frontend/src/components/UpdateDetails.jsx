@@ -13,6 +13,12 @@ import {
   fetchSubLob,
   fetchLobs,
   fetchSubLobs,
+  getAllVendors,
+  getTaggingDetailsByVendorCandidateId,
+  getSelectionDetailsByVendorCandidateId,
+  updateSelectionDetailsByVendorCandidateId,
+  updateTaggingDetailsByVendorCandidateId,
+  getVendorCandidateById,
 } from "../services/api";
 import moment from "moment";
 import { Slide, ToastContainer, toast } from "react-toastify";
@@ -22,11 +28,15 @@ import { useNavigate, useLocation } from "react-router-dom";
 function UpdateDetails() {
   const [form, setForm] = useState({});
   const [isInternal, setIsInternal] = useState(true);
+  const [isExternal, setIsExternal] = useState(false);
+  const [isVendor, setVendor] = useState(false);
   const [psId, setPsId] = useState("");
   const [candidateId, setCandidateId] = useState("");
+  const [vendorCandidateId, setVendorCandidateId] = useState("");
   const [lobs, setLobs] = useState([]);
   const [errors, setErrors] = useState({});
   const [subLobs, setSubLobs] = useState([]);
+  const [vendors, setVendors] = useState([]);
   const [subLob, setSubLob] = useState([]);
   const [selectedSubLobTemp,setSelectedSubLobTemp]=useState({});
   const navigate = useNavigate();
@@ -39,6 +49,8 @@ function UpdateDetails() {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
       setIsInternal(name === "internal" ? checked : !checked);
+      setIsExternal(name === "external" ? checked : !checked);
+      setVendor(name === "vendor" ? checked : !checked);
     } else {
       setForm({ ...form, [name]: value });
     }
@@ -54,6 +66,25 @@ function UpdateDetails() {
       }
     }
   };
+
+  useEffect(() => {
+      if (form.vendor) {
+        setVendor(true);
+      }
+    });
+
+  useEffect(() => {
+      const getVendors = async () => {
+        try {
+          const data = await getAllVendors();
+          setVendors(data);
+        } catch (error) {
+          console.error("There was an error fetching the Vendors!", error);
+        }
+      };
+  
+      getVendors();
+    }, []);  
 
   useEffect(() => {
     const getLobs = async () => {
@@ -110,6 +141,16 @@ function UpdateDetails() {
     }
   };
 
+  const handleVendorChange = async(event) =>{
+    const vendorId = event.target.value;
+    console.log(vendorId);
+
+    setForm((prevState) => ({
+      ...prevState,
+      vendors: { vendorId: vendorId },
+    }));
+  }
+
   const validate = () => {
     const errors = {};
     if (form.ctoolId && form.ctoolId.toString().length !== 6) {
@@ -125,6 +166,10 @@ function UpdateDetails() {
   const handleCandidateIdChange = (e) => {
     setCandidateId(e.target.value);
   };
+
+  const handleVendorCandidateIdChange = (e) =>{
+    setVendorCandidateId (e.target.value)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -201,10 +246,27 @@ function UpdateDetails() {
           });
           console.error("Error updating details by PsId:", error);
         });
-    } else if (!isInternal && candidateId) {
+    } else if (isExternal && candidateId) {
       updateSelectionDetailsByCandidateId(candidateId, selectionDetails)
         .then(() => {
           updateTaggingDetailsByCandidateId(candidateId, taggingDetails) &&
+            toast.success("Details updated successfully!", {
+              position: "top-right",
+            });
+          setTimeout(() => {
+            navigate("/landing-page");
+          }, 2000);
+        })
+        .catch((error) => {
+          toast.error("Error updating details:", {
+            position: "top-right",
+          });
+          console.error("Error updating details by CandidateId:", error);
+        });
+    } else if(isVendor && vendorCandidateId){
+      updateSelectionDetailsByVendorCandidateId(vendorCandidateId, selectionDetails)
+        .then(() => {
+          updateTaggingDetailsByVendorCandidateId(vendorCandidateId, taggingDetails) &&
             toast.success("Details updated successfully!", {
               position: "top-right",
             });
@@ -256,6 +318,7 @@ function UpdateDetails() {
             totalExp: employee.totalExperience || "",
             skill: employee.skill || "",
             email: employee.mailID || "",
+            vendors:"",
             selectionDate: formatDate(selectionData.hsbcselectionDate),
             bu: "BF",
             lob: selectionData.lob || "",
@@ -290,11 +353,20 @@ function UpdateDetails() {
         .catch((error) => {
           console.error("Error in Promise.all:", error);
         });
-    } else if (!isInternal && candidateId) {
+    } else if (isExternal && candidateId) {
       Promise.all([
-        getCandidateById(candidateId),
-        getSelectionDetailsByCandidateId(candidateId),
-        getTaggingDetailsByCandidateId(candidateId),
+        getCandidateById(candidateId).catch((err) => {
+          console.error("Error fetching candidate data:", err);
+          return {}; // Fallback to an empty object
+        }),
+        getSelectionDetailsByCandidateId(candidateId).catch((err) => {
+          console.error("Error fetching candidate data:", err);
+          return {}; // Fallback to an empty object
+        }),
+        getTaggingDetailsByCandidateId(candidateId).catch((err) => {
+          console.error("Error fetching candidate data:", err);
+          return {}; // Fallback to an empty object
+        }),
       ])
         .then(([candidate, selectionData, taggingData]) => {
           setForm({
@@ -306,42 +378,103 @@ function UpdateDetails() {
             totalExp: "", // Assuming totalExperience is not available for candidate
             skill: "", // Assuming skill is not available for candidate
             email: "", // Assuming email is not available for candidate
+            vendors:"",
             selectionDate: formatDate(selectionData.hsbcselectionDate),
             bu: "BF",
-            lob: selectionData.lob,
-            subLob: selectionData.subLob,
-            hiringManager: selectionData.hsbchiringManager,
-            head: selectionData.hsbchead,
-            deliveryManager: selectionData.deliveryManager,
-            salespoc: selectionData.salesPOC,
-            pricingModel: selectionData.pricingModel,
-            irm: selectionData.irm,
-            ctoolId: selectionData.hsbctoolId,
+            lob: selectionData.lob || "",
+            subLob: selectionData.sublob || "",
+            hiringManager: selectionData.hsbchiringManager || "",
+            head: selectionData.hsbchead || "",
+            deliveryManager: selectionData.deliveryManager || "",
+            salespoc: selectionData.salesPOC || "",
+            pricingModel: selectionData.pricingModel || "",
+            irm: selectionData.irm || "",
+            ctoolId: selectionData.hsbctoolId || "",
             ctoolRecDate: formatDate(selectionData.ctoolReceivedDate),
-            ctoolJobCat: selectionData.ctoolJobCategory,
-            ctoolLocation: selectionData.ctoolLocation,
-            ctoolRate: selectionData.ctoolRate,
-            ctoolPropRate: selectionData.ctoolProposedRate,
-            recruiterName: selectionData.recruiterName,
-            offerReleaseStatus: selectionData.offerReleaseStatus,
+            ctoolJobCat: selectionData.ctoolJobCategory || "",
+            ctoolLocation: selectionData.ctoolLocation || "",
+            ctoolRate: selectionData.ctoolRate || "",
+            ctoolPropRate: selectionData.ctoolProposedRate || "",
+            recruiterName: selectionData.recruiterName || "",
+            offerReleaseStatus: selectionData.offerReleaseStatus || "",
             ltiOnboardDate: formatDate(selectionData.ltionboardingDate),
             status: taggingData.onboardingStatus?.onboardingStatus || "",
             addRemark: taggingData.onboardingStatus?.remarks || "",
             bgvStatus: taggingData.bgvStatus?.bgvStatus || "",
             bgvRemark: taggingData.bgvStatus?.remarks || "",
             tagDate: formatDate(taggingData.createDate) || "",
-            techSelectDate: formatDate(selectionData.techSelectionDate),
-            dojRecDate: formatDate(selectionData.dojreceivedDate),
-            onboardingDate: formatDate(selectionData.hsbconboardingDate),
+            techSelectDate: formatDate(selectionData.techSelectionDate) || "",
+            dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
+            onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
           });
+          setSelectedSubLobTemp(selectionData.subLob);
         })
         .catch((error) => {
           console.error("Error fetching data by CandidateId:", error);
         });
+    }else if (isVendor && vendorCandidateId) {
+      Promise.all([
+        getVendorCandidateById(vendorCandidateId).catch((err) => {
+          console.error("Error fetching vendor candidate data:", err);
+          return {}; // Fallback to an empty object
+        }),,
+        getSelectionDetailsByVendorCandidateId(vendorCandidateId).catch((err) => {
+          console.error("Error fetching vendor candidate data:", err);
+          return {}; // Fallback to an empty object
+        }),,
+        getTaggingDetailsByVendorCandidateId(vendorCandidateId).catch((err) => {
+          console.error("Error fetching vendor candidate data:", err);
+          return {}; // Fallback to an empty object
+        }),,
+      ])
+        .then(([vendorCandidate, selectionData, taggingData]) => {
+          setForm({
+            fname: vendorCandidate.firstName,
+            lname: vendorCandidate.lastName,
+            grade: "", // Assuming grade is not available for candidate
+            location: "", // Assuming location is not available for candidate
+            pu: "", // Assuming pu is not available for candidate
+            totalExp: "", // Assuming totalExperience is not available for candidate
+            skill: "", // Assuming skill is not available for candidate
+            email: "", // Assuming email is not available for candidate
+            vendors: vendorCandidate.vendor,
+            selectionDate: formatDate(selectionData.hsbcselectionDate),
+            bu: "BF",
+            lob: selectionData.lob || "",
+            subLob: selectionData.sublob || "",
+            hiringManager: selectionData.hsbchiringManager || "",
+            head: selectionData.hsbchead || "",
+            deliveryManager: selectionData.deliveryManager || "",
+            salespoc: selectionData.salesPOC || "",
+            pricingModel: selectionData.pricingModel || "",
+            irm: selectionData.irm || "",
+            ctoolId: selectionData.hsbctoolId || "",
+            ctoolRecDate: formatDate(selectionData.ctoolReceivedDate),
+            ctoolJobCat: selectionData.ctoolJobCategory || "",
+            ctoolLocation: selectionData.ctoolLocation || "",
+            ctoolRate: selectionData.ctoolRate || "",
+            ctoolPropRate: selectionData.ctoolProposedRate || "",
+            recruiterName: selectionData.recruiterName || "",
+            offerReleaseStatus: selectionData.offerReleaseStatus || "",
+            ltiOnboardDate: formatDate(selectionData.ltionboardingDate),
+            status: taggingData.onboardingStatus?.onboardingStatus || "",
+            addRemark: taggingData.onboardingStatus?.remarks || "",
+            bgvStatus: taggingData.bgvStatus?.bgvStatus || "",
+            bgvRemark: taggingData.bgvStatus?.remarks || "",
+            tagDate: formatDate(taggingData.createDate) || "",
+            techSelectDate: formatDate(selectionData.techSelectionDate) || "",
+            dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
+            onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
+          });
+          setSelectedSubLobTemp(selectionData.subLob);
+        })
+        .catch((error) => {
+          console.error("Error fetching data by VendorCandidateId:", error);
+        });
     } else {
       setErrors(errors);
     }
-  }, [psId, candidateId, isInternal]);
+  }, [psId, candidateId,,vendorCandidateId, isInternal,isExternal,isVendor]);
 
   return (
     <div className="w-full px-4 py-6">
@@ -373,7 +506,19 @@ function UpdateDetails() {
                   <input
                     type="checkbox"
                     name="external"
-                    checked={!isInternal}
+                    checked={isExternal}
+                    onChange={handleChange}
+                    className="p-2"
+                  />
+                </td>
+                <td className="p-2 w-full md:w-1/3">
+                  <label className="font-bold">Vendor</label>
+                </td>
+                <td className="p-2 w-full md:w-1/3">
+                  <input
+                    type="checkbox"
+                    name="vendor"
+                    checked={isVendor}
                     onChange={handleChange}
                     className="p-2"
                   />
@@ -393,7 +538,7 @@ function UpdateDetails() {
                     onChange={handlePsIdChange}
                     required
                     className="p-2 border rounded w-full"
-                    disabled={!isInternal}
+                    disabled={isExternal || isVendor}
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -408,8 +553,31 @@ function UpdateDetails() {
                     value={candidateId}
                     onChange={handleCandidateIdChange}
                     className="p-2 border rounded w-full"
-                    disabled={isInternal}
+                    disabled={isInternal || isVendor}
                   />
+                </td>
+                <td className="p-2 w-full md:w-1/3">
+                  <label className="font-semibold">
+                    Vendor Candidate ID:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    name="vendorCandidateId"
+                    value={form.vendorCandidateId || ""}
+                    onChange={handleVendorCandidateIdChange}
+                    required
+                    className={`p-2 border rounded w-full ${
+                      errors.vendorCandidateId ? "border-red-500" : ""
+                    }`}
+                    disabled={isInternal || isExternal}
+                    pattern="\d*"
+                  />
+                  {errors.vendorCandidateId && (
+                    <p className="text-red-500 text-sm mb-4">
+                      {errors.vendorCandidateId}
+                    </p>
+                  )}
                 </td>
               </tr>
 
@@ -526,6 +694,30 @@ function UpdateDetails() {
                     className="p-2 border rounded w-full bg-slate-100"
                     disabled
                   />
+                </td>
+              </tr>
+              <tr className="flex flex-wrap md:flex-nowrap">
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-semibold">
+                    Vendor:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4" colSpan="2">
+                  <select
+                    name="vendors"
+                    value={form.vendors?.vendorId || ""}
+                    onChange={handleVendorChange}
+                    required
+                    className="p-2 border w-full bg-slate-100"
+                    disabled={isInternal || isExternal}
+                  >
+                    <option value="">Select Vendor</option>
+                    {vendors.map((vendor) => (
+                      <option key={vendor.vendorId} value={vendor.vendorId}>
+                        {vendor.vendorName}
+                      </option>
+                    ))}
+                  </select>
                 </td>
               </tr>
 
