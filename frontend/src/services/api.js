@@ -54,6 +54,52 @@ export const getCandidateById = async (candidateId) => {
   throw new Error('Failed to fetch candidate data');
 };
 
+export const getVendorById = async(vendorId) =>{
+  const response = await fetch(`http://localhost:8080/vendors/${vendorId}`);
+  if(response.ok){
+    return response.json();
+  }
+  throw new Error('Failed to fetch data');
+}
+
+export const getAllVendors = async() => {
+  const response = await fetch(`http://localhost:8080/vendors`);
+  if(response.ok){
+    return response.json();
+  }
+  throw new Error('Failed to fetch data');
+}
+
+export const getVendorCandidateById = async(vendorCandidateId) =>{
+  const response = await fetch(`http://localhost:8080/vendors/vendor-candidates/${vendorCandidateId}`);
+  if(response.ok){
+    return response.json();
+  }
+  throw new Error('Failed to fetch data');
+}
+
+export const getAllVendorCandidates = async() => {
+  const response = await fetch(`http://localhost:8080/vendors/vendor-candidates`);
+  if(response.ok){
+    return response.json();
+  }
+  throw new Error('Failed to fetch data');
+}
+
+export const createVendorCandidates = async (data) => {
+  const response = await fetch(`http://localhost:8080/vendors/vendor-candidates/create`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+};
+
 export const getSelectionDetailsByPsId = async (psid) => {
   const response = await fetch(`http://localhost:8080/selection-details/psid/${psid}`);
   if (response.ok) {
@@ -68,6 +114,14 @@ export const getSelectionDetailsByCandidateId = async (candidateId) => {
     return response.json();
   }
   throw new Error('Failed to fetch selection details by candidateId');
+};
+
+export const getSelectionDetailsByVendorCandidateId = async (vendorCandidateId) => {
+  const response = await fetch(`http://localhost:8080/selection-details/vendorCandidateId/${vendorCandidateId}`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error('Failed to fetch selection details by vendor candidateId');
 };
 
 export const getTaggingDetailsByPsId = async (psId) => {
@@ -86,7 +140,13 @@ export const getTaggingDetailsByCandidateId = async (candidateId) => {
   throw new Error('Failed to fetch tagging details by candidateId');
 };
 
-
+export const getTaggingDetailsByVendorCandidateId = async (vendorCandidateId) => {
+  const response = await fetch(`http://localhost:8080/api/tagging-details/vendor/${vendorCandidateId}`);
+  if (response.ok) {
+    return await response.json();
+  }
+  throw new Error('Failed to fetch tagging details by candidateId');
+};
 
 export const updateTaggingDetailsByPsId = async (psId, data) => {
   const response = await fetch(`http://localhost:8080/api/tagging-details/psid/${psId}`, {
@@ -116,6 +176,20 @@ export const updateTaggingDetailsByCandidateId = async (candidateId, data) => {
   return response.json();
 };
 
+export const updateTaggingDetailsByVendorCandidateId = async (vendorCandidateId, data) => {
+  const response = await fetch(`http://localhost:8080/api/tagging-details/vendor-candidate/${vendorCandidateId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+};
+
 export const updateSelectionDetailsByPsId = async (psId, data) => {
   const response = await fetch(`http://localhost:8080/selection-details/put/psid/${psId}`, {
     method: 'PUT',
@@ -132,6 +206,20 @@ export const updateSelectionDetailsByPsId = async (psId, data) => {
 
 export const updateSelectionDetailsByCandidateId = async (candidateId, data) => {
   const response = await fetch(`http://localhost:8080/selection-details/put/candidateId/${candidateId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+};
+
+export const updateSelectionDetailsByVendorCandidateId = async (vendorCandidateId, data) => {
+  const response = await fetch(`http://localhost:8080/selection-details/put/andidateId/${vendorCandidateId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

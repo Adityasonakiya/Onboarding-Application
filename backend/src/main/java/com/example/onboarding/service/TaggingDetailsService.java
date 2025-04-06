@@ -134,11 +134,56 @@ public class TaggingDetailsService {
         }
     }
 
+    public TaggingDetails updateTaggingDetailsByVendorCandidateId(int vendorCandidateId, TaggingDetails updatedDetails) {
+        try {
+            logger.info("Updating TaggingDetails by CandidateId: {}", vendorCandidateId);
+            TaggingDetails existingDetails = taggingDetailsRepository.findByCandidate_CandidateId(vendorCandidateId);
+            if (existingDetails != null) {
+                logger.info("Existing details found for CandidateId: {}", vendorCandidateId);
+                if (updatedDetails.getOnboardingStatus() != null) {
+                    OnboardingStatus onboardingStatus = onboardingStatusRepository
+                            .save(updatedDetails.getOnboardingStatus());
+                    existingDetails.setOnboardingStatus(onboardingStatus);
+                    existingDetails.setStatusRemarks(onboardingStatus.getRemarks());
+                }
+                if (updatedDetails.getBgvStatus() != null) {
+                    BGVStatus bgvStatus = bgvStatusRepository.save(updatedDetails.getBgvStatus());
+                    existingDetails.setBgvStatus(bgvStatus);
+                }
+                existingDetails.setCreateDate(updatedDetails.getCreateDate());
+                existingDetails.setUpdateDate(updatedDetails.getUpdateDate());
+                return taggingDetailsRepository.save(existingDetails);
+            } else {
+                logger.info("No existing details found for CandidateId: {}, creating new entry", vendorCandidateId);
+                updatedDetails.setCandidate(new Candidate(vendorCandidateId)); // Assuming Candidate class has a constructor
+                                                                         // with candidateId
+                if (updatedDetails.getOnboardingStatus() != null) {
+                    OnboardingStatus onboardingStatus = onboardingStatusRepository
+                            .save(updatedDetails.getOnboardingStatus());
+                    updatedDetails.setOnboardingStatus(onboardingStatus);
+                    updatedDetails.setStatusRemarks(onboardingStatus.getRemarks());
+                }
+                if (updatedDetails.getBgvStatus() != null) {
+                    BGVStatus bgvStatus = bgvStatusRepository.save(updatedDetails.getBgvStatus());
+                    updatedDetails.setBgvStatus(bgvStatus);
+                }
+                return taggingDetailsRepository.save(updatedDetails);
+            }
+        } catch (Exception e) {
+            logger.error("Error updating TaggingDetails by VendorCandidateId", e);
+            throw e; // Re-throw the exception after logging it
+        }
+    }
+
     public TaggingDetails getTaggingDetailsByPsId(int psId) {
         return taggingDetailsRepository.findByEmployee_Psid(psId);
     }
 
     public TaggingDetails getTaggingDetailsByCandidateId(int candidateId) {
         return taggingDetailsRepository.findByCandidate_CandidateId(candidateId);
+    }
+
+    public TaggingDetails getTaggingDetailsByVendorCandidateId(int vendorCandidateId) {
+        return taggingDetailsRepository.findByVendorCandidate_VendorCandidateId(vendorCandidateId);
     }
 }

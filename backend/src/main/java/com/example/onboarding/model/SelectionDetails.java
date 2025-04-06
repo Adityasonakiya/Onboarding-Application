@@ -24,6 +24,10 @@ public class SelectionDetails {
     @JoinColumn(name = "candidateId")
     private Candidate candidate;
 
+    @ManyToOne
+    @JoinColumn(name = "vendorCandidateId")
+    private VendorCandidate vendorCandidate;
+
     private String deliveryManager;
 
     @ManyToOne
@@ -310,7 +314,7 @@ public class SelectionDetails {
 
     @Override
     public String toString() {
-        return "SelectionDetails [selectionId=" + selectionId + ", employee=" + employee + ", candidate=" + candidate
+        return "SelectionDetails [selectionId=" + selectionId + ", employee=" + employee + ", candidate=" + candidate+ ", vendor candidate=" + vendorCandidate
                 + ", deliveryManager=" + deliveryManager + ", lob=" + lob + ", subLob=" + subLob + ", irm=" + irm
                 + ", createdBy=" + createdBy + ", updatedBy=" + updatedBy + ", HSBCSelectionDate=" + HSBCSelectionDate
                 + ", HSBCHiringManager=" + HSBCHiringManager + ", HSBCHead=" + HSBCHead + ", salesPOC=" + salesPOC
@@ -336,5 +340,13 @@ public class SelectionDetails {
                 + getSubLob() + ", getIrm()=" + getIrm() + ", getCreatedBy()=" + getCreatedBy() + ", getUpdatedBy()="
                 + getUpdatedBy() + ", getDeliveryManager()=" + getDeliveryManager() + ", getCreateDate()="
                 + getCreateDate() + ", getUpdateDate()=" + getUpdateDate() + ", toString()=" + super.toString() + "]";
+    }
+
+    public VendorCandidate getVendorCandidate() {
+        return vendorCandidate;
+    }
+
+    public void setVendorCandidate(VendorCandidate vendorCandidate) {
+        this.vendorCandidate = vendorCandidate;
     }
 }

@@ -113,6 +113,38 @@ public class SelectionDetailsService {
         return selectionDetailsRepository.save(updatedDetails);
     }
 
+    public SelectionDetails updateSelectionDetailsByVendorCandidateId(int vendorCandidateId, SelectionDetails updatedDetails) {
+        SelectionDetails existingDetails = selectionDetailsRepository.findByVendorCandidate_VendorCandidateId(vendorCandidateId);
+        if (existingDetails != null) {
+            existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());
+            existingDetails.setHSBCSelectionDate(updatedDetails.getHSBCSelectionDate());
+            existingDetails.setHSBCHiringManager(updatedDetails.getHSBCHiringManager());
+            existingDetails.setHSBCHead(updatedDetails.getHSBCHead());
+            existingDetails.setSalesPOC(updatedDetails.getSalesPOC());
+            existingDetails.setPricingModel(updatedDetails.getPricingModel());
+            existingDetails.setHSBCToolId(updatedDetails.getHSBCToolId());
+            existingDetails.setCToolReceivedDate(updatedDetails.getCToolReceivedDate());
+            existingDetails.setCToolJobCategory(updatedDetails.getCToolJobCategory());
+            existingDetails.setCToolLocation(updatedDetails.getCToolLocation());
+            existingDetails.setCToolRate(updatedDetails.getCToolRate());
+            existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
+            existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
+            existingDetails.setInterviewEvidences(updatedDetails.getInterviewEvidences());
+            existingDetails.setOfferReleaseStatus(updatedDetails.getOfferReleaseStatus());
+            existingDetails.setHSBCOnboardingDate(updatedDetails.getHSBCOnboardingDate());
+            existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
+            existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
+            existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
+            existingDetails.setCreateDate(existingDetails.getCreateDate());
+            existingDetails.setUpdateDate(new Date());
+            existingDetails.setIrm(updatedDetails.getIrm());
+            existingDetails.setCreatedBy(existingDetails.getCreatedBy());
+            existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            return selectionDetailsRepository.save(existingDetails);
+        }
+        return selectionDetailsRepository.save(updatedDetails);
+    }
+
     public SelectionDetails createSelectionDetails_Employee(SelectionDetails details) {
         int psid = details.getEmployee().getPsid();
         if (selectionDetailsRepository.existsByEmployee_Psid(psid) && taggingDetailsService.getTaggingDetailsByPsId(psid).getOnboardingStatus().getStatusId()!=6) {
@@ -131,6 +163,20 @@ public class SelectionDetailsService {
         int candidateId = details.getCandidate().getCandidateId();
         if (selectionDetailsRepository.existsByCandidate_CandidateId(candidateId) && taggingDetailsService.getTaggingDetailsByCandidateId(candidateId).getOnboardingStatus().getStatusId()!=6) {
             throw new RuntimeException("Selection already exists for Candidate: " + details.getCandidate().getCandidateId());
+        } else {
+            details.setCreateDate(new Date());
+            details.setUpdateDate(new Date());
+            details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            System.out.println("Dates" + details.getCreateDate() + details.getUpdateDate());
+            return selectionDetailsRepository.save(details);
+        }
+    }
+
+    public SelectionDetails createSelectionDetails_VendorCandidate(SelectionDetails details) {
+        int vendorCandidateId = details.getVendorCandidate().getVendorCandidateId();
+        if (selectionDetailsRepository.existsByVendorCandidate_VendorCandidateId(vendorCandidateId) && taggingDetailsService.getTaggingDetailsByVendorCandidateId(vendorCandidateId).getOnboardingStatus().getStatusId()!=6) {
+            throw new RuntimeException("Selection already exists for Candidate: " + details.getVendorCandidate().getVendorCandidateId());
         } else {
             details.setCreateDate(new Date());
             details.setUpdateDate(new Date());

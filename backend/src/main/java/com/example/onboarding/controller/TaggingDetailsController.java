@@ -68,4 +68,16 @@ public class TaggingDetailsController {
             return ResponseEntity.status(500).body(null);
         }
     }
+
+    @PutMapping("/vendor-candidate/{vendorCandidateId}")
+    public ResponseEntity<TaggingDetails> updateTaggingDetailsByVendorCandidateId(@PathVariable int vendorCandidateId,
+            @RequestBody TaggingDetails updatedDetails) {
+        try {
+            TaggingDetails details = taggingDetailsService.updateTaggingDetailsByCandidateId(vendorCandidateId,
+                    updatedDetails);
+            return ResponseEntity.ok(details);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
 }

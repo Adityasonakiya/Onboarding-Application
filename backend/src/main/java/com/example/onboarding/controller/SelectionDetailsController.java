@@ -72,6 +72,17 @@ public class SelectionDetailsController {
         }
     }
 
+    @PostMapping("/create/vendor")
+    public ResponseEntity<String> createSelectionDetails_VendorCandidate(@RequestBody SelectionDetails details){
+        try{
+        selectionDetailsService.createSelectionDetails_VendorCandidate(details);
+        System.out.println("details="+details);
+            return ResponseEntity.status(201).body("Selection created successfully");
+        }catch(RuntimeException e){
+            return ResponseEntity.status(400).body(e.getMessage());  
+        }
+    }
+
     @PutMapping("put/psid/{psId}")
     public ResponseEntity<?> updateSelectionDetailsByPsId(@PathVariable int psId, @RequestBody SelectionDetails updatedDetails) {
         System.out.println("Incoming request payload: " + updatedDetails);
@@ -96,7 +107,18 @@ public class SelectionDetailsController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
 
+    @PutMapping("put/vendorCandidateId/{vendorCandidateId}")
+    public ResponseEntity<SelectionDetails> updateSelectionDetailsByVendorCandidateId(@PathVariable int vendorCandidateId,
+            @RequestBody SelectionDetails updatedDetails) {
+        SelectionDetails details = selectionDetailsService.updateSelectionDetailsByCandidateId(vendorCandidateId,
+                updatedDetails);
+        if (details != null) {
+            return ResponseEntity.ok(details);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/selections")

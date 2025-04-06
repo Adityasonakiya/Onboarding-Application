@@ -24,6 +24,10 @@ public class TaggingDetails {
     @JoinColumn(name = "candidateId")
     private Candidate candidate;
 
+    @ManyToOne
+    @JoinColumn(name = "vendorCandidateId")
+    private VendorCandidate vendorCandidate;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "onboardingStatusId")
     private OnboardingStatus onboardingStatus;
@@ -64,6 +68,14 @@ public class TaggingDetails {
 
     public int getTagId() {
         return tagId;
+    }
+
+    public VendorCandidate getVendorCandidate() {
+        return vendorCandidate;
+    }
+
+    public void setVendorCandidate(VendorCandidate vendorCandidate) {
+        this.vendorCandidate = vendorCandidate;
     }
 
     public void setTagId(int tagId) {
