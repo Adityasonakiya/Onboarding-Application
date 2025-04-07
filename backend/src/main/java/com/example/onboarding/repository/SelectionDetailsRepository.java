@@ -20,7 +20,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
 
         SelectionDetails findByCandidate_CandidateId(int candidateId);
 
-        SelectionDetails findByVendorCandidate_VendorCandidateId(int candidateId);
+        SelectionDetails findByVendorCandidate_VendorCandidateId(int vendorCandidateId);
 
         Boolean existsByEmployee_Psid(int psId);
 
