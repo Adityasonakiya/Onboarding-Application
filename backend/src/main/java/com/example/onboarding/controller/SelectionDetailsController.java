@@ -48,6 +48,17 @@ public class SelectionDetailsController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/vendorCandidateId/{vendorCandidateId}")
+    public ResponseEntity<SelectionDetails> getSelectionDetailsByVendorCandidateId(@PathVariable int vendorCandidateId) {
+        SelectionDetails selectionDetails = selectionDetailsService.getSelectionDetailsByVendorCandidateId(vendorCandidateId);
+        if (selectionDetails != null) {
+            return new ResponseEntity<>(selectionDetails, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping("/create/employee")
     public ResponseEntity<String> createSelectionDetails_Employee(@RequestBody SelectionDetails details){
         //try{
