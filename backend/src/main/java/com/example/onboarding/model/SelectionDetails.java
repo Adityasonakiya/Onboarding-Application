@@ -60,7 +60,7 @@ public class SelectionDetails {
     private int CToolRate;
     private int CToolProposedRate;
     private String recruiterName;
-    private String InterviewEvidences;
+    private String interviewEvidences;
     private String offerReleaseStatus;
     private Date HSBCOnboardingDate;
     private Date techSelectionDate;
@@ -185,11 +185,11 @@ public class SelectionDetails {
     }
 
     public String getInterviewEvidences() {
-        return InterviewEvidences;
+        return interviewEvidences;
     }
 
-    public void setInterviewEvidences(String InterviewEvidences) {
-        this.InterviewEvidences = InterviewEvidences;
+    public void setInterviewEvidences(String interviewEvidences) {
+        this.interviewEvidences = interviewEvidences;
     }
 
     public String getOfferReleaseStatus() {
@@ -321,7 +321,7 @@ public class SelectionDetails {
                 + ", PricingModel=" + PricingModel + ", HSBCToolId=" + HSBCToolId + ", CToolReceivedDate="
                 + CToolReceivedDate + ", CToolJobCategory=" + CToolJobCategory + ", CToolLocation=" + CToolLocation
                 + ", CToolRate=" + CToolRate + ", CToolProposedRate=" + CToolProposedRate + ", recruiterName="
-                + recruiterName + ", InterviewEvidences=" + InterviewEvidences + ", offerReleaseStatus="
+                + recruiterName + ", InterviewEvidences=" + interviewEvidences + ", offerReleaseStatus="
                 + offerReleaseStatus + ", HSBCOnboardingDate=" + HSBCOnboardingDate + ", techSelectionDate="
                 + techSelectionDate + ", DOJReceivedDate=" + DOJReceivedDate + ", LTIOnboardingDate="
                 + LTIOnboardingDate + ", createDate=" + createDate + ", updateDate=" + updateDate

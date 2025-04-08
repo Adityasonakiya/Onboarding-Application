@@ -41,6 +41,10 @@ public class SelectionDetailsService {
         return selectionDetailsRepository.findByCandidate_CandidateId(candidateId);
     }
 
+    public SelectionDetails getSelectionDetailsByVendorCandidateId(int vendorCandidateId) {
+        return selectionDetailsRepository.findByVendorCandidate_VendorCandidateId(vendorCandidateId);
+    }
+
     public SelectionDetails updateSelectionDetailsByPsId(int psId, SelectionDetails updatedDetails) {
         System.out.println("CandidateDate that is provided by frontend is here: " + updatedDetails.getCandidateStatusDate());
         SelectionDetails existingDetails = selectionDetailsRepository.findSelectionDetailsByPsId(psId);
