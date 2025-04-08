@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 
 import com.example.onboarding.model.BGVStatus;
 import com.example.onboarding.model.Candidate;
+import com.example.onboarding.model.CandidateStatus;
 import com.example.onboarding.model.Employee;
 import com.example.onboarding.model.OnboardingStatus;
 import com.example.onboarding.model.TaggingDetails;
 import com.example.onboarding.repository.BGVStatusRepository;
+import com.example.onboarding.repository.CandidateStatusRepository;
 import com.example.onboarding.repository.OnboardingStatusRepository;
 import com.example.onboarding.repository.TaggingDetailsRepository;
 
@@ -30,6 +32,9 @@ public class TaggingDetailsService {
 
     @Autowired
     private BGVStatusRepository bgvStatusRepository;
+    
+    @Autowired
+    private CandidateStatusRepository candidateStatusRepository;
 
     @Transactional
     public TaggingDetails updateTaggingDetailsByPsId(int psId, TaggingDetails updatedDetails) {
@@ -52,6 +57,11 @@ public class TaggingDetailsService {
                     BGVStatus bgvStatus = bgvStatusRepository.save(updatedDetails.getBgvStatus());
                     existingDetails.setBgvStatus(bgvStatus);
                     logger.info("New BGV status: {}", bgvStatus);
+                }
+                if (updatedDetails.getCandidateStatus() != null) {
+                    CandidateStatus candidateStatus = candidateStatusRepository.save(updatedDetails.getCandidateStatus());
+                    existingDetails.setCandidateStatus(candidateStatus);
+                    logger.info("New Candidate status: {}", candidateStatus);
                 }
 
                 if (updatedDetails.getCreateDate() != null) {
@@ -83,6 +93,11 @@ public class TaggingDetailsService {
                     updatedDetails.setBgvStatus(bgvStatus);
                     logger.info("New BGV status: {}", bgvStatus);
                 }
+                if (updatedDetails.getCandidateStatus() != null) {
+                    CandidateStatus candidateStatus = candidateStatusRepository.save(updatedDetails.getCandidateStatus());
+                    updatedDetails.setCandidateStatus(candidateStatus);
+                    logger.info("New Candidate status: {}", candidateStatus);
+                }
 
                 logger.info("New details created: {}", updatedDetails);
                 return taggingDetailsRepository.save(updatedDetails);
@@ -109,6 +124,10 @@ public class TaggingDetailsService {
                     BGVStatus bgvStatus = bgvStatusRepository.save(updatedDetails.getBgvStatus());
                     existingDetails.setBgvStatus(bgvStatus);
                 }
+                if (updatedDetails.getCandidateStatus() != null) {
+                    CandidateStatus candidateStatus = candidateStatusRepository.save(updatedDetails.getCandidateStatus());
+                    existingDetails.setCandidateStatus(candidateStatus);
+                }
                 existingDetails.setCreateDate(updatedDetails.getCreateDate());
                 existingDetails.setUpdateDate(updatedDetails.getUpdateDate());
                 return taggingDetailsRepository.save(existingDetails);
@@ -125,6 +144,10 @@ public class TaggingDetailsService {
                 if (updatedDetails.getBgvStatus() != null) {
                     BGVStatus bgvStatus = bgvStatusRepository.save(updatedDetails.getBgvStatus());
                     updatedDetails.setBgvStatus(bgvStatus);
+                }
+                if (updatedDetails.getCandidateStatus() != null) {
+                    CandidateStatus candidateStatus = candidateStatusRepository.save(updatedDetails.getCandidateStatus());
+                    updatedDetails.setCandidateStatus(candidateStatus);
                 }
                 return taggingDetailsRepository.save(updatedDetails);
             }
@@ -150,6 +173,10 @@ public class TaggingDetailsService {
                     BGVStatus bgvStatus = bgvStatusRepository.save(updatedDetails.getBgvStatus());
                     existingDetails.setBgvStatus(bgvStatus);
                 }
+                if (updatedDetails.getCandidateStatus() != null) {
+                    CandidateStatus candidateStatus = candidateStatusRepository.save(updatedDetails.getCandidateStatus());
+                    existingDetails.setCandidateStatus(candidateStatus);
+                }
                 existingDetails.setCreateDate(updatedDetails.getCreateDate());
                 existingDetails.setUpdateDate(updatedDetails.getUpdateDate());
                 return taggingDetailsRepository.save(existingDetails);
@@ -166,6 +193,10 @@ public class TaggingDetailsService {
                 if (updatedDetails.getBgvStatus() != null) {
                     BGVStatus bgvStatus = bgvStatusRepository.save(updatedDetails.getBgvStatus());
                     updatedDetails.setBgvStatus(bgvStatus);
+                }
+                if (updatedDetails.getCandidateStatus() != null) {
+                    CandidateStatus candidateStatus = candidateStatusRepository.save(updatedDetails.getCandidateStatus());
+                    updatedDetails.setCandidateStatus(candidateStatus);
                 }
                 return taggingDetailsRepository.save(updatedDetails);
             }

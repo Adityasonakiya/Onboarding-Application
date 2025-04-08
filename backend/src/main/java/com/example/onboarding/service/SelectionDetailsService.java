@@ -42,13 +42,7 @@ public class SelectionDetailsService {
     }
 
     public SelectionDetails updateSelectionDetailsByPsId(int psId, SelectionDetails updatedDetails) {
-        System.out.println("updated Details that is provided by frontend is here: " + updatedDetails);
-        System.out.println(
-                "updated Details that is provided by frontend is here 2: " + updatedDetails.getTechSelectionDate());
-        System.out.println(
-                "updated Details that is provided by frontend is here 3: " + updatedDetails.getDOJReceivedDate());
-        System.out.println(
-                "updated Details that is provided by frontend is here 4: " + updatedDetails.getHSBCOnboardingDate());
+        System.out.println("CandidateDate that is provided by frontend is here: " + updatedDetails.getCandidateStatusDate());
         SelectionDetails existingDetails = selectionDetailsRepository.findSelectionDetailsByPsId(psId);
         if (existingDetails != null) {
             existingDetails.setLob(updatedDetails.getLob());
@@ -73,6 +67,7 @@ public class SelectionDetailsService {
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
+            existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
             existingDetails.setUpdateDate(new Date());
             existingDetails.setCreatedBy(existingDetails.getCreatedBy());
             existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
@@ -103,6 +98,7 @@ public class SelectionDetailsService {
             existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
+            existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setUpdateDate(new Date());
             existingDetails.setIrm(updatedDetails.getIrm());
@@ -135,6 +131,7 @@ public class SelectionDetailsService {
             existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
+            existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setUpdateDate(new Date());
             existingDetails.setIrm(updatedDetails.getIrm());

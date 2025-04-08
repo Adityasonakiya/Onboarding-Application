@@ -2,6 +2,8 @@ package com.example.onboarding.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,6 +40,7 @@ public class TaggingDetails {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CandidateStatusId")
+    @JsonIgnoreProperties("taggingDetails")
     private CandidateStatus candidateStatus;
 
     @ManyToOne

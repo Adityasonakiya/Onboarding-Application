@@ -38,12 +38,22 @@ function UpdateDetails() {
   const [subLobs, setSubLobs] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [subLob, setSubLob] = useState([]);
-  const [selectedSubLobTemp,setSelectedSubLobTemp]=useState({});
+  const [selectedSubLobTemp, setSelectedSubLobTemp] = useState({});
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
   const id = state?.id;
   const today = new Date().toISOString().split("T")[0];
+  const [candidateStatuses, setCandidateStatuses] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:8080/candidate-status/all')
+      .then(response => response.json())
+      .then(data => {
+        setCandidateStatuses(data);
+      })
+      .catch(error => console.error('Error fetching candidate statuses:', error));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -68,23 +78,23 @@ function UpdateDetails() {
   };
 
   useEffect(() => {
-      if (form.vendor) {
-        setVendor(true);
-      }
-    });
+    if (form.vendor) {
+      setVendor(true);
+    }
+  });
 
   useEffect(() => {
-      const getVendors = async () => {
-        try {
-          const data = await getAllVendors();
-          setVendors(data);
-        } catch (error) {
-          console.error("There was an error fetching the Vendors!", error);
-        }
-      };
-  
-      getVendors();
-    }, []);  
+    const getVendors = async () => {
+      try {
+        const data = await getAllVendors();
+        setVendors(data);
+      } catch (error) {
+        console.error("There was an error fetching the Vendors!", error);
+      }
+    };
+
+    getVendors();
+  }, []);
 
   useEffect(() => {
     const getLobs = async () => {
@@ -97,21 +107,21 @@ function UpdateDetails() {
     };
 
     getLobs();
-    
+
   }, []);
 
   useEffect(() => {
-      const getSubLobs = async () => {
-        try {
-          const data = await fetchSubLobs(form.lob.lobId);
-          setSubLobs(data);         
-          form.subLob = selectedSubLobTemp;
-        } catch (error) {
-              console.error("There was an error fetching the SubLOBs!", error);
-        }
-      };
-      getSubLobs();
-    
+    const getSubLobs = async () => {
+      try {
+        const data = await fetchSubLobs(form.lob.lobId);
+        setSubLobs(data);
+        form.subLob = selectedSubLobTemp;
+      } catch (error) {
+        console.error("There was an error fetching the SubLOBs!", error);
+      }
+    };
+    getSubLobs();
+
   }, [form.lob]);
 
   const handleLobChange = async (event) => {
@@ -141,7 +151,7 @@ function UpdateDetails() {
     }
   };
 
-  const handleVendorChange = async(event) =>{
+  const handleVendorChange = async (event) => {
     const vendorId = event.target.value;
     console.log(vendorId);
 
@@ -167,8 +177,8 @@ function UpdateDetails() {
     setCandidateId(e.target.value);
   };
 
-  const handleVendorCandidateIdChange = (e) =>{
-    setVendorCandidateId (e.target.value)
+  const handleVendorCandidateIdChange = (e) => {
+    setVendorCandidateId(e.target.value)
   }
 
   const handleSubmit = async (e) => {
@@ -198,6 +208,10 @@ function UpdateDetails() {
         bgvStatus: form.bgvStatus,
         remarks: form.bgvRemark,
       },
+      candidateStatus:{
+        candidateStatus: form.candidateStatus,
+        remarks: form.candidateRemark,
+      },
       //createDate: createDate,
       updateDate: updateDate,
     };
@@ -223,6 +237,7 @@ function UpdateDetails() {
       offerReleaseStatus: form.offerReleaseStatus,
       ltionboardingDate: form.ltiOnboardDate,
       techSelectionDate: form.techSelectDate,
+      candidateStatusDate: form.candidateStatusDate,
       dojreceivedDate: form.dojRecDate,
       hsbconboardingDate: form.onboardingDate,
     };
@@ -263,7 +278,7 @@ function UpdateDetails() {
           });
           console.error("Error updating details by CandidateId:", error);
         });
-    } else if(isVendor && vendorCandidateId){
+    } else if (isVendor && vendorCandidateId) {
       updateSelectionDetailsByVendorCandidateId(vendorCandidateId, selectionDetails)
         .then(() => {
           updateTaggingDetailsByVendorCandidateId(vendorCandidateId, taggingDetails) &&
@@ -318,7 +333,7 @@ function UpdateDetails() {
             totalExp: employee.totalExperience || "",
             skill: employee.skill || "",
             email: employee.mailID || "",
-            vendors:"",
+            vendors: "",
             selectionDate: formatDate(selectionData.hsbcselectionDate),
             bu: "BF",
             lob: selectionData.lob || "",
@@ -342,10 +357,13 @@ function UpdateDetails() {
             addRemark: taggingData.onboardingStatus?.remarks || "",
             bgvStatus: taggingData.bgvStatus?.bgvStatus || "",
             bgvRemark: taggingData.bgvStatus?.remarks || "",
+            candidateStatus: taggingData.candidateStatus?.candidateStatus || "",
+            candidateRemark: taggingData.candidateStatus?.remarks || "",
             tagDate: formatDate(taggingData.createDate) || "",
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
+            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || ""
           });
           console.log(selectionData);
           setSelectedSubLobTemp(selectionData.subLob);
@@ -378,7 +396,7 @@ function UpdateDetails() {
             totalExp: "", // Assuming totalExperience is not available for candidate
             skill: "", // Assuming skill is not available for candidate
             email: "", // Assuming email is not available for candidate
-            vendors:"",
+            vendors: "",
             selectionDate: formatDate(selectionData.hsbcselectionDate),
             bu: "BF",
             lob: selectionData.lob || "",
@@ -412,20 +430,20 @@ function UpdateDetails() {
         .catch((error) => {
           console.error("Error fetching data by CandidateId:", error);
         });
-    }else if (isVendor && vendorCandidateId) {
+    } else if (isVendor && vendorCandidateId) {
       Promise.all([
         getVendorCandidateById(vendorCandidateId).catch((err) => {
           console.error("Error fetching vendor candidate data:", err);
           return {}; // Fallback to an empty object
-        }),,
+        }), ,
         getSelectionDetailsByVendorCandidateId(vendorCandidateId).catch((err) => {
           console.error("Error fetching vendor candidate data:", err);
           return {}; // Fallback to an empty object
-        }),,
+        }), ,
         getTaggingDetailsByVendorCandidateId(vendorCandidateId).catch((err) => {
           console.error("Error fetching vendor candidate data:", err);
           return {}; // Fallback to an empty object
-        }),,
+        }), ,
       ])
         .then(([vendorCandidate, selectionData, taggingData]) => {
           setForm({
@@ -474,7 +492,7 @@ function UpdateDetails() {
     } else {
       setErrors(errors);
     }
-  }, [psId, candidateId,,vendorCandidateId, isInternal,isExternal,isVendor]);
+  }, [psId, candidateId, , vendorCandidateId, isInternal, isExternal, isVendor]);
 
   return (
     <div className="w-full px-4 py-6">
@@ -567,9 +585,8 @@ function UpdateDetails() {
                     value={form.vendorCandidateId || ""}
                     onChange={handleVendorCandidateIdChange}
                     required
-                    className={`p-2 border rounded w-full ${
-                      errors.vendorCandidateId ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.vendorCandidateId ? "border-red-500" : ""
+                      }`}
                     disabled={isInternal || isExternal}
                     pattern="\d*"
                   />
@@ -783,7 +800,7 @@ function UpdateDetails() {
                   <td className="p-2 w-full md:w-1/4">
                     <select
                       name="subLob"
-                      value={form.subLob?.subLOBid ||''}
+                      value={form.subLob?.subLOBid || ''}
                       className="p-2 bordered w-full"
                       onChange={handleSubLobChange}
                     >
@@ -1167,6 +1184,82 @@ function UpdateDetails() {
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
+                    Candidate Status:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <select
+                    name="candidateStatus"
+                    value={form.candidateStatus || ""}
+                    onChange={handleChange}
+                    className="p-2 mb-2 border rounded w-full"
+                    required
+                  >
+                    <option value="">Choose..</option>
+                    {candidateStatuses.map(status => (
+                      <option key={status.candidateStatusId} value={status.candidateStatus}>
+                        {status.candidateStatus}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-bold">
+                    Candidate Additional Remark:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <textarea
+                    name="candidateRemark"
+                    value={form.candidateRemark || ""}
+                    onChange={handleChange}
+                    className="p-2 mb-2 border rounded w-full resize-none"
+                    required
+                  />
+                </td>
+                
+              </tr>
+              <tr className="flex flex-wrap md:flex-nowrap">
+              <td className="p-2 w-full md:w-1/4">
+                  <label className="font-bold">
+                    Candidate Selection Date:
+                    <span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    type="date"
+                    name="candidateStatusDate"
+                    value={form.candidateStatusDate || ""}
+                    required
+                    // disabled={!form.candSelectDateEnabled}
+                    onChange={handleChange}
+                    className="p-2 mb-2 border rounded w-full"
+                    min={today}
+                  />
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-bold">
+                    Onboarding Date:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    type="date"
+                    name="onboardingDate"
+                    value={form.onboardingDate || ""}
+                    required
+                    disabled={!form.onboardingDateEnabled}
+                    onChange={handleChange}
+                    className="p-2 mb-2 border rounded w-full"
+                    min={today}
+                  />
+                </td>
+              </tr>
+              
+              <tr className="flex flex-wrap md:flex-nowrap">
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-bold">
                     Tagging date:<span className="text-red-500">*</span>
                   </label>
                 </td>
@@ -1214,23 +1307,6 @@ function UpdateDetails() {
                     value={form.dojRecDate || ""}
                     required
                     disabled={!form.dojRecDateEnabled}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                    min={today}
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    Onboarding Date:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="date"
-                    name="onboardingDate"
-                    value={form.onboardingDate || ""}
-                    required
-                    disabled={!form.onboardingDateEnabled}
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
                     min={today}
