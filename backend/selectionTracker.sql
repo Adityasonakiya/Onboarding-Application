@@ -55,32 +55,33 @@ VALUES
 
 INSERT INTO vendor (vendor_id, vendor_name)
 VALUES
-(1, 'Ria'),
-(2, 'CSI Global'),
-(3, 'Bil Vantis'),
-(4, 'Copia'),
-(5, 'Bowmen India'),
-(6, 'Bowmen UK'),
-(7, 'EY'),
-(8, 'Aligne'),
-(9, 'Saki Soft'),
-(10, 'Incube'),
-(11, 'Finsol');
+(1,'Not Applicable'),
+(2, 'Ria'),
+(3, 'CSI Global'),
+(4, 'Bil Vantis'),
+(5, 'Copia'),
+(6, 'Bowmen India'),
+(7, 'Bowmen UK'),
+(8, 'EY'),
+(9, 'Aligne'),
+(10, 'Saki Soft'),
+(11, 'Incube'),
+(12, 'Finsol');
 
 
-INSERT INTO vendor_candidate (vendor_candidate_id, vendor_id , first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date)
+INSERT INTO vendor_candidate (vendor_id , first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date)
 VALUES
-(101, 1, 'John', 'A.', 'Doe', '2025-01-15', 10713037, 10713037, '2025-01-01', '2025-01-10'),
-(201, 2, 'Jane', 'B.', 'Smith', '2025-01-20', 10713037, 10713037, '2025-01-02', '2025-01-11'),
-(301, 3, 'Michael', 'C.', 'Johnson', '2025-01-25', 10713037, 10713037, '2025-01-03', '2025-01-12'),
-(401, 4, 'Emily', 'D.', 'Williams', '2025-02-01', 10713037, 10713037, '2025-01-04', '2025-01-13'),
-(501, 5, 'David', 'E.', 'Brown', '2025-02-05', 10713037, 10713037, '2025-01-05', '2025-01-14'),
-(601, 6, 'Sarah', 'F.', 'Jones', '2025-02-10', 10713037, 10713037, '2025-01-06', '2025-01-15'),
-(701, 7, 'Daniel', 'G.', 'Garcia', '2025-02-15', 10713037, 10713037, '2025-01-07', '2025-01-16'),
-(801, 8, 'Sophia', 'H.', 'Martinez', '2025-02-20', 10713037, 10713037, '2025-01-08', '2025-01-17'),
-(901, 9, 'James', 'I.', 'Hernandez', '2025-02-25', 10713037, 10713037, '2025-01-09', '2025-01-18'),
-(1001, 10, 'Olivia', 'J.', 'Lopez', '2025-03-01', 10713037, 10713037, '2025-01-10', '2025-01-19'),
-(1101, 11, 'William', 'K.', 'Wilson', '2025-03-05', 10713037, 10713037, '2025-01-11', '2025-01-20');
+( 1, 'John', 'A.', 'Doe', '2025-01-15', 10713037, 10713037, '2025-01-01', '2025-01-10'),
+( 2, 'Jane', 'B.', 'Smith', '2025-01-20', 10713037, 10713037, '2025-01-02', '2025-01-11'),
+( 3, 'Michael', 'C.', 'Johnson', '2025-01-25', 10713037, 10713037, '2025-01-03', '2025-01-12'),
+( 4, 'Emily', 'D.', 'Williams', '2025-02-01', 10713037, 10713037, '2025-01-04', '2025-01-13'),
+( 5, 'David', 'E.', 'Brown', '2025-02-05', 10713037, 10713037, '2025-01-05', '2025-01-14'),
+( 6, 'Sarah', 'F.', 'Jones', '2025-02-10', 10713037, 10713037, '2025-01-06', '2025-01-15'),
+( 7, 'Daniel', 'G.', 'Garcia', '2025-02-15', 10713037, 10713037, '2025-01-07', '2025-01-16'),
+( 8, 'Sophia', 'H.', 'Martinez', '2025-02-20', 10713037, 10713037, '2025-01-08', '2025-01-17'),
+( 9, 'James', 'I.', 'Hernandez', '2025-02-25', 10713037, 10713037, '2025-01-09', '2025-01-18'),
+( 10, 'Olivia', 'J.', 'Lopez', '2025-03-01', 10713037, 10713037, '2025-01-10', '2025-01-19'),
+( 11, 'William', 'K.', 'Wilson', '2025-03-05', 10713037, 10713037, '2025-01-11', '2025-01-20');
 
 
 INSERT INTO onboarding_status 
@@ -334,7 +335,44 @@ where selection.created_by = 10713037
       and selection.lob_id=lob.lob_id
 	  and cnd.candidate_id=td.candidate_id
 	  and td.onboarding_status_id=obs.status_id
+	  and td.bgvstatus_id=bgvs.bgv_status_id
+Union
+Select vc.vendor_candidate_id as id,vc.first_name,vc.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status from vendor_candidate vc,lob lob,
+selection_details selection,onboarding_status obs,BGVStatus bgvs , tagging_details td
+where selection.created_by = 10713037
+      and selection.vendor_candidate_id=vc.vendor_candidate_id
+      and selection.lob_id=lob.lob_id
+	  and vc.vendor_candidate_id=td.vendor_candidate_id
+	  and td.onboarding_status_id=obs.status_id
 	  and td.bgvstatus_id=bgvs.bgv_status_id;
+
+Select emp.psid as id ,emp.first_name,emp.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status 
+from employee emp
+left join selection_details selection on selection.ps_id=emp.psid
+left join lob lob on selection.lob_id=lob.lob_id
+left join tagging_details td on emp.psid=td.ps_id
+left join onboarding_status obs on td.onboarding_status_id=obs.status_id
+left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
+where selection.created_by = 10713037
+Union	  
+Select cnd.candidate_id as id,cnd.first_name,cnd.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status 
+from candidate cnd
+left join selection_details selection on selection.candidate_id=cnd.candidate_id
+left join lob lob on selection.lob_id=lob.lob_id
+left join tagging_details td on cnd.candidate_id=td.candidate_id
+left join onboarding_status obs on td.onboarding_status_id=obs.status_id
+left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
+where selection.created_by = 10713037
+Union
+Select vc.vendor_candidate_id as id,vc.first_name,vc.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status   
+from vendor_candidate vc
+left join selection_details selection on selection.vendor_candidate_id=vc.vendor_candidate_id
+left join lob lob on selection.lob_id=lob.lob_id
+left join tagging_details td on vc.vendor_candidate_id=td.vendor_candidate_id
+left join onboarding_status obs on td.onboarding_status_id=obs.status_id
+left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
+where selection.created_by = 10713037;
+
 
 select count(*),lb.lob_name,sd.pricing_model from selectiontracker.selection_details sd,selectiontracker.lob lb 
 where sd.lob_id=lb.lob_id  

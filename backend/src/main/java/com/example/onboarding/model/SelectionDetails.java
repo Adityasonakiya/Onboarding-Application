@@ -25,7 +25,7 @@ public class SelectionDetails {
     private Candidate candidate;
 
     @ManyToOne
-    @JoinColumn(name = "vendorCandidateId")
+    @JoinColumn(name = "vendorId")
     private VendorCandidate vendorCandidate;
 
     private String deliveryManager;

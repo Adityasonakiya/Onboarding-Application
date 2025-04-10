@@ -4,18 +4,24 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.onboarding.model.AwaitedCasesDTO;
 import com.example.onboarding.model.BGVStatus;
 import com.example.onboarding.model.CtoolDto;
+import com.example.onboarding.model.EmployeeCandidateDTO;
 import com.example.onboarding.model.OnboardingStatus;
 import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
-import com.example.onboarding.model.TaggingDetails;
 import com.example.onboarding.repository.EmployeeRepository;
 import com.example.onboarding.repository.SelectionDetailsRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class SelectionDetailsService {
 
@@ -41,8 +47,8 @@ public class SelectionDetailsService {
         return selectionDetailsRepository.findByCandidate_CandidateId(candidateId);
     }
 
-    public SelectionDetails getSelectionDetailsByVendorCandidateId(int vendorCandidateId) {
-        return selectionDetailsRepository.findByVendorCandidate_VendorCandidateId(vendorCandidateId);
+    public SelectionDetails getSelectionDetailsByVendorCandidateId(int vendorId) {
+        return selectionDetailsRepository.findByVendorCandidate_Vendor_VendorId(vendorId);
     }
 
     public SelectionDetails updateSelectionDetailsByPsId(int psId, SelectionDetails updatedDetails) {
@@ -113,8 +119,8 @@ public class SelectionDetailsService {
         return selectionDetailsRepository.save(updatedDetails);
     }
 
-    public SelectionDetails updateSelectionDetailsByVendorCandidateId(int vendorCandidateId, SelectionDetails updatedDetails) {
-        SelectionDetails existingDetails = selectionDetailsRepository.findByVendorCandidate_VendorCandidateId(vendorCandidateId);
+    public SelectionDetails updateSelectionDetailsByVendorCandidateId(int vendorId, SelectionDetails updatedDetails) {
+        SelectionDetails existingDetails = selectionDetailsRepository.findByVendorCandidate_Vendor_VendorId(vendorId);
         if (existingDetails != null) {
             existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());
             existingDetails.setHSBCSelectionDate(updatedDetails.getHSBCSelectionDate());
@@ -175,17 +181,28 @@ public class SelectionDetailsService {
     }
 
     public SelectionDetails createSelectionDetails_VendorCandidate(SelectionDetails details) {
-        int vendorCandidateId = details.getVendorCandidate().getVendorCandidateId();
-        if (selectionDetailsRepository.existsByVendorCandidate_VendorCandidateId(vendorCandidateId) && taggingDetailsService.getTaggingDetailsByVendorCandidateId(vendorCandidateId).getOnboardingStatus().getStatusId()!=6) {
-            throw new RuntimeException("Selection already exists for Candidate: " + details.getVendorCandidate().getVendorCandidateId());
-        } else {
+        //int vendorId = details.getVendorCandidate().getVendorId();
+        // if (selectionDetailsRepository.existsByVendor_VendorId(vendorCandidateId) && taggingDetailsService.getTaggingDetailsByVendorCandidateId(vendorCandidateId).getOnboardingStatus().getStatusId()!=6) {
+        //     throw new RuntimeException("Selection already exists for Candidate: " + details.getVendorCandidate().getVendorId());
+        // } else {
             details.setCreateDate(new Date());
             details.setUpdateDate(new Date());
             details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             System.out.println("Dates" + details.getCreateDate() + details.getUpdateDate());
             return selectionDetailsRepository.save(details);
-        }
+        //}
+    }
+
+    public Page<EmployeeCandidateDTO> getEmployeeCandidates(Integer createdBy, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<EmployeeCandidateDTO> employeeCandidateDTOPage = selectionDetailsRepository.findEmployeeCandidates(createdBy,
+                pageable);
+
+        log.info("Employee Candidates Handler data : Page {} of {}", page, employeeCandidateDTOPage.getTotalPages());
+        employeeCandidateDTOPage.forEach(candidate -> log.info("Employee Candidate: {}", candidate));
+
+        return employeeCandidateDTOPage;
     }
 
     public List<SelectionDTO> findSelections() {
