@@ -14,6 +14,14 @@ export const getEmployeeCandidateByPsid = async (psid) => {
   throw new Error('Failed to fetch employee data');
 };
 
+export const getEmployeeCandidateByCandidateId = async (candidateId) => {
+  const response = await fetch(`http://localhost:8080/candidates/api/employee-candidates/${candidateId}`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error('Failed to fetch candidate data');
+};
+
 export const getAllEmployees = async (psid) => {
   const response = await fetch(`http://localhost:8080/employees`);
   if (response.ok) {
@@ -70,8 +78,8 @@ export const getAllVendors = async() => {
   throw new Error('Failed to fetch data');
 }
 
-export const getVendorCandidateById = async(vendorCandidateId) =>{
-  const response = await fetch(`http://localhost:8080/vendors/vendor-candidates/${vendorCandidateId}`);
+export const getVendorCandidateById = async(vendorId) =>{
+  const response = await fetch(`http://localhost:8080/vendors/vendor-candidates/${vendorId}`);
   if(response.ok){
     return response.json();
   }
@@ -116,8 +124,8 @@ export const getSelectionDetailsByCandidateId = async (candidateId) => {
   throw new Error('Failed to fetch selection details by candidateId');
 };
 
-export const getSelectionDetailsByVendorCandidateId = async (vendorCandidateId) => {
-  const response = await fetch(`http://localhost:8080/selection-details/vendorCandidateId/${vendorCandidateId}`);
+export const getSelectionDetailsByVendorCandidateId = async (vendorId) => {
+  const response = await fetch(`http://localhost:8080/selection-details/vendorCandidateId/${vendorId}`);
   if (response.ok) {
     return response.json();
   }
@@ -140,8 +148,8 @@ export const getTaggingDetailsByCandidateId = async (candidateId) => {
   throw new Error('Failed to fetch tagging details by candidateId');
 };
 
-export const getTaggingDetailsByVendorCandidateId = async (vendorCandidateId) => {
-  const response = await fetch(`http://localhost:8080/api/tagging-details/vendor/${vendorCandidateId}`);
+export const getTaggingDetailsByVendorCandidateId = async (vendorId) => {
+  const response = await fetch(`http://localhost:8080/api/tagging-details/vendor/${vendorId}`);
   if (response.ok) {
     return await response.json();
   }
@@ -263,9 +271,10 @@ export const fetchSubLob = async(subLobId)=>{
   }
     return response.json();
 };
-export const fetchEmployeeCandidates = async (createdBy, page = 0, size = 5) => {
+
+export const fetchEmployeeCandidatesBySelections = async (createdBy, page = 0, size = 5) => {
   const validPage=Math.max(0,page)
-  const response = await fetch(`http://localhost:8080/employees/api/employee-candidates?createdBy=${createdBy}&page=${validPage}&size=${size}`);
+  const response = await fetch(`http://localhost:8080/selection-details/api/employee-candidates?createdBy=${createdBy}&page=${validPage}&size=${size}`);
   if (!response.ok) {
     throw new Error('Failed to fetch employee candidates');
   }

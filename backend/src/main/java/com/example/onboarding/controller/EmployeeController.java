@@ -56,14 +56,14 @@ public class EmployeeController {
     //     List<EmployeeCandidateDTO> employeeCandidates = employeeService.getEmployeeCandidates(createdBy);
     //     return ResponseEntity.ok(employeeCandidates);
     // }
-    @GetMapping("/api/employee-candidates")
-    public Page<EmployeeCandidateDTO> getEmployeeCandidates(
-        @RequestParam Integer createdBy,
-        @RequestParam int page,
-        @RequestParam int size
-    ) {
-        return employeeService.getEmployeeCandidates(createdBy, page, size);       
-    }
+    // @GetMapping("/api/employee-candidates")
+    // public Page<EmployeeCandidateDTO> getEmployeeCandidates(
+    //     @RequestParam Integer createdBy,
+    //     @RequestParam int page,
+    //     @RequestParam int size
+    // ) {
+    //     return employeeService.getEmployeeCandidates(createdBy, page, size);       
+    // }
 
     @GetMapping("/api/employee-candidates/{id}")
     public ResponseEntity<EmployeeCandidateDTO> getEmployeeCandidateById(@PathVariable int id) {

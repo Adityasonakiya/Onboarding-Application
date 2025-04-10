@@ -35,16 +35,16 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Page<EmployeeCandidateDTO> getEmployeeCandidates(Integer createdBy, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<EmployeeCandidateDTO> employeeCandidateDTOPage = employeeRepository.findEmployeeCandidates(createdBy,
-                pageable);
+    // public Page<EmployeeCandidateDTO> getEmployeeCandidates(Integer createdBy, int page, int size) {
+    //     Pageable pageable = PageRequest.of(page, size);
+    //     Page<EmployeeCandidateDTO> employeeCandidateDTOPage = employeeRepository.findEmployeeCandidates(createdBy,
+    //             pageable);
 
-        log.info("Employee Candidates Handler data : Page {} of {}", page, employeeCandidateDTOPage.getTotalPages());
-        employeeCandidateDTOPage.forEach(candidate -> log.info("Employee Candidate: {}", candidate));
+    //     log.info("Employee Candidates Handler data : Page {} of {}", page, employeeCandidateDTOPage.getTotalPages());
+    //     employeeCandidateDTOPage.forEach(candidate -> log.info("Employee Candidate: {}", candidate));
 
-        return employeeCandidateDTOPage;
-    }
+    //     return employeeCandidateDTOPage;
+    // }
 
     public EmployeeCandidateDTO getEmployeeCandidateById(int id) {
         log.info("Id that is coming: {}", id);

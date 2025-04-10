@@ -157,12 +157,12 @@ public class TaggingDetailsService {
         }
     }
 
-    public TaggingDetails updateTaggingDetailsByVendorCandidateId(int vendorCandidateId, TaggingDetails updatedDetails) {
+    public TaggingDetails updateTaggingDetailsByVendorCandidateId(int vendorId, TaggingDetails updatedDetails) {
         try {
-            logger.info("Updating TaggingDetails by CandidateId: {}", vendorCandidateId);
-            TaggingDetails existingDetails = taggingDetailsRepository.findByCandidate_CandidateId(vendorCandidateId);
+            logger.info("Updating TaggingDetails by CandidateId: {}", vendorId);
+            TaggingDetails existingDetails = taggingDetailsRepository.findByCandidate_CandidateId(vendorId);
             if (existingDetails != null) {
-                logger.info("Existing details found for CandidateId: {}", vendorCandidateId);
+                logger.info("Existing details found for CandidateId: {}", vendorId);
                 if (updatedDetails.getOnboardingStatus() != null) {
                     OnboardingStatus onboardingStatus = onboardingStatusRepository
                             .save(updatedDetails.getOnboardingStatus());
@@ -181,8 +181,8 @@ public class TaggingDetailsService {
                 existingDetails.setUpdateDate(updatedDetails.getUpdateDate());
                 return taggingDetailsRepository.save(existingDetails);
             } else {
-                logger.info("No existing details found for CandidateId: {}, creating new entry", vendorCandidateId);
-                updatedDetails.setCandidate(new Candidate(vendorCandidateId)); // Assuming Candidate class has a constructor
+                logger.info("No existing details found for CandidateId: {}, creating new entry", vendorId);
+                updatedDetails.setCandidate(new Candidate(vendorId)); // Assuming Candidate class has a constructor
                                                                          // with candidateId
                 if (updatedDetails.getOnboardingStatus() != null) {
                     OnboardingStatus onboardingStatus = onboardingStatusRepository
@@ -214,7 +214,7 @@ public class TaggingDetailsService {
         return taggingDetailsRepository.findByCandidate_CandidateId(candidateId);
     }
 
-    public TaggingDetails getTaggingDetailsByVendorCandidateId(int vendorCandidateId) {
-        return taggingDetailsRepository.findByVendorCandidate_VendorCandidateId(vendorCandidateId);
+    public TaggingDetails getTaggingDetailsByVendorCandidateId(int vendorId) {
+        return taggingDetailsRepository.findByVendorCandidate_Vendor_VendorId(vendorId);
     }
 }
