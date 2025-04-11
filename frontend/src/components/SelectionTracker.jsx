@@ -120,7 +120,7 @@ function SelectionTracker() {
               pu: "", // Assuming pu is not available for candidate
               totalExp: "", // Assuming totalExperience is not available for candidate
               skill: "", // Assuming skill is not available for candidate
-              email: vendorCandidate.mailID, // Assuming email is not available for candidate
+              email: "", // Assuming email is not available for candidate
             }));
             setIsExternal(false); // Set isInternal to false for vendor
             setIsInternal(false);
@@ -315,7 +315,7 @@ function SelectionTracker() {
         pu: "", // Assuming pu is not available for candidate
         totalExp: "", // Assuming totalExperience is not available for candidate
         skill: "", // Assuming skill is not available for candidate
-        email: vendorCandidate.mailID, // Assuming email is not available for candidate
+        email: "", // Assuming email is not available for candidate
       }));
     } catch (error) {
       console.error(error);
@@ -577,7 +577,6 @@ function SelectionTracker() {
               vendor:form.vendors,
               firstName: form.fname,
               lastName: form.lname,
-              mailID:form.email,
               baseBU: "BF",
           };
       
@@ -905,7 +904,7 @@ function SelectionTracker() {
                     value={form.email || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full bg-slate-100"
-                    disabled={isInternal || readOnly}
+                    disabled
                   />
                 </td>
               </tr>
