@@ -27,7 +27,6 @@ public class VendorCandidate {
     private String firstName;
     private String middleName;
     private String lastName;
-    private String mailID;
 
     @JsonProperty("ltionboardingDate")
     private Date LTIOnboardingDate;
@@ -74,12 +73,6 @@ public class VendorCandidate {
     }
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-    public String getMailID() {
-        return mailID;
-    }
-    public void setMailID(String mailID) {
-        this.mailID = mailID;
     }
     public Date getLTIOnboardingDate() {
         return LTIOnboardingDate;
