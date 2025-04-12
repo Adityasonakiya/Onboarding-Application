@@ -47,12 +47,12 @@ public class TaggingDetailsServiceTest {
 
     @Test
     public void testGetTaggingDetailsByCandidateId() {
-        int candidateId = 1;
-        when(taggingDetailsRepository.findByCandidate_CandidateId(candidateId)).thenReturn(taggingDetails);
+        Long phoneNumber = (long) 1;
+        when(taggingDetailsRepository.findByCandidate_PhoneNumber(phoneNumber)).thenReturn(taggingDetails);
 
-        TaggingDetails result = taggingDetailsService.getTaggingDetailsByCandidateId(candidateId);
+        TaggingDetails result = taggingDetailsService.getTaggingDetailsByCandidatePhoneNumber(phoneNumber);
         assertNotNull(result);
-        verify(taggingDetailsRepository, times(1)).findByCandidate_CandidateId(candidateId);
+        verify(taggingDetailsRepository, times(1)).findByCandidate_PhoneNumber(phoneNumber);
     }
 
     @Test
@@ -70,14 +70,14 @@ public class TaggingDetailsServiceTest {
 
     @Test
     public void testUpdateTaggingDetailsByCandidateId() {
-        int candidateId = 1;
+        Long phoneNumber = (long) 1;
         TaggingDetails updatedDetails = new TaggingDetails();
-        when(taggingDetailsRepository.findByCandidate_CandidateId(candidateId)).thenReturn(taggingDetails);
+        when(taggingDetailsRepository.findByCandidate_PhoneNumber(phoneNumber)).thenReturn(taggingDetails);
         when(taggingDetailsRepository.save(taggingDetails)).thenReturn(taggingDetails);
 
-        TaggingDetails result = taggingDetailsService.updateTaggingDetailsByCandidateId(candidateId, updatedDetails);
+        TaggingDetails result = taggingDetailsService.updateTaggingDetailsByCandidatePhoneNumber(phoneNumber, updatedDetails);
         assertNotNull(result);
-        verify(taggingDetailsRepository, times(1)).findByCandidate_CandidateId(candidateId);
+        verify(taggingDetailsRepository, times(1)).findByCandidate_PhoneNumber(phoneNumber);
         verify(taggingDetailsRepository, times(1)).save(taggingDetails);
     }
 }

@@ -37,11 +37,11 @@ public class TaggingDetailsControllerTest {
 
     @Test
     public void testGetTaggingDetailsByCandidateId() throws Exception {
-        int candidateId = 1;
+        Long phoneNumber = (long) 1;
         TaggingDetails taggingDetails = new TaggingDetails();
-        Mockito.when(taggingDetailsService.getTaggingDetailsByCandidateId(candidateId)).thenReturn(taggingDetails);
+        Mockito.when(taggingDetailsService.getTaggingDetailsByCandidatePhoneNumber(phoneNumber)).thenReturn(taggingDetails);
 
-        mockMvc.perform(get("/api/tagging-details/candidate/{candidateId}", candidateId))
+        mockMvc.perform(get("/api/tagging-details/candidate/{candidateId}", phoneNumber))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
@@ -62,12 +62,12 @@ public class TaggingDetailsControllerTest {
 
     @Test
     public void testUpdateTaggingDetailsByCandidateId() throws Exception {
-        int candidateId = 1;
+        Long phoneNumber = (long) 1;
         TaggingDetails taggingDetails = new TaggingDetails();
-        Mockito.when(taggingDetailsService.updateTaggingDetailsByCandidateId(Mockito.eq(candidateId), Mockito.any(TaggingDetails.class)))
+        Mockito.when(taggingDetailsService.updateTaggingDetailsByCandidatePhoneNumber(Mockito.eq(phoneNumber), Mockito.any(TaggingDetails.class)))
                 .thenReturn(taggingDetails);
 
-        mockMvc.perform(put("/api/tagging-details/candidate/{candidateId}", candidateId)
+        mockMvc.perform(put("/api/tagging-details/candidate/{phoneNumber}", phoneNumber)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"bgvStatus\": {\"bgvStatus\": \"In progress\"}}"))
                 .andExpect(status().isOk())

@@ -21,13 +21,13 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
         @Query(value = "SELECT * FROM selection_details sd WHERE sd.ps_id = :psId ORDER BY sd.create_date DESC LIMIT 1", nativeQuery = true)
         SelectionDetails findSelectionDetailsByPsId(@Param("psId") Integer psId);
 
-        SelectionDetails findByCandidate_CandidateId(int candidateId);
+        SelectionDetails findByCandidate_PhoneNumber(Long phoneNumber);
 
-        SelectionDetails findByVendorCandidate_Vendor_VendorId(int vendorId);
+        SelectionDetails findByVendorCandidate_PhoneNumber(Long phoneNumber);
 
         Boolean existsByEmployee_Psid(int psId);
 
-        Boolean existsByCandidate_CandidateId(int candidateId);
+        Boolean existsByCandidate_PhoneNumber(Long phoneNumber);
 
         //Boolean existsByVendorCandidate_VendorCandidateId(int vendorCandidateId);
 
@@ -49,9 +49,9 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
                "lob.lob_name AS lobName, selection.hsbchiring_manager AS hsbchiringManager, " +
                "NULL AS onboardingStatus, NULL AS bgvStatus " +
                "FROM  candidate cnd " +
-               "LEFT JOIN selection_details selection ON selection.candidate_id = cnd.candidate_id " +
+               "LEFT JOIN selection_details selection ON selection.candidate_phone_number = cnd.phone_number " +
                "LEFT JOIN lob lob ON selection.lob_id = lob.lob_id " +
-               "LEFT JOIN tagging_details td ON cnd.candidate_id = td.candidate_id " +
+               "LEFT JOIN tagging_details td ON cnd.phone_number = td.candidate_phone_number " +
                "WHERE selection.created_by = :createdBy " +
                ")" +
                "UNION ALL " +
@@ -60,9 +60,9 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
                "lob.lob_name AS lobName, selection.hsbchiring_manager AS hsbchiringManager, " +
                "NULL AS onboardingStatus, NULL AS bgvStatus " +
                "FROM vendor_candidate vc " +
-               "LEFT JOIN selection_details selection ON selection.vendor_id = vc.vendor_id " +
+               "LEFT JOIN selection_details selection ON selection.vendor_phone_number = vc.phone_number " +
                "LEFT JOIN lob lob ON selection.lob_id = lob.lob_id " +
-               "LEFT JOIN tagging_details td ON vc.vendor_id = td.vendor_id " +
+               "LEFT JOIN tagging_details td ON vc.phone_number = td.vendor_phone_number " +
                "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id " +
                "LEFT JOIN BGVStatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
                "WHERE selection.created_by = :createdBy " +
@@ -73,14 +73,14 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
                "LEFT JOIN selection_details selection ON selection.ps_id = emp.psid " + // Fixed emp. -> emp.psid
                "WHERE selection.created_by = :createdBy " +
                "UNION ALL " +
-               "SELECT cnd.candidate_id AS id " +
+               "SELECT cnd.phone_number AS id " +
                "FROM candidate cnd " +
-               "LEFT JOIN selection_details selection ON selection.candidate_id = cnd.candidate_id " +
+               "LEFT JOIN selection_details selection ON selection.candidate_phone_number = cnd.phone_number " +
                "WHERE selection.created_by = :createdBy " +
                "UNION ALL " +
                "SELECT vc.vendor_id AS id " +
                "FROM vendor_candidate vc " +
-               "LEFT JOIN selection_details selection ON selection.vendor_id = vc.vendor_id " +
+               "LEFT JOIN selection_details selection ON selection.vendor_phone_number = vc.phone_number " +
                "WHERE selection.created_by = :createdBy " +
                ") AS totalCount",
         nativeQuery = true)

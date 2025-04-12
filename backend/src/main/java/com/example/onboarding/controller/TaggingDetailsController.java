@@ -36,9 +36,9 @@ public class TaggingDetailsController {
         }
     }
 
-    @GetMapping("/candidate/{candidateId}")
-    public ResponseEntity<TaggingDetails> getTaggingDetailsByCandidateId(@PathVariable int candidateId) {
-        TaggingDetails details = taggingDetailsService.getTaggingDetailsByCandidateId(candidateId);
+    @GetMapping("/candidate/{phoneNumber}")
+    public ResponseEntity<TaggingDetails> getTaggingDetailsByCandidateId(@PathVariable Long phoneNumber) {
+        TaggingDetails details = taggingDetailsService.getTaggingDetailsByCandidatePhoneNumber(phoneNumber);
         if (details != null) {
             return ResponseEntity.ok(details);
         } else {
@@ -57,11 +57,11 @@ public class TaggingDetailsController {
         return ResponseEntity.ok(updated);
     }
 
-    @PutMapping("/candidate/{candidateId}")
-    public ResponseEntity<TaggingDetails> updateTaggingDetailsByCandidateId(@PathVariable int candidateId,
+    @PutMapping("/candidate/{phoneNumber}")
+    public ResponseEntity<TaggingDetails> updateTaggingDetailsByCandidateId(@PathVariable Long phoneNumber,
             @RequestBody TaggingDetails updatedDetails) {
         try {
-            TaggingDetails details = taggingDetailsService.updateTaggingDetailsByCandidateId(candidateId,
+            TaggingDetails details = taggingDetailsService.updateTaggingDetailsByCandidatePhoneNumber(phoneNumber,
                     updatedDetails);
             return ResponseEntity.ok(details);
         } catch (Exception e) {
@@ -69,11 +69,11 @@ public class TaggingDetailsController {
         }
     }
 
-    @PutMapping("/vendor-candidate/{vendorCandidateId}")
-    public ResponseEntity<TaggingDetails> updateTaggingDetailsByVendorCandidateId(@PathVariable int vendorCandidateId,
+    @PutMapping("/vendor-candidate/{phoneNumber}")
+    public ResponseEntity<TaggingDetails> updateTaggingDetailsByVendorCandidateId(@PathVariable Long phoneNumber,
             @RequestBody TaggingDetails updatedDetails) {
         try {
-            TaggingDetails details = taggingDetailsService.updateTaggingDetailsByCandidateId(vendorCandidateId,
+            TaggingDetails details = taggingDetailsService.updateTaggingDetailsByVendorPhoneNumber(phoneNumber,
                     updatedDetails);
             return ResponseEntity.ok(details);
         } catch (Exception e) {

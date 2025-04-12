@@ -4,23 +4,18 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class VendorCandidate {
     
-     @EmbeddedId
-    private VendorCandidateKey id;
-
+    @Id
+    private Long phoneNumber;
     
-    @MapsId("vendorId") // Links to Vendor's primary key
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "vendorId")
     private Vendor vendor;
 
@@ -44,12 +39,7 @@ public class VendorCandidate {
 
     
     // Getters, Setters, Constructors (default and parameterized), equals, hashCode, and toString
-    public VendorCandidateKey getId() {
-        return id;
-    }
-     public void setId(VendorCandidateKey id) {
-         this.id = id;
-     }
+    
     public Vendor getVendor() {
         return vendor;
     }
@@ -110,7 +100,12 @@ public class VendorCandidate {
                 + ", lastName=" + lastName + ", LTIOnboardingDate=" + LTIOnboardingDate + ", createdBy=" + createdBy
                 + ", updatedBy=" + updatedBy + ", createDate=" + createDate + ", updateDate=" + updateDate + "]";
     }
-
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
     
     
 }

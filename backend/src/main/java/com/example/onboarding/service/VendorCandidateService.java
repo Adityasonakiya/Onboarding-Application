@@ -1,5 +1,6 @@
 package com.example.onboarding.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,27 +9,26 @@ import org.springframework.stereotype.Service;
 
 import com.example.onboarding.model.Vendor;
 import com.example.onboarding.model.VendorCandidate;
-import com.example.onboarding.model.VendorCandidateKey;
+import com.example.onboarding.repository.EmployeeRepository;
 import com.example.onboarding.repository.VendorCandidateRepository;
 import com.example.onboarding.repository.VendorRepository;
 
 @Service
-public class VendorCandidateSerivce {
+public class VendorCandidateService {
     @Autowired
     private VendorRepository vendorRepository;
 
     @Autowired
     private VendorCandidateRepository vendorCandidateRepository;
 
-    public VendorCandidate getVendorCandidateById(int vendorId) {
-    // Create the composite key (VendorCandidateId)
-        VendorCandidateKey vendorCandidateId = new VendorCandidateKey();
-        vendorCandidateId.setVendorId(vendorId);
+    @Autowired
+    private UserService userService;
 
-    // Query the repository using the composite key
-        Optional<VendorCandidate> vendorCandidate = vendorCandidateRepository.findById(vendorCandidateId);
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
-    // Return the VendorCandidate if found, otherwise return null
+    public VendorCandidate getVendorCandidateById(Long phoneNumber) {
+        Optional<VendorCandidate> vendorCandidate = vendorCandidateRepository.findById(phoneNumber);
         return vendorCandidate.orElse(null);
     }
 
@@ -49,6 +49,10 @@ public class VendorCandidateSerivce {
 
     public VendorCandidate createVendorCandidate(VendorCandidate vendorCandidate) {
         System.out.println("VendorServicePoint "+ vendorCandidate);
+        vendorCandidate.setCreateDate(new Date());
+        vendorCandidate.setUpdateDate(new Date());
+        vendorCandidate.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        vendorCandidate.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
         return vendorCandidateRepository.save(vendorCandidate);
     }
 
