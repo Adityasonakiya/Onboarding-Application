@@ -1,5 +1,6 @@
 package com.example.onboarding.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.onboarding.model.Candidate;
 import com.example.onboarding.model.EmployeeCandidateDTO;
+import com.example.onboarding.model.VendorCandidate;
 import com.example.onboarding.repository.CandidateRepository;
+import com.example.onboarding.repository.EmployeeRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +22,15 @@ public class CandidateService {
     @Autowired
     private CandidateRepository candidateRepository;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     
-    public Candidate getCandidateById(int candidateId) {
-        Optional<Candidate> candidate = candidateRepository.findById(candidateId);
+    public Candidate getCandidateById(Long phoneNumber) {
+        Optional<Candidate> candidate = candidateRepository.findById(phoneNumber);
         return candidate.orElse(null);
     }
 
@@ -29,20 +38,18 @@ public class CandidateService {
         return candidateRepository.findAll();
     }
 
-    // public Page<EmployeeCandidateDTO> getEmployeeCandidates(Integer createdBy, int page, int size) {
-    //     Pageable pageable = PageRequest.of(page, size);
-    //     Page<EmployeeCandidateDTO> employeeCandidateDTOPage = candidateRepository.findEmployeeCandidates(createdBy,
-    //             pageable);
+    public Candidate createCandidate(Candidate candidate) {
+        System.out.println("ServicePoint "+ candidate);
+        candidate.setCreateDate(new Date());
+        candidate.setUpdateDate(new Date());
+        candidate.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        candidate.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        return candidateRepository.save(candidate);
+    }
 
-    //     log.info("Employee Candidates Handler data : Page {} of {}", page, employeeCandidateDTOPage.getTotalPages());
-    //     employeeCandidateDTOPage.forEach(candidate -> log.info("Employee Candidate: {}", candidate));
-
-    //     return employeeCandidateDTOPage;
-    // }
-
-    public EmployeeCandidateDTO getEmployeeCandidateById(int id) {
+    public EmployeeCandidateDTO getEmployeeCandidateById(Long id) {
         log.info("Id that is coming: {}", id);
-        Optional<EmployeeCandidateDTO> employeeCandidateOptional = candidateRepository.findEmployeeCandidateByCandidateId(id);
+        Optional<EmployeeCandidateDTO> employeeCandidateOptional = candidateRepository.findEmployeeCandidateByPhoneNumber(id);
     
         if (employeeCandidateOptional.isPresent()) {
             EmployeeCandidateDTO employeeCandidate = employeeCandidateOptional.get();

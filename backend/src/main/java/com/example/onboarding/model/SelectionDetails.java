@@ -21,11 +21,11 @@ public class SelectionDetails {
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "candidateId")
+    @JoinColumn(name = "candidate_phone_number")
     private Candidate candidate;
 
     @ManyToOne
-    @JoinColumn(name = "vendorId")
+    @JoinColumn(name = "vendor_phone_number")
     private VendorCandidate vendorCandidate;
 
     private String deliveryManager;

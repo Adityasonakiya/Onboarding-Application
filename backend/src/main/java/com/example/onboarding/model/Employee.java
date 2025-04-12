@@ -22,6 +22,7 @@ public class Employee {
     private double totalExperience;
     private String pu;
     private String mailID;
+    private Long phoneNumber;
 
     @ManyToOne
     @JoinColumn(name="createdByPsId")
@@ -151,4 +152,13 @@ public class Employee {
     public void setUpdatedDate(LocalDateTime updatedDate) {
         this.updatedDate = updatedDate;
     }
+
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    
 }

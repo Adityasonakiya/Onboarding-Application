@@ -23,8 +23,7 @@ function SelectionTracker() {
   const [form, setForm] = useState({
     bu: "BF",
     psId: "",
-    candidateId: "",
-    vendorCandidateId: "",
+    phoneNumber: "",
   });
   const [errors, setErrors] = useState({});
   const [isInternal, setIsInternal] = useState(true);
@@ -74,6 +73,7 @@ function SelectionTracker() {
               skill: employee.skill,
               email: employee.mailID,
               bu: employee.baseBU,
+              phone: employee.phoneNumber,
             }));
             setIsInternal(true); // Set isInternal to true for employees
             setVendor(false); //set Vendor to false
@@ -81,57 +81,67 @@ function SelectionTracker() {
             await fetchSelectionDetailsByPsid(employee.psid);
           }
         } catch (error) {
-          const candidate = await getCandidateById(id);
-          const vendorCandidate = await getVendorCandidateById(id);
-          if (candidate) {
-            // Set the form state with candidate data
-            setForm((prevForm) => ({
-              ...prevForm,
-              //: candidate.candidateId,
-              fname: candidate.firstName,
-              lname: candidate.lastName,
-              baseBU: "",
-              grade: "", // Assuming grade is not available for candidate
-              location: "", // Assuming location is not available for candidate
-              pu: "", // Assuming pu is not available for candidate
-              totalExp: "", // Assuming totalExperience is not available for candidate
-              skill: "", // Assuming skill is not available for candidate
-              email: candidate.mailID, // Assuming email is not available for candidate
-            }));
-            setIsExternal(true); // Set isInternal to false for candidates
-            setVendor(false); //set Vendor to false
-            // Fetch selection details for the candidate
-            await fetchSelectionDetailsByCandidateId(candidate.candidateId);
-          }
-          // } catch (candidateError) {
-          //   console.error("Error fetching candidate data:", candidateError);
-          // }
-          // try {
-          else if (vendorCandidate && vendorCandidate.vendorId) {
-            // Set the form state with candidate data
-            setForm((prevForm) => ({
-              ...prevForm,
-              //vendorCandidateId: vendorCandidate.vendorCandidateId,
-              fname: vendorCandidate.firstName,
-              lname: vendorCandidate.lastName,
-              baseBU: "",
-              grade: "", // Assuming grade is not available for candidate
-              location: "", // Assuming location is not available for candidate
-              pu: "", // Assuming pu is not available for candidate
-              totalExp: "", // Assuming totalExperience is not available for candidate
-              skill: "", // Assuming skill is not available for candidate
-              email: "", // Assuming email is not available for candidate
-            }));
-            setIsExternal(false); // Set isInternal to false for vendor
-            setIsInternal(false);
-            setVendor(true); //set Vendor to true
-            // Fetch selection details for the candidate
-            await fetchSelectionDetailsByVendorCandidateId(
-              vendorCandidate.vendorId
-            );
-          }
+          console.log("Error fetching details!");
         }
       }
+      //   else{
+      //     try{
+      //       const candidate = await getCandidateById(phoneNumber);
+      //       const vendorCandidate = await getVendorCandidateById(phoneNumber);
+
+      //       if (candidate) {
+      //         // Set the form state with candidate data
+      //         setForm((prevForm) => ({
+      //           ...prevForm,
+      //           vendors: {vendorId:1},
+      //           phone: candidate.phoneNumber,
+      //           fname: candidate.firstName,
+      //           lname: candidate.lastName,
+      //           baseBU: "",
+      //           grade: "", // Assuming grade is not available for candidate
+      //           location: "", // Assuming location is not available for candidate
+      //           pu: "", // Assuming pu is not available for candidate
+      //           totalExp: "", // Assuming totalExperience is not available for candidate
+      //           skill: "", // Assuming skill is not available for candidate
+      //           email: "", // Assuming email is not available for candidate
+      //         }));
+      //         setIsExternal(true); // Set isInternal to false for candidates
+      //         setVendor(false); //set Vendor to false
+      //         // Fetch selection details for the candidate
+      //         await fetchSelectionDetailsByCandidateId(candidate.phoneNumber);
+      //       }
+      //       // } catch (candidateError) {
+      //       //   console.error("Error fetching candidate data:", candidateError);
+      //       // }
+      //       // try {
+      //       else if (vendorCandidate && vendorCandidate.phoneNumber) {
+      //         // Set the form state with candidate data
+      //         setForm((prevForm) => ({
+      //           ...prevForm,
+      //           vendors:vendorCandidate.vendor,
+      //           phone: vendorCandidate.phoneNumber,
+      //           fname: vendorCandidate.firstName,
+      //           lname: vendorCandidate.lastName,
+      //           baseBU: "",
+      //           grade: "", // Assuming grade is not available for candidate
+      //           location: "", // Assuming location is not available for candidate
+      //           pu: "", // Assuming pu is not available for candidate
+      //           totalExp: "", // Assuming totalExperience is not available for candidate
+      //           skill: "", // Assuming skill is not available for candidate
+      //           email: "", // Assuming email is not available for candidate
+      //         }));
+      //         setIsExternal(false); // Set isInternal to false for vendor
+      //         setIsInternal(false);
+      //         setVendor(true); //set Vendor to true
+      //         // Fetch selection details for the candidate
+      //         await fetchSelectionDetailsByVendorCandidateId(
+      //           vendorCandidate.phoneNumber
+      //         );
+      //       }
+      //   }catch (error) {
+      //     console.log("Error fetching details!");
+      //   }
+      // }
     };
     fetchData();
   }, [id]);
@@ -144,24 +154,24 @@ function SelectionTracker() {
   }, [form.psId]);
 
   useEffect(() => {
-    if (form.candidateId) {
-      fetchCandidateData(form.candidateId);
-      fetchSelectionDetailsByCandidateId(form.candidateId);
+    if (form.phoneNumber && form.vendors === 1) {
+      fetchCandidateData(form.phoneNumber);
+      fetchSelectionDetailsByCandidateId(form.phoneNumber);
     }
-  }, [form.candidateId]);
+  }, [form.phoneNumber]);
 
   useEffect(() => {
-    if (form.vendors) {
+    if (form.vendors !== 1) {
       setVendor(true);
     }
   });
 
   useEffect(() => {
-    if (form.vendorId) {
-      fetchVendorData(form.vendorId);
-      fetchSelectionDetailsByVendorCandidateId(form.vendorId);
+    if (isVendor) {
+      fetchVendorData(form.phoneNumber);
+      fetchSelectionDetailsByVendorCandidateId(form.phoneNumber);
     }
-  }, [form.vendorId]);
+  }, [form.phoneNumber]);
 
   useEffect(() => {
     const getVendors = async () => {
@@ -276,40 +286,45 @@ function SelectionTracker() {
         skill: employee.skill,
         email: employee.mailID,
         baseBU: "BF",
+        phone: employee.phoneNumber,
       }));
     } catch (error) {
       console.error(error);
     }
   };
 
-  const fetchCandidateData = async (candidateId) => {
+  const fetchCandidateData = async (phoneNumber) => {
     try {
-      const candidate = await getCandidateById(candidateId);
+      const candidate = await getCandidateById(phoneNumber);
       setForm((prevForm) => ({
         ...prevForm,
-        //fname: candidate.firstName,
+        vendors: { vendorId: 1 },
+        phone: candidate.phoneNumber,
+        fname: candidate.firstName,
         lname: candidate.lastName,
-        baseBU: "BF",
+        baseBU: "",
         grade: "", // Assuming grade is not available for candidate
         location: "", // Assuming location is not available for candidate
         pu: "", // Assuming pu is not available for candidate
         totalExp: "", // Assuming totalExperience is not available for candidate
         skill: "", // Assuming skill is not available for candidate
-        email: candidate.mailID, // Assuming email is not available for candidate
+        email: "", // Assuming email is not available for candidate
       }));
     } catch (error) {
       console.error(error);
     }
   };
 
-  const fetchVendorData = async (vendorId) => {
+  const fetchVendorData = async (phoneNumber) => {
     try {
-      const vendorCandidate = await getVendorCandidateById(vendorId);
+      const vendorCandidate = await getVendorCandidateById(phoneNumber);
       setForm((prevForm) => ({
         ...prevForm,
+        vendors: vendorCandidate.vendor,
+        phone: vendorCandidate.phoneNumber,
         fname: vendorCandidate.firstName,
         lname: vendorCandidate.lastName,
-        baseBU: "BF",
+        baseBU: "",
         grade: "", // Assuming grade is not available for candidate
         location: "", // Assuming location is not available for candidate
         pu: "", // Assuming pu is not available for candidate
@@ -376,12 +391,12 @@ function SelectionTracker() {
     }
   };
 
-  const fetchSelectionDetailsByCandidateId = async (candidateId) => {
+  const fetchSelectionDetailsByCandidateId = async (phoneNumber) => {
     try {
       const selectionDetails = await getSelectionDetailsByCandidateId(
-        candidateId
+        phoneNumber
       );
-      const taggingDetails = await getTaggingDetailsByPsId(candidateId).catch(
+      const taggingDetails = await getTaggingDetailsByPsId(phoneNumber).catch(
         (err) => {
           console.error("Error fetching tagging details:", err);
           return {}; // Fallback to an empty object
@@ -427,13 +442,13 @@ function SelectionTracker() {
     }
   };
 
-  const fetchSelectionDetailsByVendorCandidateId = async (vendorId) => {
+  const fetchSelectionDetailsByVendorCandidateId = async (phoneNumber) => {
     try {
       const selectionDetails = await getSelectionDetailsByVendorCandidateId(
-        vendorId
+        phoneNumber
       );
       const taggingDetails = await getTaggingDetailsByVendorCandidateId(
-        vendorId
+        phoneNumber
       ).catch((err) => {
         console.error("Error fetching tagging details:", err);
         return {}; // Fallback to an empty object
@@ -556,7 +571,41 @@ function SelectionTracker() {
           await handleResponse(response, requestBody);
         } else if (form.vendors.vendorId === 1) {
           // Candidate logic
-          requestBody.candidate = { firstName: form.fname };
+          const candidate = {
+            phoneNumber: form.phone,
+            vendor: form.vendors,
+            firstName: form.fname,
+            lastName: form.lname,
+            baseBU: "BF",
+          };
+
+          console.log("Candidate Payload:", candidate);
+
+          // Step 1: Create vendor candidate
+          const candidateResponse = await fetch(
+            "http://localhost:8080/candidates/create",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(candidate), // JSON payload for VendorCandidate
+            }
+          );
+
+          console.log("Candidate Response:", candidateResponse);
+
+          if (!candidateResponse.ok) {
+            const errorData = await candidateResponse.json();
+            console.error("Vendor creation failed:", errorData.message);
+            toast.error("Failed to create Vendor Candidate!", {
+              position: "top-right",
+            });
+            return; // Stop execution if vendor creation fails
+          }
+          //step 3
+          requestBody.candidate = { 
+            phoneNumber: form.phone,
+            firstName: form.fname 
+          };
           console.log(requestBody);
           const response = await fetch(
             "http://localhost:8080/selection-details/create/candidate",
@@ -571,65 +620,60 @@ function SelectionTracker() {
         } else if (isVendor && form.vendors.vendorId !== 1) {
           // Vendor logic
           const vendorCandidate = {
-              id: {
-                  vendorId: form.vendors.vendorId, // The embedded key now requires "id.vendorId"
-              },
-              vendor:form.vendors,
-              firstName: form.fname,
-              lastName: form.lname,
-              baseBU: "BF",
+            phoneNumber: form.phone,
+            vendor: form.vendors,
+            firstName: form.fname,
+            lastName: form.lname,
+            baseBU: "BF",
           };
-      
+
           console.log("VendorCandidate Payload:", vendorCandidate);
-      
+
           // Step 1: Create vendor candidate
           const vendorResponse = await fetch(
-              "http://localhost:8080/vendors/vendor-candidates/create",
-              {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(vendorCandidate), // JSON payload for VendorCandidate
-              }
+            "http://localhost:8080/vendors/vendor-candidates/create",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(vendorCandidate), // JSON payload for VendorCandidate
+            }
           );
-      
+
           console.log("Vendor Response:", vendorResponse);
-      
+
           if (!vendorResponse.ok) {
-              const errorData = await vendorResponse.json();
-              console.error("Vendor creation failed:", errorData.message);
-              toast.error("Failed to create Vendor Candidate!", {
-                  position: "top-right",
-              });
-              return; // Stop execution if vendor creation fails
+            const errorData = await vendorResponse.json();
+            console.error("Vendor creation failed:", errorData.message);
+            toast.error("Failed to create Vendor Candidate!", {
+              position: "top-right",
+            });
+            return; // Stop execution if vendor creation fails
           }
-      
+
           // Step 2: Attach vendorCandidate reference to requestBody for selection details
           requestBody.vendorCandidate = {
-              id: {
-                  vendorId: form.vendors.vendorId, // Ensure id.vendorId is included
-              },
-              firstName: form.fname,
-              lastName: form.lname,
+            phoneNumber: form.phone,
+            firstName: form.fname,
+            lastName: form.lname,
           };
-      
+
           console.log("Request Body for Selection Details:", requestBody);
-      
+
           // Post selection details
           const response = await fetch(
-              "http://localhost:8080/selection-details/create/vendor",
-              {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(requestBody), // JSON payload for selection details
-              }
+            "http://localhost:8080/selection-details/create/vendor",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(requestBody), // JSON payload for selection details
+            }
           );
-      
+
           console.log("Selection Details Response:", response);
-      
+
           // Handle response
           await handleResponse(response, requestBody);
-      }
-      
+        }
       } catch (error) {
         // Generic error handling
         console.error("An error occurred:", error.message);
@@ -908,30 +952,23 @@ function SelectionTracker() {
                   />
                 </td>
               </tr>
-              {/*<tr className="flex flex-wrap md:flex-nowrap">
+              <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">
-                    Vendor:<span className="text-red-500">*</span>
+                    Phone Number:<span className="text-red-500">*</span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4" colSpan="2">
-                  <select
-                    name="vendors"
-                    value={form.vendors?.vendorId || ""}
-                    onChange={handleVendorChange}
-                    required
-                    className="p-2 border w-full bg-slate-100"
-                    disabled={isInternal || isExternal || readOnly}
-                  >
-                    <option value="">Select Vendor</option>
-                    {vendors.map((vendor) => (
-                      <option key={vendor.vendorId} value={vendor.vendorId}>
-                        {vendor.vendorName}
-                      </option>
-                    ))}
-                  </select>
-                </td> 
-              </tr>*/}
+                  <input
+                    type="text"
+                    name="phone"
+                    value={form.phone || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full bg-slate-100"
+                    disabled={isInternal || readOnly}
+                  />
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
