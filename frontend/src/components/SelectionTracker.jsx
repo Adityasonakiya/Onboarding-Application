@@ -20,7 +20,11 @@ import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function SelectionTracker() {
-  const [form, setForm] = useState({ bu: "BF", psId: "", candidateId: "", vendorCandidateId:"" });
+  const [form, setForm] = useState({
+    bu: "BF",
+    psId: "",
+    phoneNumber: "",
+  });
   const [errors, setErrors] = useState({});
   const [isInternal, setIsInternal] = useState(true);
   const [isExternal, setIsExternal] = useState(false);
@@ -54,6 +58,7 @@ function SelectionTracker() {
         try {
           // Attempt to fetch employee data by psid
           const employee = await getEmployeeByPsid(id);
+
           if (employee && employee.psid) {
             // If employee data is found, set the form state with employee data
             setForm((prevForm) => ({
@@ -68,7 +73,7 @@ function SelectionTracker() {
               skill: employee.skill,
               email: employee.mailID,
               bu: employee.baseBU,
-              vendors: "",
+              phone: employee.phoneNumber,
             }));
             setIsInternal(true); // Set isInternal to true for employees
             setVendor(false); //set Vendor to false
@@ -76,65 +81,67 @@ function SelectionTracker() {
             await fetchSelectionDetailsByPsid(employee.psid);
           }
         } catch (error) {
-          console.error("Error fetching candidate data:", error);
-          // If error occurs (e.g., employee not found), attempt to fetch candidate data by candidateId
-        }
-        try {
-          const candidate = await getCandidateById(id);
-          if (candidate && candidate.candidateId) {
-            // Set the form state with candidate data
-            setForm((prevForm) => ({
-              ...prevForm,
-              candidateId: candidate.candidateId,
-              fname: candidate.firstName,
-              lname: candidate.lastName,
-              baseBU: "",
-              grade: "", // Assuming grade is not available for candidate
-              location: "", // Assuming location is not available for candidate
-              pu: "", // Assuming pu is not available for candidate
-              totalExp: "", // Assuming totalExperience is not available for candidate
-              skill: "", // Assuming skill is not available for candidate
-              email: "", // Assuming email is not available for candidate
-              vendors: "",
-            }));
-            setIsExternal(true); // Set isInternal to false for candidates
-            setVendor(false); //set Vendor to false
-            // Fetch selection details for the candidate
-            await fetchSelectionDetailsByCandidateId(candidate.candidateId);
-          }
-        } catch (candidateError) {
-          console.error("Error fetching candidate data:", candidateError);
-        }
-        try {
-          const vendorCandidate = await getVendorCandidateById(id);
-          if (vendorCandidate && vendorCandidate.vendorCandidateId) {
-            // Set the form state with candidate data
-            setForm((prevForm) => ({
-              ...prevForm,
-              vendorCandidateId: vendorCandidate.vendorCandidateId,
-              fname: vendorCandidate.firstName,
-              lname: vendorCandidate.lastName,
-              baseBU: "",
-              grade: "", // Assuming grade is not available for candidate
-              location: "", // Assuming location is not available for candidate
-              pu: "", // Assuming pu is not available for candidate
-              totalExp: "", // Assuming totalExperience is not available for candidate
-              skill: "", // Assuming skill is not available for candidate
-              email: "", // Assuming email is not available for candidate
-              vendors: vendorCandidate.vendors,
-            }));
-            setIsExternal(false); // Set isInternal to false for vendor
-            setIsInternal(false);
-            setVendor(true); //set Vendor to true
-            // Fetch selection details for the candidate
-            await fetchSelectionDetailsByVendorCandidateId(
-              vendorCandidate.vendorCandidateId
-            );
-          }
-        } catch (candidateError) {
-          console.error("Error fetching candidate data:", candidateError);
+          console.log("Error fetching details!");
         }
       }
+      //   else{
+      //     try{
+      //       const candidate = await getCandidateById(phoneNumber);
+      //       const vendorCandidate = await getVendorCandidateById(phoneNumber);
+
+      //       if (candidate) {
+      //         // Set the form state with candidate data
+      //         setForm((prevForm) => ({
+      //           ...prevForm,
+      //           vendors: {vendorId:1},
+      //           phone: candidate.phoneNumber,
+      //           fname: candidate.firstName,
+      //           lname: candidate.lastName,
+      //           baseBU: "",
+      //           grade: "", // Assuming grade is not available for candidate
+      //           location: "", // Assuming location is not available for candidate
+      //           pu: "", // Assuming pu is not available for candidate
+      //           totalExp: "", // Assuming totalExperience is not available for candidate
+      //           skill: "", // Assuming skill is not available for candidate
+      //           email: "", // Assuming email is not available for candidate
+      //         }));
+      //         setIsExternal(true); // Set isInternal to false for candidates
+      //         setVendor(false); //set Vendor to false
+      //         // Fetch selection details for the candidate
+      //         await fetchSelectionDetailsByCandidateId(candidate.phoneNumber);
+      //       }
+      //       // } catch (candidateError) {
+      //       //   console.error("Error fetching candidate data:", candidateError);
+      //       // }
+      //       // try {
+      //       else if (vendorCandidate && vendorCandidate.phoneNumber) {
+      //         // Set the form state with candidate data
+      //         setForm((prevForm) => ({
+      //           ...prevForm,
+      //           vendors:vendorCandidate.vendor,
+      //           phone: vendorCandidate.phoneNumber,
+      //           fname: vendorCandidate.firstName,
+      //           lname: vendorCandidate.lastName,
+      //           baseBU: "",
+      //           grade: "", // Assuming grade is not available for candidate
+      //           location: "", // Assuming location is not available for candidate
+      //           pu: "", // Assuming pu is not available for candidate
+      //           totalExp: "", // Assuming totalExperience is not available for candidate
+      //           skill: "", // Assuming skill is not available for candidate
+      //           email: "", // Assuming email is not available for candidate
+      //         }));
+      //         setIsExternal(false); // Set isInternal to false for vendor
+      //         setIsInternal(false);
+      //         setVendor(true); //set Vendor to true
+      //         // Fetch selection details for the candidate
+      //         await fetchSelectionDetailsByVendorCandidateId(
+      //           vendorCandidate.phoneNumber
+      //         );
+      //       }
+      //   }catch (error) {
+      //     console.log("Error fetching details!");
+      //   }
+      // }
     };
     fetchData();
   }, [id]);
@@ -147,24 +154,24 @@ function SelectionTracker() {
   }, [form.psId]);
 
   useEffect(() => {
-    if (form.candidateId) {
-      fetchCandidateData(form.candidateId);
-      fetchSelectionDetailsByCandidateId(form.candidateId);
+    if (form.phoneNumber && form.vendors === 1) {
+      fetchCandidateData(form.phoneNumber);
+      fetchSelectionDetailsByCandidateId(form.phoneNumber);
     }
-  }, [form.candidateId]);
+  }, [form.phoneNumber]);
 
   useEffect(() => {
-    if (form.vendor) {
+    if (form.vendors !== 1) {
       setVendor(true);
     }
   });
 
   useEffect(() => {
-    if (form.vendorCandidateId) {
-      fetchVendorData(form.vendorCandidateId);
-      fetchSelectionDetailsByVendorCandidateId(form.vendorCandidateId);
+    if (isVendor) {
+      fetchVendorData(form.phoneNumber);
+      fetchSelectionDetailsByVendorCandidateId(form.phoneNumber);
     }
-  }, [form.vendorCandidateId]);
+  }, [form.phoneNumber]);
 
   useEffect(() => {
     const getVendors = async () => {
@@ -242,7 +249,7 @@ function SelectionTracker() {
     }
   };
 
-  const handleVendorChange = async(event) =>{
+  const handleVendorChange = async (event) => {
     const vendorId = event.target.value;
     console.log(vendorId);
 
@@ -250,7 +257,12 @@ function SelectionTracker() {
       ...prevState,
       vendors: { vendorId: vendorId },
     }));
-  }
+    console.log(form.vendors);
+    if (vendorId === 1) {
+      setVendor(false);
+      setIsExternal(true);
+    }
+  };
 
   const validate = () => {
     const errors = {};
@@ -274,49 +286,51 @@ function SelectionTracker() {
         skill: employee.skill,
         email: employee.mailID,
         baseBU: "BF",
-        vendors: "",
+        phone: employee.phoneNumber,
       }));
     } catch (error) {
       console.error(error);
     }
   };
 
-  const fetchCandidateData = async (candidateId) => {
+  const fetchCandidateData = async (phoneNumber) => {
     try {
-      const candidate = await getCandidateById(candidateId);
+      const candidate = await getCandidateById(phoneNumber);
       setForm((prevForm) => ({
         ...prevForm,
+        vendors: { vendorId: 1 },
+        phone: candidate.phoneNumber,
         fname: candidate.firstName,
         lname: candidate.lastName,
-        baseBU: "BF",
+        baseBU: "",
         grade: "", // Assuming grade is not available for candidate
         location: "", // Assuming location is not available for candidate
         pu: "", // Assuming pu is not available for candidate
         totalExp: "", // Assuming totalExperience is not available for candidate
         skill: "", // Assuming skill is not available for candidate
         email: "", // Assuming email is not available for candidate
-        vendors: "",
       }));
     } catch (error) {
       console.error(error);
     }
   };
 
-  const fetchVendorData = async (vendorCandidateId) => {
+  const fetchVendorData = async (phoneNumber) => {
     try {
-      const vendorCandidate = await getVendorCandidateById(vendorCandidateId);
+      const vendorCandidate = await getVendorCandidateById(phoneNumber);
       setForm((prevForm) => ({
         ...prevForm,
+        vendors: vendorCandidate.vendor,
+        phone: vendorCandidate.phoneNumber,
         fname: vendorCandidate.firstName,
         lname: vendorCandidate.lastName,
-        baseBU: "BF",
+        baseBU: "",
         grade: "", // Assuming grade is not available for candidate
         location: "", // Assuming location is not available for candidate
         pu: "", // Assuming pu is not available for candidate
         totalExp: "", // Assuming totalExperience is not available for candidate
         skill: "", // Assuming skill is not available for candidate
         email: "", // Assuming email is not available for candidate
-        vendors: vendorCandidate.vendor,
       }));
     } catch (error) {
       console.error(error);
@@ -377,12 +391,12 @@ function SelectionTracker() {
     }
   };
 
-  const fetchSelectionDetailsByCandidateId = async (candidateId) => {
+  const fetchSelectionDetailsByCandidateId = async (phoneNumber) => {
     try {
       const selectionDetails = await getSelectionDetailsByCandidateId(
-        candidateId
+        phoneNumber
       );
-      const taggingDetails = await getTaggingDetailsByPsId(candidateId).catch(
+      const taggingDetails = await getTaggingDetailsByPsId(phoneNumber).catch(
         (err) => {
           console.error("Error fetching tagging details:", err);
           return {}; // Fallback to an empty object
@@ -428,15 +442,13 @@ function SelectionTracker() {
     }
   };
 
-  const fetchSelectionDetailsByVendorCandidateId = async (
-    vendorCandidateId
-  ) => {
+  const fetchSelectionDetailsByVendorCandidateId = async (phoneNumber) => {
     try {
       const selectionDetails = await getSelectionDetailsByVendorCandidateId(
-        vendorCandidateId
+        phoneNumber
       );
       const taggingDetails = await getTaggingDetailsByVendorCandidateId(
-        vendorCandidateId
+        phoneNumber
       ).catch((err) => {
         console.error("Error fetching tagging details:", err);
         return {}; // Fallback to an empty object
@@ -484,10 +496,10 @@ function SelectionTracker() {
   //handle changes in form
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (type === "checkbox") {
+    if (type === "radio") {
       setIsInternal(name === "internal" ? checked : !checked);
       setIsExternal(name === "external" ? checked : !checked);
-      setVendor(name === "vendor" ? checked : !checked);
+      //setVendor(name === "vendor" ? checked : !checked);
     } else {
       setForm({ ...form, [name]: value });
     }
@@ -557,10 +569,44 @@ function SelectionTracker() {
           );
 
           await handleResponse(response, requestBody);
-        } else if (form.candidateId) {
+        } else if (form.vendors.vendorId === 1) {
           // Candidate logic
-          requestBody.candidate = { candidateId: form.candidateId };
+          const candidate = {
+            phoneNumber: form.phone,
+            vendor: form.vendors,
+            firstName: form.fname,
+            lastName: form.lname,
+            baseBU: "BF",
+          };
 
+          console.log("Candidate Payload:", candidate);
+
+          // Step 1: Create vendor candidate
+          const candidateResponse = await fetch(
+            "http://localhost:8080/candidates/create",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(candidate), // JSON payload for VendorCandidate
+            }
+          );
+
+          console.log("Candidate Response:", candidateResponse);
+
+          if (!candidateResponse.ok) {
+            const errorData = await candidateResponse.json();
+            console.error("Vendor creation failed:", errorData.message);
+            toast.error("Failed to create Vendor Candidate!", {
+              position: "top-right",
+            });
+            return; // Stop execution if vendor creation fails
+          }
+          //step 3
+          requestBody.candidate = { 
+            phoneNumber: form.phone,
+            firstName: form.fname 
+          };
+          console.log(requestBody);
           const response = await fetch(
             "http://localhost:8080/selection-details/create/candidate",
             {
@@ -571,27 +617,30 @@ function SelectionTracker() {
           );
 
           await handleResponse(response, requestBody);
-        } else if (form.vendorCandidateId) {
+        } else if (isVendor && form.vendors.vendorId !== 1) {
           // Vendor logic
           const vendorCandidate = {
-            vendorCandidateId: form.vendorCandidateId,
+            phoneNumber: form.phone,
+            vendor: form.vendors,
             firstName: form.fname,
             lastName: form.lname,
             baseBU: "BF",
-            vendor: form.vendors,
           };
 
-          // Step 1: Create vendor
+          console.log("VendorCandidate Payload:", vendorCandidate);
+
+          // Step 1: Create vendor candidate
           const vendorResponse = await fetch(
             "http://localhost:8080/vendors/vendor-candidates/create",
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(vendorCandidate),
+              body: JSON.stringify(vendorCandidate), // JSON payload for VendorCandidate
             }
           );
-          console.log(vendorCandidate);
-          console.log(vendorResponse);
+
+          console.log("Vendor Response:", vendorResponse);
+
           if (!vendorResponse.ok) {
             const errorData = await vendorResponse.json();
             console.error("Vendor creation failed:", errorData.message);
@@ -601,21 +650,28 @@ function SelectionTracker() {
             return; // Stop execution if vendor creation fails
           }
 
-          // Step 2: Attach vendorCandidate to requestBody for selection details
+          // Step 2: Attach vendorCandidate reference to requestBody for selection details
           requestBody.vendorCandidate = {
-            vendorCandidateId: form.vendorCandidateId,
+            phoneNumber: form.phone,
+            firstName: form.fname,
+            lastName: form.lname,
           };
-          console.log(requestBody);
+
+          console.log("Request Body for Selection Details:", requestBody);
+
+          // Post selection details
           const response = await fetch(
             "http://localhost:8080/selection-details/create/vendor",
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(requestBody),
+              body: JSON.stringify(requestBody), // JSON payload for selection details
             }
           );
-          console.log(response);
-          console.log(requestBody);
+
+          console.log("Selection Details Response:", response);
+
+          // Handle response
           await handleResponse(response, requestBody);
         }
       } catch (error) {
@@ -643,12 +699,12 @@ function SelectionTracker() {
           <table className="w-full border-collapse">
             <tbody>
               <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/3">
+                <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">Internal</label>
                 </td>
-                <td className="p-2 w-full md:w-1/3">
+                <td className="p-2 w-full md:w-1/4">
                   <input
-                    type="checkbox"
+                    type="radio"
                     name="internal"
                     checked={isInternal}
                     onChange={handleChange}
@@ -656,40 +712,40 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   />
                 </td>
-                <td className="p-2 w-full md:w-1/3">
+                <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">External</label>
                 </td>
-                <td className="p-2 w-full md:w-1/3">
+                <td className="p-2 w-full md:w-1/4">
                   <input
-                    type="checkbox"
+                    type="radio"
                     name="external"
-                    checked={isExternal}
+                    checked={!isInternal && isExternal}
                     onChange={handleChange}
                     className="p-2"
                     disabled={isReadOnly}
                   />
                 </td>
-                <td className="p-2 w-full md:w-1/3">
+                {/* <td className="p-2 w-full md:w-1/3">
                   <label className="font-bold">Vendor</label>
                 </td>
                 <td className="p-2 w-full md:w-1/3">
                   <input
-                    type="checkbox"
+                    type="radio"
                     name="vendor"
                     checked={isVendor}
                     onChange={handleChange}
                     className="p-2"
                     disabled={isReadOnly}
                   />
-                </td>
+                </td> */}
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap ">
-                <td className="p-2 w-full md:w-1/3">
+                <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">
                     PS ID:<span className="text-red-500">*</span>
                   </label>
                 </td>
-                <td className="p-2 w-full md:w-1/3">
+                <td className="p-2 w-full md:w-1/4">
                   <input
                     type="number"
                     name="psId"
@@ -706,7 +762,7 @@ function SelectionTracker() {
                     <p className="text-red-500 text-sm mb-4">{errors.psId}</p>
                   )}
                 </td>
-                <td className="p-2 w-full md:w-1/4">
+                {/* <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">
                     Candidate ID:<span className="text-red-500">*</span>
                   </label>
@@ -730,13 +786,39 @@ function SelectionTracker() {
                       {errors.candidateId}
                     </p>
                   )}
+                </td> */}
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-semibold">Vendor:</label>
                 </td>
-                <td className="p-2 w-full md:w-1/3">
+                <td className="p-2 w-full md:w-1/4" colSpan="2">
+                  <select
+                    name="vendors"
+                    value={form.vendors?.vendorId || ""}
+                    onChange={handleVendorChange}
+                    className={`p-2 border rounded w-full ${
+                      errors.vendorId ? "border-red-500" : ""
+                    }`}
+                    disabled={isInternal || readOnly}
+                  >
+                    <option value="">Select Vendor</option>
+                    {vendors.map((vendor) => (
+                      <option key={vendor.vendorId} value={vendor.vendorId}>
+                        {vendor.vendorName}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.vendorId && (
+                    <p className="text-red-500 text-sm mb-4">
+                      {errors.vendorId}
+                    </p>
+                  )}
+                </td>
+                {/* <td className="p-2 w-full md:w-1/3">
                   <label className="font-semibold">
                     Vendor Candidate ID:<span className="text-red-500">*</span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </td> */}
+                {/* <td className="p-2 w-full md:w-1/4">
                   <input
                     name="vendorCandidateId"
                     value={form.vendorCandidateId || ""}
@@ -753,7 +835,7 @@ function SelectionTracker() {
                       {errors.vendorCandidateId}
                     </p>
                   )}
-                </td>
+                </td> */}
               </tr>
               <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
                 Basic Info
@@ -769,7 +851,7 @@ function SelectionTracker() {
                     value={form.fname || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full bg-slate-100"
-                    disabled={isInternal || isExternal || readOnly}
+                    disabled={isInternal || readOnly}
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -782,7 +864,7 @@ function SelectionTracker() {
                     value={form.lname || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full bg-slate-100"
-                    disabled={isInternal || isExternal || readOnly}
+                    disabled={isInternal || readOnly}
                   />
                 </td>
               </tr>
@@ -873,25 +955,18 @@ function SelectionTracker() {
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">
-                    Vendor:<span className="text-red-500">*</span>
+                    Phone Number:<span className="text-red-500">*</span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4" colSpan="2">
-                  <select
-                    name="vendors"
-                    value={form.vendors?.vendorId || ""}
-                    onChange={handleVendorChange}
-                    required
-                    className="p-2 border w-full bg-slate-100"
-                    disabled={isInternal || isExternal || readOnly}
-                  >
-                    <option value="">Select Vendor</option>
-                    {vendors.map((vendor) => (
-                      <option key={vendor.vendorId} value={vendor.vendorId}>
-                        {vendor.vendorName}
-                      </option>
-                    ))}
-                  </select>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={form.phone || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full bg-slate-100"
+                    disabled={isInternal || readOnly}
+                  />
                 </td>
               </tr>
             </tbody>
@@ -1229,7 +1304,7 @@ function SelectionTracker() {
                     <option value="">Choose...</option>
                     <option value="Pending">Pending</option>
                     <option value="On Hold">On Hold</option>
-                    <option value="Release">Release</option>
+                    <option value="Release">Released</option>
                     <option value="WIP">WIP</option>
                   </select>
                 </td>

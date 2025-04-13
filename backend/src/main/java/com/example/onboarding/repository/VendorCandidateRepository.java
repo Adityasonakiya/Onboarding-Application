@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.onboarding.model.VendorCandidate;
 
 @Repository
-public interface VendorCandidateRepository extends JpaRepository<VendorCandidate, Integer> {
+public interface VendorCandidateRepository extends JpaRepository<VendorCandidate,Long> {
 
 }

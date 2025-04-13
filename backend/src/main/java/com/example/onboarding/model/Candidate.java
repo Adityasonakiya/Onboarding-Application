@@ -1,11 +1,8 @@
 package com.example.onboarding.model;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
-// import jakarta.persistence.GeneratedValue;
-// import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -13,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Candidate {
     @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long phoneNumber;
     private int candidateId;
     private String firstName;
     private String middleName;
@@ -27,23 +24,31 @@ public class Candidate {
     @JoinColumn(name = "updatedByPsId")
     private Employee updatedBy;
     
-    private LocalDateTime createDate;
-    private LocalDateTime updateDate;
+    private Date createDate;
+    private Date updateDate;
 
-    public Candidate(int candidateId) {
-        this.candidateId = candidateId;
-    }
 
     public Candidate() {
     }
 
-    public int getCandidateId() {
-        return candidateId;
+    public Candidate(Long phoneNumber2){
+
+    }
+    
+
+    public Candidate(Long phoneNumber, String firstName, String middleName, String lastName, Date lTIOnboardingDate,
+            Employee createdBy, Employee updatedBy, Date createDate, Date updateDate) {
+        this.phoneNumber = phoneNumber;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        LTIOnboardingDate = lTIOnboardingDate;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
     }
 
-    public void setCandidateId(int candidateId) {
-        this.candidateId = candidateId;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -68,6 +73,7 @@ public class Candidate {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+    
 
     public Date getLTIOnboardingDate() {
         return LTIOnboardingDate;
@@ -93,20 +99,38 @@ public class Candidate {
         this.updatedBy = updatedBy;
     }
 
-    public LocalDateTime getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
-    public LocalDateTime getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(LocalDateTime updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
+
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public int getCandidateId() {
+        return candidateId;
+    }
+
+    public void setCandidateId() {
+        this.candidateId = 1;
+    }
+
+    
 
 }

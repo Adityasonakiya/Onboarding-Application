@@ -108,12 +108,12 @@ public class TaggingDetailsService {
         }
     }
 
-    public TaggingDetails updateTaggingDetailsByCandidateId(int candidateId, TaggingDetails updatedDetails) {
+    public TaggingDetails updateTaggingDetailsByCandidatePhoneNumber(Long phoneNumber, TaggingDetails updatedDetails) {
         try {
-            logger.info("Updating TaggingDetails by CandidateId: {}", candidateId);
-            TaggingDetails existingDetails = taggingDetailsRepository.findByCandidate_CandidateId(candidateId);
+            logger.info("Updating TaggingDetails by PhoneNumber: {}", phoneNumber);
+            TaggingDetails existingDetails = taggingDetailsRepository.findByCandidate_PhoneNumber(phoneNumber);
             if (existingDetails != null) {
-                logger.info("Existing details found for CandidateId: {}", candidateId);
+                logger.info("Existing details found for PhoneNumber: {}", phoneNumber);
                 if (updatedDetails.getOnboardingStatus() != null) {
                     OnboardingStatus onboardingStatus = onboardingStatusRepository
                             .save(updatedDetails.getOnboardingStatus());
@@ -132,9 +132,9 @@ public class TaggingDetailsService {
                 existingDetails.setUpdateDate(updatedDetails.getUpdateDate());
                 return taggingDetailsRepository.save(existingDetails);
             } else {
-                logger.info("No existing details found for CandidateId: {}, creating new entry", candidateId);
-                updatedDetails.setCandidate(new Candidate(candidateId)); // Assuming Candidate class has a constructor
-                                                                         // with candidateId
+                logger.info("No existing details found for PhoneNumber: {}, creating new entry", phoneNumber);
+                updatedDetails.setCandidate(new Candidate(phoneNumber)); // Assuming Candidate class has a constructor
+                                                                         // with phoneNumber
                 if (updatedDetails.getOnboardingStatus() != null) {
                     OnboardingStatus onboardingStatus = onboardingStatusRepository
                             .save(updatedDetails.getOnboardingStatus());
@@ -152,17 +152,17 @@ public class TaggingDetailsService {
                 return taggingDetailsRepository.save(updatedDetails);
             }
         } catch (Exception e) {
-            logger.error("Error updating TaggingDetails by CandidateId", e);
+            logger.error("Error updating TaggingDetails by PhoneNumber", e);
             throw e; // Re-throw the exception after logging it
         }
     }
 
-    public TaggingDetails updateTaggingDetailsByVendorCandidateId(int vendorCandidateId, TaggingDetails updatedDetails) {
+    public TaggingDetails updateTaggingDetailsByVendorPhoneNumber(Long phoneNumber, TaggingDetails updatedDetails) {
         try {
-            logger.info("Updating TaggingDetails by CandidateId: {}", vendorCandidateId);
-            TaggingDetails existingDetails = taggingDetailsRepository.findByCandidate_CandidateId(vendorCandidateId);
+            logger.info("Updating TaggingDetails by PhoneNumber: {}", phoneNumber);
+            TaggingDetails existingDetails = taggingDetailsRepository.findByVendorCandidate_PhoneNumber(phoneNumber);
             if (existingDetails != null) {
-                logger.info("Existing details found for CandidateId: {}", vendorCandidateId);
+                logger.info("Existing details found for PhoneNumber: {}", phoneNumber);
                 if (updatedDetails.getOnboardingStatus() != null) {
                     OnboardingStatus onboardingStatus = onboardingStatusRepository
                             .save(updatedDetails.getOnboardingStatus());
@@ -181,9 +181,9 @@ public class TaggingDetailsService {
                 existingDetails.setUpdateDate(updatedDetails.getUpdateDate());
                 return taggingDetailsRepository.save(existingDetails);
             } else {
-                logger.info("No existing details found for CandidateId: {}, creating new entry", vendorCandidateId);
-                updatedDetails.setCandidate(new Candidate(vendorCandidateId)); // Assuming Candidate class has a constructor
-                                                                         // with candidateId
+                logger.info("No existing details found for PhoneNumber: {}, creating new entry", phoneNumber);
+                updatedDetails.setCandidate(new Candidate(phoneNumber)); // Assuming Candidate class has a constructor
+                                                                         // with phoneNumber
                 if (updatedDetails.getOnboardingStatus() != null) {
                     OnboardingStatus onboardingStatus = onboardingStatusRepository
                             .save(updatedDetails.getOnboardingStatus());
@@ -201,7 +201,7 @@ public class TaggingDetailsService {
                 return taggingDetailsRepository.save(updatedDetails);
             }
         } catch (Exception e) {
-            logger.error("Error updating TaggingDetails by VendorCandidateId", e);
+            logger.error("Error updating TaggingDetails by VendorPhoneNumber", e);
             throw e; // Re-throw the exception after logging it
         }
     }
@@ -210,11 +210,11 @@ public class TaggingDetailsService {
         return taggingDetailsRepository.findByEmployee_Psid(psId);
     }
 
-    public TaggingDetails getTaggingDetailsByCandidateId(int candidateId) {
-        return taggingDetailsRepository.findByCandidate_CandidateId(candidateId);
+    public TaggingDetails getTaggingDetailsByCandidatePhoneNumber(Long phoneNumber) {
+        return taggingDetailsRepository.findByCandidate_PhoneNumber(phoneNumber);
     }
 
-    public TaggingDetails getTaggingDetailsByVendorCandidateId(int vendorCandidateId) {
-        return taggingDetailsRepository.findByVendorCandidate_VendorCandidateId(vendorCandidateId);
+    public TaggingDetails getTaggingDetailsByVendorPhoneNumber(Long phoneNumber) {
+        return taggingDetailsRepository.findByVendorCandidate_PhoneNumber(phoneNumber);
     }
 }

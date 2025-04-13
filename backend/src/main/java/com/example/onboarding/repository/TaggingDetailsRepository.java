@@ -8,6 +8,6 @@ import com.example.onboarding.model.TaggingDetails;
 @Repository
 public interface TaggingDetailsRepository extends JpaRepository<TaggingDetails,Integer>{
     TaggingDetails findByEmployee_Psid(int psid);
-    TaggingDetails findByCandidate_CandidateId(int candidateId);
-    TaggingDetails findByVendorCandidate_VendorCandidateId(int vendorCandidateId);
+    TaggingDetails findByCandidate_PhoneNumber(Long phoneNumber);
+    TaggingDetails findByVendorCandidate_PhoneNumber(Long phoneNumber);
 }

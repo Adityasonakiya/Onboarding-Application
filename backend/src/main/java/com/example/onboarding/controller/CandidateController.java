@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,9 +24,9 @@ public class CandidateController {
     @Autowired
     private CandidateService candidateService;
 
-    @GetMapping("/{candidateId}")
-    public ResponseEntity<Candidate> getCandidateById(@PathVariable int candidateId) {
-        Candidate candidate = candidateService.getCandidateById(candidateId);
+    @GetMapping("/{phoneNumber}")
+    public ResponseEntity<Candidate> getCandidateById(@PathVariable Long phoneNumber) {
+        Candidate candidate = candidateService.getCandidateById(phoneNumber);
         if (candidate != null) {
             return new ResponseEntity<>(candidate, HttpStatus.OK);
         } else {
@@ -40,6 +42,17 @@ public class CandidateController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Candidate> createVendorCandidate(@RequestBody Candidate candidate) {
+        System.out.println("Object sent"+ candidate);
+        if (candidate == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Candidate createdCandidate = candidateService.createCandidate(candidate);
+        System.out.println("Object recieved"+ createdCandidate);
+        return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
     }
 }
 

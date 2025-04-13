@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.onboarding.model.Vendor;
 import com.example.onboarding.model.VendorCandidate;
-import com.example.onboarding.service.VendorCandidateSerivce;
+import com.example.onboarding.service.VendorCandidateService;
 
 @CrossOrigin("*")
 @RestController
@@ -23,11 +23,11 @@ import com.example.onboarding.service.VendorCandidateSerivce;
 public class VendorCandidateController {
 
     @Autowired
-    private VendorCandidateSerivce vendorCandiateService;
+    private VendorCandidateService vendorCandidateService;
 
     @GetMapping("/{vendorId}")
     public ResponseEntity<Vendor> getVendorById(@PathVariable Integer vendorId) {
-        Vendor vendor = vendorCandiateService.getVendorById(vendorId);
+        Vendor vendor = vendorCandidateService.getVendorById(vendorId);
         if (vendor != null) {
             return new ResponseEntity<>(vendor, HttpStatus.OK);
         } else {
@@ -37,7 +37,7 @@ public class VendorCandidateController {
 
     @GetMapping
     public ResponseEntity<List<Vendor>> getAllVendors() {
-        List<Vendor> vendors = vendorCandiateService.getAllVendors();
+        List<Vendor> vendors = vendorCandidateService.getAllVendors();
         if (vendors != null) {
             return new ResponseEntity<>(vendors, HttpStatus.OK);
         } else {
@@ -45,19 +45,20 @@ public class VendorCandidateController {
         }
     }
 
-    @GetMapping("/vendor-candidates/{vendorCandidateId}")
-    public ResponseEntity<VendorCandidate> getVendorCandidateById(@PathVariable Integer vendorCandidateId) {
-        VendorCandidate vendorCandidate = vendorCandiateService.getVendorCandidateById(vendorCandidateId);
+    @GetMapping("/vendor-candidates/{phoneNumber}")
+    public ResponseEntity<VendorCandidate> getVendorCandidateById(@PathVariable Long phoneNumber) {
+        VendorCandidate vendorCandidate = vendorCandidateService.getVendorCandidateById(phoneNumber);
         if (vendorCandidate != null) {
             return new ResponseEntity<>(vendorCandidate, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    
 
     @GetMapping("/vendor-candidates")
     public ResponseEntity<List<VendorCandidate>> getAllVendorCandidates() {
-        List<VendorCandidate> vendorCandidates = vendorCandiateService.getAllVendorCandidates();
+        List<VendorCandidate> vendorCandidates = vendorCandidateService.getAllVendorCandidates();
         if (vendorCandidates != null) {
             return new ResponseEntity<>(vendorCandidates, HttpStatus.OK);
         } else {
@@ -68,7 +69,10 @@ public class VendorCandidateController {
     @PostMapping("/vendor-candidates/create")
     public ResponseEntity<VendorCandidate> createVendorCandidate(@RequestBody VendorCandidate vendorCandidate) {
         System.out.println("Object sent"+ vendorCandidate);
-        VendorCandidate createdVendorCandidate = vendorCandiateService.createVendorCandidate(vendorCandidate);
+        if (vendorCandidate == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        VendorCandidate createdVendorCandidate = vendorCandidateService.createVendorCandidate(vendorCandidate);
         System.out.println("Object recieved"+ createdVendorCandidate);
         return new ResponseEntity<>(createdVendorCandidate, HttpStatus.CREATED);
     }

@@ -3,12 +3,16 @@ import Pagination from "@mui/material/Pagination";
 import usePagination from "@mui/material/usePagination";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  fetchEmployeeCandidates,
+  // fetchEmployeeCandidatesByEmployee,
+  // fetchEmployeeCandidatesByCandidate,
+  fetchEmployeeCandidatesBySelections,
   getCandidateById,
   getEmployeeByPsid,
   getEmployeeCandidateByBgv,
   getEmployeeCandidateByCtool,
   getEmployeeCandidateByPsid,
+  getEmployeeCandidateByCandidateId,
+
 } from "../services/api";
 import zIndex from "@mui/material/styles/zIndex";
 
@@ -73,7 +77,7 @@ const LandingPage = () => {
           content = response;
           totalPages = response.totalPages;
         } else {
-          const response = await fetchEmployeeCandidates(user, currentPage, rowsPerPage);
+          const response = await fetchEmployeeCandidatesBySelections(user, currentPage, rowsPerPage);
           content = response.content;
           totalPages = response.totalPages;
         }
@@ -87,10 +91,16 @@ const LandingPage = () => {
           const filtered = content.filter((candidate) => candidate.id === id);
           console.log("displaying filtered by ID");
           const employee = await getEmployeeCandidateByPsid(id);
+          const candidate = await getEmployeeCandidateByCandidateId(id);
           if (employee && employee.id) {
             setFilteredCandidates([employee]);
             setTotalPages(1);
             console.log("searched emp2:", employee);
+          } if (candidate && candidate.id) {
+            setFilteredCandidates([candidate]);
+            candidate.id = null;
+            //setTotalPages(1);
+            console.log("searched candidate:", candidate);
           }
         } 
         else {
@@ -164,7 +174,7 @@ const LandingPage = () => {
           style={{ maxHeight: "calc(100vh - 200px)", overflowY: "auto" }}
         >
           <table className="w-full border-collapse">
-            <thead className="bg-gray-200 top-0 sticky" style={{zIndex:1}}>
+            <thead className="bg-gray-200 top-0 sticky" style={{ zIndex: 1 }}>
               <tr>
                 <th className="p-2 text-center">PSID/External</th>
                 <th className="p-2 text-center">Name</th>
@@ -176,36 +186,34 @@ const LandingPage = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredCandidates.map((candidate) => (
-                <tr key={candidate.id}>
+              {filteredCandidates.map((emp) => (
+                <tr key={emp.id}>
                   <td className="p-2 border text-center">
                     <button
                       className="text-blue-500 underline"
-                      onClick={() => handleViewOnly(candidate.id)}
+                      onClick={() => handleViewOnly(emp.id)}
                     >
-                      {candidate.id}
+                      {emp.id || 'EXTERNAL'} 
                     </button>
                   </td>
                   <td className="p-2 border text-center">
-                    {candidate.firstName} {candidate.lastName}
+                    {emp.firstName} {emp.lastName}
+                  </td>
+                  <td className="p-2 border text-center">{emp.lobName}</td>
+                  <td className="p-2 border text-center">
+                    {emp.hsbchiringManager}
                   </td>
                   <td className="p-2 border text-center">
-                    {candidate.lobName}
+                    {emp.onboardingStatus || "-"}
                   </td>
                   <td className="p-2 border text-center">
-                    {candidate.hsbchiringManager}
-                  </td>
-                  <td className="p-2 border text-center">
-                    {candidate.onboardingStatus || "-"}
-                  </td>
-                  <td className="p-2 border text-center">
-                    {candidate.bgvStatus || "-"}
+                    {emp.bgvStatus || "-"}
                   </td>
                   <td className="p-2 border text-center">
                     <div className="flex justify-center">
                       <button
                         className="bg-blue-500 text-white py-1 px-2 rounded mr-2"
-                        onClick={() => handleEdit(candidate.id)}
+                        onClick={() => handleEdit(emp.id)}
                       >
                         Edit
                       </button>

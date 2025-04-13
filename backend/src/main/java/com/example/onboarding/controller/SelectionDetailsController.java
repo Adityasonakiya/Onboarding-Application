@@ -3,6 +3,7 @@ package com.example.onboarding.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.onboarding.model.AwaitedCasesDTO;
 import com.example.onboarding.model.CtoolDto;
+import com.example.onboarding.model.EmployeeCandidateDTO;
 import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
 import com.example.onboarding.service.SelectionDetailsService;
@@ -39,9 +42,9 @@ public class SelectionDetailsController {
         }
     }
 
-    @GetMapping("/candidateId/{candidateId}")
-    public ResponseEntity<SelectionDetails> getSelectionDetailsByCandidateId(@PathVariable int candidateId) {
-        SelectionDetails selectionDetails = selectionDetailsService.getSelectionDetailsByCandidateId(candidateId);
+    @GetMapping("/candidateId/{phoneNumber}")
+    public ResponseEntity<SelectionDetails> getSelectionDetailsByCandidateId(@PathVariable Long phoneNumber) {
+        SelectionDetails selectionDetails = selectionDetailsService.getSelectionDetailsByCandidatePhoneNumber(phoneNumber);
         if (selectionDetails != null) {
             return new ResponseEntity<>(selectionDetails, HttpStatus.OK);
         } else {
@@ -49,9 +52,9 @@ public class SelectionDetailsController {
         }
     }
 
-    @GetMapping("/vendorCandidateId/{vendorCandidateId}")
-    public ResponseEntity<SelectionDetails> getSelectionDetailsByVendorCandidateId(@PathVariable int vendorCandidateId) {
-        SelectionDetails selectionDetails = selectionDetailsService.getSelectionDetailsByVendorCandidateId(vendorCandidateId);
+    @GetMapping("/vendorCandidateId/{phoneNumber}")
+    public ResponseEntity<SelectionDetails> getSelectionDetailsByVendorCandidateId(@PathVariable Long phoneNumber) {
+        SelectionDetails selectionDetails = selectionDetailsService.getSelectionDetailsByVendorCandidatePhoneNumber(phoneNumber);
         if (selectionDetails != null) {
             return new ResponseEntity<>(selectionDetails, HttpStatus.OK);
         } else {
@@ -108,10 +111,10 @@ public class SelectionDetailsController {
     }
     
 
-    @PutMapping("put/candidateId/{candidateId}")
-    public ResponseEntity<SelectionDetails> updateSelectionDetailsByCandidateId(@PathVariable int candidateId,
+    @PutMapping("put/candidateId/{phoneNumber}")
+    public ResponseEntity<SelectionDetails> updateSelectionDetailsByCandidateId(@PathVariable Long phoneNumber,
             @RequestBody SelectionDetails updatedDetails) {
-        SelectionDetails details = selectionDetailsService.updateSelectionDetailsByCandidateId(candidateId,
+        SelectionDetails details = selectionDetailsService.updateSelectionDetailsByCandidatePhoneNumber(phoneNumber,
                 updatedDetails);
         if (details != null) {
             return ResponseEntity.ok(details);
@@ -120,16 +123,25 @@ public class SelectionDetailsController {
         }
     }
 
-    @PutMapping("put/vendorCandidateId/{vendorCandidateId}")
-    public ResponseEntity<SelectionDetails> updateSelectionDetailsByVendorCandidateId(@PathVariable int vendorCandidateId,
+    @PutMapping("put/vendorCandidateId/{phoneNumber}")
+    public ResponseEntity<SelectionDetails> updateSelectionDetailsByVendorCandidateId(@PathVariable Long phoneNumber,
             @RequestBody SelectionDetails updatedDetails) {
-        SelectionDetails details = selectionDetailsService.updateSelectionDetailsByCandidateId(vendorCandidateId,
+        SelectionDetails details = selectionDetailsService.updateSelectionDetailsByVendorCandidatePhoneNumber(phoneNumber,
                 updatedDetails);
         if (details != null) {
             return ResponseEntity.ok(details);
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/api/employee-candidates")
+    public Page<EmployeeCandidateDTO> getEmployeeCandidates(
+        @RequestParam Integer createdBy,
+        @RequestParam int page,
+        @RequestParam int size
+    ) {
+        return selectionDetailsService.getEmployeeCandidates(createdBy, page, size);       
     }
 
     @GetMapping("/selections")

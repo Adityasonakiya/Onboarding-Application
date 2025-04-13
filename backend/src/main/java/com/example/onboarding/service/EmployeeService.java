@@ -6,10 +6,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Pageable;
 
 import com.example.onboarding.model.Employee;
 import com.example.onboarding.model.EmployeeCandidateDTO;
@@ -33,17 +30,6 @@ public class EmployeeService {
 
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
-    }
-
-    public Page<EmployeeCandidateDTO> getEmployeeCandidates(Integer createdBy, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<EmployeeCandidateDTO> employeeCandidateDTOPage = employeeRepository.findEmployeeCandidates(createdBy,
-                pageable);
-
-        log.info("Employee Candidates Handler data : Page {} of {}", page, employeeCandidateDTOPage.getTotalPages());
-        employeeCandidateDTOPage.forEach(candidate -> log.info("Employee Candidate: {}", candidate));
-
-        return employeeCandidateDTOPage;
     }
 
     public EmployeeCandidateDTO getEmployeeCandidateById(int id) {

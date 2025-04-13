@@ -63,10 +63,10 @@ function UpdateDetails() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (type === "checkbox") {
+    if (type === "radio") {
       setIsInternal(name === "internal" ? checked : !checked);
       setIsExternal(name === "external" ? checked : !checked);
-      setVendor(name === "vendor" ? checked : !checked);
+      //setVendor(name === "vendor" ? checked : !checked);
     } else {
       setForm({ ...form, [name]: value });
     }
@@ -84,7 +84,7 @@ function UpdateDetails() {
   };
 
   useEffect(() => {
-    if (form.vendor) {
+    if (form.vendors && form.vendors !== 1) {
       setVendor(true);
     }
   });
@@ -165,6 +165,10 @@ function UpdateDetails() {
       ...prevState,
       vendors: { vendorId: vendorId },
     }));
+    if(form.vendors === 1){
+      setVendor(false);
+      setIsExternal(true);
+    }
   }
 
   const validate = () => {
@@ -178,14 +182,14 @@ function UpdateDetails() {
   const handlePsIdChange = (e) => {
     setPsId(e.target.value);
   };
+// const handleCandidateIdChange = (e) => {
+//     setCandidateId(e.target.value);
+//   };
 
-  const handleCandidateIdChange = (e) => {
-    setCandidateId(e.target.value);
-  };
-
-  const handleVendorCandidateIdChange = (e) => {
-    setVendorCandidateId(e.target.value)
-  }
+//   const handleVendorCandidateIdChange = (e) => {
+//     setVendorCandidateId(e.target.value)
+//   }
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -516,7 +520,7 @@ function UpdateDetails() {
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
-                    type="checkbox"
+                    type="radio"
                     name="internal"
                     checked={isInternal}
                     onChange={handleChange}
@@ -528,14 +532,14 @@ function UpdateDetails() {
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
-                    type="checkbox"
+                    type="radio"
                     name="external"
-                    checked={isExternal}
+                    checked={!isInternal && isExternal}
                     onChange={handleChange}
                     className="p-2"
                   />
                 </td>
-                <td className="p-2 w-full md:w-1/3">
+                {/* <td className="p-2 w-full md:w-1/3">
                   <label className="font-bold">Vendor</label>
                 </td>
                 <td className="p-2 w-full md:w-1/3">
@@ -546,7 +550,7 @@ function UpdateDetails() {
                     onChange={handleChange}
                     className="p-2"
                   />
-                </td>
+                </td> */}
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
@@ -566,6 +570,34 @@ function UpdateDetails() {
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
+                  <label className="font-semibold">
+                    Vendor:
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4" colSpan="2">
+                  <select
+                    name="vendors"
+                    value={form.vendors?.vendorId || ""}
+                    onChange={handleVendorChange}
+                    required
+                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
+                    }`}
+                    disabled={isInternal}
+                  >
+                    <option value="">Select Vendor</option>
+                    {vendors.map((vendor) => (
+                      <option key={vendor.vendorId} value={vendor.vendorId}>
+                        {vendor.vendorName}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.vendorId && (
+                    <p className="text-red-500 text-sm mb-4">
+                      {errors.vendorId}
+                    </p>
+                  )}
+                </td>
+                {/* <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">
                     Candidate ID:<span className="text-red-500">*</span>
                   </label>
@@ -601,7 +633,7 @@ function UpdateDetails() {
                       {errors.vendorCandidateId}
                     </p>
                   )}
-                </td>
+                </td> */}
               </tr>
 
               <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
@@ -618,7 +650,7 @@ function UpdateDetails() {
                     value={form.fname || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full bg-slate-100"
-                    disabled
+                    disabled={isInternal}
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -631,7 +663,7 @@ function UpdateDetails() {
                     value={form.lname || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full bg-slate-100"
-                    disabled
+                    disabled={isInternal}
                   />
                 </td>
               </tr>
@@ -717,30 +749,6 @@ function UpdateDetails() {
                     className="p-2 border rounded w-full bg-slate-100"
                     disabled
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
-                    Vendor:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4" colSpan="2">
-                  <select
-                    name="vendors"
-                    value={form.vendors?.vendorId || ""}
-                    onChange={handleVendorChange}
-                    required
-                    className="p-2 border w-full bg-slate-100"
-                    disabled={isInternal || isExternal}
-                  >
-                    <option value="">Select Vendor</option>
-                    {vendors.map((vendor) => (
-                      <option key={vendor.vendorId} value={vendor.vendorId}>
-                        {vendor.vendorName}
-                      </option>
-                    ))}
-                  </select>
                 </td>
               </tr>
 
@@ -1064,7 +1072,7 @@ function UpdateDetails() {
                       <option value="">Choose...</option>
                       <option value="Pending">Pending</option>
                       <option value="On Hold">On Hold</option>
-                      <option value="Release">Release</option>
+                      <option value="Released">Released</option>
                       <option value="WIP">WIP</option>
                     </select>
                   </td>
