@@ -364,9 +364,9 @@ where selection.created_by = 10713037
 Union
 Select vc.vendor_id as id,vc.first_name,vc.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status   
 from vendor_candidate vc
-left join selection_details selection on selection.vendor_id=vc.vendor_id
+left join selection_details selection on selection.vendor_phone_number=vc.phone_number
 left join lob lob on selection.lob_id=lob.lob_id
-left join tagging_details td on vc.vendor_id=td.vendor_id
+left join tagging_details td on vc.phone_number=td.vendor_phone_number
 left join onboarding_status obs on td.onboarding_status_id=obs.status_id
 left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
 where selection.created_by = 10713037;

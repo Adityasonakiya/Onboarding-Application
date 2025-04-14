@@ -12,6 +12,23 @@ public class EmployeeCandidateDTO {
     private String hsbchiringManager;
     private String onboardingStatus;
     private String bgvStatus;
+    private Long phoneNumber;
+
+    public EmployeeCandidateDTO() {
+    }
+
+    public EmployeeCandidateDTO(int id, String firstName, String lastName, String lobName, String hsbchiringManager,
+            String onboardingStatus, String bgvStatus, Long phoneNumber) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.lobName = lobName;
+        this.hsbchiringManager = hsbchiringManager;
+        this.onboardingStatus = onboardingStatus;
+        this.bgvStatus = bgvStatus;
+        this.phoneNumber = phoneNumber;
+    }
+    
     public int getId() {
         return id;
     }
@@ -54,17 +71,13 @@ public class EmployeeCandidateDTO {
     public void setBgvStatus(String bgvStatus) {
         this.bgvStatus = bgvStatus;
     }
-    public EmployeeCandidateDTO(int id, String firstName, String lastName, String lobName, String hsbchiringManager,
-            String onboardingStatus, String bgvStatus) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.lobName = lobName;
-        this.hsbchiringManager = hsbchiringManager;
-        this.onboardingStatus = onboardingStatus;
-        this.bgvStatus = bgvStatus;
+   
+    
+    public Long getPhoneNumber() {
+        return phoneNumber;
     }
-    public EmployeeCandidateDTO() {
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
 }

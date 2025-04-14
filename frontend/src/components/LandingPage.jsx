@@ -53,16 +53,16 @@ const LandingPage = () => {
     navigate("/selection-tracker");
   };
 
-  const handleEdit = (id) => {
-    navigate("/update-details", { state: { id } });
-  };
+  const handleEdit = (id, phoneNumber) => {
+    navigate("/update-details", { state: { id, phoneNumber } });
+};
 
   const handleRefresh = () => {
     navigate("/landing-page");
   };
 
-  const handleViewOnly = (id) => {
-    navigate("/selection-tracker", { state: { id, readOnly: true } }); // Pass the readOnly flag
+  const handleViewOnly = (id, phoneNumber) => {
+    navigate("/selection-tracker", { state: { id,phoneNumber, readOnly: true } }); // Pass the readOnly flag
   };
 
   useEffect(() => {
@@ -240,7 +240,7 @@ const LandingPage = () => {
                     <div className="flex justify-center">
                       <button
                         className="bg-blue-500 text-white py-1 px-2 rounded mr-2"
-                        onClick={() => handleEdit(emp.id)}
+                        onClick={() => handleEdit(emp.id,emp.phoneNumber)}
                       >
                         Edit
                       </button>
