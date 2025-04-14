@@ -41,7 +41,7 @@ function SelectionTracker() {
   const location = useLocation();
   const { state } = location;
   // const id = state?.id;
-  const { id, readOnly } = state || {};
+  const { id,phoneNumber, readOnly } = state || {};
 
   useEffect(() => {
     if (readOnly) {
@@ -755,7 +755,7 @@ function SelectionTracker() {
                     className={`p-2 border rounded w-full ${
                       errors.psId ? "border-red-500" : ""
                     }`}
-                    disabled={isExternal || isVendor || readOnly}
+                    disabled={!isInternal || readOnly}
                     pattern="\d*"
                   />
                   {errors.psId && (
