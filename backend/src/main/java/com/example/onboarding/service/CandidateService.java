@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,15 @@ public class CandidateService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    public List<EmployeeCandidateDTO> searchByCandidateName(String query) {
+        logger.info("Searching for candidates with name containing: {}", query);
+        List<EmployeeCandidateDTO> candidates = candidateRepository.searchByCandidateName(query);
+        logger.info("Found {} candidates", candidates.size());
+        return candidates;
+
+    }
     
     public Candidate getCandidateById(Long phoneNumber) {
         Optional<Candidate> candidate = candidateRepository.findById(phoneNumber);

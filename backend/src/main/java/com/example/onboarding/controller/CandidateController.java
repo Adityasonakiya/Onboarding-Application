@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.onboarding.model.Candidate;
+import com.example.onboarding.model.EmployeeCandidateDTO;
 import com.example.onboarding.service.CandidateService;
 
 @CrossOrigin("*")
@@ -42,6 +44,15 @@ public class CandidateController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/api/candidates/search")
+    public ResponseEntity<List<EmployeeCandidateDTO>> searchCandidatesByName(@RequestParam String query) {
+        List<EmployeeCandidateDTO> candidates = candidateService.searchByCandidateName(query);
+        if (candidates.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(candidates);
     }
 
     @PostMapping("/create")

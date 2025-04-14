@@ -35,7 +35,7 @@ public class EmployeeService {
     public EmployeeCandidateDTO getEmployeeCandidateById(int id) {
         log.info("Id that is coming: {}", id);
         Optional<EmployeeCandidateDTO> employeeCandidateOptional = employeeRepository.findEmployeeCandidateByPsid(id);
-    
+
         if (employeeCandidateOptional.isPresent()) {
             EmployeeCandidateDTO employeeCandidate = employeeCandidateOptional.get();
             log.info("Employee Candidate: {}", employeeCandidate);
@@ -45,6 +45,19 @@ public class EmployeeService {
             throw new EntityNotFoundException("Employee Candidate not found with ID: " + id);
         }
     }
+
+    public List<EmployeeCandidateDTO> searchByCandidateName(String query) {
+        logger.info("Searching for candidates with name containing: {}", query);
+        List<EmployeeCandidateDTO> candidates = employeeRepository.searchByCandidateName(query);
+        logger.info("Found {} candidates", candidates.size());
+        return candidates;
+
+    }
+
+    // public Optional<EmployeeCandidateDTO> findCandidateByName(String firstName,
+    // String lastName) {
+    // return employeeRepository.findCandidateByName(firstName, lastName);
+    // }
 
     public List<EmployeeCandidateDTO> searchById(int query) {
         return employeeRepository.searchByPsidOrCandidateId(query);

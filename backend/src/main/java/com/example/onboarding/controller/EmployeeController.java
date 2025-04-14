@@ -1,6 +1,7 @@
 package com.example.onboarding.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,28 +42,29 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployees(){
+    public ResponseEntity<List<Employee>> getAllEmployees() {
         List<Employee> employees = employeeService.getAllEmployees();
-        if (employees!=null) {
+        if (employees != null) {
             return new ResponseEntity<>(employees, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-
     // @GetMapping("/employee-candidates")
-    // public ResponseEntity<List<EmployeeCandidateDTO>> getEmployeeCandidates(@RequestParam Integer createdBy) {
-    //     List<EmployeeCandidateDTO> employeeCandidates = employeeService.getEmployeeCandidates(createdBy);
-    //     return ResponseEntity.ok(employeeCandidates);
+    // public ResponseEntity<List<EmployeeCandidateDTO>>
+    // getEmployeeCandidates(@RequestParam Integer createdBy) {
+    // List<EmployeeCandidateDTO> employeeCandidates =
+    // employeeService.getEmployeeCandidates(createdBy);
+    // return ResponseEntity.ok(employeeCandidates);
     // }
     // @GetMapping("/api/employee-candidates")
     // public Page<EmployeeCandidateDTO> getEmployeeCandidates(
-    //     @RequestParam Integer createdBy,
-    //     @RequestParam int page,
-    //     @RequestParam int size
+    // @RequestParam Integer createdBy,
+    // @RequestParam int page,
+    // @RequestParam int size
     // ) {
-    //     return employeeService.getEmployeeCandidates(createdBy, page, size);       
+    // return employeeService.getEmployeeCandidates(createdBy, page, size);
     // }
 
     @GetMapping("/api/employee-candidates/{id}")
@@ -74,6 +76,18 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
+    
+
+    // @GetMapping("/api/candidate")
+    // public ResponseEntity<EmployeeCandidateDTO> getCandidateByName(@RequestParam
+    // String firstName,
+    // @RequestParam String lastName) {
+    // Optional<EmployeeCandidateDTO> candidate =
+    // employeeService.findCandidateByName(firstName, lastName);
+    // return candidate.map(ResponseEntity::ok).orElseGet(() ->
+    // ResponseEntity.notFound().build());
+    // }
 
     @GetMapping("/search")
     public ResponseEntity<List<EmployeeCandidateDTO>> searchById(@RequestParam("query") int query) {
@@ -95,4 +109,3 @@ public class EmployeeController {
         return ResponseEntity.ok(candidates);
     }
 }
-
