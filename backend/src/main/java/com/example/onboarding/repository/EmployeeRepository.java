@@ -19,7 +19,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
                         +
                         "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
                         +
-                        "bgvs.bgv_status as bgvStatus " +
+                        "bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber " +
                         "FROM employee emp " +
                         "JOIN selection_details selection ON selection.ps_id = emp.psid " +
                         "JOIN lob lob ON selection.lob_id = lob.lob_id " +
@@ -55,7 +55,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
                         +
                         "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
                         +
-                        "bgvs.bgv_status as bgvStatus " +
+                        "bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber " +
                         "FROM employee emp " +
                         "JOIN selection_details selection ON selection.ps_id = emp.psid " +
                         "JOIN lob lob ON selection.lob_id = lob.lob_id " +
@@ -68,7 +68,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
         @Query(value = "SELECT emp.psid as id, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, "
                         + "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
-                        + "bgvs.bgv_status as bgvStatus "
+                        + "bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber "
                         + "FROM employee emp "
                         + "JOIN selection_details selection ON selection.ps_id = emp.psid "
                         + "JOIN lob lob ON selection.lob_id = lob.lob_id "
@@ -80,7 +80,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
         @Query(value = "SELECT emp.psid as id, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, "
                         + "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
-                        + "bgvs.bgv_status as bgvStatus "
+                        + "bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber "
                         + "FROM employee emp "
                         + "JOIN selection_details selection ON selection.ps_id = emp.psid "
                         + "JOIN lob lob ON selection.lob_id = lob.lob_id "
