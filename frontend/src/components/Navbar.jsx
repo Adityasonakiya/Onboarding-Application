@@ -18,7 +18,7 @@ export default function Navbar() {
   const [allCandidates, setAllCandidates] = useState([]);
   const suggestionsRef = useRef(null);
   const location = useLocation();
-  const [selectedOption, setSelectedOption] = useState('PSID/CandidateID');
+  const [selectedOption, setSelectedOption] = useState('PSID');
   const [statusOptions, setStatusOptions] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('');
 
@@ -41,16 +41,29 @@ export default function Navbar() {
   const handleSearchChangeDebounced = debounce(async (query) => {
     if (query.length > 3) {
       try {
-        const response = await fetch(`http://localhost:8080/employees/search?query=${query}`);
-        const data = await response.json();
-        setSuggestions(data);
+        let response;
+        if (selectedOption === 'PSID') {
+          response = await fetch(`http://localhost:8080/employees/search?query=${query}`);
+        } else if (selectedOption === 'CandidateName') {
+          response = await fetch(`http://localhost:8080/candidates/api/candidates/search?query=${query}`);
+        }
+
+        if (response.ok) {
+          const data = await response.json();
+          setSuggestions(data);
+        } else {
+          console.error("Error fetching search results:", response.statusText);
+          setSuggestions([]);
+        }
       } catch (error) {
         console.error("Error fetching search results:", error);
+        setSuggestions([]);
       }
     } else {
       setSuggestions([]);
     }
   }, 300);
+
 
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
@@ -98,14 +111,14 @@ export default function Navbar() {
   }, [selectedOption]);
 
   useEffect(() => {
-    if (selectedOption !== 'PSID/CandidateID' && selectedStatus) {
+    if (selectedOption !== 'PSID' && selectedOption !== 'CandidateName' && selectedStatus) {
       handleSearch(); // Ensure handleSearch triggers only after selectedStatus updates
     }
   }, [selectedStatus, selectedOption]);
-  
+
   const handleSuggestionClick = (value) => {
     console.log('Suggestion clicked:', value);
-    if (selectedOption === 'PSID/CandidateID') {
+    if (selectedOption === 'PSID') {
       setSearchQuery(value); // Update the input value
       navigate('/landing-page', { state: { id: value } });
       setSuggestions([]);
@@ -113,7 +126,7 @@ export default function Navbar() {
       setSelectedStatus(value); // Update the selected status for statuses
     }
   };
-  
+
 
   const handleSearch = () => {
     const searchType = selectedOption === 'CTool Status' ? 'ctool' : 'bgv';
@@ -207,22 +220,23 @@ export default function Navbar() {
               onChange={handleOptionChange}
               className='bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2 w-full sm:w-1/2 md:w-1/3 lg:w-auto'
             >
-              <option value='PSID/CandidateID'>PSID/CandidateID</option>
+              <option value='PSID'>PSID</option>
+              <option value='CandidateName'>Candidate Name</option>
               <option value='CTool Status'>CTool Status</option>
               <option value='BgvStatus'>BgvStatus</option>
             </select>
             <div className='relative w-2/3 md:w-auto'>
-              {selectedOption === 'PSID/CandidateID' && (
+              {(selectedOption === 'PSID' || selectedOption === 'CandidateName') && (
                 <input
                   type="text"
                   className="bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2 w-full"
                   placeholder={selectedOption}
                   value={searchQuery}
                   onChange={handleSearchChange}
-                  disabled={selectedOption !== 'PSID/CandidateID'}
+                  disabled={selectedOption !== 'PSID' && selectedOption !== 'CandidateName'}
                 />
               )}
-              {selectedOption !== 'PSID/CandidateID' && (
+              {selectedOption !== 'PSID' && selectedOption !== 'CandidateName' && (
                 <>
                   <select
                     value={selectedStatus}
@@ -239,37 +253,41 @@ export default function Navbar() {
               {suggestions.length > 0 && (
                 <div ref={suggestionsRef} className='absolute top-9 left-1 bg-white p-1 w-full md:w-56 border border-gray-300 rounded-md'>
                   {suggestions.map((suggestion) => (
-                   <div
-                   key={suggestion.id || suggestion.onboardingStatus || suggestion.bgvStatus}
-                   className='cursor-pointer border-b-2 border-gray-400 p-1'
-                   onClick={() => {
-                     if (selectedOption === 'PSID/CandidateID') {
-                       handleSuggestionClick(suggestion.id); // Update the input value for PSID/CandidateID
-                     } else {
-                       handleSuggestionClick(suggestion.onboardingStatus || suggestion.bgvStatus); // Update state for status
-                       handleSearch(); // Trigger search only for statuses
-                     }
-                   }}
-                 >
-                   <p className='text-sm'>Name: {suggestion.firstName} {suggestion.lastName}</p>
-                   {selectedOption === 'PSID/CandidateID' && (
-                     <p className='text-sm'>PSID/CandidateId: {suggestion.id}</p>
-                   )}
-                   {(selectedOption === 'CTool Status' || selectedOption === 'BgvStatus') && (
-                     <p className='text-sm'>Status: {suggestion.onboardingStatus}</p>
-                   )}
-                 </div>
-                 
+                    <div
+                      key={suggestion.id}
+                      className='cursor-pointer border-b-2 border-gray-400 p-1'
+                      onClick={() => {
+                        if (selectedOption === 'PSID') {
+                          handleSuggestionClick(suggestion.id);
+                        } else if (selectedOption === 'CandidateName') {
+                          handleSuggestionClick(`${suggestion.firstName} ${suggestion.lastName}`);
+                        } else {
+                          handleSuggestionClick(suggestion.onboardingStatus || suggestion.bgvStatus); // Update state for status
+                          handleSearch(); // Trigger search only for statuses
+                        }
+                      }}
+                    >
+                      <p className='text-sm'>Name: {suggestion.firstName} {suggestion.lastName}</p>
+                      {selectedOption === 'PSID' && (
+                        <p className='text-sm'>PSID: {suggestion.id}</p>
+                      )}
+                      {selectedOption === 'CandidateName' && (
+                        <p className='text-sm'>Candidate Name: {suggestion.firstName} {suggestion.lastName}</p>
+                      )}
+                      {(selectedOption === 'CTool Status' || selectedOption === 'BgvStatus') && (
+                        <p className='text-sm'>Status: {suggestion.onboardingStatus}</p>
+                      )}
+                    </div>
                   ))}
-
                 </div>
               )}
             </div>
             <FaSearch
-              className={`text-gray-800 hover:text-gray-400 duration-300 cursor-pointer ${selectedOption === 'PSID/CandidateID' && 'cursor-not-allowed'}`}
-              onClick={selectedOption === 'PSID/CandidateID' ? null : handleSearch}
+              className={`text-gray-800 hover:text-gray-400 duration-300 cursor-pointer ${(selectedOption === 'PSID' || selectedOption === 'CandidateName') && 'cursor-not-allowed'}`}
+              onClick={(selectedOption === 'PSID' || selectedOption === 'CandidateName') ? null : handleSearch}
             />
           </div>
+
           <div
             className='relative popup-trigger'
             onMouseEnter={() => setHoverPopup('user')}

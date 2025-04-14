@@ -113,16 +113,16 @@ const LandingPage = () => {
           const filtered = content.filter((candidate) => candidate.id === id);
           console.log("displaying filtered by ID");
           const employee = await getEmployeeCandidateByPsid(id);
-          const candidate = await getEmployeeCandidateByCandidateId(id);
+          // const candidate = await getEmployeeCandidateByCandidateId(id);
           if (employee && employee.id) {
             setFilteredCandidates([employee]);
             setTotalPages(1);
             console.log("searched emp2:", employee);
-          } if (candidate && candidate.id) {
-            setFilteredCandidates([candidate]);
-            candidate.id = null;
-            //setTotalPages(1);
-            console.log("searched candidate:", candidate);
+          // } if (candidate && candidate.id) {
+          //   setFilteredCandidates([candidate]);
+          //   candidate.id = null;
+          //   //setTotalPages(1);
+          //   console.log("searched candidate:", candidate);
           }
         }
         else {
