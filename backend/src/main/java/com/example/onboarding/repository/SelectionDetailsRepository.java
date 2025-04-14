@@ -34,7 +34,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
         @Query(value = "(" +
                "SELECT emp.psid AS id, emp.first_name AS firstName, emp.last_name AS lastName, " +
                "lob.lob_name AS lobName, selection.hsbchiring_manager AS hsbchiringManager, " +
-               "obs.onboarding_status AS onboardingStatus, bgvs.bgv_status AS bgvStatus " +
+               "obs.onboarding_status AS onboardingStatus, bgvs.bgv_status AS bgvStatus, emp.phone_number as phoneNumber " +
                "FROM employee emp " +
                "LEFT JOIN selection_details selection ON selection.ps_id = emp.psid " +
                "LEFT JOIN lob lob ON selection.lob_id = lob.lob_id " +
@@ -47,7 +47,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
                "(" +
                "SELECT cnd.candidate_id AS id, cnd.first_name AS firstName, cnd.last_name AS lastName, " +
                "lob.lob_name AS lobName, selection.hsbchiring_manager AS hsbchiringManager, " +
-               "NULL AS onboardingStatus, NULL AS bgvStatus " +
+               "NULL AS onboardingStatus, NULL AS bgvStatus, cnd.phone_number as phoneNumber " +
                "FROM  candidate cnd " +
                "LEFT JOIN selection_details selection ON selection.candidate_phone_number = cnd.phone_number " +
                "LEFT JOIN lob lob ON selection.lob_id = lob.lob_id " +
@@ -58,7 +58,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
                "(" +
                "SELECT vc.vendor_id AS id, vc.first_name AS firstName, vc.last_name AS lastName, " +
                "lob.lob_name AS lobName, selection.hsbchiring_manager AS hsbchiringManager, " +
-               "NULL AS onboardingStatus, NULL AS bgvStatus " +
+               "NULL AS onboardingStatus, NULL AS bgvStatus, vc.phone_number as phoneNumber " +
                "FROM vendor_candidate vc " +
                "LEFT JOIN selection_details selection ON selection.vendor_phone_number = vc.phone_number " +
                "LEFT JOIN lob lob ON selection.lob_id = lob.lob_id " +

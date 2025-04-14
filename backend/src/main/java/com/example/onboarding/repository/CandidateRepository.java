@@ -28,7 +28,7 @@ public interface CandidateRepository extends JpaRepository<Candidate,Long>{
                         "WHERE cnd.phone_number = :phoneNumber", nativeQuery = true)
         Optional<EmployeeCandidateDTO> findEmployeeCandidateByPhoneNumber(@Param("phoneNumber") Long phoneNumber);
 
-        @Query(value = "SELECT emp.candidate_id as id, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, "
+        @Query(value = "SELECT emp.candidate_id as id, emp.phone_number as phone_number, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, "
                         +
                         "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
                         +
