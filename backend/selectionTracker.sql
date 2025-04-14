@@ -38,18 +38,18 @@ VALUES
 (10830015, 'Aakash', NULL, 'Mishra', 'P4', 'Bangalore', 'Cloud Engineer', 4, 'BB', 'aakash.mishra@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW());
 
 INSERT INTO candidate
-(phone_number, first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date) 
+(phone_number,candidate_id, first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date) 
 VALUES
-(1082980311, 'Harshita', NULL, 'Tripathi', '2024-09-23', 10713037, 10713037, '2024-09-23', NOW()),
-(1082058123, 'Komal', 'Vitthal', 'More', '2024-09-23', NULL, NULL, '2024-09-23', NOW()),
-(1083000611, 'Ankit', NULL, 'Jain', '2024-10-01', 10713037, 10713037, '2024-10-01', NOW()),
-(1083000721, 'Sneha', NULL, 'Reddy', '2024-10-05', 10713037, 10713037, '2024-10-05', NOW()),
-(1083000821, 'Rahul', NULL, 'Mehta', '2024-10-10', 10713037, 10713037, '2024-10-10', NOW()),
-(1083000911, 'Kiran', NULL, 'Patil', '2024-10-15', 10713037, 10713037, '2024-10-15', NOW()),
-(1083001023, 'Megha', NULL, 'Sharma', '2024-10-20', 10713037, 10713037, '2024-10-20', NOW()),
-(1083001121, 'Suresh', NULL, 'Kumar', '2024-10-25', 10713037, 10713037, '2024-10-25', NOW()),
-(1083001223, 'Anjali', NULL, 'Verma', '2024-10-30', 10713037, 10713037, '2024-10-30', NOW()),
-(1083001322, 'Vivek', NULL, 'Singh', '2024-11-05', 10713037, 10713037, '2024-11-05', NOW());
+(1082980311, 1,'Harshita', NULL, 'Tripathi', '2024-09-23', 10713037, 10713037, '2024-09-23', NOW()),
+(1082058123,1, 'Komal', 'Vitthal', 'More', '2024-09-23', NULL, NULL, '2024-09-23', NOW()),
+(1083000611,1, 'Ankit', NULL, 'Jain', '2024-10-01', 10713037, 10713037, '2024-10-01', NOW()),
+(1083000721,1, 'Sneha', NULL, 'Reddy', '2024-10-05', 10713037, 10713037, '2024-10-05', NOW()),
+(1083000821,1, 'Rahul', NULL, 'Mehta', '2024-10-10', 10713037, 10713037, '2024-10-10', NOW()),
+(1083000911,1, 'Kiran', NULL, 'Patil', '2024-10-15', 10713037, 10713037, '2024-10-15', NOW()),
+(1083001023,1, 'Megha', NULL, 'Sharma', '2024-10-20', 10713037, 10713037, '2024-10-20', NOW()),
+(1083001121,1, 'Suresh', NULL, 'Kumar', '2024-10-25', 10713037, 10713037, '2024-10-25', NOW()),
+(1083001223,1, 'Anjali', NULL, 'Verma', '2024-10-30', 10713037, 10713037, '2024-10-30', NOW()),
+(1083001322,1, 'Vivek', NULL, 'Singh', '2024-11-05', 10713037, 10713037, '2024-11-05', NOW());
 
 INSERT INTO vendor (vendor_id, vendor_name)
 VALUES

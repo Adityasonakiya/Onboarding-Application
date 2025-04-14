@@ -41,16 +41,29 @@ export default function Navbar() {
   const handleSearchChangeDebounced = debounce(async (query) => {
     if (query.length > 3) {
       try {
-        const response = await fetch(`http://localhost:8080/employees/search?query=${query}`);
-        const data = await response.json();
-        setSuggestions(data);
+        let response;
+        if (selectedOption === 'PSID') {
+          response = await fetch(`http://localhost:8080/employees/search?query=${query}`);
+        } else if (selectedOption === 'CandidateName') {
+          response = await fetch(`http://localhost:8080/candidates/api/candidates/search?query=${query}`);
+        }
+
+        if (response.ok) {
+          const data = await response.json();
+          setSuggestions(data);
+        } else {
+          console.error("Error fetching search results:", response.statusText);
+          setSuggestions([]);
+        }
       } catch (error) {
         console.error("Error fetching search results:", error);
+        setSuggestions([]);
       }
     } else {
       setSuggestions([]);
     }
   }, 300);
+
 
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
@@ -241,13 +254,13 @@ export default function Navbar() {
                 <div ref={suggestionsRef} className='absolute top-9 left-1 bg-white p-1 w-full md:w-56 border border-gray-300 rounded-md'>
                   {suggestions.map((suggestion) => (
                     <div
-                      key={suggestion.id || suggestion.onboardingStatus || suggestion.bgvStatus}
+                      key={suggestion.id}
                       className='cursor-pointer border-b-2 border-gray-400 p-1'
                       onClick={() => {
                         if (selectedOption === 'PSID') {
-                          handleSuggestionClick(suggestion.id); // Update the input value for PSID
+                          handleSuggestionClick(suggestion.id);
                         } else if (selectedOption === 'CandidateName') {
-                          handleSuggestionClick(suggestion.firstName + ' ' + suggestion.lastName); // Update the input value for Candidate Name
+                          handleSuggestionClick(`${suggestion.firstName} ${suggestion.lastName}`);
                         } else {
                           handleSuggestionClick(suggestion.onboardingStatus || suggestion.bgvStatus); // Update state for status
                           handleSearch(); // Trigger search only for statuses

@@ -63,7 +63,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
                         "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id " +
                         "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
                         "WHERE emp.psid LIKE CONCAT('%', :query, '%') \n" + //
-                        "   OR selection.candidate_id LIKE CONCAT('%', :query, '%')", nativeQuery = true)
+                        "   OR selection.candidate_phone_number LIKE CONCAT('%', :query, '%')", nativeQuery = true)
         List<EmployeeCandidateDTO> searchByPsidOrCandidateId(@Param("query") int query);
 
         @Query(value = "SELECT emp.psid as id, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, "

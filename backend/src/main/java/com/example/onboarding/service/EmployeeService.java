@@ -46,13 +46,7 @@ public class EmployeeService {
         }
     }
 
-    public List<EmployeeCandidateDTO> searchByCandidateName(String query) {
-        logger.info("Searching for candidates with name containing: {}", query);
-        List<EmployeeCandidateDTO> candidates = employeeRepository.searchByCandidateName(query);
-        logger.info("Found {} candidates", candidates.size());
-        return candidates;
-
-    }
+    
 
     // public Optional<EmployeeCandidateDTO> findCandidateByName(String firstName,
     // String lastName) {
