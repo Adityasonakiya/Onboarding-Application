@@ -40,6 +40,7 @@ public class CandidateService {
 
     public Candidate createCandidate(Candidate candidate) {
         System.out.println("ServicePoint "+ candidate);
+        candidate.setCandidateId(1);
         candidate.setCreateDate(new Date());
         candidate.setUpdateDate(new Date());
         candidate.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());

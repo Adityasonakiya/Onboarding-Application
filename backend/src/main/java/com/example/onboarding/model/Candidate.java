@@ -127,8 +127,8 @@ public class Candidate {
         return candidateId;
     }
 
-    public void setCandidateId() {
-        this.candidateId = 1;
+    public void setCandidateId(int candidateId) {
+        this.candidateId = candidateId;
     }
 
     
