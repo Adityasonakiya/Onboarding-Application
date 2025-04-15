@@ -355,9 +355,9 @@ where selection.created_by = 10713037
 Union	  
 Select cnd.phone_number as id,cnd.first_name,cnd.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status 
 from candidate cnd
-left join selection_details selection on selection.phone_number=cnd.phone_number
+left join selection_details selection on selection.vendor_phone_number=cnd.phone_number
 left join lob lob on selection.lob_id=lob.lob_id
-left join tagging_details td on cnd.phone_number=td.phone_number
+left join tagging_details td on cnd.phone_number=td.vendor_phone_number
 left join onboarding_status obs on td.onboarding_status_id=obs.status_id
 left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
 where selection.created_by = 10713037

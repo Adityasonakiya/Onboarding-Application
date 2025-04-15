@@ -31,11 +31,6 @@ public class Candidate {
     public Candidate() {
     }
 
-    public Candidate(Long phoneNumber2){
-
-    }
-    
-
     public Candidate(Long phoneNumber, String firstName, String middleName, String lastName, Date lTIOnboardingDate,
             Employee createdBy, Employee updatedBy, Date createDate, Date updateDate) {
         this.phoneNumber = phoneNumber;
@@ -48,8 +43,7 @@ public class Candidate {
         this.createDate = createDate;
         this.updateDate = updateDate;
     }
-
-
+    
     public String getFirstName() {
         return firstName;
     }

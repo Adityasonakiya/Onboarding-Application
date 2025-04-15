@@ -31,8 +31,7 @@ function UpdateDetails() {
   const [isExternal, setIsExternal] = useState(false);
   const [isVendor, setVendor] = useState(false);
   const [psId, setPsId] = useState("");
-  const [candidateId, setCandidateId] = useState("");
-  const [vendorCandidateId, setVendorCandidateId] = useState("");
+  const [phone, setPhone] = useState("");
   const [lobs, setLobs] = useState([]);
   const [errors, setErrors] = useState({});
   const [subLobs, setSubLobs] = useState([]);
@@ -43,6 +42,7 @@ function UpdateDetails() {
   const location = useLocation();
   const { state } = location;
   const id = state?.id;
+  const phoneNumber = state?.phoneNumber;
   const today = new Date().toISOString().split("T")[0];
   const [candidateStatuses, setCandidateStatuses] = useState([]);
 
@@ -50,14 +50,11 @@ function UpdateDetails() {
     fetch('http://localhost:8080/candidate-status/all')
       .then(response => response.json())
       .then(data => {
-        // Use a Set to filter out duplicate candidate statuses
-        const uniqueStatuses = Array.from(new Set(data.map(item => item.candidateStatus)))
-          .map(status => {
-            return data.find(item => item.candidateStatus === status);
-          });
-        setCandidateStatuses(uniqueStatuses);
+        setCandidateStatuses(data);
       })
-      .catch(error => console.error('Error fetching candidate statuses:', error));
+      .catch((error) =>
+        console.error("Error fetching candidate statuses:", error)
+      );
   }, []);
   
 
@@ -113,7 +110,6 @@ function UpdateDetails() {
     };
 
     getLobs();
-
   }, []);
 
   useEffect(() => {
@@ -127,7 +123,6 @@ function UpdateDetails() {
       }
     };
     getSubLobs();
-
   }, [form.lob]);
 
   const handleLobChange = async (event) => {
@@ -165,11 +160,12 @@ function UpdateDetails() {
       ...prevState,
       vendors: { vendorId: vendorId },
     }));
-    if(form.vendors === 1){
+    setVendor(true);
+    if (form.vendors === 1) {
       setVendor(false);
       setIsExternal(true);
     }
-  }
+  };
 
   const validate = () => {
     const errors = {};
@@ -182,14 +178,10 @@ function UpdateDetails() {
   const handlePsIdChange = (e) => {
     setPsId(e.target.value);
   };
-// const handleCandidateIdChange = (e) => {
-//     setCandidateId(e.target.value);
-//   };
-
-//   const handleVendorCandidateIdChange = (e) => {
-//     setVendorCandidateId(e.target.value)
-//   }
-  
+  const handlePhoneChange = (e) => {
+    console.log(phone);
+    setPhone(e.target.value);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -218,7 +210,7 @@ function UpdateDetails() {
         bgvStatus: form.bgvStatus,
         remarks: form.bgvRemark,
       },
-      candidateStatus:{
+      candidateStatus: {
         candidateStatus: form.candidateStatus,
         remarks: form.candidateRemark,
       },
@@ -271,10 +263,10 @@ function UpdateDetails() {
           });
           console.error("Error updating details by PsId:", error);
         });
-    } else if (isExternal && candidateId) {
-      updateSelectionDetailsByCandidateId(candidateId, selectionDetails)
+    } else if (isExternal && phone) {
+      updateSelectionDetailsByCandidateId(phone, selectionDetails)
         .then(() => {
-          updateTaggingDetailsByCandidateId(candidateId, taggingDetails) &&
+          updateTaggingDetailsByCandidateId(phone, taggingDetails) &&
             toast.success("Details updated successfully!", {
               position: "top-right",
             });
@@ -288,10 +280,11 @@ function UpdateDetails() {
           });
           console.error("Error updating details by CandidateId:", error);
         });
-    } else if (isVendor && vendorCandidateId) {
-      updateSelectionDetailsByVendorCandidateId(vendorCandidateId, selectionDetails)
-        .then(() => {
-          updateTaggingDetailsByVendorCandidateId(vendorCandidateId, taggingDetails) &&
+    } else if (isVendor && phone) {
+      updateSelectionDetailsByVendorCandidateId(phone, selectionDetails)
+      .then(() => {
+          updateTaggingDetailsByVendorCandidateId(phone, taggingDetails)
+           &&
             toast.success("Details updated successfully!", {
               position: "top-right",
             });
@@ -303,13 +296,21 @@ function UpdateDetails() {
           toast.error("Error updating details:", {
             position: "top-right",
           });
-          console.error("Error updating details by CandidateId:", error);
+          console.error("Error updating details by VendorId:", error);
         });
     }
   };
 
   useEffect(() => {
-    if (id) {
+    if (id === 1) {
+      setIsInternal(false);
+      setIsExternal(true);
+      setPhone(phoneNumber);
+    } else if (id < 100) {
+      setIsInternal(false);
+      setVendor(true);
+      setPhone(phoneNumber);
+    } else {
       setIsInternal(true);
       setPsId(id);
     }
@@ -343,7 +344,7 @@ function UpdateDetails() {
             totalExp: employee.totalExperience || "",
             skill: employee.skill || "",
             email: employee.mailID || "",
-            vendors: "",
+            phone: employee.phoneNumber,
             selectionDate: formatDate(selectionData.hsbcselectionDate),
             bu: "BF",
             lob: selectionData.lob || "",
@@ -373,7 +374,7 @@ function UpdateDetails() {
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
-            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || ""
+            candidateStatusDate:formatDate(selectionData.candidateStatusDate) || "",
           });
           console.log(selectionData);
           setSelectedSubLobTemp(selectionData.subLob);
@@ -381,23 +382,25 @@ function UpdateDetails() {
         .catch((error) => {
           console.error("Error in Promise.all:", error);
         });
-    } else if (isExternal && candidateId) {
+    } else if (isExternal && phone) {
       Promise.all([
-        getCandidateById(candidateId).catch((err) => {
+        getCandidateById(phone).catch((err) => {
           console.error("Error fetching candidate data:", err);
           return {}; // Fallback to an empty object
         }),
-        getSelectionDetailsByCandidateId(candidateId).catch((err) => {
+        getSelectionDetailsByCandidateId(phone).catch((err) => {
           console.error("Error fetching candidate data:", err);
           return {}; // Fallback to an empty object
         }),
-        getTaggingDetailsByCandidateId(candidateId).catch((err) => {
+        getTaggingDetailsByCandidateId(phone).catch((err) => {
           console.error("Error fetching candidate data:", err);
           return {}; // Fallback to an empty object
         }),
       ])
         .then(([candidate, selectionData, taggingData]) => {
           setForm({
+            vendors: { vendorId: 1 },
+            phone: candidate.phoneNumber,
             fname: candidate.firstName,
             lname: candidate.lastName,
             grade: "", // Assuming grade is not available for candidate
@@ -406,7 +409,6 @@ function UpdateDetails() {
             totalExp: "", // Assuming totalExperience is not available for candidate
             skill: "", // Assuming skill is not available for candidate
             email: "", // Assuming email is not available for candidate
-            vendors: "",
             selectionDate: formatDate(selectionData.hsbcselectionDate),
             bu: "BF",
             lob: selectionData.lob || "",
@@ -434,29 +436,34 @@ function UpdateDetails() {
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
+            candidateStatus: taggingData.candidateStatus?.candidateStatus || "",
+            candidateRemark: taggingData.candidateStatus?.remarks || "",
+            candidateStatusDate:formatDate(taggingData.candidateStatusDate) ||"",
           });
           setSelectedSubLobTemp(selectionData.subLob);
         })
         .catch((error) => {
           console.error("Error fetching data by CandidateId:", error);
         });
-    } else if (isVendor && vendorCandidateId) {
+    } else if (isVendor && phone) {
       Promise.all([
-        getVendorCandidateById(vendorCandidateId).catch((err) => {
-          console.error("Error fetching vendor candidate data:", err);
+        getVendorCandidateById(phone).catch((err) => {
+          console.error("Error fetching vendor data:", err);
           return {}; // Fallback to an empty object
-        }), ,
-        getSelectionDetailsByVendorCandidateId(vendorCandidateId).catch((err) => {
-          console.error("Error fetching vendor candidate data:", err);
+        }),
+        getSelectionDetailsByVendorCandidateId(phone).catch((err) => {
+          console.error("Error fetching vendor data:", err);
           return {}; // Fallback to an empty object
-        }), ,
-        getTaggingDetailsByVendorCandidateId(vendorCandidateId).catch((err) => {
-          console.error("Error fetching vendor candidate data:", err);
+        }),
+        getTaggingDetailsByVendorCandidateId(phone).catch((err) => {
+          console.error("Error fetching vendor data:", err);
           return {}; // Fallback to an empty object
-        }), ,
+        }),
       ])
         .then(([vendorCandidate, selectionData, taggingData]) => {
           setForm({
+            vendors: { vendorId: id },
+            phone: vendorCandidate.phoneNumber,
             fname: vendorCandidate.firstName,
             lname: vendorCandidate.lastName,
             grade: "", // Assuming grade is not available for candidate
@@ -465,7 +472,6 @@ function UpdateDetails() {
             totalExp: "", // Assuming totalExperience is not available for candidate
             skill: "", // Assuming skill is not available for candidate
             email: "", // Assuming email is not available for candidate
-            vendors: vendorCandidate.vendor,
             selectionDate: formatDate(selectionData.hsbcselectionDate),
             bu: "BF",
             lob: selectionData.lob || "",
@@ -493,6 +499,9 @@ function UpdateDetails() {
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
+            candidateStatus: taggingData.candidateStatus?.candidateStatus || "",
+            candidateRemark: taggingData.candidateStatus?.remarks || "",
+            candidateStatusDate:formatDate(taggingData.candidateStatusDate) ||"",
           });
           setSelectedSubLobTemp(selectionData.subLob);
         })
@@ -502,7 +511,7 @@ function UpdateDetails() {
     } else {
       setErrors(errors);
     }
-  }, [psId, candidateId, , vendorCandidateId, isInternal, isExternal, isVendor]);
+  }, [psId, phone, isInternal, isExternal, isVendor]);
 
   return (
     <div className="w-full px-4 py-6">
@@ -534,7 +543,7 @@ function UpdateDetails() {
                   <input
                     type="radio"
                     name="external"
-                    checked={!isInternal && isExternal}
+                    checked={!isInternal}
                     onChange={handleChange}
                     className="p-2"
                   />
@@ -566,13 +575,11 @@ function UpdateDetails() {
                     onChange={handlePsIdChange}
                     required
                     className="p-2 border rounded w-full"
-                    disabled={isExternal || isVendor}
+                    disabled={!isInternal}
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
-                    Vendor:
-                  </label>
+                  <label className="font-semibold">Vendor:</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4" colSpan="2">
                   <select
@@ -580,7 +587,8 @@ function UpdateDetails() {
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
                     required
-                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
+                    className={`p-2 border rounded w-full ${
+                      errors.vendorId ? "border-red-500" : ""
                     }`}
                     disabled={isInternal}
                   >
@@ -650,7 +658,7 @@ function UpdateDetails() {
                     value={form.fname || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full bg-slate-100"
-                    disabled={isInternal}
+                    disabled
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -663,7 +671,7 @@ function UpdateDetails() {
                     value={form.lname || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full bg-slate-100"
-                    disabled={isInternal}
+                    disabled
                   />
                 </td>
               </tr>
@@ -751,6 +759,23 @@ function UpdateDetails() {
                   />
                 </td>
               </tr>
+              <tr className="flex flex-wrap md:flex-nowrap">
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-semibold">
+                    Phone Number:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4" colSpan="2">
+                  <input
+                    type="text"
+                    name="phone"
+                    value={form.phone || ""}
+                    onChange={handlePhoneChange}
+                    className="p-2 border rounded w-full bg-slate-100"
+                    disabled
+                  />
+                </td>
+              </tr>
 
               <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
                 Selection Details
@@ -814,7 +839,7 @@ function UpdateDetails() {
                   <td className="p-2 w-full md:w-1/4">
                     <select
                       name="subLob"
-                      value={form.subLob?.subLOBid || ''}
+                      value={form.subLob?.subLOBid || ""}
                       className="p-2 bordered w-full"
                       onChange={handleSubLobChange}
                     >
@@ -1210,8 +1235,11 @@ function UpdateDetails() {
                     required
                   >
                     <option value="">Choose..</option>
-                    {candidateStatuses.map(status => (
-                      <option key={status.candidateStatusId} value={status.candidateStatus}>
+                    {candidateStatuses.map((status) => (
+                      <option
+                        key={status.candidateStatusId}
+                        value={status.candidateStatus}
+                      >
                         {status.candidateStatus}
                       </option>
                     ))}
@@ -1219,7 +1247,8 @@ function UpdateDetails() {
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
-                    Candidate Additional Remark:<span className="text-red-500">*</span>
+                    Candidate Additional Remark:
+                    <span className="text-red-500">*</span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -1231,10 +1260,9 @@ function UpdateDetails() {
                     required
                   />
                 </td>
-                
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
-              <td className="p-2 w-full md:w-1/4">
+                <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
                     Candidate Selection Date:
                     <span className="text-red-500">*</span>
@@ -1270,7 +1298,7 @@ function UpdateDetails() {
                   />
                 </td>
               </tr>
-              
+
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">

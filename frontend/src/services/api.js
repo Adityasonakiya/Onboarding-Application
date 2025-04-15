@@ -297,7 +297,7 @@ export const updateSelectionDetailsByVendorCandidateId = async (
   data
 ) => {
   const response = await fetch(
-    `http://localhost:8080/selection-details/put/andidateId/${phoneNumber}`,
+    `http://localhost:8080/selection-details/put/vendorCandidateId/${phoneNumber}`,
     {
       method: "PUT",
       headers: {
