@@ -121,8 +121,12 @@ export default function Navbar() {
     if (selectedOption === 'PSID') {
       setSearchQuery(value); // Update the input value
       navigate('/landing-page', { state: { id: value } });
-      setSuggestions([]);
-    } else {
+      setSuggestions([]); 
+    } else if(selectedOption === 'CandidateName')  {
+      // setSearchQuery(value); // Update the input value
+      navigate('/landing-page', { state: { phoneNumber: value } });
+      setSuggestions([]); 
+    }else {
       setSelectedStatus(value); // Update the selected status for statuses
     }
   };
@@ -260,7 +264,7 @@ export default function Navbar() {
                         if (selectedOption === 'PSID') {
                           handleSuggestionClick(suggestion.id);
                         } else if (selectedOption === 'CandidateName') {
-                          handleSuggestionClick(`${suggestion.firstName} ${suggestion.lastName}`);
+                          handleSuggestionClick(`${suggestion.phoneNumber}`);
                         } else {
                           handleSuggestionClick(suggestion.onboardingStatus || suggestion.bgvStatus); // Update state for status
                           handleSearch(); // Trigger search only for statuses
@@ -272,7 +276,7 @@ export default function Navbar() {
                         <p className='text-sm'>PSID: {suggestion.id}</p>
                       )}
                       {selectedOption === 'CandidateName' && (
-                        <p className='text-sm'>Candidate Name: {suggestion.firstName} {suggestion.lastName}</p>
+                        <p className='text-sm'>Phone number: {suggestion.phoneNumber}</p>
                       )}
                       {(selectedOption === 'CTool Status' || selectedOption === 'BgvStatus') && (
                         <p className='text-sm'>Status: {suggestion.onboardingStatus}</p>

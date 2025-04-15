@@ -16,6 +16,16 @@ export const getEmployeeCandidateByPsid = async (psid) => {
   throw new Error("Failed to fetch employee data");
 };
 
+export const getCandidateByPhoneNumber = async (phoneNumber) => {
+  const response = await fetch(
+    `http://localhost:8080/candidates/phoneNumber/${phoneNumber}`
+  );
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch candidate by phone number");
+};
+
 export const getEmployeeCandidateByCandidateId = async (candidateId) => {
   const response = await fetch(
     `http://localhost:8080/candidates/api/employee-candidates/${candidateId}`
