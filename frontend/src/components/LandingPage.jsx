@@ -12,7 +12,8 @@ import {
   getEmployeeCandidateByCtool,
   getEmployeeCandidateByPsid,
   getEmployeeCandidateByCandidateId,
-  getVendorById
+  getVendorById,
+  getCandidateByPhoneNumber
 
 } from "../services/api";
 import zIndex from "@mui/material/styles/zIndex";
@@ -22,6 +23,7 @@ const LandingPage = () => {
   const location = useLocation();
   const { state } = location;
   const id = state?.id;
+  const phoneNumber = state?.phoneNumber;
   const [employeeCandidates, setEmployeeCandidates] = useState([]);
   const [filteredCandidates, setFilteredCandidates] = useState([]);
   const searchType = state?.searchType;
@@ -106,9 +108,6 @@ const LandingPage = () => {
         setVendorNames(vendorNamesMap);
         console.log("Vendor Names:", vendorNamesMap);
 
-
-
-
         if (id) {
           const filtered = content.filter((candidate) => candidate.id === id);
           console.log("displaying filtered by ID");
@@ -124,7 +123,13 @@ const LandingPage = () => {
           //   //setTotalPages(1);
           //   console.log("searched candidate:", candidate);
           }
-        }
+        }else if(phoneNumber){
+          const candidate = await getCandidateByPhoneNumber(phoneNumber);
+          if (candidate && candidate.phoneNumber) {
+            setFilteredCandidates([candidate]);
+            setTotalPages(1);
+            console.log("searched Candidate using phone:", candidate);
+        }}
         else {
           setFilteredCandidates(content);
           console.log("displaying All");
@@ -134,7 +139,7 @@ const LandingPage = () => {
       }
     };
     getEmployeeCandidates();
-  }, [id, searchType, status, currentPage, rowsPerPage]);
+  }, [id, phoneNumber, searchType, status, currentPage, rowsPerPage]);
 
   const handlePageClick = (page) => {
     if (page !== 0) {

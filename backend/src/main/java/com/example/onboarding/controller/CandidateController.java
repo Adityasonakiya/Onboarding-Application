@@ -2,6 +2,8 @@ package com.example.onboarding.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.onboarding.model.Candidate;
 import com.example.onboarding.model.EmployeeCandidateDTO;
 import com.example.onboarding.service.CandidateService;
+import com.example.onboarding.service.UserService;
 
 @CrossOrigin("*")
 @RestController
@@ -25,6 +28,8 @@ public class CandidateController {
 
     @Autowired
     private CandidateService candidateService;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @GetMapping("/{phoneNumber}")
     public ResponseEntity<Candidate> getCandidateById(@PathVariable Long phoneNumber) {
@@ -36,10 +41,26 @@ public class CandidateController {
         }
     }
 
+    @GetMapping("/phoneNumber/{phoneNumber}")
+    public ResponseEntity<EmployeeCandidateDTO> getCandidateByPhoneNumber(@PathVariable Long phoneNumber) {
+        try {
+            System.out.println("Type of phoneNumber: " + phoneNumber.getClass().getName());
+
+    
+            EmployeeCandidateDTO candidate = candidateService.getEmployeeCandidateById(phoneNumber);
+            return candidate != null
+                    ? new ResponseEntity<>(candidate, HttpStatus.OK)
+                    : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (NumberFormatException e) {
+            logger.error("Invalid phone number format: {}", phoneNumber);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping
-    public ResponseEntity<List<Candidate>> getAllCandidates(){
+    public ResponseEntity<List<Candidate>> getAllCandidates() {
         List<Candidate> candidates = candidateService.getAllCandidates();
-        if (candidates!=null) {
+        if (candidates != null) {
             return new ResponseEntity<>(candidates, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -57,13 +78,12 @@ public class CandidateController {
 
     @PostMapping("/create")
     public ResponseEntity<Candidate> createVendorCandidate(@RequestBody Candidate candidate) {
-        System.out.println("Object sent"+ candidate);
+        System.out.println("Object sent" + candidate);
         if (candidate == null) {
             return ResponseEntity.badRequest().build();
         }
         Candidate createdCandidate = candidateService.createCandidate(candidate);
-        System.out.println("Object recieved"+ createdCandidate);
+        System.out.println("Object recieved" + createdCandidate);
         return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
     }
 }
-
