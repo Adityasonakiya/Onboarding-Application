@@ -50,10 +50,16 @@ function UpdateDetails() {
     fetch('http://localhost:8080/candidate-status/all')
       .then(response => response.json())
       .then(data => {
-        setCandidateStatuses(data);
+        // Use a Set to filter out duplicate candidate statuses
+        const uniqueStatuses = Array.from(new Set(data.map(item => item.candidateStatus)))
+          .map(status => {
+            return data.find(item => item.candidateStatus === status);
+          });
+        setCandidateStatuses(uniqueStatuses);
       })
       .catch(error => console.error('Error fetching candidate statuses:', error));
   }, []);
+  
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

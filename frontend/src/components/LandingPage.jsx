@@ -12,6 +12,8 @@ import {
   getEmployeeCandidateByCtool,
   getEmployeeCandidateByPsid,
   getEmployeeCandidateByCandidateId,
+  getVendorById,
+  getCandidateByPhoneNumber
 
 } from "../services/api";
 import zIndex from "@mui/material/styles/zIndex";
@@ -21,6 +23,7 @@ const LandingPage = () => {
   const location = useLocation();
   const { state } = location;
   const id = state?.id;
+  const phoneNumber = state?.phoneNumber;
   const [employeeCandidates, setEmployeeCandidates] = useState([]);
   const [filteredCandidates, setFilteredCandidates] = useState([]);
   const searchType = state?.searchType;
@@ -29,6 +32,9 @@ const LandingPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [vendorNames, setVendorNames] = useState({});
+
 
   const handleRowPerChange = (e) => {
     setRowsPerPage(Number(e.target.value));
@@ -49,16 +55,16 @@ const LandingPage = () => {
     navigate("/selection-tracker");
   };
 
-  const handleEdit = (id) => {
-    navigate("/update-details", { state: { id } });
-  };
+  const handleEdit = (id, phoneNumber) => {
+    navigate("/update-details", { state: { id, phoneNumber } });
+};
 
   const handleRefresh = () => {
     navigate("/landing-page");
   };
 
-  const handleViewOnly = (id) => {
-    navigate("/selection-tracker", { state: { id, readOnly: true } }); // Pass the readOnly flag
+  const handleViewOnly = (id, phoneNumber) => {
+    navigate("/selection-tracker", { state: { id,phoneNumber, readOnly: true } }); // Pass the readOnly flag
   };
 
   useEffect(() => {
@@ -67,7 +73,6 @@ const LandingPage = () => {
       try {
         let content = [];
         let totalPages = 0;
-  
         if (searchType === "ctool" && status) {
           const response = await getEmployeeCandidateByCtool(status);
           content = response;
@@ -81,28 +86,50 @@ const LandingPage = () => {
           content = response.content;
           totalPages = response.totalPages;
         }
-  
+
         setEmployeeCandidates(content);
         setTotalPages(totalPages);
         setFilteredCandidates(content);
         console.log("dashboard data: ", content);
-  
+
+
+        // Fetch vendor names
+        let vendorNamesMap = {};
+        for (const candidate of content) {
+          if (candidate.id && candidate.id < 100) {
+            const vendor = await getVendorById(candidate.id);
+            console.log(`Vendor response for ID ${candidate.id}:`, vendor);
+            vendorNamesMap[candidate.id] = vendor.vendorName;
+            // vendorNamesMap={candidateName :  candidate?.id , vendorName : vendor.vendorName}
+          }
+        }
+        
+        console.log("Vendor Names:", vendorNamesMap);
+        setVendorNames(vendorNamesMap);
+        console.log("Vendor Names:", vendorNamesMap);
+
         if (id) {
           const filtered = content.filter((candidate) => candidate.id === id);
           console.log("displaying filtered by ID");
           const employee = await getEmployeeCandidateByPsid(id);
-          const candidate = await getEmployeeCandidateByCandidateId(id);
+          // const candidate = await getEmployeeCandidateByCandidateId(id);
           if (employee && employee.id) {
             setFilteredCandidates([employee]);
             setTotalPages(1);
             console.log("searched emp2:", employee);
-          } if (candidate && candidate.id) {
-            setFilteredCandidates([candidate]);
-            candidate.id = null;
-            //setTotalPages(1);
-            console.log("searched candidate:", candidate);
+          // } if (candidate && candidate.id) {
+          //   setFilteredCandidates([candidate]);
+          //   candidate.id = null;
+          //   //setTotalPages(1);
+          //   console.log("searched candidate:", candidate);
           }
-        } 
+        }else if(phoneNumber){
+          const candidate = await getCandidateByPhoneNumber(phoneNumber);
+          if (candidate && candidate.phoneNumber) {
+            setFilteredCandidates([candidate]);
+            setTotalPages(1);
+            console.log("searched Candidate using phone:", candidate);
+        }}
         else {
           setFilteredCandidates(content);
           console.log("displaying All");
@@ -112,7 +139,7 @@ const LandingPage = () => {
       }
     };
     getEmployeeCandidates();
-  }, [id, searchType, status, currentPage, rowsPerPage]);
+  }, [id, phoneNumber, searchType, status, currentPage, rowsPerPage]);
 
   const handlePageClick = (page) => {
     if (page !== 0) {
@@ -136,11 +163,10 @@ const LandingPage = () => {
       pages.push(
         <button
           key={i}
-          className={`px-3 py-1 mx-1 ${
-            i === currentPage
-              ? "bg-gray-500 text-white rounded-full"
-              : "text-gray-700"
-          }`}
+          className={`px-3 py-1 mx-1 ${i === currentPage
+            ? "bg-gray-500 text-white rounded-full"
+            : "text-gray-700"
+            }`}
           onClick={() => handlePageClick(i)}
         >
           {i + 1}
@@ -188,14 +214,20 @@ const LandingPage = () => {
             <tbody>
               {filteredCandidates.map((emp) => (
                 <tr key={emp.id}>
+
+
+
                   <td className="p-2 border text-center">
                     <button
                       className="text-blue-500 underline"
                       onClick={() => handleViewOnly(emp.id)}
                     >
-                      {emp.id || 'EXTERNAL'} 
+                      {emp.id === 1 ? 'EXTERNAL' : (emp.id < 100 ? vendorNames[emp.id] : emp.id)}
                     </button>
                   </td>
+
+
+
                   <td className="p-2 border text-center">
                     {emp.firstName} {emp.lastName}
                   </td>
@@ -213,7 +245,7 @@ const LandingPage = () => {
                     <div className="flex justify-center">
                       <button
                         className="bg-blue-500 text-white py-1 px-2 rounded mr-2"
-                        onClick={() => handleEdit(emp.id)}
+                        onClick={() => handleEdit(emp.id,emp.phoneNumber)}
                       >
                         Edit
                       </button>
@@ -228,9 +260,8 @@ const LandingPage = () => {
         <div className="fixed bottom-0 left-0 w-full bg-white py-2 z-0 flex justify-between items-center px-4">
           <div className="flex justify-center flex-grow">
             <button
-              className={`px-3 py-1 mx-1 ${
-                currentPage === 0 ? "text-black font-bold" : "text-gray-900"
-              }`}
+              className={`px-3 py-1 mx-1 ${currentPage === 0 ? "text-black font-bold" : "text-gray-900"
+                }`}
               onClick={() => handlePageClick(1)}
               disabled={currentPage === 0}
             >
@@ -244,11 +275,10 @@ const LandingPage = () => {
               boundaryCount={1}
             />
             <button
-              className={`px-3 py-1 mx-1 ${
-                currentPage === totalPages - 1
-                  ? " text-black font-bold"
-                  : "text-gray-900"
-              }`}
+              className={`px-3 py-1 mx-1 ${currentPage === totalPages - 1
+                ? " text-black font-bold"
+                : "text-gray-900"
+                }`}
               onClick={() => handlePageClick(totalPages)}
               disabled={currentPage === totalPages - 1}
             >

@@ -47,7 +47,8 @@ function SelectionTracker() {
   const [selectedSubLobTemp, setSelectedSubLobTemp] = useState({});
   const location = useLocation();
   const { state } = location;
-  const { id, readOnly } = state || {};
+  // const id = state?.id;
+  const { id,phoneNumber, readOnly } = state || {};
 
   const validateForm = () => {
     const newErrors = {};
@@ -794,7 +795,7 @@ function SelectionTracker() {
                     className={`p-2 border rounded w-full ${
                       errors.psId ? "border-red-500" : ""
                     }`}
-                    disabled={isExternal || isVendor || readOnly}
+                    disabled={!isInternal || readOnly}
                     pattern="\d*"
                   />
                   {errors.psId && (
