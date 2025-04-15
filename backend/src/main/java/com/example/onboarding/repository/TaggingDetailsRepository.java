@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.onboarding.model.TaggingDetails;
 
+
 @Repository
 public interface TaggingDetailsRepository extends JpaRepository<TaggingDetails,Integer>{
     TaggingDetails findByEmployee_Psid(int psid);

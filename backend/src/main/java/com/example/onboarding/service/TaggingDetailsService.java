@@ -10,10 +10,13 @@ import com.example.onboarding.model.CandidateStatus;
 import com.example.onboarding.model.Employee;
 import com.example.onboarding.model.OnboardingStatus;
 import com.example.onboarding.model.TaggingDetails;
+import com.example.onboarding.model.VendorCandidate;
 import com.example.onboarding.repository.BGVStatusRepository;
+import com.example.onboarding.repository.CandidateRepository;
 import com.example.onboarding.repository.CandidateStatusRepository;
 import com.example.onboarding.repository.OnboardingStatusRepository;
 import com.example.onboarding.repository.TaggingDetailsRepository;
+import com.example.onboarding.repository.VendorCandidateRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -35,6 +38,12 @@ public class TaggingDetailsService {
     
     @Autowired
     private CandidateStatusRepository candidateStatusRepository;
+
+    @Autowired
+    private VendorCandidateRepository vendorCandidateRepository;
+
+    @Autowired
+    private CandidateRepository candidateRepository;
 
     @Transactional
     public TaggingDetails updateTaggingDetailsByPsId(int psId, TaggingDetails updatedDetails) {
@@ -133,8 +142,10 @@ public class TaggingDetailsService {
                 return taggingDetailsRepository.save(existingDetails);
             } else {
                 logger.info("No existing details found for PhoneNumber: {}, creating new entry", phoneNumber);
-                updatedDetails.setCandidate(new Candidate(phoneNumber)); // Assuming Candidate class has a constructor
-                                                                         // with phoneNumber
+                // Assuming Candidate class has a constructor
+                Candidate existingCandidate = candidateRepository.findById(phoneNumber)
+                        .orElseThrow(() -> new RuntimeException("Candidate not found for phoneNumber: " + phoneNumber));   
+                updatedDetails.setCandidate(existingCandidate);                                                              // with phoneNumber
                 if (updatedDetails.getOnboardingStatus() != null) {
                     OnboardingStatus onboardingStatus = onboardingStatusRepository
                             .save(updatedDetails.getOnboardingStatus());
@@ -182,8 +193,11 @@ public class TaggingDetailsService {
                 return taggingDetailsRepository.save(existingDetails);
             } else {
                 logger.info("No existing details found for PhoneNumber: {}, creating new entry", phoneNumber);
-                updatedDetails.setCandidate(new Candidate(phoneNumber)); // Assuming Candidate class has a constructor
-                                                                         // with phoneNumber
+                VendorCandidate existingVendorCandidate = vendorCandidateRepository.findById(phoneNumber)
+                            .orElseThrow(() -> new RuntimeException("VendorCandidate not found for phoneNumber: " + phoneNumber));
+
+                updatedDetails.setVendorCandidate(existingVendorCandidate); // Set the existing entity
+                // Assuming VendorCandidate class has a constructor
                 if (updatedDetails.getOnboardingStatus() != null) {
                     OnboardingStatus onboardingStatus = onboardingStatusRepository
                             .save(updatedDetails.getOnboardingStatus());

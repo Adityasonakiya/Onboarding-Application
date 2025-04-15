@@ -46,6 +46,16 @@ public class TaggingDetailsController {
         }
     }
 
+    @GetMapping("/vendor/{phoneNumber}")
+    public ResponseEntity<TaggingDetails> getTaggingDetailsByVendorCandidateId(@PathVariable Long phoneNumber) {
+        TaggingDetails details = taggingDetailsService.getTaggingDetailsByVendorPhoneNumber(phoneNumber);
+        if (details != null) {
+            return ResponseEntity.ok(details);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PutMapping("/psid/{psId}")
     public ResponseEntity<TaggingDetails> updateTaggingDetailsByPsId(@PathVariable int psId,
             @RequestBody TaggingDetails updates) {

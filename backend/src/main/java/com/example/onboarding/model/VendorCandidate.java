@@ -40,6 +40,29 @@ public class VendorCandidate {
     
     // Getters, Setters, Constructors (default and parameterized), equals, hashCode, and toString
     
+    
+    public VendorCandidate(){
+
+    }
+    
+    public VendorCandidate(Long phoneNumber, Vendor vendor, String firstName, String middleName, String lastName,
+            Date lTIOnboardingDate, Employee createdBy, Employee updatedBy, Date createDate, Date updateDate) {
+        this.phoneNumber = phoneNumber;
+        this.vendor = vendor;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        LTIOnboardingDate = lTIOnboardingDate;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
+    }
+
+    // public VendorCandidate(Long phoneNumber2) {
+    //     this.phoneNumber = phoneNumber2;
+    // }
+
     public Vendor getVendor() {
         return vendor;
     }
