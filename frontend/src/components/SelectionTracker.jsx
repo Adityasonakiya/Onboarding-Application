@@ -14,7 +14,6 @@ import {
   getSelectionDetailsByVendorCandidateId,
   getVendorCandidateById,
 } from "../services/api";
-//import UpdateDetails from "./UpdateDetails";
 import moment from "moment";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -23,25 +22,47 @@ function SelectionTracker() {
   const [form, setForm] = useState({
     bu: "BF",
     psId: "",
-    phoneNumber: "",
+    lob: {},
+    subLob: {},
+    irm: "",
+    phone: "",
   });
-  const [errors, setErrors] = useState({});
+
+  const [errors, setErrors] = useState({
+    lob: "",
+    subLob: "",
+    irm: "",
+    phone: "",
+  });
   const [isInternal, setIsInternal] = useState(true);
   const [isExternal, setIsExternal] = useState(false);
   const [isVendor, setVendor] = useState(false);
-  // const [selected, setSelected] = React.useState("");
   const [isReadOnly, setIsReadOnly] = useState(false);
   const navigate = useNavigate();
   const [vendors, setVendors] = useState([]);
   const [lobs, setLobs] = useState([]);
   const [subLobs, setSubLobs] = useState([]);
-  //const [Lob, setLob] = useState([]);
   const [subLob, setSubLob] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedSubLobTemp, setSelectedSubLobTemp] = useState({});
   const location = useLocation();
   const { state } = location;
-  // const id = state?.id;
   const { id, readOnly } = state || {};
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!form.lob.lobId) newErrors.lob = 'This field is required.';
+    if (!form.subLob.subLOBid || form.subLob.subLOBid === '0')
+      newErrors.subLob = 'This field is required.';
+    if (!form.irm) newErrors.irm = 'This field is required.';
+    if (!form.phone) {
+      newErrors.phone = 'Phone number is required.';
+    } else if (form.phone.length !== 10) {
+      newErrors.phone = 'Phone number must be exactly 10 digits.';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   useEffect(() => {
     if (readOnly) {
@@ -84,64 +105,6 @@ function SelectionTracker() {
           console.log("Error fetching details!");
         }
       }
-      //   else{
-      //     try{
-      //       const candidate = await getCandidateById(phoneNumber);
-      //       const vendorCandidate = await getVendorCandidateById(phoneNumber);
-
-      //       if (candidate) {
-      //         // Set the form state with candidate data
-      //         setForm((prevForm) => ({
-      //           ...prevForm,
-      //           vendors: {vendorId:1},
-      //           phone: candidate.phoneNumber,
-      //           fname: candidate.firstName,
-      //           lname: candidate.lastName,
-      //           baseBU: "",
-      //           grade: "", // Assuming grade is not available for candidate
-      //           location: "", // Assuming location is not available for candidate
-      //           pu: "", // Assuming pu is not available for candidate
-      //           totalExp: "", // Assuming totalExperience is not available for candidate
-      //           skill: "", // Assuming skill is not available for candidate
-      //           email: "", // Assuming email is not available for candidate
-      //         }));
-      //         setIsExternal(true); // Set isInternal to false for candidates
-      //         setVendor(false); //set Vendor to false
-      //         // Fetch selection details for the candidate
-      //         await fetchSelectionDetailsByCandidateId(candidate.phoneNumber);
-      //       }
-      //       // } catch (candidateError) {
-      //       //   console.error("Error fetching candidate data:", candidateError);
-      //       // }
-      //       // try {
-      //       else if (vendorCandidate && vendorCandidate.phoneNumber) {
-      //         // Set the form state with candidate data
-      //         setForm((prevForm) => ({
-      //           ...prevForm,
-      //           vendors:vendorCandidate.vendor,
-      //           phone: vendorCandidate.phoneNumber,
-      //           fname: vendorCandidate.firstName,
-      //           lname: vendorCandidate.lastName,
-      //           baseBU: "",
-      //           grade: "", // Assuming grade is not available for candidate
-      //           location: "", // Assuming location is not available for candidate
-      //           pu: "", // Assuming pu is not available for candidate
-      //           totalExp: "", // Assuming totalExperience is not available for candidate
-      //           skill: "", // Assuming skill is not available for candidate
-      //           email: "", // Assuming email is not available for candidate
-      //         }));
-      //         setIsExternal(false); // Set isInternal to false for vendor
-      //         setIsInternal(false);
-      //         setVendor(true); //set Vendor to true
-      //         // Fetch selection details for the candidate
-      //         await fetchSelectionDetailsByVendorCandidateId(
-      //           vendorCandidate.phoneNumber
-      //         );
-      //       }
-      //   }catch (error) {
-      //     console.log("Error fetching details!");
-      //   }
-      // }
     };
     fetchData();
   }, [id]);
@@ -165,7 +128,6 @@ function SelectionTracker() {
       setVendor(true);
     }
   });
-
   useEffect(() => {
     if (isVendor) {
       fetchVendorData(form.phoneNumber);
@@ -182,10 +144,8 @@ function SelectionTracker() {
         console.error("There was an error fetching the Vendors!", error);
       }
     };
-
     getVendors();
   }, []);
-
   useEffect(() => {
     const getLobs = async () => {
       try {
@@ -213,16 +173,19 @@ function SelectionTracker() {
   }, [form.lob]);
 
   const handleLobChange = async (event) => {
+    const { value } = event.target;
+    setForm((prevForm) => ({
+      ...prevForm,
+      lob: { lobId: value },
+    }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      lob: value ? "" : "This field is required.",
+    }));
+
     setSelectedSubLobTemp({});
     const lobId = event.target.value;
     console.log("LOB: ", lobId);
-    //form.lob.lobId = lobId;
-
-    setForm((prevState) => ({
-      ...prevState,
-      lob: { lobId: lobId },
-    }));
-
     try {
       const data = await fetchSubLobs(lobId);
       setSubLobs(data);
@@ -232,15 +195,17 @@ function SelectionTracker() {
   };
 
   const handleSubLobChange = async (event) => {
+    const { value } = event.target;
+    setForm((prevForm) => ({
+      ...prevForm,
+      subLob: { subLOBid: value },
+    }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      subLob: value && value !== "0" ? "" : "This field is required.",
+    }));
     const subLobId = event.target.value;
     console.log("subLOB: ", subLobId);
-    //form.subLob.subLOBid = subLobId;
-
-    setForm((prevState) => ({
-      ...prevState,
-      subLob: { subLOBid: subLobId },
-    }));
-
     try {
       const data = await fetchSubLob(subLobId);
       setSubLob(data);
@@ -314,7 +279,6 @@ function SelectionTracker() {
       console.error(error);
     }
   };
-
   const fetchVendorData = async (phoneNumber) => {
     try {
       const vendorCandidate = await getVendorCandidateById(phoneNumber);
@@ -338,8 +302,37 @@ function SelectionTracker() {
   };
 
   const formatDate = (date) => {
-    if (!date) return "";
+    if (!date) return null;
     return moment(date).format("YYYY-MM-DD");
+  };
+
+  const isValidDateRange = (startDate, endDate) => {
+    if (!startDate || !endDate) return false; // Return false if either date is missing
+    return moment(startDate).isBefore(moment(endDate));
+  };
+
+  const validateDates = (selectionDate, ctoolRecDate, ltiOnboardDate) => {
+    const errors = {};
+
+    if (
+      ltiOnboardDate &&
+      selectionDate &&
+      !isValidDateRange(ltiOnboardDate, selectionDate)
+    ) {
+      errors.ltiOnboardDate =
+        "LTI Onboarding Date must be before Selection Date";
+    }
+
+    if (
+      selectionDate &&
+      ctoolRecDate &&
+      !isValidDateRange(selectionDate, ctoolRecDate)
+    ) {
+      errors.selectionDate =
+        "Selection Date must be before CTool Received Date";
+    }
+
+    return errors;
   };
 
   const fetchSelectionDetailsByPsid = async (psid) => {
@@ -351,9 +344,26 @@ function SelectionTracker() {
           return {}; // Fallback to an empty object
         }
       );
+
+      const selectionDate = formatDate(selectionDetails.hsbcselectionDate);
+      const ctoolRecDate = formatDate(selectionDetails.ctoolReceivedDate);
+      const ltiOnboardDate = formatDate(selectionDetails.ltionboardingDate);
+
+      console.log("Selection Date:", selectionDate);
+      console.log("CTool Received Date:", ctoolRecDate);
+      console.log("LTI Onboarding Date:", ltiOnboardDate);
+
+      const errors = validateDates(selectionDate, ctoolRecDate, ltiOnboardDate);
+
+      if (Object.keys(errors).length > 0) {
+        console.error("Validation errors:", errors);
+        alert(Object.values(errors).join("\n"));
+        return; // Exit function if validation fails
+      }
+
       setForm((prevForm) => ({
         ...prevForm,
-        selectionDate: formatDate(selectionDetails.hsbcselectionDate),
+        selectionDate: selectionDate,
         bu: "BF",
         lob: selectionDetails.lob || "",
         subLob: selectionDetails.sublob || "",
@@ -364,16 +374,18 @@ function SelectionTracker() {
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
         ctoolId: selectionDetails.hsbctoolId,
-        ctoolRecDate: formatDate(selectionDetails.ctoolReceivedDate),
+        ctoolRecDate: ctoolRecDate,
         ctoolJobCat: selectionDetails.ctoolJobCategory,
         ctoolLocation: selectionDetails.ctoolLocation,
         ctoolRate: selectionDetails.ctoolRate,
         ctoolPropRate: selectionDetails.ctoolProposedRate,
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
-        ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
+        ltiOnboardDate: ltiOnboardDate,
       }));
+
       setSelectedSubLobTemp(selectionDetails.subLob);
+
       if (
         !readOnly &&
         taggingDetails.onboardingStatus.onboardingStatus !==
@@ -492,7 +504,6 @@ function SelectionTracker() {
       console.error(error);
     }
   };
-
   //handle changes in form
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -500,13 +511,37 @@ function SelectionTracker() {
       setIsInternal(name === "internal" ? checked : !checked);
       setIsExternal(name === "external" ? checked : !checked);
       //setVendor(name === "vendor" ? checked : !checked);
+    } else if (name === "phone") {
+      if (name === "phone") {
+        const numericValue = value.replace(/\D/g, ""); // Remove non-numeric characters
+        if (numericValue.length <= 10) {
+          setForm((prevForm) => ({
+            ...prevForm,
+            [name]: numericValue,
+          }));
+        }
+      }
+
+      // Clear errors if the input is valid
+      if (name === "phone" && value.length === 10) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          phone: "",
+        }));
+      }
     } else {
-      setForm({ ...form, [name]: value });
+      setForm((prevForm) => ({
+        ...prevForm,
+        [name]: value,
+      }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: value ? "" : "This field is required.",
+      }));
     }
   };
 
   //for submit
-
   const handleResponse = async (response, requestBody) => {
     if (response.ok) {
       toast.success("Details updated successfully!", {
@@ -524,171 +559,188 @@ function SelectionTracker() {
       });
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const errors = validate(); // Validate the form inputs
-    if (Object.keys(errors).length === 0) {
-      try {
-        // Common request body for selection details
-        const requestBody = {
-          hsbcselectionDate: form.selectionDate,
-          baseBU: form.bu,
-          lob: form.lob,
-          subLob: form.subLob,
-          hsbchiringManager: form.hiringManager,
-          hsbchead: form.head,
-          deliveryManager: form.deliveryManager,
-          salesPOC: form.salespoc,
-          pricingModel: form.pricingModel,
-          irm: form.irm,
-          hsbctoolId: form.ctoolId,
-          ctoolReceivedDate: form.ctoolRecDate,
-          ctoolJobCategory: form.ctoolJobCat,
-          ctoolLocation: form.ctoolLocation,
-          ctoolRate: form.ctoolRate,
-          ctoolProposedRate: form.ctoolPropRate,
-          recruiterName: form.recruiterName,
-          interviewEvidence: form.evidence,
-          offerReleaseStatus: form.offerReleaseStatus,
-          ltionboardingDate: form.ltiOnboardDate,
-        };
-
-        if (form.psId) {
-          // Employee logic
-          requestBody.employee = { psid: form.psId };
-
-          const response = await fetch(
-            "http://localhost:8080/selection-details/create/employee",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(requestBody),
-            }
-          );
-
-          await handleResponse(response, requestBody);
-        } else if (form.vendors.vendorId === 1) {
-          // Candidate logic
-          const candidate = {
-            phoneNumber: form.phone,
-            vendor: form.vendors,
-            firstName: form.fname,
-            lastName: form.lname,
-            baseBU: "BF",
-          };
-
-          console.log("Candidate Payload:", candidate);
-
-          // Step 1: Create vendor candidate
-          const candidateResponse = await fetch(
-            "http://localhost:8080/candidates/create",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(candidate), // JSON payload for VendorCandidate
-            }
-          );
-
-          console.log("Candidate Response:", candidateResponse);
-
-          if (!candidateResponse.ok) {
-            const errorData = await candidateResponse.json();
-            console.error("Vendor creation failed:", errorData.message);
-            toast.error("Failed to create Vendor Candidate!", {
-              position: "top-right",
-            });
-            return; // Stop execution if vendor creation fails
-          }
-          //step 3
-          requestBody.candidate = { 
-            phoneNumber: form.phone,
-            firstName: form.fname 
-          };
-          console.log(requestBody);
-          const response = await fetch(
-            "http://localhost:8080/selection-details/create/candidate",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(requestBody),
-            }
-          );
-
-          await handleResponse(response, requestBody);
-        } else if (isVendor && form.vendors.vendorId !== 1) {
-          // Vendor logic
-          const vendorCandidate = {
-            phoneNumber: form.phone,
-            vendor: form.vendors,
-            firstName: form.fname,
-            lastName: form.lname,
-            baseBU: "BF",
-          };
-
-          console.log("VendorCandidate Payload:", vendorCandidate);
-
-          // Step 1: Create vendor candidate
-          const vendorResponse = await fetch(
-            "http://localhost:8080/vendors/vendor-candidates/create",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(vendorCandidate), // JSON payload for VendorCandidate
-            }
-          );
-
-          console.log("Vendor Response:", vendorResponse);
-
-          if (!vendorResponse.ok) {
-            const errorData = await vendorResponse.json();
-            console.error("Vendor creation failed:", errorData.message);
-            toast.error("Failed to create Vendor Candidate!", {
-              position: "top-right",
-            });
-            return; // Stop execution if vendor creation fails
-          }
-
-          // Step 2: Attach vendorCandidate reference to requestBody for selection details
-          requestBody.vendorCandidate = {
-            phoneNumber: form.phone,
-            firstName: form.fname,
-            lastName: form.lname,
-          };
-
-          console.log("Request Body for Selection Details:", requestBody);
-
-          // Post selection details
-          const response = await fetch(
-            "http://localhost:8080/selection-details/create/vendor",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(requestBody), // JSON payload for selection details
-            }
-          );
-
-          console.log("Selection Details Response:", response);
-
-          // Handle response
-          await handleResponse(response, requestBody);
-        }
-      } catch (error) {
-        // Generic error handling
-        console.error("An error occurred:", error.message);
-        setErrors({ submit: "An error occurred while submitting the form." });
-        toast.error("Error adding details!", { position: "top-right" });
+    if (validateForm()) {
+      const errors = validate(); // Validate the form inputs // Additional required field validations
+      if (!form.lob || !form.lob.lobId) {
+        errors.lob = "LOB is required";
       }
-    } else {
-      // Validation errors
-      setErrors(errors);
-      toast.error("Please fix the errors before submitting!", {
-        position: "top-right",
-      });
+      if (!form.subLob || !form.subLob.subLOBid) {
+        errors.subLob = "Sub LOB is required";
+      }
+      if (!form.irm) {
+        errors.irm = "IRM is required";
+      }
+      if (!form.head) {
+        errors.head = "HSBC Head is required";
+      }
+      if (!form.deliveryManager) {
+        errors.deliveryManager = "Delivery Manager is required";
+      }
+
+      const dateErrors = validateDates(
+        form.selectionDate,
+        form.ctoolRecDate,
+        form.ltiOnboardDate
+      ); // Validate the dates
+
+      if (
+        Object.keys(errors).length === 0 &&
+        Object.keys(dateErrors).length === 0
+      ) {
+        try {
+          // Common request body for selection details
+          const requestBody = {
+            hsbcselectionDate: form.selectionDate,
+            baseBU: form.bu,
+            lob: form.lob,
+            subLob: form.subLob,
+            hsbchiringManager: form.hiringManager,
+            hsbchead: form.head,
+            deliveryManager: form.deliveryManager,
+            salesPOC: form.salespoc,
+            pricingModel: form.pricingModel,
+            irm: form.irm,
+            hsbctoolId: form.ctoolId,
+            ctoolReceivedDate: form.ctoolRecDate,
+            ctoolJobCategory: form.ctoolJobCat,
+            ctoolLocation: form.ctoolLocation,
+            ctoolRate: form.ctoolRate,
+            ctoolProposedRate: form.ctoolPropRate,
+            recruiterName: form.recruiterName,
+            interviewEvidence: form.evidence,
+            offerReleaseStatus: form.offerReleaseStatus,
+            ltionboardingDate: form.ltiOnboardDate,
+          };
+
+          if (form.psId) {
+            // Employee logic
+            requestBody.employee = { psid: form.psId };
+
+            const response = await fetch(
+              "http://localhost:8080/selection-details/create/employee",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestBody),
+              }
+            );
+
+            await handleResponse(response, requestBody);
+          } else if (form.vendors.vendorId === 1) {
+            // Candidate logic
+            const candidate = {
+              phoneNumber: form.phone,
+              vendor: form.vendors,
+              firstName: form.fname,
+              lastName: form.lname,
+              baseBU: "BF",
+            };
+
+            console.log("Candidate Payload:", candidate); // Step 1: Create vendor candidate
+
+            const candidateResponse = await fetch(
+              "http://localhost:8080/candidates/create",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(candidate), // JSON payload for VendorCandidate
+              }
+            );
+
+            console.log("Candidate Response:", candidateResponse);
+
+            if (!candidateResponse.ok) {
+              const errorData = await candidateResponse.json();
+              console.error("Vendor creation failed:", errorData.message);
+              toast.error("Failed to create Vendor Candidate!", {
+                position: "top-right",
+              });
+              return; // Stop execution if vendor creation fails
+            } // Step 3
+            requestBody.candidate = {
+              phoneNumber: form.phone,
+              firstName: form.fname,
+            };
+            console.log(requestBody);
+            const response = await fetch(
+              "http://localhost:8080/selection-details/create/candidate",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestBody),
+              }
+            );
+
+            await handleResponse(response, requestBody);
+          } else if (isVendor && form.vendors.vendorId !== 1) {
+            // Vendor logic
+            const vendorCandidate = {
+              phoneNumber: form.phone,
+              vendor: form.vendors,
+              firstName: form.fname,
+              lastName: form.lname,
+              baseBU: "BF",
+            };
+
+            console.log("VendorCandidate Payload:", vendorCandidate); // Step 1: Create vendor candidate
+
+            const vendorResponse = await fetch(
+              "http://localhost:8080/vendors/vendor-candidates/create",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(vendorCandidate), // JSON payload for VendorCandidate
+              }
+            );
+
+            console.log("Vendor Response:", vendorResponse);
+
+            if (!vendorResponse.ok) {
+              const errorData = await vendorResponse.json();
+              console.error("Vendor creation failed:", errorData.message);
+              toast.error("Failed to create Vendor Candidate!", {
+                position: "top-right",
+              });
+              return; // Stop execution if vendor creation fails
+            } // Step 2: Attach vendorCandidate reference to requestBody for selection details
+            requestBody.vendorCandidate = {
+              phoneNumber: form.phone,
+              firstName: form.fname,
+              lastName: form.lname,
+            };
+            console.log("Request Body for Selection Details:", requestBody); // Post selection details
+
+            const response = await fetch(
+              "http://localhost:8080/selection-details/create/vendor",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestBody), // JSON payload for selection details
+              }
+            );
+
+            console.log("Selection Details Response:", response); // Handle response
+
+            await handleResponse(response, requestBody);
+          }
+        } catch (error) {
+          // Generic error handling
+          console.error("An error occurred:", error.message);
+          setErrors({ submit: "An error occurred while submitting the form." });
+          toast.error("Error adding details!", { position: "top-right" });
+        }
+      } else {
+        // Validation errors
+        setErrors({ ...errors, ...dateErrors });
+        toast.error("Please fix the errors before submitting!", {
+          position: "top-right",
+        });
+      }
     }
   };
-
   return (
     <div className="w-full px-4 py-6">
       <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">
@@ -725,19 +777,6 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   />
                 </td>
-                {/* <td className="p-2 w-full md:w-1/3">
-                  <label className="font-bold">Vendor</label>
-                </td>
-                <td className="p-2 w-full md:w-1/3">
-                  <input
-                    type="radio"
-                    name="vendor"
-                    checked={isVendor}
-                    onChange={handleChange}
-                    className="p-2"
-                    disabled={isReadOnly}
-                  />
-                </td> */}
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap ">
                 <td className="p-2 w-full md:w-1/4">
@@ -762,31 +801,6 @@ function SelectionTracker() {
                     <p className="text-red-500 text-sm mb-4">{errors.psId}</p>
                   )}
                 </td>
-                {/* <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
-                    Candidate ID:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/3">
-                  <input
-                    type="number"
-                    name="candidateId"
-                    value={form.candidateId || ""}
-                    onChange={(e) => handleChange(e)}
-                    onBlur={(e) =>
-                      fetchSelectionDetailsByCandidateId(e.target.value)
-                    }
-                    className={`p-2 border rounded w-full ${
-                      errors.candidateId ? "border-red-500" : ""
-                    }`}
-                    disabled={isInternal || isVendor || readOnly}
-                  />
-                  {errors.candidateId && (
-                    <p className="text-red-500 text-sm mb-4">
-                      {errors.candidateId}
-                    </p>
-                  )}
-                </td> */}
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">Vendor:</label>
                 </td>
@@ -813,29 +827,6 @@ function SelectionTracker() {
                     </p>
                   )}
                 </td>
-                {/* <td className="p-2 w-full md:w-1/3">
-                  <label className="font-semibold">
-                    Vendor Candidate ID:<span className="text-red-500">*</span>
-                  </label>
-                </td> */}
-                {/* <td className="p-2 w-full md:w-1/4">
-                  <input
-                    name="vendorCandidateId"
-                    value={form.vendorCandidateId || ""}
-                    onChange={handleChange}
-                    required
-                    className={`p-2 border rounded w-full ${
-                      errors.vendorCandidateId ? "border-red-500" : ""
-                    }`}
-                    disabled={isInternal || isExternal || readOnly}
-                    pattern="\d*"
-                  />
-                  {errors.vendorCandidateId && (
-                    <p className="text-red-500 text-sm mb-4">
-                      {errors.vendorCandidateId}
-                    </p>
-                  )}
-                </td> */}
               </tr>
               <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
                 Basic Info
@@ -964,37 +955,51 @@ function SelectionTracker() {
                     name="phone"
                     value={form.phone || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className={`p-2 border rounded w-full bg-slate-100 ${
+                      errors.phone ? "border-red-500" : ""
+                    }`}
                     disabled={isInternal || readOnly}
+                    maxLength="10"
                   />
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm">{errors.phone}</p>
+                  )}
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-
         <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
           Selection Details
         </h4>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <tbody>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
+              <tr className="flex flex-wrap md:flex-nowrap items-center">
+                <td className="p-2 w-full md:w-1/4 flex items-center">
                   <label className="font-semibold">
                     Selection Date:<span className="text-red-500">*</span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
+                   {" "}
                   <input
                     type="date"
                     name="selectionDate"
                     required
                     value={form.selectionDate || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full"
+                    className={`p-2 border rounded w-full ${
+                      errors.selectionDate ? "border-red-500" : ""
+                    }`}
                     disabled={readOnly}
                   />
+                   {" "}
+                  {errors.selectionDate && (
+                    <p className="text-red-500 text-sm">
+                      {errors.selectionDate}
+                    </p>
+                  )}
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">Base BU:</label>
@@ -1021,8 +1026,11 @@ function SelectionTracker() {
                     value={form.lob?.lobId || ""}
                     onChange={handleLobChange}
                     name="lob"
-                    className="p-2 bordered w-full"
+                    className={`p-2 bordered w-full ${
+                      errors.lob ? "border-red-500" : ""
+                    }`}
                     disabled={isReadOnly}
+                    required
                   >
                     <option value="">Choose...</option>
                     {lobs.map((lob) => (
@@ -1031,7 +1039,11 @@ function SelectionTracker() {
                       </option>
                     ))}
                   </select>
+                  {errors.lob && (
+                    <p className="text-red-500 text-sm">{errors.lob}</p>
+                  )}
                 </td>
+
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">
                     Sub LOB:<span className="text-red-500">*</span>
@@ -1041,7 +1053,9 @@ function SelectionTracker() {
                   <select
                     name="subLob"
                     value={form.subLob?.subLOBid || ""}
-                    className="p-2 bordered w-full"
+                    className={`p-2 bordered w-full ${
+                      errors.subLob ? "border-red-500" : ""
+                    }`}
                     onChange={handleSubLobChange}
                     disabled={isReadOnly}
                   >
@@ -1052,6 +1066,9 @@ function SelectionTracker() {
                       </option>
                     ))}
                   </select>
+                  {errors.subLob && (
+                    <p className="text-red-500 text-sm">{errors.subLob}</p>
+                  )}
                 </td>
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
@@ -1165,9 +1182,14 @@ function SelectionTracker() {
                     name="irm"
                     value={form.irm || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full"
+                    className={`p-2 border rounded w-full ${
+                      errors.irm ? "border-red-500" : ""
+                    }`}
                     disabled={isReadOnly}
                   />
+                  {errors.irm && (
+                    <p className="text-red-500 text-sm">{errors.irm}</p>
+                  )}
                 </td>
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
@@ -1193,18 +1215,28 @@ function SelectionTracker() {
                     </div>
                   )}
                 </td>
-                <td className="p-2 w-full md:w-1/4">
+                <td className="p-2 w-full md:w-1/4 items-center">
                   <label className="font-semibold">CTOOL Received Date:</label>
                 </td>
-                <td className="p-2 w-full md:w-1/4">
+                <td className="p-2 w-full md:w-1/4 flex items-center">
+                   {" "}
                   <input
                     type="date"
                     name="ctoolRecDate"
+                    required
                     value={form.ctoolRecDate || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full"
-                    disabled={isReadOnly}
+                    className={`p-2 border rounded w-full ${
+                      errors.ctoolRecDate ? "border-red-500" : ""
+                    }`}
+                    disabled={readOnly}
                   />
+                   {" "}
+                  {errors.ctoolRecDate && (
+                    <p className="text-red-500 text-sm">
+                      {errors.ctoolRecDate}
+                    </p>
+                  )}
                 </td>
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
@@ -1308,39 +1340,30 @@ function SelectionTracker() {
                     <option value="WIP">WIP</option>
                   </select>
                 </td>
-                <td className="p-2 w-full md:w-1/4">
+                <td className="p-2 w-full md:w-1/4 items-center">
                   <label className="font-semibold">LTI Onboarding Date:</label>
                 </td>
-                <td className="p-2 w-full md:w-1/4">
+                <td className="p-2 w-full md:w-1/4 flex items-center">
+                   {" "}
                   <input
                     type="date"
                     name="ltiOnboardDate"
+                    required
                     value={form.ltiOnboardDate || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full"
+                    className={`p-2 border rounded w-full ${
+                      errors.ltiOnboardDate ? "border-red-500" : ""
+                    }`}
+                    disabled={readOnly}
                   />
+                   {" "}
+                  {errors.ltiOnboardDate && (
+                    <p className="text-red-500 text-sm">
+                      {errors.ltiOnboardDate}
+                    </p>
+                  )}
                 </td>
               </tr>
-              {/* <tr>
-                <td colSpan="4" className="p-2">
-                  <div className="flex justify-center space-x-4">
-                    <button
-                      type="submit"
-                      onClick={handleSubmit}
-                      className="bg-blue-500 text-white py-2 px-10 rounded"
-                    >
-                      Submit
-                    </button>
-                    <button
-                      type="button"
-                      className="bg-gray-500 text-white py-2 px-10 rounded"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </td>
-              </tr> */}
-
               {!isReadOnly && (
                 <tr>
                   <td colSpan="4" className="p-2">
@@ -1350,6 +1373,7 @@ function SelectionTracker() {
                         onClick={handleSubmit}
                         className="bg-blue-500 text-white py-2 px-10 rounded"
                         disabled={form.invalid}
+                        // disabled={isSubmitting}
                       >
                         Submit
                       </button>
@@ -1382,5 +1406,4 @@ function SelectionTracker() {
     </div>
   );
 }
-
 export default SelectionTracker;
