@@ -1220,47 +1220,7 @@ function UpdateDetails() {
                   />
                 </td>
               </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    Candidate Status:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <select
-                    name="candidateStatus"
-                    value={form.candidateStatus || ""}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                    required
-                  >
-                    <option value="">Choose..</option>
-                    {candidateStatuses.map((status) => (
-                      <option
-                        key={status.candidateStatusId}
-                        value={status.candidateStatus}
-                      >
-                        {status.candidateStatus}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    Candidate Additional Remark:
-                    <span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <textarea
-                    name="candidateRemark"
-                    value={form.candidateRemark || ""}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full resize-none"
-                    required
-                  />
-                </td>
-              </tr>
+              
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
@@ -1352,6 +1312,47 @@ function UpdateDetails() {
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
                     min={today}
+                  />
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-bold">
+                    Candidate Status:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <select
+                    name="candidateStatus"
+                    value={form.candidateStatus || ""}
+                    onChange={handleChange}
+                    className="p-2 mb-2 border rounded w-full"
+                    required
+                  >
+                    <option value="">Choose..</option>
+                    {candidateStatuses.map((status) => (
+                      <option
+                        key={status.candidateStatusId}
+                        value={status.candidateStatus}
+                      >
+                        {status.candidateStatus}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+              </tr>
+              <tr className="flex flex-wrap md:flex-nowrap">
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-bold">
+                    Candidate Additional Remark:
+                    <span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <textarea
+                    name="candidateRemark"
+                    value={form.candidateRemark || ""}
+                    onChange={handleChange}
+                    className="p-2 mb-2 border rounded w-full resize-none"
+                    required
                   />
                 </td>
               </tr>
