@@ -14,14 +14,17 @@ import com.example.onboarding.model.CtoolDto;
 import com.example.onboarding.model.EmployeeCandidateDTO;
 import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
+import com.example.onboarding.model.VendorCandidate;
 import com.example.onboarding.repository.EmployeeRepository;
 import com.example.onboarding.repository.SelectionDetailsRepository;
-
+import com.example.onboarding.repository.VendorCandidateRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class SelectionDetailsService {
+
+    private final VendorCandidateRepository vendorCandidateRepository;
 
     @Autowired
     private SelectionDetailsRepository selectionDetailsRepository;
@@ -34,6 +37,10 @@ public class SelectionDetailsService {
 
     @Autowired
     private TaggingDetailsService taggingDetailsService;
+
+    SelectionDetailsService(VendorCandidateRepository vendorCandidateRepository) {
+        this.vendorCandidateRepository = vendorCandidateRepository;
+    }
 
     public SelectionDetails getSelectionDetailsByPsid(int psid) {
         return selectionDetailsRepository.findSelectionDetailsByPsId(psid);
@@ -177,18 +184,24 @@ public class SelectionDetailsService {
     }
 
     public SelectionDetails createSelectionDetails_VendorCandidate(SelectionDetails details) {
-        //int vendorId = details.getVendorCandidate().getVendorId();
-        // if (selectionDetailsRepository.existsByVendor_VendorId(vendorCandidateId) && taggingDetailsService.getTaggingDetailsByVendorCandidateId(vendorCandidateId).getOnboardingStatus().getStatusId()!=6) {
-        //     throw new RuntimeException("Selection already exists for Candidate: " + details.getVendorCandidate().getVendorId());
-        // } else {
-            details.setCreateDate(new Date());
-            details.setUpdateDate(new Date());
-            details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
-            details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
-            System.out.println("Dates" + details.getCreateDate() + details.getUpdateDate());
-            return selectionDetailsRepository.save(details);
-        //}
-    }
+    int vendor_candidate_id = details.getVendorCandidate().getVendorCandidateId(); // Ensure phoneNumber exists
+
+    // Fetch existing VendorCandidate from the DB
+    VendorCandidate existingVendorCandidate = vendorCandidateRepository.findById(vendor_candidate_id)
+        .orElseThrow(() -> new RuntimeException("VendorCandidate not found for id: " + vendor_candidate_id));
+
+    // Set the existing VendorCandidate instead of creating a new one
+    details.setVendorCandidate(existingVendorCandidate);
+
+    details.setCreateDate(new Date());
+    details.setUpdateDate(new Date());
+    details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+    details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+
+    System.out.println("Dates: " + details.getCreateDate() + " " + details.getUpdateDate());
+
+    return selectionDetailsRepository.save(details);
+}
 
     public Page<EmployeeCandidateDTO> getEmployeeCandidates(Integer createdBy, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
