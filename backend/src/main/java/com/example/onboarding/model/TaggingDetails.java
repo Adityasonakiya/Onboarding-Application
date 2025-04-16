@@ -23,11 +23,11 @@ public class TaggingDetails {
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "candidate_phone_number")
+    @JoinColumn(name = "candidate_id")
     private Candidate candidate;
 
     @ManyToOne
-    @JoinColumn(name = "vendor_phone_number")
+    @JoinColumn(name = "vendor_candidate_id")
     private VendorCandidate vendorCandidate;
 
     @ManyToOne(cascade = CascadeType.ALL)

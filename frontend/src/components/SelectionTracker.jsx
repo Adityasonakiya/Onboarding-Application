@@ -48,18 +48,18 @@ function SelectionTracker() {
   const location = useLocation();
   const { state } = location;
   // const id = state?.id;
-  const { id,phoneNumber, readOnly } = state || {};
+  const { id, phoneNumber, readOnly } = state || {};
 
   const validateForm = () => {
     const newErrors = {};
-    if (!form.lob.lobId) newErrors.lob = 'This field is required.';
-    if (!form.subLob.subLOBid || form.subLob.subLOBid === '0')
-      newErrors.subLob = 'This field is required.';
-    if (!form.irm) newErrors.irm = 'This field is required.';
+    if (!form.lob.lobId) newErrors.lob = "This field is required.";
+    if (!form.subLob.subLOBid || form.subLob.subLOBid === "0")
+      newErrors.subLob = "This field is required.";
+    if (!form.irm) newErrors.irm = "This field is required.";
     if (!form.phone) {
-      newErrors.phone = 'Phone number is required.';
+      newErrors.phone = "Phone number is required.";
     } else if (form.phone.length !== 10) {
-      newErrors.phone = 'Phone number must be exactly 10 digits.';
+      newErrors.phone = "Phone number must be exactly 10 digits.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -634,7 +634,7 @@ function SelectionTracker() {
             // Candidate logic
             const candidate = {
               phoneNumber: form.phone,
-              vendor: form.vendors,
+              vendorId: form.vendors.vendorId,
               firstName: form.fname,
               lastName: form.lname,
               baseBU: "BF",
@@ -661,9 +661,12 @@ function SelectionTracker() {
               });
               return; // Stop execution if vendor creation fails
             } // Step 3
+            const candidateData = await candidateResponse.json(); // Ensure JSON parsing
+            console.log("Saved Candidate:", candidateData);
+
             requestBody.candidate = {
               phoneNumber: form.phone,
-              firstName: form.fname,
+              candidateId: candidateData.candidateId, // Extract newly generated ID
             };
             console.log(requestBody);
             const response = await fetch(
@@ -707,10 +710,12 @@ function SelectionTracker() {
               });
               return; // Stop execution if vendor creation fails
             } // Step 2: Attach vendorCandidate reference to requestBody for selection details
+            const vendorData = await vendorResponse.json(); // Ensure JSON parsing
+            console.log("Saved VendorCandidate:", vendorData);
+
             requestBody.vendorCandidate = {
               phoneNumber: form.phone,
-              firstName: form.fname,
-              lastName: form.lname,
+              vendorCandidateId: vendorData.vendorCandidateId, // Extract newly generated ID
             };
             console.log("Request Body for Selection Details:", requestBody); // Post selection details
 

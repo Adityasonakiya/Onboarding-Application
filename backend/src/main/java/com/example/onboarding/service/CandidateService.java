@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.onboarding.model.Candidate;
 import com.example.onboarding.model.EmployeeCandidateDTO;
-import com.example.onboarding.model.VendorCandidate;
 import com.example.onboarding.repository.CandidateRepository;
 import com.example.onboarding.repository.EmployeeRepository;
 
@@ -41,7 +40,7 @@ public class CandidateService {
     }
     
     public Candidate getCandidateById(Long phoneNumber) {
-        Optional<Candidate> candidate = candidateRepository.findById(phoneNumber);
+        Optional<Candidate> candidate = candidateRepository.findByPhoneNumber(phoneNumber);
         return candidate.orElse(null);
     }
 
