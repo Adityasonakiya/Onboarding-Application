@@ -13,6 +13,9 @@ const SelectionTrackerDashboard = ({ user }) => {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [chartData, setChartData] = useState({ labels: [], values: [] });
+  const [selectionFilter, setSelectionFilter] = useState('all'); // New state for selection filter
+  const [ctoolFilter, setCtoolFilter] = useState('all'); // New state for ctool filter
+  const [awaitedCasesFilter, setAwaitedCasesFilter] = useState('all'); // New state for awaited cases filter
 
   const handleExportToExcel = (data, sheetName, fileName) => {
     if (!data || data.length === 0) {
@@ -29,7 +32,7 @@ const SelectionTrackerDashboard = ({ user }) => {
 
   const fetchData = () => {
     // Fetch selections data
-    fetch('http://localhost:8080/selection-details/selections')
+    fetch(`http://localhost:8080/selection-details/selections?filter=${selectionFilter}`)
       .then(response => response.json())
       .then(data => {
         console.log('Selections data:', data); // Check if data is fetched correctly
@@ -86,7 +89,7 @@ const SelectionTrackerDashboard = ({ user }) => {
       });
 
     // Fetch awaited cases data
-    fetch('http://localhost:8080/selection-details/awaited-cases')
+    fetch(`http://localhost:8080/selection-details/awaited-cases?filter=${awaitedCasesFilter}`)
       .then(response => response.json())
       .then(data => {
         console.log('Awaited Cases data:', data); // Check if data is fetched correctly
@@ -145,11 +148,10 @@ const SelectionTrackerDashboard = ({ user }) => {
       });
 
     // Fetch ctool data
-    fetch('http://localhost:8080/selection-details/ctool')
+    fetch(`http://localhost:8080/selection-details/ctool?filter=${ctoolFilter}`)
       .then(response => response.json())
       .then(data => {
         console.log('CTool data:', data); // Check if data is fetched correctly
-
         const counts = data.reduce((acc, item) => {
           const { lobName, onboarding_status, bgv_status, updateDate } = item;
 
@@ -206,7 +208,7 @@ const SelectionTrackerDashboard = ({ user }) => {
     fetchData();
     const intervalId = setInterval(fetchData, 60000); // Poll every 60 seconds
     return () => clearInterval(intervalId); // Cleanup interval on component unmount
-  }, [filter, fromDate, toDate]);
+  }, [filter, fromDate, toDate, selectionFilter, ctoolFilter, awaitedCasesFilter]);
 
   const applyFilter = (data, filter, fromDate, toDate, dateField) => {
     if (!filter && !fromDate && !toDate) {
@@ -231,12 +233,6 @@ const SelectionTrackerDashboard = ({ user }) => {
     });
   };
 
-  // const handleFilterChange = (event) => {
-  //   setFilter(event.target.id);
-  //   setFromDate('');
-  //   setToDate('');
-  // };
-
   const handleRadioChange = (e) => {
     setFilter(e.target.id);
     setFromDate('');
@@ -252,7 +248,6 @@ const SelectionTrackerDashboard = ({ user }) => {
       setToDate(value);
     }
   };
-
 
   useEffect(() => {
     if (fromDate && toDate) {
@@ -291,8 +286,6 @@ const SelectionTrackerDashboard = ({ user }) => {
                 <FaFileExcel />
               </button>
               <button onClick={handleRefresh} className=" px-2 py-2 bg-blue-500 text-white rounded-full" title='Refresh'><HiRefresh /></button>
-
-
               <div className="flex items-center font-medium text-sm">
                 <div className="flex items-center mr-4">
                   <input type="radio" id="7days" className="hidden" value="7days" name="filter" onChange={handleRadioChange} checked={filter === '7days'} />
@@ -328,8 +321,14 @@ const SelectionTrackerDashboard = ({ user }) => {
                   </div>
                 )}
               </div>
-
-
+              <div className="flex items-center ml-auto">
+                <label htmlFor="selectionFilter" className="mr-2 font-semibold">Filter:</label>
+                <select id="selectionFilter" value={selectionFilter} onChange={(e) => setSelectionFilter(e.target.value)} className="p-2 border border-gray-400 rounded-full">
+                  <option value="all">All</option>
+                  <option value="internal">Internal</option>
+                  <option value="external">External</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -375,11 +374,9 @@ const SelectionTrackerDashboard = ({ user }) => {
             <section className="w-1/3" style={{ zIndex: 1, position: "relative" }}>
               <PieChart data={chartData} />
             </section>
-
           </div>
           <section className="mb-8">
             <div className="flex items-center py-2 gap-[1vw]">
-
               <h2 className="font-semibold text-lg">CTool Clear Cases</h2>
               <button
                 onClick={() =>
@@ -389,7 +386,15 @@ const SelectionTrackerDashboard = ({ user }) => {
               >
                 <FaFileExcel />
               </button>
-            </div>
+              <div className="flex items-center ml-auto">
+                <label htmlFor="ctoolFilter" className="mr-2 font-semibold">Filter:</label>
+                <select id="ctoolFilter" value={ctoolFilter} onChange={(e) => setCtoolFilter(e.target.value)} className="p-2 border border-gray-400 rounded-full">
+                  <option value="all">All</option>
+                  <option value="internal">Internal</option>
+                  <option value="external">External</option>
+                </select>
+              </div>
+              </div>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border-2 border-gray-400 text-center">
                 <thead>
@@ -450,6 +455,14 @@ const SelectionTrackerDashboard = ({ user }) => {
               >
                 <FaFileExcel />
               </button>
+              <div className="flex items-center ml-auto">
+                <label htmlFor="awaitedCasesFilter" className="mr-2 font-semibold">Filter:</label>
+                <select id="awaitedCasesFilter" value={awaitedCasesFilter} onChange={(e) => setAwaitedCasesFilter(e.target.value)} className="p-2 border border-gray-400 rounded-full">
+                  <option value="all">All</option>
+                  <option value="internal">Internal</option>
+                  <option value="external">External</option>
+                </select>
+              </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border-2 border-gray-400 text-center">
