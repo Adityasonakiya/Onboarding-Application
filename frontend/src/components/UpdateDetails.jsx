@@ -1314,7 +1314,10 @@ function UpdateDetails() {
                     min={today}
                   />
                 </td>
-                <td className="p-2 w-full md:w-1/4">
+                
+              </tr>
+              <tr className="flex flex-wrap md:flex-nowrap">
+              <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
                     Candidate Status:<span className="text-red-500">*</span>
                   </label>
@@ -1338,8 +1341,6 @@ function UpdateDetails() {
                     ))}
                   </select>
                 </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
                     Candidate Additional Remark:
