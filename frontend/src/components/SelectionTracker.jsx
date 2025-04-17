@@ -55,10 +55,12 @@ function SelectionTracker() {
     if (!form.subLob.subLOBid || form.subLob.subLOBid === "0")
       newErrors.subLob = "This field is required.";
     if (!form.irm) newErrors.irm = "This field is required.";
-    if (!form.phone) {
-      newErrors.phone = "Phone number is required.";
-    } else if (form.phone.length !== 10) {
-      newErrors.phone = "Phone number must be exactly 10 digits.";
+    if (isExternal) {
+      if (!form.phone) {
+        newErrors.phone = "Phone number is required.";
+      } else if (form.phone.length !== 10) {
+        newErrors.phone = "Phone number must be exactly 10 digits.";
+      }
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -99,7 +101,7 @@ function SelectionTracker() {
             if (candidate) {
               setForm((prevForm) => ({
                 ...prevForm,
-                vendors:{vendorId:1},
+                vendors: { vendorId: 1 },
                 phone: candidate.phoneNumber,
                 fname: candidate.firstName,
                 lname: candidate.lastName,
@@ -115,7 +117,7 @@ function SelectionTracker() {
             if (vendorCandidate) {
               setForm((prevForm) => ({
                 ...prevForm,
-                vendors:{vendorId:id},
+                vendors: { vendorId: id },
                 phone: vendorCandidate.phoneNumber,
                 fname: vendorCandidate.firstName,
                 lname: vendorCandidate.lastName,
@@ -123,7 +125,9 @@ function SelectionTracker() {
               setIsInternal(false);
               setIsExternal(false);
               setVendor(true); // Vendor applicable
-              await fetchSelectionDetailsByVendorCandidateId(vendorCandidate.phoneNumber);
+              await fetchSelectionDetailsByVendorCandidateId(
+                vendorCandidate.phoneNumber
+              );
             }
           }
         } catch (error) {
@@ -248,7 +252,7 @@ function SelectionTracker() {
       vendors: { vendorId: vendorId },
     }));
     console.log(form.vendors);
-    if (form.vendors === '1') {
+    if (form.vendors === "1") {
       setVendor(false);
       setIsExternal(true);
     }
@@ -414,7 +418,7 @@ function SelectionTracker() {
       if (
         !readOnly &&
         taggingDetails.onboardingStatus.onboardingStatus !==
-        "Onboarding Completed"
+          "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -465,7 +469,7 @@ function SelectionTracker() {
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-        "Onboarding Completed"
+          "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -516,7 +520,7 @@ function SelectionTracker() {
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-        "Onboarding Completed"
+          "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -655,7 +659,7 @@ function SelectionTracker() {
 
             await handleResponse(response, requestBody);
           } else if (isExternal && form.vendors.vendorId === 1) {
-            console.log(isExternal,isVendor, form.vendors.vendorId);
+            console.log(isExternal, isVendor, form.vendors.vendorId);
             // Candidate logic
             const candidate = {
               phoneNumber: form.phone,
@@ -705,7 +709,7 @@ function SelectionTracker() {
 
             await handleResponse(response, requestBody);
           } else if (isVendor && form.vendors.vendorId !== 1) {
-            console.log(isExternal,isVendor, form.vendors.vendorId);
+            console.log(isExternal, isVendor, form.vendors.vendorId);
             // Vendor logic
             const vendorCandidate = {
               phoneNumber: form.phone,
@@ -823,7 +827,9 @@ function SelectionTracker() {
                     value={form.psId || ""}
                     onChange={handleChange}
                     required
-                    className={`p-2 border rounded w-full ${errors.psId ? "border-red-500" : ""}`}
+                    className={`p-2 border rounded w-full ${
+                      errors.psId ? "border-red-500" : ""
+                    }`}
                     disabled={!isInternal || readOnly}
                     pattern="\d*"
                   />
@@ -843,20 +849,22 @@ function SelectionTracker() {
                       disabled
                     />
                   ) : ( */}
-                    <select
-                      name="vendors"
-                      value={form.vendors?.vendorId || ""}
-                      onChange={handleVendorChange}
-                      className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""}`}
-                      disabled={isInternal || readOnly}
-                    >
-                      <option value="">Select Vendor</option>
-                      {vendors.map((vendor) => (
-                        <option key={vendor.vendorId} value={vendor.vendorId}>
-                          {vendor.vendorName}
-                        </option>
-                      ))}
-                    </select>
+                  <select
+                    name="vendors"
+                    value={form.vendors?.vendorId || ""}
+                    onChange={handleVendorChange}
+                    className={`p-2 border rounded w-full ${
+                      errors.vendorId ? "border-red-500" : ""
+                    }`}
+                    disabled={isInternal || readOnly}
+                  >
+                    <option value="">Select Vendor</option>
+                    {vendors.map((vendor) => (
+                      <option key={vendor.vendorId} value={vendor.vendorId}>
+                        {vendor.vendorName}
+                      </option>
+                    ))}
+                  </select>
                   {/* )} */}
                   {errors.vendorId && (
                     <p className="text-red-500 text-sm mb-4">
@@ -992,8 +1000,9 @@ function SelectionTracker() {
                     name="phone"
                     value={form.phone || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full bg-slate-100 ${errors.phone ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full bg-slate-100 ${
+                      errors.phone ? "border-red-500" : ""
+                    }`}
                     disabled={isInternal || readOnly}
                     maxLength="10"
                   />
@@ -1025,11 +1034,11 @@ function SelectionTracker() {
                     required
                     value={form.selectionDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.selectionDate ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.selectionDate ? "border-red-500" : ""
+                    }`}
                     disabled={readOnly}
-                  />
-                  {" "}
+                  />{" "}
                   {errors.selectionDate && (
                     <p className="text-red-500 text-sm">
                       {errors.selectionDate}
@@ -1061,8 +1070,9 @@ function SelectionTracker() {
                     value={form.lob?.lobId || ""}
                     onChange={handleLobChange}
                     name="lob"
-                    className={`p-2 bordered w-full ${errors.lob ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 bordered w-full ${
+                      errors.lob ? "border-red-500" : ""
+                    }`}
                     disabled={isReadOnly}
                     required
                   >
@@ -1087,8 +1097,9 @@ function SelectionTracker() {
                   <select
                     name="subLob"
                     value={form.subLob?.subLOBid || ""}
-                    className={`p-2 bordered w-full ${errors.subLob ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 bordered w-full ${
+                      errors.subLob ? "border-red-500" : ""
+                    }`}
                     onChange={handleSubLobChange}
                     disabled={isReadOnly}
                   >
@@ -1215,8 +1226,9 @@ function SelectionTracker() {
                     name="irm"
                     value={form.irm || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.irm ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.irm ? "border-red-500" : ""
+                    }`}
                     disabled={isReadOnly}
                   />
                   {errors.irm && (
@@ -1258,11 +1270,11 @@ function SelectionTracker() {
                     required
                     value={form.ctoolRecDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.ctoolRecDate ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.ctoolRecDate ? "border-red-500" : ""
+                    }`}
                     disabled={readOnly}
-                  />
-                  {" "}
+                  />{" "}
                   {errors.ctoolRecDate && (
                     <p className="text-red-500 text-sm">
                       {errors.ctoolRecDate}
@@ -1382,11 +1394,11 @@ function SelectionTracker() {
                     required
                     value={form.ltiOnboardDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.ltiOnboardDate ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.ltiOnboardDate ? "border-red-500" : ""
+                    }`}
                     disabled={readOnly}
-                  />
-                  {" "}
+                  />{" "}
                   {errors.ltiOnboardDate && (
                     <p className="text-red-500 text-sm">
                       {errors.ltiOnboardDate}
@@ -1403,7 +1415,7 @@ function SelectionTracker() {
                         onClick={handleSubmit}
                         className="bg-blue-500 text-white py-2 px-10 rounded"
                         disabled={form.invalid}
-                      // disabled={isSubmitting}
+                        // disabled={isSubmitting}
                       >
                         Submit
                       </button>
