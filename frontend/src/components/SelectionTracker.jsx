@@ -47,7 +47,6 @@ function SelectionTracker() {
   const [selectedSubLobTemp, setSelectedSubLobTemp] = useState({});
   const location = useLocation();
   const { state } = location;
-  // const id = state?.id;
   const { id, phoneNumber, readOnly } = state || {};
 
   const validateForm = () => {
@@ -73,42 +72,6 @@ function SelectionTracker() {
       });
     }
   }, [readOnly]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (id) {
-  //       try {
-  //         // Attempt to fetch employee data by psid
-  //         const employee = await getEmployeeByPsid(id);
-
-  //         if (employee && employee.psid) {
-  //           // If employee data is found, set the form state with employee data
-  //           setForm((prevForm) => ({
-  //             ...prevForm,
-  //             psId: employee.psid,
-  //             fname: employee.firstName,
-  //             lname: employee.lastName,
-  //             pu: employee.pu,
-  //             grade: employee.grade,
-  //             location: employee.location,
-  //             totalExp: employee.totalExperience,
-  //             skill: employee.skill,
-  //             email: employee.mailID,
-  //             bu: employee.baseBU,
-  //             phone: employee.phoneNumber,
-  //           }));
-  //           setIsInternal(true); // Set isInternal to true for employees
-  //           setVendor(false); //set Vendor to false
-  //           // Fetch selection details for the employee
-  //           await fetchSelectionDetailsByPsid(employee.psid);
-  //         }
-  //       } catch (error) {
-  //         console.log("Error fetching details!");
-  //       }
-  //     }
-  //   };
-  //   fetchData();
-  // }, [id]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -716,7 +679,7 @@ function SelectionTracker() {
             if (!candidateResponse.ok) {
               const errorData = await candidateResponse.json();
               console.error("Vendor creation failed:", errorData.message);
-              toast.error("Failed to create Vendor Candidate!", {
+              toast.error("Failed to create Candidate!", {
                 position: "top-right",
               });
               return; // Stop execution if vendor creation fails

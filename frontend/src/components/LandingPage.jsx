@@ -3,8 +3,6 @@ import Pagination from "@mui/material/Pagination";
 import usePagination from "@mui/material/usePagination";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  // fetchEmployeeCandidatesByEmployee,
-  // fetchEmployeeCandidatesByCandidate,
   fetchEmployeeCandidatesBySelections,
   getCandidateById,
   getEmployeeByPsid,
@@ -46,10 +44,6 @@ const LandingPage = () => {
     console.log("Search Type:", searchType);
     console.log("Status:", status);
   }, [state]);
-
-  // useEffect(() => {
-  //   setCurrentPage(1);
-  // }, [rowsPerPage]);
 
   const addNewSelection = () => {
     navigate("/selection-tracker");
@@ -103,7 +97,6 @@ const LandingPage = () => {
             const vendor = await getVendorById(candidate.id);
             console.log(`Vendor response for ID ${candidate.id}:`, vendor);
             vendorNamesMap[candidate.id] = vendor.vendorName;
-            // vendorNamesMap={candidateName :  candidate?.id , vendorName : vendor.vendorName}
           }
         }
 
@@ -115,16 +108,10 @@ const LandingPage = () => {
           const filtered = content.filter((candidate) => candidate.id === id);
           console.log("displaying filtered by ID");
           const employee = await getEmployeeCandidateByPsid(id);
-          // const candidate = await getEmployeeCandidateByCandidateId(id);
           if (employee && employee.id) {
             setFilteredCandidates([employee]);
             setTotalPages(1);
             console.log("searched emp2:", employee);
-            // } if (candidate && candidate.id) {
-            //   setFilteredCandidates([candidate]);
-            //   candidate.id = null;
-            //   //setTotalPages(1);
-            //   console.log("searched candidate:", candidate);
           }
         } else if (phoneNumber) {
           const candidate = await getCandidateByPhoneNumber(phoneNumber);

@@ -193,16 +193,7 @@ function UpdateDetails() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // const isValidDate = (dateString) => {
-    //   return moment(dateString, "YYYY-MM-DD", true).isValid();
-    // };
-
-    // if (!isValidDate(form.tagDate)) {
-    //   console.error("Invalid date format for tagDate");
-    //   return;
-    // }
-
+    
     const formattedTagDate = moment(form.tagDate, "YYYY-MM-DD").toISOString();
     console.log("Formatted tagDate value:", formattedTagDate);
 
