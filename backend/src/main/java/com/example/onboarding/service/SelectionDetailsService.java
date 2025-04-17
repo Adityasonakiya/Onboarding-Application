@@ -55,7 +55,8 @@ public class SelectionDetailsService {
     }
 
     public SelectionDetails updateSelectionDetailsByPsId(int psId, SelectionDetails updatedDetails) {
-        System.out.println("CandidateDate that is provided by frontend is here: " + updatedDetails.getCandidateStatusDate());
+        System.out.println(
+                "CandidateDate that is provided by frontend is here: " + updatedDetails.getCandidateStatusDate());
         SelectionDetails existingDetails = selectionDetailsRepository.findSelectionDetailsByPsId(psId);
         if (existingDetails != null) {
             existingDetails.setLob(updatedDetails.getLob());
@@ -89,7 +90,8 @@ public class SelectionDetailsService {
         return selectionDetailsRepository.save(updatedDetails);
     }
 
-    public SelectionDetails updateSelectionDetailsByCandidatePhoneNumber(Long phoneNumber, SelectionDetails updatedDetails) {
+    public SelectionDetails updateSelectionDetailsByCandidatePhoneNumber(Long phoneNumber,
+            SelectionDetails updatedDetails) {
         SelectionDetails existingDetails = selectionDetailsRepository.findByCandidate_PhoneNumber(phoneNumber);
         if (existingDetails != null) {
             existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());
@@ -122,7 +124,8 @@ public class SelectionDetailsService {
         return selectionDetailsRepository.save(updatedDetails);
     }
 
-    public SelectionDetails updateSelectionDetailsByVendorCandidatePhoneNumber(Long phoneNumber, SelectionDetails updatedDetails) {
+    public SelectionDetails updateSelectionDetailsByVendorCandidatePhoneNumber(Long phoneNumber,
+            SelectionDetails updatedDetails) {
         SelectionDetails existingDetails = selectionDetailsRepository.findByVendorCandidate_PhoneNumber(phoneNumber);
         if (existingDetails != null) {
             existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());
@@ -157,7 +160,8 @@ public class SelectionDetailsService {
 
     public SelectionDetails createSelectionDetails_Employee(SelectionDetails details) {
         int psid = details.getEmployee().getPsid();
-        if (selectionDetailsRepository.existsByEmployee_Psid(psid) && taggingDetailsService.getTaggingDetailsByPsId(psid).getOnboardingStatus().getStatusId()!=6) {
+        if (selectionDetailsRepository.existsByEmployee_Psid(psid)
+                && taggingDetailsService.getTaggingDetailsByPsId(psid).getOnboardingStatus().getStatusId() != 6) {
             throw new RuntimeException("Selection already exists");
         } else {
             details.setCreateDate(new Date());
@@ -171,8 +175,10 @@ public class SelectionDetailsService {
 
     public SelectionDetails createSelectionDetails_Candidate(SelectionDetails details) {
         Long phoneNumber = details.getCandidate().getPhoneNumber();
-        if (selectionDetailsRepository.existsByCandidate_PhoneNumber(phoneNumber) && taggingDetailsService.getTaggingDetailsByCandidatePhoneNumber(phoneNumber).getOnboardingStatus().getStatusId()!=6) {
-            throw new RuntimeException("Selection already exists for Candidate: " + details.getCandidate().getPhoneNumber());
+        if (selectionDetailsRepository.existsByCandidate_PhoneNumber(phoneNumber) && taggingDetailsService
+                .getTaggingDetailsByCandidatePhoneNumber(phoneNumber).getOnboardingStatus().getStatusId() != 6) {
+            throw new RuntimeException(
+                    "Selection already exists for Candidate: " + details.getCandidate().getPhoneNumber());
         } else {
             details.setCreateDate(new Date());
             details.setUpdateDate(new Date());
@@ -184,28 +190,29 @@ public class SelectionDetailsService {
     }
 
     public SelectionDetails createSelectionDetails_VendorCandidate(SelectionDetails details) {
-    int vendor_candidate_id = details.getVendorCandidate().getVendorCandidateId(); // Ensure phoneNumber exists
+        int vendor_candidate_id = details.getVendorCandidate().getVendorCandidateId(); // Ensure phoneNumber exists
 
-    // Fetch existing VendorCandidate from the DB
-    VendorCandidate existingVendorCandidate = vendorCandidateRepository.findById(vendor_candidate_id)
-        .orElseThrow(() -> new RuntimeException("VendorCandidate not found for id: " + vendor_candidate_id));
+        // Fetch existing VendorCandidate from the DB
+        VendorCandidate existingVendorCandidate = vendorCandidateRepository.findById(vendor_candidate_id)
+                .orElseThrow(() -> new RuntimeException("VendorCandidate not found for id: " + vendor_candidate_id));
 
-    // Set the existing VendorCandidate instead of creating a new one
-    details.setVendorCandidate(existingVendorCandidate);
+        // Set the existing VendorCandidate instead of creating a new one
+        details.setVendorCandidate(existingVendorCandidate);
 
-    details.setCreateDate(new Date());
-    details.setUpdateDate(new Date());
-    details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
-    details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        details.setCreateDate(new Date());
+        details.setUpdateDate(new Date());
+        details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
 
-    System.out.println("Dates: " + details.getCreateDate() + " " + details.getUpdateDate());
+        System.out.println("Dates: " + details.getCreateDate() + " " + details.getUpdateDate());
 
-    return selectionDetailsRepository.save(details);
-}
+        return selectionDetailsRepository.save(details);
+    }
 
     public Page<EmployeeCandidateDTO> getEmployeeCandidates(Integer createdBy, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<EmployeeCandidateDTO> employeeCandidateDTOPage = selectionDetailsRepository.findEmployeeCandidates(createdBy,
+        Page<EmployeeCandidateDTO> employeeCandidateDTOPage = selectionDetailsRepository.findEmployeeCandidates(
+                createdBy,
                 pageable);
 
         log.info("Employee Candidates Handler data : Page {} of {}", page, employeeCandidateDTOPage.getTotalPages());
@@ -214,15 +221,18 @@ public class SelectionDetailsService {
         return employeeCandidateDTOPage;
     }
 
-    public List<SelectionDTO> findSelections() {
-        return selectionDetailsRepository.findSelections();
+    // In SelectionDetailsService.java
+
+    public List<SelectionDTO> findSelections(String filter) {
+        return selectionDetailsRepository.findSelections(filter);
     }
 
-    public List<CtoolDto> findCtool() {
-        return selectionDetailsRepository.findCtool();
+    public List<AwaitedCasesDTO> findAwaitedCases(String filter) {
+        return selectionDetailsRepository.findAwaitedCases(filter);
     }
 
-    public List<AwaitedCasesDTO> findAwaitedCases() {
-        return selectionDetailsRepository.findAwaitedCases();
+    public List<CtoolDto> findCtool(String filter) {
+        return selectionDetailsRepository.findCtool(filter);
     }
+
 }

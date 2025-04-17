@@ -23,7 +23,6 @@ import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
 import com.example.onboarding.service.SelectionDetailsService;
 
-
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/selection-details")
@@ -44,7 +43,8 @@ public class SelectionDetailsController {
 
     @GetMapping("/candidateId/{phoneNumber}")
     public ResponseEntity<SelectionDetails> getSelectionDetailsByCandidateId(@PathVariable Long phoneNumber) {
-        SelectionDetails selectionDetails = selectionDetailsService.getSelectionDetailsByCandidatePhoneNumber(phoneNumber);
+        SelectionDetails selectionDetails = selectionDetailsService
+                .getSelectionDetailsByCandidatePhoneNumber(phoneNumber);
         if (selectionDetails != null) {
             return new ResponseEntity<>(selectionDetails, HttpStatus.OK);
         } else {
@@ -54,7 +54,8 @@ public class SelectionDetailsController {
 
     @GetMapping("/vendorCandidateId/{phoneNumber}")
     public ResponseEntity<SelectionDetails> getSelectionDetailsByVendorCandidateId(@PathVariable Long phoneNumber) {
-        SelectionDetails selectionDetails = selectionDetailsService.getSelectionDetailsByVendorCandidatePhoneNumber(phoneNumber);
+        SelectionDetails selectionDetails = selectionDetailsService
+                .getSelectionDetailsByVendorCandidatePhoneNumber(phoneNumber);
         if (selectionDetails != null) {
             return new ResponseEntity<>(selectionDetails, HttpStatus.OK);
         } else {
@@ -63,45 +64,46 @@ public class SelectionDetailsController {
     }
 
     @PostMapping("/create/employee")
-    public ResponseEntity<String> createSelectionDetails_Employee(@RequestBody SelectionDetails details){
-        //try{
+    public ResponseEntity<String> createSelectionDetails_Employee(@RequestBody SelectionDetails details) {
+        // try{
         selectionDetailsService.createSelectionDetails_Employee(details);
-        System.out.println("details="+details);
-        if(details!=null)
+        System.out.println("details=" + details);
+        if (details != null)
             return ResponseEntity.status(201).body("Selection created successfully");
-        return ResponseEntity.status(500).build();    
-        //}catch(RuntimeException e){
-        //    return ResponseEntity.status(400).body(e.getMessage());    
-        //}
+        return ResponseEntity.status(500).build();
+        // }catch(RuntimeException e){
+        // return ResponseEntity.status(400).body(e.getMessage());
+        // }
     }
 
     @PostMapping("/create/candidate")
-    public ResponseEntity<String> createSelectionDetails_Candidate(@RequestBody SelectionDetails details){
-        try{
-        selectionDetailsService.createSelectionDetails_Candidate(details);
-        System.out.println("details="+details);
+    public ResponseEntity<String> createSelectionDetails_Candidate(@RequestBody SelectionDetails details) {
+        try {
+            selectionDetailsService.createSelectionDetails_Candidate(details);
+            System.out.println("details=" + details);
             return ResponseEntity.status(201).body("Selection created successfully");
-        }catch(RuntimeException e){
-            return ResponseEntity.status(400).body(e.getMessage());  
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
     @PostMapping("/create/vendor")
-    public ResponseEntity<String> createSelectionDetails_VendorCandidate(@RequestBody SelectionDetails details){
-        try{
-        selectionDetailsService.createSelectionDetails_VendorCandidate(details);
-        System.out.println("details="+details);
+    public ResponseEntity<String> createSelectionDetails_VendorCandidate(@RequestBody SelectionDetails details) {
+        try {
+            selectionDetailsService.createSelectionDetails_VendorCandidate(details);
+            System.out.println("details=" + details);
             return ResponseEntity.status(201).body("Selection created successfully");
-        }catch(RuntimeException e){
-            return ResponseEntity.status(400).body(e.getMessage());  
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
     @PutMapping("put/psid/{psId}")
-    public ResponseEntity<?> updateSelectionDetailsByPsId(@PathVariable int psId, @RequestBody SelectionDetails updatedDetails) {
+    public ResponseEntity<?> updateSelectionDetailsByPsId(@PathVariable int psId,
+            @RequestBody SelectionDetails updatedDetails) {
         System.out.println("Incoming request payload: " + updatedDetails);
         System.out.println("CToolJobCategory in payload: " + updatedDetails.getCToolJobCategory());
-        
+
         SelectionDetails details = selectionDetailsService.updateSelectionDetailsByPsId(psId, updatedDetails);
         if (details != null) {
             return ResponseEntity.ok(details);
@@ -109,7 +111,6 @@ public class SelectionDetailsController {
             return ResponseEntity.notFound().build();
         }
     }
-    
 
     @PutMapping("put/candidateId/{phoneNumber}")
     public ResponseEntity<SelectionDetails> updateSelectionDetailsByCandidateId(@PathVariable Long phoneNumber,
@@ -126,7 +127,8 @@ public class SelectionDetailsController {
     @PutMapping("put/vendorCandidateId/{phoneNumber}")
     public ResponseEntity<SelectionDetails> updateSelectionDetailsByVendorCandidateId(@PathVariable Long phoneNumber,
             @RequestBody SelectionDetails updatedDetails) {
-        SelectionDetails details = selectionDetailsService.updateSelectionDetailsByVendorCandidatePhoneNumber(phoneNumber,
+        SelectionDetails details = selectionDetailsService.updateSelectionDetailsByVendorCandidatePhoneNumber(
+                phoneNumber,
                 updatedDetails);
         if (details != null) {
             return ResponseEntity.ok(details);
@@ -137,29 +139,51 @@ public class SelectionDetailsController {
 
     @GetMapping("/api/employee-candidates")
     public Page<EmployeeCandidateDTO> getEmployeeCandidates(
-        @RequestParam Integer createdBy,
-        @RequestParam int page,
-        @RequestParam int size
-    ) {
-        return selectionDetailsService.getEmployeeCandidates(createdBy, page, size);       
+            @RequestParam Integer createdBy,
+            @RequestParam int page,
+            @RequestParam int size) {
+        return selectionDetailsService.getEmployeeCandidates(createdBy, page, size);
     }
 
+    // @GetMapping("/selections")
+    // public ResponseEntity<List<SelectionDTO>> findSelections(){
+    // List<SelectionDTO> selections = selectionDetailsService.findSelections();
+    // return ResponseEntity.ok(selections);
+    // }
+
+    // @GetMapping("/ctool")
+    // public ResponseEntity<List<CtoolDto>> findCtool(){
+    // List<CtoolDto> ctool = selectionDetailsService.findCtool();
+    // return ResponseEntity.ok(ctool);
+    // }
+
+    // @GetMapping("/awaited-cases")
+    // public ResponseEntity<List<AwaitedCasesDTO>> findAwaitedCases(){
+    // List<AwaitedCasesDTO> awaitedCases =
+    // selectionDetailsService.findAwaitedCases();
+    // return ResponseEntity.ok(awaitedCases);
+    // }
+
+    // In SelectionDetailsController.java
+
+    // In SelectionDetailsController.java
+
     @GetMapping("/selections")
-    public ResponseEntity<List<SelectionDTO>> findSelections(){
-        List<SelectionDTO> selections = selectionDetailsService.findSelections();
+    public ResponseEntity<List<SelectionDTO>> findSelections(@RequestParam String filter) {
+        List<SelectionDTO> selections = selectionDetailsService.findSelections(filter);
         return ResponseEntity.ok(selections);
     }
 
-    @GetMapping("/ctool")
-    public ResponseEntity<List<CtoolDto>> findCtool(){
-        List<CtoolDto> ctool = selectionDetailsService.findCtool();
-        return ResponseEntity.ok(ctool);
+    @GetMapping("/awaited-cases")
+    public ResponseEntity<List<AwaitedCasesDTO>> findAwaitedCases(@RequestParam String filter) {
+        List<AwaitedCasesDTO> awaitedCases = selectionDetailsService.findAwaitedCases(filter);
+        return ResponseEntity.ok(awaitedCases);
     }
 
-    @GetMapping("/awaited-cases")
-    public ResponseEntity<List<AwaitedCasesDTO>> findAwaitedCases(){
-        List<AwaitedCasesDTO> awaitedCases = selectionDetailsService.findAwaitedCases();
-        return ResponseEntity.ok(awaitedCases);
+    @GetMapping("/ctool")
+    public ResponseEntity<List<CtoolDto>> findCtool(@RequestParam String filter) {
+        List<CtoolDto> ctool = selectionDetailsService.findCtool(filter);
+        return ResponseEntity.ok(ctool);
     }
 
 }

@@ -74,41 +74,101 @@ function SelectionTracker() {
     }
   }, [readOnly]);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (id) {
+  //       try {
+  //         // Attempt to fetch employee data by psid
+  //         const employee = await getEmployeeByPsid(id);
+
+  //         if (employee && employee.psid) {
+  //           // If employee data is found, set the form state with employee data
+  //           setForm((prevForm) => ({
+  //             ...prevForm,
+  //             psId: employee.psid,
+  //             fname: employee.firstName,
+  //             lname: employee.lastName,
+  //             pu: employee.pu,
+  //             grade: employee.grade,
+  //             location: employee.location,
+  //             totalExp: employee.totalExperience,
+  //             skill: employee.skill,
+  //             email: employee.mailID,
+  //             bu: employee.baseBU,
+  //             phone: employee.phoneNumber,
+  //           }));
+  //           setIsInternal(true); // Set isInternal to true for employees
+  //           setVendor(false); //set Vendor to false
+  //           // Fetch selection details for the employee
+  //           await fetchSelectionDetailsByPsid(employee.psid);
+  //         }
+  //       } catch (error) {
+  //         console.log("Error fetching details!");
+  //       }
+  //     }
+  //   };
+  //   fetchData();
+  // }, [id]);
+
   useEffect(() => {
     const fetchData = async () => {
-      if (id) {
+      if (id || phoneNumber) {
         try {
-          // Attempt to fetch employee data by psid
-          const employee = await getEmployeeByPsid(id);
-
-          if (employee && employee.psid) {
-            // If employee data is found, set the form state with employee data
-            setForm((prevForm) => ({
-              ...prevForm,
-              psId: employee.psid,
-              fname: employee.firstName,
-              lname: employee.lastName,
-              pu: employee.pu,
-              grade: employee.grade,
-              location: employee.location,
-              totalExp: employee.totalExperience,
-              skill: employee.skill,
-              email: employee.mailID,
-              bu: employee.baseBU,
-              phone: employee.phoneNumber,
-            }));
-            setIsInternal(true); // Set isInternal to true for employees
-            setVendor(false); //set Vendor to false
-            // Fetch selection details for the employee
-            await fetchSelectionDetailsByPsid(employee.psid);
+          if (id && id >= 100) {
+            // Internal candidate
+            const employee = await getEmployeeByPsid(id);
+            if (employee) {
+              setForm((prevForm) => ({
+                ...prevForm,
+                psId: employee.psid,
+                fname: employee.firstName,
+                lname: employee.lastName,
+                phone: employee.phoneNumber,
+              }));
+              setIsInternal(true);
+              setIsExternal(false);
+              setVendor(false);
+              await fetchSelectionDetailsByPsid(employee.psid);
+            }
+          } else if (id === 1) {
+            // External candidate
+            const candidate = await getCandidateById(phoneNumber);
+            if (candidate) {
+              setForm((prevForm) => ({
+                ...prevForm,
+                phone: candidate.phoneNumber,
+                fname: candidate.firstName,
+                lname: candidate.lastName,
+              }));
+              setIsInternal(false);
+              setIsExternal(true);
+              setVendor(false); // Vendor not applicable
+              await fetchSelectionDetailsByCandidateId(candidate.phoneNumber);
+            }
+          } else if (id && id < 100 && id !== 1) {
+            // Vendor candidate
+            const vendorCandidate = await getVendorCandidateById(phoneNumber);
+            if (vendorCandidate) {
+              setForm((prevForm) => ({
+                ...prevForm,
+                phone: vendorCandidate.phoneNumber,
+                fname: vendorCandidate.firstName,
+                lname: vendorCandidate.lastName,
+                vendors: vendorCandidate.vendor,
+              }));
+              setIsInternal(false);
+              setIsExternal(true);
+              setVendor(true); // Vendor applicable
+              await fetchSelectionDetailsByVendorCandidateId(vendorCandidate.phoneNumber);
+            }
           }
         } catch (error) {
-          console.log("Error fetching details!");
+          console.error("Error fetching data:", error);
         }
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, phoneNumber]);
 
   useEffect(() => {
     if (form.psId) {
@@ -390,7 +450,7 @@ function SelectionTracker() {
       if (
         !readOnly &&
         taggingDetails.onboardingStatus.onboardingStatus !==
-          "Onboarding Completed"
+        "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -441,7 +501,7 @@ function SelectionTracker() {
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-          "Onboarding Completed"
+        "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -492,7 +552,7 @@ function SelectionTracker() {
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-          "Onboarding Completed"
+        "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -797,9 +857,7 @@ function SelectionTracker() {
                     value={form.psId || ""}
                     onChange={handleChange}
                     required
-                    className={`p-2 border rounded w-full ${
-                      errors.psId ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.psId ? "border-red-500" : ""}`}
                     disabled={!isInternal || readOnly}
                     pattern="\d*"
                   />
@@ -811,22 +869,29 @@ function SelectionTracker() {
                   <label className="font-semibold">Vendor:</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4" colSpan="2">
-                  <select
-                    name="vendors"
-                    value={form.vendors?.vendorId || ""}
-                    onChange={handleVendorChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.vendorId ? "border-red-500" : ""
-                    }`}
-                    disabled={isInternal || readOnly}
-                  >
-                    <option value="">Select Vendor</option>
-                    {vendors.map((vendor) => (
-                      <option key={vendor.vendorId} value={vendor.vendorId}>
-                        {vendor.vendorName}
-                      </option>
-                    ))}
-                  </select>
+                  {isExternal && !isVendor ? (
+                    <input
+                      type="text"
+                      value="Not Applicable"
+                      className="p-2 border rounded w-full bg-gray-100"
+                      disabled
+                    />
+                  ) : (
+                    <select
+                      name="vendors"
+                      value={form.vendors?.vendorId || ""}
+                      onChange={handleVendorChange}
+                      className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""}`}
+                      disabled={isInternal || readOnly}
+                    >
+                      <option value="">Select Vendor</option>
+                      {vendors.map((vendor) => (
+                        <option key={vendor.vendorId} value={vendor.vendorId}>
+                          {vendor.vendorName}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                   {errors.vendorId && (
                     <p className="text-red-500 text-sm mb-4">
                       {errors.vendorId}
@@ -961,9 +1026,8 @@ function SelectionTracker() {
                     name="phone"
                     value={form.phone || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full bg-slate-100 ${
-                      errors.phone ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full bg-slate-100 ${errors.phone ? "border-red-500" : ""
+                      }`}
                     disabled={isInternal || readOnly}
                     maxLength="10"
                   />
@@ -988,19 +1052,18 @@ function SelectionTracker() {
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                   {" "}
+                  {" "}
                   <input
                     type="date"
                     name="selectionDate"
                     required
                     value={form.selectionDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.selectionDate ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.selectionDate ? "border-red-500" : ""
+                      }`}
                     disabled={readOnly}
                   />
-                   {" "}
+                  {" "}
                   {errors.selectionDate && (
                     <p className="text-red-500 text-sm">
                       {errors.selectionDate}
@@ -1032,9 +1095,8 @@ function SelectionTracker() {
                     value={form.lob?.lobId || ""}
                     onChange={handleLobChange}
                     name="lob"
-                    className={`p-2 bordered w-full ${
-                      errors.lob ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 bordered w-full ${errors.lob ? "border-red-500" : ""
+                      }`}
                     disabled={isReadOnly}
                     required
                   >
@@ -1059,9 +1121,8 @@ function SelectionTracker() {
                   <select
                     name="subLob"
                     value={form.subLob?.subLOBid || ""}
-                    className={`p-2 bordered w-full ${
-                      errors.subLob ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 bordered w-full ${errors.subLob ? "border-red-500" : ""
+                      }`}
                     onChange={handleSubLobChange}
                     disabled={isReadOnly}
                   >
@@ -1188,9 +1249,8 @@ function SelectionTracker() {
                     name="irm"
                     value={form.irm || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.irm ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.irm ? "border-red-500" : ""
+                      }`}
                     disabled={isReadOnly}
                   />
                   {errors.irm && (
@@ -1225,19 +1285,18 @@ function SelectionTracker() {
                   <label className="font-semibold">CTOOL Received Date:</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4 flex items-center">
-                   {" "}
+                  {" "}
                   <input
                     type="date"
                     name="ctoolRecDate"
                     required
                     value={form.ctoolRecDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.ctoolRecDate ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.ctoolRecDate ? "border-red-500" : ""
+                      }`}
                     disabled={readOnly}
                   />
-                   {" "}
+                  {" "}
                   {errors.ctoolRecDate && (
                     <p className="text-red-500 text-sm">
                       {errors.ctoolRecDate}
@@ -1350,19 +1409,18 @@ function SelectionTracker() {
                   <label className="font-semibold">LTI Onboarding Date:</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4 flex items-center">
-                   {" "}
+                  {" "}
                   <input
                     type="date"
                     name="ltiOnboardDate"
                     required
                     value={form.ltiOnboardDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.ltiOnboardDate ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.ltiOnboardDate ? "border-red-500" : ""
+                      }`}
                     disabled={readOnly}
                   />
-                   {" "}
+                  {" "}
                   {errors.ltiOnboardDate && (
                     <p className="text-red-500 text-sm">
                       {errors.ltiOnboardDate}
@@ -1379,7 +1437,7 @@ function SelectionTracker() {
                         onClick={handleSubmit}
                         className="bg-blue-500 text-white py-2 px-10 rounded"
                         disabled={form.invalid}
-                        // disabled={isSubmitting}
+                      // disabled={isSubmitting}
                       >
                         Submit
                       </button>

@@ -57,15 +57,18 @@ const LandingPage = () => {
 
   const handleEdit = (id, phoneNumber) => {
     navigate("/update-details", { state: { id, phoneNumber } });
-};
+  };
 
   const handleRefresh = () => {
     navigate("/landing-page");
   };
 
   const handleViewOnly = (id, phoneNumber) => {
-    navigate("/selection-tracker", { state: { id,phoneNumber, readOnly: true } }); // Pass the readOnly flag
+    navigate("/selection-tracker", { state: { id, phoneNumber, readOnly: true } }); // Pass the readOnly flag
+    console.log("ID:", id);
+    console.log("Phone Number:", phoneNumber);
   };
+  
 
   useEffect(() => {
     const getEmployeeCandidates = async () => {
@@ -103,7 +106,7 @@ const LandingPage = () => {
             // vendorNamesMap={candidateName :  candidate?.id , vendorName : vendor.vendorName}
           }
         }
-        
+
         console.log("Vendor Names:", vendorNamesMap);
         setVendorNames(vendorNamesMap);
         console.log("Vendor Names:", vendorNamesMap);
@@ -117,19 +120,20 @@ const LandingPage = () => {
             setFilteredCandidates([employee]);
             setTotalPages(1);
             console.log("searched emp2:", employee);
-          // } if (candidate && candidate.id) {
-          //   setFilteredCandidates([candidate]);
-          //   candidate.id = null;
-          //   //setTotalPages(1);
-          //   console.log("searched candidate:", candidate);
+            // } if (candidate && candidate.id) {
+            //   setFilteredCandidates([candidate]);
+            //   candidate.id = null;
+            //   //setTotalPages(1);
+            //   console.log("searched candidate:", candidate);
           }
-        }else if(phoneNumber){
+        } else if (phoneNumber) {
           const candidate = await getCandidateByPhoneNumber(phoneNumber);
           if (candidate && candidate.phoneNumber) {
             setFilteredCandidates([candidate]);
             setTotalPages(1);
             console.log("searched Candidate using phone:", candidate);
-        }}
+          }
+        }
         else {
           setFilteredCandidates(content);
           console.log("displaying All");
@@ -220,7 +224,7 @@ const LandingPage = () => {
                   <td className="p-2 border text-center">
                     <button
                       className="text-blue-500 underline"
-                      onClick={() => handleViewOnly(emp.id)}
+                      onClick={() => handleViewOnly(emp.id, emp.phoneNumber)}
                     >
                       {emp.id === 1 ? 'EXTERNAL' : (emp.id < 100 ? vendorNames[emp.id] : emp.id)}
                     </button>
@@ -245,7 +249,7 @@ const LandingPage = () => {
                     <div className="flex justify-center">
                       <button
                         className="bg-blue-500 text-white py-1 px-2 rounded mr-2"
-                        onClick={() => handleEdit(emp.id,emp.phoneNumber)}
+                        onClick={() => handleEdit(emp.id, emp.phoneNumber)}
                       >
                         Edit
                       </button>
