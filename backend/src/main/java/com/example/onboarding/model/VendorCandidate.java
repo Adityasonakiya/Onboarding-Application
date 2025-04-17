@@ -5,6 +5,8 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -13,6 +15,9 @@ import jakarta.persistence.ManyToOne;
 public class VendorCandidate {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int vendorCandidateId;
+
     private Long phoneNumber;
     
     @ManyToOne
@@ -62,6 +67,7 @@ public class VendorCandidate {
     // public VendorCandidate(Long phoneNumber2) {
     //     this.phoneNumber = phoneNumber2;
     // }
+    
 
     public Vendor getVendor() {
         return vendor;
@@ -128,6 +134,14 @@ public class VendorCandidate {
     }
     public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public int getVendorCandidateId() {
+        return vendorCandidateId;
+    }
+
+    public void setVendorCandidateId(int vendorCandidateId) {
+        this.vendorCandidateId = vendorCandidateId;
     }
     
     

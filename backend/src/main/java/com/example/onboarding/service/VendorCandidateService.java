@@ -28,7 +28,7 @@ public class VendorCandidateService {
     private EmployeeRepository employeeRepository;
 
     public VendorCandidate getVendorCandidateById(Long phoneNumber) {
-        Optional<VendorCandidate> vendorCandidate = vendorCandidateRepository.findById(phoneNumber);
+        Optional<VendorCandidate> vendorCandidate = vendorCandidateRepository.findByPhoneNumber(phoneNumber);
         return vendorCandidate.orElse(null);
     }
 

@@ -21,14 +21,15 @@ public class SelectionDetails {
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "candidate_phone_number")
+    @JoinColumn(name = "candidate_id")
     private Candidate candidate;
 
     @ManyToOne
-    @JoinColumn(name = "vendor_phone_number")
+    @JoinColumn(name = "vendor_candidate_id")
     private VendorCandidate vendorCandidate;
 
     private String deliveryManager;
+
 
     @ManyToOne
     @JoinColumn(name = "lobId")
@@ -111,7 +112,7 @@ public class SelectionDetails {
     public void setHSBCHead(String HSBCHead) {
         this.HSBCHead = HSBCHead;
     }
-
+    
     public String getSalesPOC() {
         return salesPOC;
     }
@@ -349,4 +350,48 @@ public class SelectionDetails {
     public void setVendorCandidate(VendorCandidate vendorCandidate) {
         this.vendorCandidate = vendorCandidate;
     }
+
+    public SelectionDetails() {
+    }
+
+    public SelectionDetails(int selectionId, Employee employee, Candidate candidate, VendorCandidate vendorCandidate,
+            String deliveryManager, LOB lob, SubLOB subLob, String irm, Employee createdBy, Employee updatedBy,
+            Date hSBCSelectionDate, String hSBCHiringManager, String hSBCHead, String salesPOC, String pricingModel,
+            int hSBCToolId, Date cToolReceivedDate, String cToolJobCategory, String cToolLocation, int cToolRate,
+            int cToolProposedRate, String recruiterName, String interviewEvidences, String offerReleaseStatus,
+            Date hSBCOnboardingDate, Date techSelectionDate, Date dOJReceivedDate, Date lTIOnboardingDate,
+            Date createDate, Date updateDate, Date candidateStatusDate) {
+        this.selectionId = selectionId;
+        this.employee = employee;
+        this.candidate = candidate;
+        this.vendorCandidate = vendorCandidate;
+        this.deliveryManager = deliveryManager;
+        this.lob = lob;
+        this.subLob = subLob;
+        this.irm = irm;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        HSBCSelectionDate = hSBCSelectionDate;
+        HSBCHiringManager = hSBCHiringManager;
+        HSBCHead = hSBCHead;
+        this.salesPOC = salesPOC;
+        PricingModel = pricingModel;
+        HSBCToolId = hSBCToolId;
+        CToolReceivedDate = cToolReceivedDate;
+        CToolJobCategory = cToolJobCategory;
+        CToolLocation = cToolLocation;
+        CToolRate = cToolRate;
+        CToolProposedRate = cToolProposedRate;
+        this.recruiterName = recruiterName;
+        this.interviewEvidences = interviewEvidences;
+        this.offerReleaseStatus = offerReleaseStatus;
+        HSBCOnboardingDate = hSBCOnboardingDate;
+        this.techSelectionDate = techSelectionDate;
+        DOJReceivedDate = dOJReceivedDate;
+        LTIOnboardingDate = lTIOnboardingDate;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
+        this.candidateStatusDate = candidateStatusDate;
+    }
+    
 }

@@ -43,15 +43,15 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
                "LEFT JOIN BGVStatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
                "WHERE selection.created_by = :createdBy " +
                ")" +
-               "UNION ALL " +
+               "UNION ALL " + 
                "(" +
-               "SELECT cnd.candidate_id AS id, cnd.first_name AS firstName, cnd.last_name AS lastName, " +
+               "SELECT cnd.vendor_id AS id, cnd.first_name AS firstName, cnd.last_name AS lastName, " +
                "lob.lob_name AS lobName, selection.hsbchiring_manager AS hsbchiringManager, " +
                "obs.onboarding_status AS onboardingStatus, bgvs.bgv_status AS bgvStatus, cnd.phone_number as phoneNumber " +
                "FROM  candidate cnd " +
-               "LEFT JOIN selection_details selection ON selection.candidate_phone_number = cnd.phone_number " +
+               "LEFT JOIN selection_details selection ON selection.candidate_id = cnd.candidate_id " +
                "LEFT JOIN lob lob ON selection.lob_id = lob.lob_id " +
-               "LEFT JOIN tagging_details td ON cnd.phone_number = td.candidate_phone_number " +
+               "LEFT JOIN tagging_details td ON cnd.candidate_id = td.candidate_id " +
                "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id " +
                "LEFT JOIN BGVStatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
                "WHERE selection.created_by = :createdBy " +
@@ -62,9 +62,9 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
                "lob.lob_name AS lobName, selection.hsbchiring_manager AS hsbchiringManager, " +
                "obs.onboarding_status AS onboardingStatus, bgvs.bgv_status AS bgvStatus, vc.phone_number as phoneNumber " +
                "FROM vendor_candidate vc " +
-               "LEFT JOIN selection_details selection ON selection.vendor_phone_number = vc.phone_number " +
+               "LEFT JOIN selection_details selection ON selection.vendor_candidate_id = vc.vendor_candidate_id " +
                "LEFT JOIN lob lob ON selection.lob_id = lob.lob_id " +
-               "LEFT JOIN tagging_details td ON vc.phone_number = td.vendor_phone_number " +
+               "LEFT JOIN tagging_details td ON vc.vendor_candidate_id = td.vendor_candidate_id " +
                "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id " +
                "LEFT JOIN BGVStatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
                "WHERE selection.created_by = :createdBy " +
@@ -75,14 +75,14 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
                "LEFT JOIN selection_details selection ON selection.ps_id = emp.psid " + // Fixed emp. -> emp.psid
                "WHERE selection.created_by = :createdBy " +
                "UNION ALL " +
-               "SELECT cnd.phone_number AS id " +
+               "SELECT cnd.candidate_id AS id " +
                "FROM candidate cnd " +
-               "LEFT JOIN selection_details selection ON selection.candidate_phone_number = cnd.phone_number " +
+               "LEFT JOIN selection_details selection ON selection.candidate_id = cnd.candidate_id " +
                "WHERE selection.created_by = :createdBy " +
                "UNION ALL " +
-               "SELECT vc.vendor_id AS id " +
+               "SELECT vc.vendor_candidate_id AS id " +
                "FROM vendor_candidate vc " +
-               "LEFT JOIN selection_details selection ON selection.vendor_phone_number = vc.phone_number " +
+               "LEFT JOIN selection_details selection ON selection.vendor_candidate_id = vc.vendor_candidate_id " +
                "WHERE selection.created_by = :createdBy " +
                ") AS totalCount",
         nativeQuery = true)

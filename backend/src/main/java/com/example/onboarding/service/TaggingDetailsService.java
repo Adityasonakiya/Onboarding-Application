@@ -143,7 +143,7 @@ public class TaggingDetailsService {
             } else {
                 logger.info("No existing details found for PhoneNumber: {}, creating new entry", phoneNumber);
                 // Assuming Candidate class has a constructor
-                Candidate existingCandidate = candidateRepository.findById(phoneNumber)
+                Candidate existingCandidate = candidateRepository.findByPhoneNumber(phoneNumber)
                         .orElseThrow(() -> new RuntimeException("Candidate not found for phoneNumber: " + phoneNumber));   
                 updatedDetails.setCandidate(existingCandidate);                                                              // with phoneNumber
                 if (updatedDetails.getOnboardingStatus() != null) {
@@ -193,7 +193,7 @@ public class TaggingDetailsService {
                 return taggingDetailsRepository.save(existingDetails);
             } else {
                 logger.info("No existing details found for PhoneNumber: {}, creating new entry", phoneNumber);
-                VendorCandidate existingVendorCandidate = vendorCandidateRepository.findById(phoneNumber)
+                VendorCandidate existingVendorCandidate = vendorCandidateRepository.findByPhoneNumber(phoneNumber)
                             .orElseThrow(() -> new RuntimeException("VendorCandidate not found for phoneNumber: " + phoneNumber));
 
                 updatedDetails.setVendorCandidate(existingVendorCandidate); // Set the existing entity

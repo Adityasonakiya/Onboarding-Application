@@ -1237,6 +1237,7 @@ function UpdateDetails() {
                     // disabled={!form.candSelectDateEnabled}
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
+                    disabled={isInternal}
                     min={today}
                   />
                 </td>
@@ -1328,6 +1329,7 @@ function UpdateDetails() {
                     value={form.candidateStatus || ""}
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
+                    disabled={isInternal}
                     required
                   >
                     <option value="">Choose..</option>
@@ -1353,6 +1355,7 @@ function UpdateDetails() {
                     value={form.candidateRemark || ""}
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full resize-none"
+                    disabled={isInternal}
                     required
                   />
                 </td>

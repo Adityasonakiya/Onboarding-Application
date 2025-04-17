@@ -3,6 +3,8 @@ package com.example.onboarding.model;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -10,8 +12,11 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Candidate {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    int candidateId;
+    
     private Long phoneNumber;
-    private int candidateId;
+    private int vendorId;
     private String firstName;
     private String middleName;
     private String lastName;
@@ -31,9 +36,10 @@ public class Candidate {
     public Candidate() {
     }
 
-    public Candidate(Long phoneNumber, String firstName, String middleName, String lastName, Date lTIOnboardingDate,
+    public Candidate(Long phoneNumber,int vendorId, String firstName, String middleName, String lastName, Date lTIOnboardingDate,
             Employee createdBy, Employee updatedBy, Date createDate, Date updateDate) {
         this.phoneNumber = phoneNumber;
+        this.vendorId = vendorId;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -43,6 +49,8 @@ public class Candidate {
         this.createDate = createDate;
         this.updateDate = updateDate;
     }
+
+    
     
     public String getFirstName() {
         return firstName;
@@ -123,6 +131,14 @@ public class Candidate {
 
     public void setCandidateId(int candidateId) {
         this.candidateId = candidateId;
+    }
+
+    public int getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(int vendorId) {
+        this.vendorId = vendorId;
     }
 
     
