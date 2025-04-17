@@ -50,13 +50,21 @@ function UpdateDetails() {
     fetch('http://localhost:8080/candidate-status/all')
       .then(response => response.json())
       .then(data => {
-        setCandidateStatuses(data);
+        // Use a Set to store unique statuses
+        const uniqueStatusesMap = new Map();
+  
+        data.forEach(status => {
+          uniqueStatusesMap.set(status.candidateStatus, status);
+        });
+  
+        setCandidateStatuses(Array.from(uniqueStatusesMap.values()));
       })
-      .catch((error) =>
+      .catch(error => 
         console.error("Error fetching candidate statuses:", error)
       );
   }, []);
   
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -282,9 +290,9 @@ function UpdateDetails() {
         });
     } else if (isVendor && phone) {
       updateSelectionDetailsByVendorCandidateId(phone, selectionDetails)
-      .then(() => {
+        .then(() => {
           updateTaggingDetailsByVendorCandidateId(phone, taggingDetails)
-           &&
+            &&
             toast.success("Details updated successfully!", {
               position: "top-right",
             });
@@ -374,7 +382,7 @@ function UpdateDetails() {
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
-            candidateStatusDate:formatDate(selectionData.candidateStatusDate) || "",
+            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
           });
           console.log(selectionData);
           setSelectedSubLobTemp(selectionData.subLob);
@@ -438,7 +446,7 @@ function UpdateDetails() {
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
             candidateStatus: taggingData.candidateStatus?.candidateStatus || "",
             candidateRemark: taggingData.candidateStatus?.remarks || "",
-            candidateStatusDate:formatDate(taggingData.candidateStatusDate) ||"",
+            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
           });
           setSelectedSubLobTemp(selectionData.subLob);
         })
@@ -501,7 +509,7 @@ function UpdateDetails() {
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
             candidateStatus: taggingData.candidateStatus?.candidateStatus || "",
             candidateRemark: taggingData.candidateStatus?.remarks || "",
-            candidateStatusDate:formatDate(taggingData.candidateStatusDate) ||"",
+            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
           });
           setSelectedSubLobTemp(selectionData.subLob);
         })
@@ -587,9 +595,8 @@ function UpdateDetails() {
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
                     required
-                    className={`p-2 border rounded w-full ${
-                      errors.vendorId ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
+                      }`}
                     disabled={isInternal}
                   >
                     <option value="">Select Vendor</option>
@@ -1220,7 +1227,7 @@ function UpdateDetails() {
                   />
                 </td>
               </tr>
-              
+
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
@@ -1315,51 +1322,50 @@ function UpdateDetails() {
                     min={today}
                   />
                 </td>
-                
+
               </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-              <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    Candidate Status:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <select
-                    name="candidateStatus"
-                    value={form.candidateStatus || ""}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                    disabled={isInternal}
-                    required
-                  >
-                    <option value="">Choose..</option>
-                    {candidateStatuses.map((status) => (
-                      <option
-                        key={status.candidateStatusId}
-                        value={status.candidateStatus}
-                      >
-                        {status.candidateStatus}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    Candidate Additional Remark:
-                    <span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <textarea
-                    name="candidateRemark"
-                    value={form.candidateRemark || ""}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full resize-none"
-                    disabled={isInternal}
-                    required
-                  />
-                </td>
-              </tr>
+              <div className="border border-gray-300 rounded-md shadow">
+                <tr className="flex flex-wrap md:flex-nowrap">
+                  <td className="p-2 w-full md:w-1/4">
+                    <label className="font-bold">
+                      Candidate Status:<span className="text-red-500">*</span>
+                    </label>
+                  </td>
+                  <td className="p-2 w-full md:w-1/4">
+                    <select
+                      name="candidateStatus"
+                      value={form.candidateStatus || ""}
+                      onChange={handleChange}
+                      className="p-2 mb-2 border rounded w-full"
+                      disabled={isInternal}
+                      required
+                    >
+                      <option value="">Choose..</option>
+                      {candidateStatuses.map((status) => (
+                        <option key={status.candidateStatusId} value={status.candidateStatus}>
+                          {status.candidateStatus}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td className="p-2 w-full md:w-1/4">
+                    <label className="font-bold">
+                      Candidate Additional Remark:<span className="text-red-500">*</span>
+                    </label>
+                  </td>
+                  <td className="p-2 w-full md:w-1/4">
+                    <textarea
+                      name="candidateRemark"
+                      value={form.candidateRemark || ""}
+                      onChange={handleChange}
+                      className="p-2 mb-2 border rounded w-full resize-none"
+                      disabled={isInternal}
+                      required
+                    />
+                  </td>
+                </tr>
+              </div>
+
               <tr>
                 <td colSpan="4" className="p-2">
                   <div className="flex justify-center space-x-4">
