@@ -99,6 +99,7 @@ function SelectionTracker() {
             if (candidate) {
               setForm((prevForm) => ({
                 ...prevForm,
+                vendors:{vendorId:1},
                 phone: candidate.phoneNumber,
                 fname: candidate.firstName,
                 lname: candidate.lastName,
@@ -114,13 +115,13 @@ function SelectionTracker() {
             if (vendorCandidate) {
               setForm((prevForm) => ({
                 ...prevForm,
+                vendors:{vendorId:id},
                 phone: vendorCandidate.phoneNumber,
                 fname: vendorCandidate.firstName,
                 lname: vendorCandidate.lastName,
-                vendors: vendorCandidate.vendor,
               }));
               setIsInternal(false);
-              setIsExternal(true);
+              setIsExternal(false);
               setVendor(true); // Vendor applicable
               await fetchSelectionDetailsByVendorCandidateId(vendorCandidate.phoneNumber);
             }
@@ -247,7 +248,7 @@ function SelectionTracker() {
       vendors: { vendorId: vendorId },
     }));
     console.log(form.vendors);
-    if (vendorId === 1) {
+    if (form.vendors === '1') {
       setVendor(false);
       setIsExternal(true);
     }
@@ -653,7 +654,8 @@ function SelectionTracker() {
             );
 
             await handleResponse(response, requestBody);
-          } else if (form.vendors.vendorId === 1) {
+          } else if (isExternal && form.vendors.vendorId === 1) {
+            console.log(isExternal,isVendor, form.vendors.vendorId);
             // Candidate logic
             const candidate = {
               phoneNumber: form.phone,
@@ -703,6 +705,7 @@ function SelectionTracker() {
 
             await handleResponse(response, requestBody);
           } else if (isVendor && form.vendors.vendorId !== 1) {
+            console.log(isExternal,isVendor, form.vendors.vendorId);
             // Vendor logic
             const vendorCandidate = {
               phoneNumber: form.phone,
@@ -832,14 +835,14 @@ function SelectionTracker() {
                   <label className="font-semibold">Vendor:</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4" colSpan="2">
-                  {isExternal && !isVendor ? (
+                  {/* {isExternal && !isVendor ? (
                     <input
                       type="text"
                       value="Not Applicable"
                       className="p-2 border rounded w-full bg-gray-100"
                       disabled
                     />
-                  ) : (
+                  ) : ( */}
                     <select
                       name="vendors"
                       value={form.vendors?.vendorId || ""}
@@ -854,7 +857,7 @@ function SelectionTracker() {
                         </option>
                       ))}
                     </select>
-                  )}
+                  {/* )} */}
                   {errors.vendorId && (
                     <p className="text-red-500 text-sm mb-4">
                       {errors.vendorId}
