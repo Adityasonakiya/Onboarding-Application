@@ -20,9 +20,9 @@ public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
                         +
                         "bgvs.bgv_status as bgvStatus, cnd.phone_number as phoneNumber " +
                         "FROM candidate cnd " +
-                        "JOIN selection_details selection ON selection.candidate_phone_number = cnd.phone_number " +
+                        "JOIN selection_details selection ON selection.candidate_id = cnd.candidate_id " +
                         "JOIN lob lob ON selection.lob_id = lob.lob_id " +
-                        "LEFT JOIN tagging_details td ON cnd.phone_number = td.candidate_phone_number " +
+                        "LEFT JOIN tagging_details td ON cnd.candidate_id = td.candidate_id " +
                         "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id " +
                         "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
                         "WHERE cnd.phone_number = :phoneNumber", nativeQuery = true)
@@ -32,9 +32,9 @@ public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
                         + "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
                         + "bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber " +
                         "FROM candidate emp " +
-                        "JOIN selection_details selection ON selection.candidate_phone_number = emp.phone_number " +
+                        "JOIN selection_details selection ON selection.candidate_id = emp.candidate_id " +
                         "JOIN lob lob ON selection.lob_id = lob.lob_id " +
-                        "LEFT JOIN tagging_details td ON emp.phone_number = td.candidate_phone_number " +
+                        "LEFT JOIN tagging_details td ON emp.phone_number = td.candidate_id " +
                         "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id " +
                         "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
                         "WHERE LOWER(CONCAT(emp.first_name, ' ', emp.last_name)) LIKE LOWER(CONCAT('%', :query, '%')) "
