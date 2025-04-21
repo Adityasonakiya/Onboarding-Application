@@ -44,9 +44,9 @@ const SelectionTrackerDashboard = ({ user }) => {
             acc[lobName] = { FP: 0, TnM: 0, total: 0, hsbcselectionDate };
           }
           if (pricingModel === 'FP') {
-            acc[lobName].FP = selectionCount;
+            acc[lobName].FP += selectionCount;
           } else if (pricingModel === 'T&M') {
-            acc[lobName].TnM = selectionCount;
+            acc[lobName].TnM += selectionCount;
           }
           acc[lobName].total += selectionCount;
           return acc;
