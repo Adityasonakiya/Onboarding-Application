@@ -26,13 +26,10 @@ const LandingPage = () => {
   const [filteredCandidates, setFilteredCandidates] = useState([]);
   const searchType = state?.searchType;
   const status = state?.status;
-
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
   const [vendorNames, setVendorNames] = useState({});
-
 
   const handleRowPerChange = (e) => {
     setRowsPerPage(Number(e.target.value));
@@ -62,8 +59,12 @@ const LandingPage = () => {
     console.log("ID:", id);
     console.log("Phone Number:", phoneNumber);
   };
-  
 
+  const handlePageClick = (page) => {
+      console.log("Page clicked:", page);
+      setCurrentPage(page - 1);
+    };
+    
   useEffect(() => {
     const getEmployeeCandidates = async () => {
       const user = JSON.parse(localStorage.getItem("user")).psid;
@@ -88,7 +89,6 @@ const LandingPage = () => {
         setTotalPages(totalPages);
         setFilteredCandidates(content);
         console.log("dashboard data: ", content);
-
 
         // Fetch vendor names
         let vendorNamesMap = {};
@@ -132,12 +132,6 @@ const LandingPage = () => {
     getEmployeeCandidates();
   }, [id, phoneNumber, searchType, status, currentPage, rowsPerPage]);
 
-  const handlePageClick = (page) => {
-    if (page !== 0) {
-      setCurrentPage(page - 1);
-    }
-  };
-
   useEffect(() => {
     if (currentPage >= totalPages) {
       if (currentPage !== 0) {
@@ -148,24 +142,6 @@ const LandingPage = () => {
     console.log("TotalPages", totalPages);
   }, [totalPages, currentPage]);
 
-  const renderPagination = () => {
-    const pages = [];
-    for (let i = 0; i < totalPages; i++) {
-      pages.push(
-        <button
-          key={i}
-          className={`px-3 py-1 mx-1 ${i === currentPage
-            ? "bg-gray-500 text-white rounded-full"
-            : "text-gray-700"
-            }`}
-          onClick={() => handlePageClick(i)}
-        >
-          {i + 1}
-        </button>
-      );
-    }
-    return pages;
-  };
   return (
     <div className="w-full px-4 py-6">
       <div className="mx-4 h-full flex flex-col">
@@ -203,11 +179,8 @@ const LandingPage = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredCandidates.map((emp) => (
-                <tr key={emp.id}>
-
-
-
+              {filteredCandidates.map((emp, index) => (
+                <tr key={`${emp.id}-${index}`}>
                   <td className="p-2 border text-center">
                     <button
                       className="text-blue-500 underline"
@@ -216,9 +189,6 @@ const LandingPage = () => {
                       {emp.id === 1 ? 'EXTERNAL' : (emp.id < 100 ? vendorNames[emp.id] : emp.id)}
                     </button>
                   </td>
-
-
-
                   <td className="p-2 border text-center">
                     {emp.firstName} {emp.lastName}
                   </td>
@@ -298,5 +268,4 @@ const LandingPage = () => {
     </div>
   );
 };
-
 export default LandingPage;
