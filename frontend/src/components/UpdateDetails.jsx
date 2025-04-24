@@ -47,24 +47,22 @@ function UpdateDetails() {
   const [candidateStatuses, setCandidateStatuses] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/candidate-status/all')
-      .then(response => response.json())
-      .then(data => {
+    fetch("http://localhost:8080/candidate-status/all")
+      .then((response) => response.json())
+      .then((data) => {
         // Use a Set to store unique statuses
         const uniqueStatusesMap = new Map();
-  
-        data.forEach(status => {
+
+        data.forEach((status) => {
           uniqueStatusesMap.set(status.candidateStatus, status);
         });
-  
+
         setCandidateStatuses(Array.from(uniqueStatusesMap.values()));
       })
-      .catch(error => 
+      .catch((error) =>
         console.error("Error fetching candidate statuses:", error)
       );
   }, []);
-  
-
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -193,7 +191,7 @@ function UpdateDetails() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const formattedTagDate = moment(form.tagDate, "YYYY-MM-DD").toISOString();
     console.log("Formatted tagDate value:", formattedTagDate);
 
@@ -241,6 +239,7 @@ function UpdateDetails() {
       candidateStatusDate: form.candidateStatusDate,
       dojreceivedDate: form.dojRecDate,
       hsbconboardingDate: form.onboardingDate,
+      ctoolStartDate: form.ctoolStartDate,
     };
 
     console.log("tagging details: ", taggingDetails);
@@ -282,8 +281,7 @@ function UpdateDetails() {
     } else if (isVendor && phone) {
       updateSelectionDetailsByVendorCandidateId(phone, selectionDetails)
         .then(() => {
-          updateTaggingDetailsByVendorCandidateId(phone, taggingDetails)
-            &&
+          updateTaggingDetailsByVendorCandidateId(phone, taggingDetails) &&
             toast.success("Details updated successfully!", {
               position: "top-right",
             });
@@ -373,7 +371,9 @@ function UpdateDetails() {
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
-            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
+            candidateStatusDate:
+              formatDate(selectionData.candidateStatusDate) || "",
+            ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
           });
           console.log(selectionData);
           setSelectedSubLobTemp(selectionData.subLob);
@@ -437,7 +437,9 @@ function UpdateDetails() {
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
             candidateStatus: taggingData.candidateStatus?.candidateStatus || "",
             candidateRemark: taggingData.candidateStatus?.remarks || "",
-            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
+            candidateStatusDate:
+              formatDate(selectionData.candidateStatusDate) || "",
+            ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
           });
           setSelectedSubLobTemp(selectionData.subLob);
         })
@@ -500,7 +502,9 @@ function UpdateDetails() {
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
             candidateStatus: taggingData.candidateStatus?.candidateStatus || "",
             candidateRemark: taggingData.candidateStatus?.remarks || "",
-            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
+            candidateStatusDate:
+              formatDate(selectionData.candidateStatusDate) || "",
+            ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
           });
           setSelectedSubLobTemp(selectionData.subLob);
         })
@@ -586,8 +590,9 @@ function UpdateDetails() {
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
                     required
-                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.vendorId ? "border-red-500" : ""
+                    }`}
                     disabled={isInternal}
                   >
                     <option value="">Select Vendor</option>
@@ -1295,7 +1300,7 @@ function UpdateDetails() {
                   />
                 </td>
               </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
+              {/* <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
                     DOJ Recieved Date:<span className="text-red-500">*</span>
@@ -1313,8 +1318,43 @@ function UpdateDetails() {
                     min={today}
                   />
                 </td>
-
+              </tr> */}
+              <tr className="flex flex-wrap md:flex-nowrap">
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-bold">
+                    DOJ Received Date:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    type="date"
+                    name="dojRecDate"
+                    value={form.dojRecDate || ""}
+                    required
+                    disabled={!form.dojRecDateEnabled}
+                    onChange={handleChange}
+                    className="p-2 mb-2 border rounded w-full"
+                    min={today}
+                  />
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-bold">
+                    CTool Start Date:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    type="date"
+                    name="ctoolStartDate"
+                    value={form.ctoolStartDate || ""}
+                    required
+                    onChange={handleChange}
+                    className="p-2 mb-2 border rounded w-full"
+                    min={form.dojRecDate}
+                  />
+                </td>
               </tr>
+
               <div className="border border-gray-300 rounded-md shadow">
                 <tr className="flex flex-wrap md:flex-nowrap">
                   <td className="p-2 w-full md:w-1/4">
@@ -1333,7 +1373,10 @@ function UpdateDetails() {
                     >
                       <option value="">Choose..</option>
                       {candidateStatuses.map((status) => (
-                        <option key={status.candidateStatusId} value={status.candidateStatus}>
+                        <option
+                          key={status.candidateStatusId}
+                          value={status.candidateStatus}
+                        >
                           {status.candidateStatus}
                         </option>
                       ))}
@@ -1341,7 +1384,8 @@ function UpdateDetails() {
                   </td>
                   <td className="p-2 w-full md:w-1/4">
                     <label className="font-bold">
-                      Candidate Additional Remark:<span className="text-red-500">*</span>
+                      Candidate Additional Remark:
+                      <span className="text-red-500">*</span>
                     </label>
                   </td>
                   <td className="p-2 w-full md:w-1/4">

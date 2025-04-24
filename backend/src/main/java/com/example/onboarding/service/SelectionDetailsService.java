@@ -82,6 +82,7 @@ public class SelectionDetailsService {
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
+            existingDetails.setCtoolStartDate(updatedDetails.getCtoolStartDate());
             existingDetails.setUpdateDate(new Date());
             existingDetails.setCreatedBy(existingDetails.getCreatedBy());
             existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
@@ -114,6 +115,7 @@ public class SelectionDetailsService {
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
+            existingDetails.setCtoolStartDate(updatedDetails.getCtoolStartDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setUpdateDate(new Date());
             existingDetails.setIrm(updatedDetails.getIrm());
@@ -148,6 +150,7 @@ public class SelectionDetailsService {
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
+            existingDetails.setCtoolStartDate(updatedDetails.getCtoolStartDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setUpdateDate(new Date());
             existingDetails.setIrm(updatedDetails.getIrm());

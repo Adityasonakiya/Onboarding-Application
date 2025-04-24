@@ -70,8 +70,17 @@ public class SelectionDetails {
     private Date createDate;
     private Date updateDate;
     private Date candidateStatusDate;
+    private Date ctoolStartDate;
 
     // Getters and Setters
+
+    public Date getCtoolStartDate() {
+        return ctoolStartDate;
+    }
+
+    public void setCtoolStartDate(Date ctoolStartDate) {
+        this.ctoolStartDate = ctoolStartDate;
+    }
 
     public Date getCandidateStatusDate() {
         return candidateStatusDate;
