@@ -411,6 +411,7 @@ function SelectionTracker() {
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: ltiOnboardDate,
+        evidence: selectionDetails.interviewEvidence,
       }));
 
       setSelectedSubLobTemp(selectionDetails.subLob);
@@ -418,7 +419,7 @@ function SelectionTracker() {
       if (
         !readOnly &&
         taggingDetails.onboardingStatus.onboardingStatus !==
-          "Onboarding Completed"
+        "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -464,12 +465,13 @@ function SelectionTracker() {
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
+        evidence: selectionDetails.interviewEvidence,
       }));
       setSelectedSubLobTemp(selectionDetails.subLob);
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-          "Onboarding Completed"
+        "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -515,12 +517,13 @@ function SelectionTracker() {
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
+        evidence: selectionDetails.interviewEvidence,
       }));
       setSelectedSubLobTemp(selectionDetails.subLob);
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-          "Onboarding Completed"
+        "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -592,7 +595,8 @@ function SelectionTracker() {
     e.preventDefault();
 
     if (validateForm()) {
-      const errors = validate(); // Validate the form inputs // Additional required field validations
+      const errors = validate(); // Validate the form inputs
+      // Additional required field validations
       if (!form.lob || !form.lob.lobId) {
         errors.lob = "LOB is required";
       }
@@ -620,7 +624,35 @@ function SelectionTracker() {
         Object.keys(dateErrors).length === 0
       ) {
         try {
-          // Common request body for selection details
+          // Validate file type and size
+          const file = form.evidence;
+          const validTypes = ["image/png", "image/jpeg", "application/msword"];
+          if (!validTypes.includes(file.type)) {
+            throw new Error("Invalid file type. Only PNG, JPG, and DOC files are allowed.");
+          }
+          if (file.size > 10 * 1024 * 1024) { // 10MB
+            throw new Error("File size exceeds the limit of 10MB.");
+          }
+
+          // Create FormData object for file upload
+          const formData = new FormData();
+          formData.append("files", file);
+
+          // Upload file
+          const uploadResponse = await fetch("http://localhost:8080/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+
+          console.log("Upload response:", uploadResponse);
+
+
+          if (!uploadResponse.ok) {
+            throw new Error("Failed to upload file.");
+          }
+
+          // Proceed with the rest of the form submission logic
           const requestBody = {
             hsbcselectionDate: form.selectionDate,
             baseBU: form.bu,
@@ -639,9 +671,10 @@ function SelectionTracker() {
             ctoolRate: form.ctoolRate,
             ctoolProposedRate: form.ctoolPropRate,
             recruiterName: form.recruiterName,
-            interviewEvidence: form.evidence,
+            interviewEvidence: form.evidence.name, // Save file name
             offerReleaseStatus: form.offerReleaseStatus,
             ltionboardingDate: form.ltiOnboardDate,
+            
           };
 
           if (form.psId) {
@@ -827,9 +860,8 @@ function SelectionTracker() {
                     value={form.psId || ""}
                     onChange={handleChange}
                     required
-                    className={`p-2 border rounded w-full ${
-                      errors.psId ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.psId ? "border-red-500" : ""
+                      }`}
                     disabled={!isInternal || readOnly}
                     pattern="\d*"
                   />
@@ -853,9 +885,8 @@ function SelectionTracker() {
                     name="vendors"
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.vendorId ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
+                      }`}
                     disabled={isInternal || readOnly}
                   >
                     <option value="">Select Vendor</option>
@@ -1000,9 +1031,8 @@ function SelectionTracker() {
                     name="phone"
                     value={form.phone || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full bg-slate-100 ${
-                      errors.phone ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full bg-slate-100 ${errors.phone ? "border-red-500" : ""
+                      }`}
                     disabled={isInternal || readOnly}
                     maxLength="10"
                   />
@@ -1034,9 +1064,8 @@ function SelectionTracker() {
                     required
                     value={form.selectionDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.selectionDate ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.selectionDate ? "border-red-500" : ""
+                      }`}
                     disabled={readOnly}
                   />{" "}
                   {errors.selectionDate && (
@@ -1070,9 +1099,8 @@ function SelectionTracker() {
                     value={form.lob?.lobId || ""}
                     onChange={handleLobChange}
                     name="lob"
-                    className={`p-2 bordered w-full ${
-                      errors.lob ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 bordered w-full ${errors.lob ? "border-red-500" : ""
+                      }`}
                     disabled={isReadOnly}
                     required
                   >
@@ -1097,9 +1125,8 @@ function SelectionTracker() {
                   <select
                     name="subLob"
                     value={form.subLob?.subLOBid || ""}
-                    className={`p-2 bordered w-full ${
-                      errors.subLob ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 bordered w-full ${errors.subLob ? "border-red-500" : ""
+                      }`}
                     onChange={handleSubLobChange}
                     disabled={isReadOnly}
                   >
@@ -1226,9 +1253,8 @@ function SelectionTracker() {
                     name="irm"
                     value={form.irm || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.irm ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.irm ? "border-red-500" : ""
+                      }`}
                     disabled={isReadOnly}
                   />
                   {errors.irm && (
@@ -1270,9 +1296,8 @@ function SelectionTracker() {
                     required
                     value={form.ctoolRecDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.ctoolRecDate ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.ctoolRecDate ? "border-red-500" : ""
+                      }`}
                     disabled={readOnly}
                   />{" "}
                   {errors.ctoolRecDate && (
@@ -1359,7 +1384,8 @@ function SelectionTracker() {
                   <input
                     type="file"
                     name="evidence"
-                    onChange={handleChange}
+                    accept=".png,.jpg,.jpeg,.doc"
+                    onChange={(e) => setForm({ ...form, evidence: e.target.files[0] })}
                     className="p-2 border rounded w-full"
                   />
                 </td>
@@ -1394,9 +1420,8 @@ function SelectionTracker() {
                     required
                     value={form.ltiOnboardDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.ltiOnboardDate ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.ltiOnboardDate ? "border-red-500" : ""
+                      }`}
                     disabled={readOnly}
                   />{" "}
                   {errors.ltiOnboardDate && (
@@ -1415,7 +1440,7 @@ function SelectionTracker() {
                         onClick={handleSubmit}
                         className="bg-blue-500 text-white py-2 px-10 rounded"
                         disabled={form.invalid}
-                        // disabled={isSubmitting}
+                      // disabled={isSubmitting}
                       >
                         Submit
                       </button>
@@ -1432,7 +1457,7 @@ function SelectionTracker() {
             </tbody>
           </table>
         </div>
-      </form>
+      </form >
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -1445,7 +1470,7 @@ function SelectionTracker() {
         pauseOnHover
         transition={Slide}
       />
-    </div>
+    </div >
   );
 }
 export default SelectionTracker;
