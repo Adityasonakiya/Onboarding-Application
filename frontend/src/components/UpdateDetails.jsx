@@ -195,7 +195,6 @@ function UpdateDetails() {
     const formattedTagDate = moment(form.tagDate, "YYYY-MM-DD").toISOString();
     console.log("Formatted tagDate value:", formattedTagDate);
 
-    //const createDate = formattedTagDate;
     const updateDate = new Date().toISOString();
 
     const taggingDetails = {
@@ -211,9 +210,9 @@ function UpdateDetails() {
         candidateStatus: form.candidateStatus,
         remarks: form.candidateRemark,
       },
-      //createDate: createDate,
       updateDate: updateDate,
     };
+
     const selectionDetails = {
       hsbcselectionDate: form.selectionDate,
       baseBU: form.bu,
@@ -232,7 +231,7 @@ function UpdateDetails() {
       ctoolRate: form.ctoolRate,
       ctoolProposedRate: form.ctoolPropRate,
       recruiterName: form.recruiterName,
-      interviewEvidence: form.evidence,
+      interviewEvidence: form.evidence.name, // Save file name
       offerReleaseStatus: form.offerReleaseStatus,
       ltionboardingDate: form.ltiOnboardDate,
       techSelectionDate: form.techSelectDate,
@@ -244,59 +243,92 @@ function UpdateDetails() {
 
     console.log("tagging details: ", taggingDetails);
     console.log("selection details: ", selectionDetails);
-    if (isInternal && psId) {
-      updateSelectionDetailsByPsId(psId, selectionDetails)
-        .then(() => {
-          updateTaggingDetailsByPsId(psId, taggingDetails) &&
-            toast.success("Details updated successfully!", {
+
+    try {
+      // Validate file type and size
+      const file = form.evidence;
+      const validTypes = ["image/png", "image/jpeg", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+      if (!validTypes.includes(file.type)) {
+        throw new Error("Invalid file type. Only PNG, JPG, and DOC files are allowed.");
+      }
+      if (file.size > 10 * 1024 * 1024) { // 10MB
+        throw new Error("File size exceeds the limit of 10MB.");
+      }
+
+      // Create FormData object for file upload
+      const formData = new FormData();
+      formData.append("files", file);
+
+      // Upload file
+      const uploadResponse = await fetch("http://localhost:8080/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error("Failed to upload file.");
+      }
+
+      // Proceed with the rest of the form submission logic
+      if (isInternal && psId) {
+        updateSelectionDetailsByPsId(psId, selectionDetails)
+          .then(() => {
+            updateTaggingDetailsByPsId(psId, taggingDetails) &&
+              toast.success("Details updated successfully!", {
+                position: "top-right",
+              });
+            setTimeout(() => {
+              navigate("/landing-page");
+            }, 2000);
+          })
+          .catch((error) => {
+            toast.error("Error updating details:", {
               position: "top-right",
             });
-          setTimeout(() => {
-            navigate("/landing-page");
-          }, 2000);
-        })
-        .catch((error) => {
-          toast.error("Error updating details:", {
-            position: "top-right",
+            console.error("Error updating details by PsId:", error);
           });
-          console.error("Error updating details by PsId:", error);
-        });
-    } else if (isExternal && phone) {
-      updateSelectionDetailsByCandidateId(phone, selectionDetails)
-        .then(() => {
-          updateTaggingDetailsByCandidateId(phone, taggingDetails) &&
-            toast.success("Details updated successfully!", {
+      } else if (isExternal && phone) {
+        updateSelectionDetailsByCandidateId(phone, selectionDetails)
+          .then(() => {
+            updateTaggingDetailsByCandidateId(phone, taggingDetails) &&
+              toast.success("Details updated successfully!", {
+                position: "top-right",
+              });
+            setTimeout(() => {
+              navigate("/landing-page");
+            }, 2000);
+          })
+          .catch((error) => {
+            toast.error("Error updating details:", {
               position: "top-right",
             });
-          setTimeout(() => {
-            navigate("/landing-page");
-          }, 2000);
-        })
-        .catch((error) => {
-          toast.error("Error updating details:", {
-            position: "top-right",
+            console.error("Error updating details by CandidateId:", error);
           });
-          console.error("Error updating details by CandidateId:", error);
-        });
-    } else if (isVendor && phone) {
-      updateSelectionDetailsByVendorCandidateId(phone, selectionDetails)
-        .then(() => {
-          updateTaggingDetailsByVendorCandidateId(phone, taggingDetails) &&
-            toast.success("Details updated successfully!", {
+      } else if (isVendor && phone) {
+        updateSelectionDetailsByVendorCandidateId(phone, selectionDetails)
+          .then(() => {
+            updateTaggingDetailsByVendorCandidateId(phone, taggingDetails) &&
+              toast.success("Details updated successfully!", {
+                position: "top-right",
+              });
+            setTimeout(() => {
+              navigate("/landing-page");
+            }, 2000);
+          })
+          .catch((error) => {
+            toast.error("Error updating details:", {
               position: "top-right",
             });
-          setTimeout(() => {
-            navigate("/landing-page");
-          }, 2000);
-        })
-        .catch((error) => {
-          toast.error("Error updating details:", {
-            position: "top-right",
+            console.error("Error updating details by VendorId:", error);
           });
-          console.error("Error updating details by VendorId:", error);
-        });
+      }
+    } catch (error) {
+      console.error("An error occurred:", error.message);
+      toast.error(error.message, { position: "top-right" });
     }
   };
+
+
 
   useEffect(() => {
     if (id === 1) {
@@ -374,6 +406,7 @@ function UpdateDetails() {
             candidateStatusDate:
               formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
+            evidence: selectionData.interviewEvidence || "",
           });
           console.log(selectionData);
           setSelectedSubLobTemp(selectionData.subLob);
@@ -440,6 +473,7 @@ function UpdateDetails() {
             candidateStatusDate:
               formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
+            evidence: selectionData.interviewEvidence || "",
           });
           setSelectedSubLobTemp(selectionData.subLob);
         })
@@ -505,6 +539,7 @@ function UpdateDetails() {
             candidateStatusDate:
               formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
+            evidence: selectionData.interviewEvidence || "",
           });
           setSelectedSubLobTemp(selectionData.subLob);
         })
@@ -590,9 +625,8 @@ function UpdateDetails() {
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
                     required
-                    className={`p-2 border rounded w-full ${
-                      errors.vendorId ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
+                      }`}
                     disabled={isInternal}
                   >
                     <option value="">Select Vendor</option>
@@ -1075,14 +1109,17 @@ function UpdateDetails() {
                   <td className="p-2 w-full md:w-1/4">
                     <label className="font-semibold">Interview Evidences</label>
                   </td>
+
                   <td className="p-2 w-full md:w-1/4">
                     <input
                       type="file"
                       name="evidence"
-                      onChange={handleChange}
+                      accept=".png,.jpg,.jpeg,.doc,.docx"
+                      onChange={(e) => setForm({ ...form, evidence: e.target.files[0] })}
                       className="p-2 border rounded w-full"
                     />
                   </td>
+
                 </tr>
                 <tr className="flex flex-wrap md:flex-nowrap">
                   <td className="p-2 w-full md:w-1/4">
