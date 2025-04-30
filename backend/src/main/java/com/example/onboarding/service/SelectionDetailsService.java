@@ -3,6 +3,8 @@ package com.example.onboarding.service;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,19 +14,18 @@ import org.springframework.stereotype.Service;
 import com.example.onboarding.model.AwaitedCasesDTO;
 import com.example.onboarding.model.CtoolDto;
 import com.example.onboarding.model.EmployeeCandidateDTO;
+import com.example.onboarding.model.ExcelDataDTO;
 import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
 import com.example.onboarding.model.VendorCandidate;
 import com.example.onboarding.repository.EmployeeRepository;
 import com.example.onboarding.repository.SelectionDetailsRepository;
 import com.example.onboarding.repository.VendorCandidateRepository;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 public class SelectionDetailsService {
 
-    private final VendorCandidateRepository vendorCandidateRepository;
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private SelectionDetailsRepository selectionDetailsRepository;
@@ -38,9 +39,8 @@ public class SelectionDetailsService {
     @Autowired
     private TaggingDetailsService taggingDetailsService;
 
-    SelectionDetailsService(VendorCandidateRepository vendorCandidateRepository) {
-        this.vendorCandidateRepository = vendorCandidateRepository;
-    }
+    @Autowired
+    private VendorCandidateRepository vendorCandidateRepository;
 
     public SelectionDetails getSelectionDetailsByPsid(int psid) {
         return selectionDetailsRepository.findSelectionDetailsByPsId(psid);
@@ -80,6 +80,7 @@ public class SelectionDetailsService {
             existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
+            existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
             existingDetails.setCtoolStartDate(updatedDetails.getCtoolStartDate());
@@ -114,6 +115,7 @@ public class SelectionDetailsService {
             existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
+            existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
             existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
             existingDetails.setCtoolStartDate(updatedDetails.getCtoolStartDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
@@ -151,6 +153,7 @@ public class SelectionDetailsService {
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
             existingDetails.setCtoolStartDate(updatedDetails.getCtoolStartDate());
+            existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setUpdateDate(new Date());
             existingDetails.setIrm(updatedDetails.getIrm());
@@ -218,8 +221,8 @@ public class SelectionDetailsService {
                 createdBy,
                 pageable);
 
-        log.info("Employee Candidates Handler data : Page {} of {}", page, employeeCandidateDTOPage.getTotalPages());
-        employeeCandidateDTOPage.forEach(candidate -> log.info("Employee Candidate: {}", candidate));
+        logger.info("Employee Candidates Handler data : Page {} of {}", page, employeeCandidateDTOPage.getTotalPages());
+        employeeCandidateDTOPage.forEach(candidate -> logger.info("Employee Candidate: {}", candidate));
 
         return employeeCandidateDTOPage;
     }
@@ -236,6 +239,12 @@ public class SelectionDetailsService {
 
     public List<CtoolDto> findCtool(String filter) {
         return selectionDetailsRepository.findCtool(filter);
+    }
+
+    public List<ExcelDataDTO> findExcelData(Integer createdBy){
+        System.out.println("Result"+ createdBy);
+        System.out.println(selectionDetailsRepository.findCustomQueryResults(createdBy));
+        return selectionDetailsRepository.findCustomQueryResults(createdBy);
     }
 
 }

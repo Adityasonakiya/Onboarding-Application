@@ -12,14 +12,14 @@ import jakarta.persistence.Table;
 @Table(name = "employee")
 public class Employee {
     @Id
-    private int psid;
+    private Integer psid;
     private String firstName;
     private String middleName;
     private String lastName;
     private String grade;
     private String location;
     private String skill;
-    private double totalExperience;
+    private Double totalExperience;
     private String pu;
     private String mailID;
     private Long phoneNumber;
@@ -34,14 +34,14 @@ public class Employee {
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 
-    public Employee(int psid) {
+    public Employee(Integer psid) {
         this.psid = psid;
     }
 
     public Employee() {
     }
 
-    public int getPsid() {
+    public Integer getPsid() {
         return psid;
     }
 
@@ -97,11 +97,11 @@ public class Employee {
         this.skill = skill;
     }
 
-    public double getTotalExperience() {
+    public Double getTotalExperience() {
         return totalExperience;
     }
 
-    public void setTotalExperience(double totalExperience) {
+    public void setTotalExperience(Double totalExperience) {
         this.totalExperience = totalExperience;
     }
 

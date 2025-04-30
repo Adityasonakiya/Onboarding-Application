@@ -1,7 +1,5 @@
 package com.example.onboarding.controller;
 
-import com.example.onboarding.model.TaggingDetails;
-import com.example.onboarding.service.TaggingDetailsService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +7,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.example.onboarding.model.TaggingDetails;
+import com.example.onboarding.service.TaggingDetailsService;
 
 @WebMvcTest(TaggingDetailsController.class)
 public class TaggingDetailsControllerTest {
@@ -21,6 +21,7 @@ public class TaggingDetailsControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @SuppressWarnings("removal")
     @MockBean
     private TaggingDetailsService taggingDetailsService;
 
@@ -72,5 +73,13 @@ public class TaggingDetailsControllerTest {
                 .content("{\"bgvStatus\": {\"bgvStatus\": \"In progress\"}}"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    public TaggingDetailsService getTaggingDetailsService() {
+        return taggingDetailsService;
+    }
+
+    public void setTaggingDetailsService(TaggingDetailsService taggingDetailsService) {
+        this.taggingDetailsService = taggingDetailsService;
     }
 }

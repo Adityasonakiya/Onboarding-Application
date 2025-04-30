@@ -1,5 +1,6 @@
 package com.example.onboarding.service;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,11 +21,9 @@ import com.example.onboarding.repository.VendorCandidateRepository;
 
 import jakarta.transaction.Transactional;
 
-import org.slf4j.Logger;
-// import org.slf4j.LoggerFactory;
-
 @Service
 public class TaggingDetailsService {
+
     private static final Logger logger = LoggerFactory.getLogger(TaggingDetailsService.class);
 
     @Autowired
@@ -35,7 +34,7 @@ public class TaggingDetailsService {
 
     @Autowired
     private BGVStatusRepository bgvStatusRepository;
-    
+
     @Autowired
     private CandidateStatusRepository candidateStatusRepository;
 
@@ -144,7 +143,7 @@ public class TaggingDetailsService {
                 logger.info("No existing details found for PhoneNumber: {}, creating new entry", phoneNumber);
                 // Assuming Candidate class has a constructor
                 Candidate existingCandidate = candidateRepository.findByPhoneNumber(phoneNumber)
-                        .orElseThrow(() -> new RuntimeException("Candidate not found for phoneNumber: " + phoneNumber));   
+                        .orElseThrow(() -> new RuntimeException("Candidate not found for phoneNumber: " + phoneNumber));
                 updatedDetails.setCandidate(existingCandidate);                                                              // with phoneNumber
                 if (updatedDetails.getOnboardingStatus() != null) {
                     OnboardingStatus onboardingStatus = onboardingStatusRepository
@@ -194,7 +193,7 @@ public class TaggingDetailsService {
             } else {
                 logger.info("No existing details found for PhoneNumber: {}, creating new entry", phoneNumber);
                 VendorCandidate existingVendorCandidate = vendorCandidateRepository.findByPhoneNumber(phoneNumber)
-                            .orElseThrow(() -> new RuntimeException("VendorCandidate not found for phoneNumber: " + phoneNumber));
+                        .orElseThrow(() -> new RuntimeException("VendorCandidate not found for phoneNumber: " + phoneNumber));
 
                 updatedDetails.setVendorCandidate(existingVendorCandidate); // Set the existing entity
                 // Assuming VendorCandidate class has a constructor

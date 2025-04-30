@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.onboarding.model.AwaitedCasesDTO;
 import com.example.onboarding.model.CtoolDto;
 import com.example.onboarding.model.EmployeeCandidateDTO;
+import com.example.onboarding.model.ExcelDataDTO;
 import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
 import com.example.onboarding.service.SelectionDetailsService;
@@ -184,6 +185,14 @@ public class SelectionDetailsController {
     public ResponseEntity<List<CtoolDto>> findCtool(@RequestParam String filter) {
         List<CtoolDto> ctool = selectionDetailsService.findCtool(filter);
         return ResponseEntity.ok(ctool);
+    }
+
+    @GetMapping("/excel")
+    public ResponseEntity<List<ExcelDataDTO>> findExcelData(@RequestParam Integer createdBy) {
+        System.out.println("Controller result"+createdBy);
+        List<ExcelDataDTO> data = selectionDetailsService.findExcelData(createdBy);
+        System.out.println("Data"+data);
+        return ResponseEntity.ok(data);
     }
 
 }
