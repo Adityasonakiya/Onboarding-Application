@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   getCandidateById,
   getEmployeeByPsid,
@@ -19,6 +19,8 @@ import {
   updateSelectionDetailsByVendorCandidateId,
   updateTaggingDetailsByVendorCandidateId,
   getVendorCandidateById,
+  getHsbcRoles,
+  getHsbcRolesById,
 } from "../services/api";
 import moment from "moment";
 import { Slide, ToastContainer, toast } from "react-toastify";
@@ -38,6 +40,11 @@ function UpdateDetails() {
   const [vendors, setVendors] = useState([]);
   const [subLob, setSubLob] = useState([]);
   const [selectedSubLobTemp, setSelectedSubLobTemp] = useState({});
+  const [roles, setRoles] = useState([]); //hsbc roles
+  const [searchTerm, setSearchTerm] = useState(""); // Search query for hsbc roles
+  const [filteredRoles, setFilteredRoles] = useState([]); // Roles displayed after filtering
+  const [showDropdown, setShowDropdown] = useState(false); // Show/Hide dropdown for hsbc roles
+  const comboboxRef = useRef(null); // Reference for handling clicks outside
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
@@ -104,6 +111,60 @@ function UpdateDetails() {
 
     getVendors();
   }, []);
+
+  useEffect(() => {
+      const getRoles = async () => {
+        try {
+          const data = await getHsbcRoles();
+          setRoles(data);
+          setFilteredRoles(data);
+        } catch (error) {
+          console.error("There was an error fetching the Roles!", error);
+        }
+      };
+      getRoles();
+    }, []);
+  
+    // Filter roles as the user types
+    const handleSearch = (event) => {
+      const searchValue = event.target.value.toLowerCase();
+      setSearchTerm(searchValue); // Update the input value
+      if (searchValue.length >= 3) {
+        const filtered = roles.filter((role) =>
+          role.roleTitle.toLowerCase().includes(searchValue)
+        );
+        setFilteredRoles(filtered); // Update filtered roles
+      } else {
+        setFilteredRoles(roles); // Reset to all roles if fewer than 2 characters
+      }
+      setShowDropdown(true); // Show dropdown when typing
+    };
+  
+    // Select an option and update the input
+    const handleSelect = (roleTitle,ref) => {
+      setSearchTerm(roleTitle); // Populate the input with the selected role
+      setForm((prevState) => ({
+        ...prevState,
+        hsbcRoles: { ref:ref, roleTitle: roleTitle },
+      }));
+      setShowDropdown(false); // Hide dropdown after selection
+    };
+  
+    // Close dropdown when clicking outside
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (
+          comboboxRef.current &&
+          !comboboxRef.current.contains(event.target)
+        ) {
+          setShowDropdown(false); // Close dropdown if clicking outside
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }, []); 
 
   useEffect(() => {
     const getLobs = async () => {
@@ -239,6 +300,7 @@ function UpdateDetails() {
       dojreceivedDate: form.dojRecDate,
       hsbconboardingDate: form.onboardingDate,
       ctoolStartDate: form.ctoolStartDate,
+      hsbcRoles: form.hsbcRoles,
     };
 
     console.log("tagging details: ", taggingDetails);
@@ -247,11 +309,19 @@ function UpdateDetails() {
     try {
       // Validate file type and size
       const file = form.evidence;
-      const validTypes = ["image/png", "image/jpeg", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+      const validTypes = [
+        "image/png",
+        "image/jpeg",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      ];
       if (!validTypes.includes(file.type)) {
-        throw new Error("Invalid file type. Only PNG, JPG, and DOC files are allowed.");
+        throw new Error(
+          "Invalid file type. Only PNG, JPG, and DOC files are allowed."
+        );
       }
-      if (file.size > 10 * 1024 * 1024) { // 10MB
+      if (file.size > 10 * 1024 * 1024) {
+        // 10MB
         throw new Error("File size exceeds the limit of 10MB.");
       }
 
@@ -327,8 +397,6 @@ function UpdateDetails() {
       toast.error(error.message, { position: "top-right" });
     }
   };
-
-
 
   useEffect(() => {
     if (id === 1) {
@@ -407,6 +475,7 @@ function UpdateDetails() {
               formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
             evidence: selectionData.interviewEvidence || "",
+            hsbcRoles: selectionData.hsbcRoles || "",
           });
           console.log(selectionData);
           setSelectedSubLobTemp(selectionData.subLob);
@@ -474,6 +543,7 @@ function UpdateDetails() {
               formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
             evidence: selectionData.interviewEvidence || "",
+            hsbcRoles: selectionData.hsbcRoles || "",
           });
           setSelectedSubLobTemp(selectionData.subLob);
         })
@@ -540,6 +610,7 @@ function UpdateDetails() {
               formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
             evidence: selectionData.interviewEvidence || "",
+            hsbcRoles: selectionData.hsbcRoles || "",
           });
           setSelectedSubLobTemp(selectionData.subLob);
         })
@@ -625,8 +696,9 @@ function UpdateDetails() {
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
                     required
-                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.vendorId ? "border-red-500" : ""
+                    }`}
                     disabled={isInternal}
                   >
                     <option value="">Select Vendor</option>
@@ -858,7 +930,7 @@ function UpdateDetails() {
                       value={form.lob?.lobId || ""}
                       onChange={handleLobChange}
                       name="lob"
-                      className="p-2 bordered w-full"
+                      className="p-2 border w-full"
                     >
                       <option value="">Choose...</option>
                       {lobs.map((lob) => (
@@ -877,7 +949,7 @@ function UpdateDetails() {
                     <select
                       name="subLob"
                       value={form.subLob?.subLOBid || ""}
-                      className="p-2 bordered w-full"
+                      className="p-2 border w-full"
                       onChange={handleSubLobChange}
                     >
                       <option value="">Choose...</option>
@@ -1115,11 +1187,12 @@ function UpdateDetails() {
                       type="file"
                       name="evidence"
                       accept=".png,.jpg,.jpeg,.doc,.docx"
-                      onChange={(e) => setForm({ ...form, evidence: e.target.files[0] })}
+                      onChange={(e) =>
+                        setForm({ ...form, evidence: e.target.files[0] })
+                      }
                       className="p-2 border rounded w-full"
                     />
                   </td>
-
                 </tr>
                 <tr className="flex flex-wrap md:flex-nowrap">
                   <td className="p-2 w-full md:w-1/4">
@@ -1156,6 +1229,89 @@ function UpdateDetails() {
                     />
                   </td>
                 </tr>
+                <tr className="flex flex-wrap md:flex-nowrap">
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-semibold">
+                    HSBC Roles:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <div ref={comboboxRef} style={{ position: "relative"}}>
+                    {/* Input field */}
+                    <input
+                      type="text"
+                      placeholder="Search or select a role..."
+                      value={form.hsbcRoles?.roleTitle || ""}
+                      className={`p-2 border w-full ${
+                        errors.hsbcRoles ? "border-red-500" : ""
+                      }`}
+                      onChange={handleSearch}
+                      onFocus={() => setShowDropdown(true)} // Open dropdown on focus
+                      style={{
+                        width: "100%",
+                        padding: "8px",
+                        border: "1px solid #ccc",
+                        borderRadius: "4px",
+                      }}
+                    />
+              
+                    {/* Dropdown options (conditionally rendered) */}
+                    {showDropdown && filteredRoles.length > 0 && (
+                      <ul
+                        style={{
+                          position: "absolute",
+                          top: "100%",
+                          left: "0",
+                          width: "100%",
+                          maxHeight: "200px",
+                          overflowY: "auto",
+                          background: "#fff",
+                          border: "1px solid #ccc",
+                          borderRadius: "4px",
+                          zIndex: "1000",
+                          padding: "0",
+                          margin: "0",
+                          listStyleType: "none",
+                        }}
+                      >
+                        {filteredRoles.map((role) => (
+                          <li
+                            key={role.ref}
+                            onClick={() => handleSelect(role.roleTitle,role.ref)} // Properly update input value
+                            style={{
+                              padding: "8px",
+                              cursor: "pointer",
+                              borderBottom: "1px solid #f0f0f0",
+                            }}
+                          >
+                            {role.roleTitle}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+              
+                    {/* Fallback for no matches */}
+                    {showDropdown && filteredRoles.length === 0 && (
+                      <div
+                        style={{
+                          padding: "8px",
+                          background: "#fff",
+                          border: "1px solid #ccc",
+                          borderRadius: "4px",
+                          marginTop: "4px",
+                        }}
+                      >
+                        No matching roles found
+                      </div>
+                    )}
+                  </div>
+
+                  {errors.lob && (
+                    <p className="text-red-500 text-sm">{errors.hsbcRoles}</p>
+                  )}
+                </td>
+                <td></td>
+              </tr>
               </div>
 
               <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
@@ -1337,25 +1493,6 @@ function UpdateDetails() {
                   />
                 </td>
               </tr>
-              {/* <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    DOJ Recieved Date:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="date"
-                    name="dojRecDate"
-                    value={form.dojRecDate || ""}
-                    required
-                    disabled={!form.dojRecDateEnabled}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                    min={today}
-                  />
-                </td>
-              </tr> */}
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">

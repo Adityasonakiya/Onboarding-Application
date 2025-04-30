@@ -7,10 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.ToString;
 
 @Entity
-@ToString
 public class SelectionDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +40,10 @@ public class SelectionDetails {
     private String irm;
 
     @ManyToOne
+    @JoinColumn(name = "hsbcRoleId")
+    private HsbcRoles hsbcRoles;
+
+    @ManyToOne
     @JoinColumn(name = "createdBy")
     private Employee createdBy;
 
@@ -54,12 +56,12 @@ public class SelectionDetails {
     private String HSBCHead;
     private String salesPOC;
     private String PricingModel;
-    private int HSBCToolId;
+    private Integer HSBCToolId;
     private Date CToolReceivedDate;
     private String CToolJobCategory;
     private String CToolLocation;
-    private int CToolRate;
-    private int CToolProposedRate;
+    private Integer CToolRate;
+    private Integer CToolProposedRate;
     private String recruiterName;
     private String interviewEvidences;
     private String offerReleaseStatus;
@@ -138,11 +140,11 @@ public class SelectionDetails {
         this.PricingModel = PricingModel;
     }
 
-    public int getHSBCToolId() {
+    public Integer getHSBCToolId() {
         return HSBCToolId;
     }
 
-    public void setHSBCToolId(int HSBCToolId) {
+    public void setHSBCToolId(Integer HSBCToolId) {
         this.HSBCToolId = HSBCToolId;
     }
 
@@ -170,19 +172,19 @@ public class SelectionDetails {
         CToolLocation = cToolLocation;
     }
 
-    public int getCToolRate() {
+    public Integer getCToolRate() {
         return CToolRate;
     }
 
-    public void setCToolRate(int cToolRate) {
+    public void setCToolRate(Integer cToolRate) {
         CToolRate = cToolRate;
     }
 
-    public int getCToolProposedRate() {
+    public Integer getCToolProposedRate() {
         return CToolProposedRate;
     }
 
-    public void setCToolProposedRate(int CToolProposedRate) {
+    public void setCToolProposedRate(Integer CToolProposedRate) {
         this.CToolProposedRate = CToolProposedRate;
     }
 
@@ -364,12 +366,12 @@ public class SelectionDetails {
     }
 
     public SelectionDetails(int selectionId, Employee employee, Candidate candidate, VendorCandidate vendorCandidate,
-            String deliveryManager, LOB lob, SubLOB subLob, String irm, Employee createdBy, Employee updatedBy,
-            Date hSBCSelectionDate, String hSBCHiringManager, String hSBCHead, String salesPOC, String pricingModel,
-            int hSBCToolId, Date cToolReceivedDate, String cToolJobCategory, String cToolLocation, int cToolRate,
-            int cToolProposedRate, String recruiterName, String interviewEvidences, String offerReleaseStatus,
-            Date hSBCOnboardingDate, Date techSelectionDate, Date dOJReceivedDate, Date lTIOnboardingDate,
-            Date createDate, Date updateDate, Date candidateStatusDate) {
+            String deliveryManager, LOB lob, SubLOB subLob, String irm, HsbcRoles hsbcRoles, Employee createdBy,
+            Employee updatedBy, Date hSBCSelectionDate, String hSBCHiringManager, String hSBCHead, String salesPOC,
+            String pricingModel, Integer hSBCToolId, Date cToolReceivedDate, String cToolJobCategory, String cToolLocation,
+            Integer cToolRate, Integer cToolProposedRate, String recruiterName, String interviewEvidences,
+            String offerReleaseStatus, Date hSBCOnboardingDate, Date techSelectionDate, Date dOJReceivedDate,
+            Date lTIOnboardingDate, Date createDate, Date updateDate, Date candidateStatusDate, Date ctoolStartDate) {
         this.selectionId = selectionId;
         this.employee = employee;
         this.candidate = candidate;
@@ -378,6 +380,7 @@ public class SelectionDetails {
         this.lob = lob;
         this.subLob = subLob;
         this.irm = irm;
+        this.hsbcRoles = hsbcRoles;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         HSBCSelectionDate = hSBCSelectionDate;
@@ -401,6 +404,15 @@ public class SelectionDetails {
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.candidateStatusDate = candidateStatusDate;
+        this.ctoolStartDate = ctoolStartDate;
+    }
+
+    public HsbcRoles getHsbcRoles() {
+        return hsbcRoles;
+    }
+
+    public void setHsbcRoles(HsbcRoles hsbcRoles) {
+        this.hsbcRoles = hsbcRoles;
     }
     
 }

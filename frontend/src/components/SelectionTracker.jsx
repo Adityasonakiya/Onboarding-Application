@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   getCandidateById,
@@ -13,6 +13,8 @@ import {
   getTaggingDetailsByVendorCandidateId,
   getSelectionDetailsByVendorCandidateId,
   getVendorCandidateById,
+  getHsbcRoles,
+  getHsbcRolesById,
 } from "../services/api";
 import moment from "moment";
 import { Slide, ToastContainer, toast } from "react-toastify";
@@ -43,8 +45,13 @@ function SelectionTracker() {
   const [lobs, setLobs] = useState([]);
   const [subLobs, setSubLobs] = useState([]);
   const [subLob, setSubLob] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  //const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedSubLobTemp, setSelectedSubLobTemp] = useState({});
+  const [roles, setRoles] = useState([]); //hsbc roles
+  const [searchTerm, setSearchTerm] = useState(""); // Search query for hsbc roles
+  const [filteredRoles, setFilteredRoles] = useState([]); // Roles displayed after filtering
+  const [showDropdown, setShowDropdown] = useState(false); // Show/Hide dropdown for hsbc roles
+  const comboboxRef = useRef(null); // Reference for handling clicks outside
   const location = useLocation();
   const { state } = location;
   const { id, phoneNumber, readOnly } = state || {};
@@ -155,10 +162,6 @@ function SelectionTracker() {
   useEffect(() => {
     if (form.vendors !== 1) {
       setVendor(true);
-    }
-  });
-  useEffect(() => {
-    if (isVendor) {
       fetchVendorData(form.phoneNumber);
       fetchSelectionDetailsByVendorCandidateId(form.phoneNumber);
     }
@@ -175,6 +178,61 @@ function SelectionTracker() {
     };
     getVendors();
   }, []);
+
+  useEffect(() => {
+    const getRoles = async () => {
+      try {
+        const data = await getHsbcRoles();
+        setRoles(data);
+        setFilteredRoles(data);
+      } catch (error) {
+        console.error("There was an error fetching the Roles!", error);
+      }
+    };
+    getRoles();
+  }, []);
+
+  // Filter roles as the user types
+  const handleSearch = (event) => {
+    const searchValue = event.target.value.toLowerCase();
+    setSearchTerm(searchValue); // Update the input value
+    if (searchValue.length >= 3) {
+      const filtered = roles.filter((role) =>
+        role.roleTitle.toLowerCase().includes(searchValue)
+      );
+      setFilteredRoles(filtered); // Update filtered roles
+    } else {
+      setFilteredRoles(roles); // Reset to all roles if fewer than 2 characters
+    }
+    setShowDropdown(true); // Show dropdown when typing
+  };
+
+  // Select an option and update the input
+  const handleSelect = (roleTitle,ref) => {
+    setSearchTerm(roleTitle); // Populate the input with the selected role
+    setForm((prevForm) => ({
+      ...prevForm,
+      hsbcRoles: { ref: ref, roleTitle: roleTitle },
+    }));
+    setShowDropdown(false); // Hide dropdown after selection
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        comboboxRef.current &&
+        !comboboxRef.current.contains(event.target)
+      ) {
+        setShowDropdown(false); // Close dropdown if clicking outside
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   useEffect(() => {
     const getLobs = async () => {
       try {
@@ -337,7 +395,7 @@ function SelectionTracker() {
 
   const isValidDateRange = (startDate, endDate) => {
     if (!startDate || !endDate) return false; // Return false if either date is missing
-    return moment(startDate).isBefore(moment(endDate));
+    return moment(startDate).isSameOrBefore(moment(endDate));
   };
 
   const validateDates = (selectionDate, ctoolRecDate, ltiOnboardDate) => {
@@ -412,6 +470,7 @@ function SelectionTracker() {
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: ltiOnboardDate,
         evidence: selectionDetails.interviewEvidence,
+        hsbcRoles: selectionDetails.hsbcRoles,
       }));
 
       setSelectedSubLobTemp(selectionDetails.subLob);
@@ -419,7 +478,7 @@ function SelectionTracker() {
       if (
         !readOnly &&
         taggingDetails.onboardingStatus.onboardingStatus !==
-        "Onboarding Completed"
+          "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -466,12 +525,13 @@ function SelectionTracker() {
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
         evidence: selectionDetails.interviewEvidence,
+        hsbcRoles: selectionDetails.hsbcRoles,
       }));
       setSelectedSubLobTemp(selectionDetails.subLob);
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-        "Onboarding Completed"
+          "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -518,12 +578,13 @@ function SelectionTracker() {
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
         evidence: selectionDetails.interviewEvidence,
+        hsbcRoles: selectionDetails.hsbcRoles,
       }));
       setSelectedSubLobTemp(selectionDetails.subLob);
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-        "Onboarding Completed"
+          "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -628,9 +689,12 @@ function SelectionTracker() {
           const file = form.evidence;
           const validTypes = ["image/png", "image/jpeg", "application/msword"];
           if (!validTypes.includes(file.type)) {
-            throw new Error("Invalid file type. Only PNG, JPG, and DOC files are allowed.");
+            throw new Error(
+              "Invalid file type. Only PNG, JPG, and DOC files are allowed."
+            );
           }
-          if (file.size > 10 * 1024 * 1024) { // 10MB
+          if (file.size > 10 * 1024 * 1024) {
+            // 10MB
             throw new Error("File size exceeds the limit of 10MB.");
           }
 
@@ -644,9 +708,7 @@ function SelectionTracker() {
             body: formData,
           });
 
-
           console.log("Upload response:", uploadResponse);
-
 
           if (!uploadResponse.ok) {
             throw new Error("Failed to upload file.");
@@ -674,7 +736,7 @@ function SelectionTracker() {
             interviewEvidence: form.evidence.name, // Save file name
             offerReleaseStatus: form.offerReleaseStatus,
             ltionboardingDate: form.ltiOnboardDate,
-            
+            hsbcRoles: form.hsbcRoles,
           };
 
           if (form.psId) {
@@ -860,8 +922,9 @@ function SelectionTracker() {
                     value={form.psId || ""}
                     onChange={handleChange}
                     required
-                    className={`p-2 border rounded w-full ${errors.psId ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.psId ? "border-red-500" : ""
+                    }`}
                     disabled={!isInternal || readOnly}
                     pattern="\d*"
                   />
@@ -873,20 +936,13 @@ function SelectionTracker() {
                   <label className="font-semibold">Vendor:</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4" colSpan="2">
-                  {/* {isExternal && !isVendor ? (
-                    <input
-                      type="text"
-                      value="Not Applicable"
-                      className="p-2 border rounded w-full bg-gray-100"
-                      disabled
-                    />
-                  ) : ( */}
                   <select
                     name="vendors"
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
-                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.vendorId ? "border-red-500" : ""
+                    }`}
                     disabled={isInternal || readOnly}
                   >
                     <option value="">Select Vendor</option>
@@ -1031,8 +1087,9 @@ function SelectionTracker() {
                     name="phone"
                     value={form.phone || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full bg-slate-100 ${errors.phone ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full bg-slate-100 ${
+                      errors.phone ? "border-red-500" : ""
+                    }`}
                     disabled={isInternal || readOnly}
                     maxLength="10"
                   />
@@ -1064,8 +1121,9 @@ function SelectionTracker() {
                     required
                     value={form.selectionDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.selectionDate ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.selectionDate ? "border-red-500" : ""
+                    }`}
                     disabled={readOnly}
                   />{" "}
                   {errors.selectionDate && (
@@ -1099,8 +1157,9 @@ function SelectionTracker() {
                     value={form.lob?.lobId || ""}
                     onChange={handleLobChange}
                     name="lob"
-                    className={`p-2 bordered w-full ${errors.lob ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 bordered w-full ${
+                      errors.lob ? "border-red-500" : ""
+                    }`}
                     disabled={isReadOnly}
                     required
                   >
@@ -1125,8 +1184,9 @@ function SelectionTracker() {
                   <select
                     name="subLob"
                     value={form.subLob?.subLOBid || ""}
-                    className={`p-2 bordered w-full ${errors.subLob ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border w-full ${
+                      errors.subLob ? "border-red-500" : ""
+                    }`}
                     onChange={handleSubLobChange}
                     disabled={isReadOnly}
                   >
@@ -1253,8 +1313,9 @@ function SelectionTracker() {
                     name="irm"
                     value={form.irm || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.irm ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.irm ? "border-red-500" : ""
+                    }`}
                     disabled={isReadOnly}
                   />
                   {errors.irm && (
@@ -1296,8 +1357,9 @@ function SelectionTracker() {
                     required
                     value={form.ctoolRecDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.ctoolRecDate ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.ctoolRecDate ? "border-red-500" : ""
+                    }`}
                     disabled={readOnly}
                   />{" "}
                   {errors.ctoolRecDate && (
@@ -1385,7 +1447,9 @@ function SelectionTracker() {
                     type="file"
                     name="evidence"
                     accept=".png,.jpg,.jpeg,.doc"
-                    onChange={(e) => setForm({ ...form, evidence: e.target.files[0] })}
+                    onChange={(e) =>
+                      setForm({ ...form, evidence: e.target.files[0] })
+                    }
                     className="p-2 border rounded w-full"
                   />
                 </td>
@@ -1420,8 +1484,9 @@ function SelectionTracker() {
                     required
                     value={form.ltiOnboardDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.ltiOnboardDate ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.ltiOnboardDate ? "border-red-500" : ""
+                    }`}
                     disabled={readOnly}
                   />{" "}
                   {errors.ltiOnboardDate && (
@@ -1430,6 +1495,91 @@ function SelectionTracker() {
                     </p>
                   )}
                 </td>
+              </tr>
+              <tr className="flex flex-wrap md:flex-nowrap">
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-semibold">
+                    HSBC Roles:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <div ref={comboboxRef} style={{ position: "relative"}}>
+                    {/* Input field */}
+                    <input
+                      type="text"
+                      name="hsbcRoles"
+                      placeholder="Search or select a role..."
+                      value={form.hsbcRoles?.roleTitle || ""}
+                      className={`p-2 border w-full ${
+                        errors.hsbcRoles ? "border-red-500" : ""
+                      }`}
+                      disabled={isReadOnly}
+                      onChange={handleSearch}
+                      onFocus={() => setShowDropdown(true)} // Open dropdown on focus
+                      style={{
+                        width: "100%",
+                        padding: "8px",
+                        border: "1px solid #ccc",
+                        borderRadius: "4px",
+                      }}
+                    />
+              
+                    {/* Dropdown options (conditionally rendered) */}
+                    {showDropdown && filteredRoles.length > 0 && (
+                      <ul
+                        style={{
+                          position: "absolute",
+                          top: "100%",
+                          left: "0",
+                          width: "100%",
+                          maxHeight: "200px",
+                          overflowY: "auto",
+                          background: "#fff",
+                          border: "1px solid #ccc",
+                          borderRadius: "4px",
+                          zIndex: "1000",
+                          padding: "0",
+                          margin: "0",
+                          listStyleType: "none",
+                        }}
+                      >
+                        {filteredRoles.map((role) => (
+                          <li
+                            key={role.ref}
+                            onClick={() => handleSelect(role.roleTitle,role.ref)} // Properly update input value
+                            style={{
+                              padding: "8px",
+                              cursor: "pointer",
+                              borderBottom: "1px solid #f0f0f0",
+                            }}
+                          >
+                            {role.roleTitle}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+              
+                    {/* Fallback for no matches */}
+                    {showDropdown && filteredRoles.length === 0 && (
+                      <div
+                        style={{
+                          padding: "8px",
+                          background: "#fff",
+                          border: "1px solid #ccc",
+                          borderRadius: "4px",
+                          marginTop: "4px",
+                        }}
+                      >
+                        No matching roles found
+                      </div>
+                    )}
+                  </div>
+
+                  {errors.lob && (
+                    <p className="text-red-500 text-sm">{errors.hsbcRoles}</p>
+                  )}
+                </td>
+                <td></td>
               </tr>
               {!isReadOnly && (
                 <tr>
@@ -1440,7 +1590,7 @@ function SelectionTracker() {
                         onClick={handleSubmit}
                         className="bg-blue-500 text-white py-2 px-10 rounded"
                         disabled={form.invalid}
-                      // disabled={isSubmitting}
+                        // disabled={isSubmitting}
                       >
                         Submit
                       </button>
@@ -1457,7 +1607,7 @@ function SelectionTracker() {
             </tbody>
           </table>
         </div>
-      </form >
+      </form>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -1470,7 +1620,7 @@ function SelectionTracker() {
         pauseOnHover
         transition={Slide}
       />
-    </div >
+    </div>
   );
 }
 export default SelectionTracker;

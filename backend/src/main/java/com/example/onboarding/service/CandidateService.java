@@ -15,9 +15,7 @@ import com.example.onboarding.repository.CandidateRepository;
 import com.example.onboarding.repository.EmployeeRepository;
 
 import jakarta.persistence.EntityNotFoundException;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 public class CandidateService {
     @Autowired
@@ -59,15 +57,15 @@ public class CandidateService {
     }
 
     public EmployeeCandidateDTO getEmployeeCandidateById(Long id) {
-        log.info("Id that is coming: {}", id);
+        logger.info("Id that is coming: {}", id);
         Optional<EmployeeCandidateDTO> employeeCandidateOptional = candidateRepository.findEmployeeCandidateByPhoneNumber(id);
     
         if (employeeCandidateOptional.isPresent()) {
             EmployeeCandidateDTO employeeCandidate = employeeCandidateOptional.get();
-            log.info("Employee Candidate: {}", employeeCandidate);
+            logger.info("Employee Candidate: {}", employeeCandidate);
             return employeeCandidate;
         } else {
-            log.warn("Employee Candidate with ID {} not found", id);
+            logger.warn("Employee Candidate with ID {} not found", id);
             throw new EntityNotFoundException("Employee Candidate not found with ID: " + id);
         }
     }

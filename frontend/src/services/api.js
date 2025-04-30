@@ -380,3 +380,24 @@ export const getEmployeeCandidateByBgv = async (bgv) => {
   }
   throw new Error("Failed to fetch Employees by Bgv");
 };
+
+export const getHsbcRoles = async () => {
+  const response = await fetch(
+    `http://localhost:8080/hsbc-roles`
+  );
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch HSBC roles");
+};
+
+export const getHsbcRolesById = async (ref) => {
+  const response = await fetch(
+    `http://localhost:8080/hsbc-roles/${ref}`
+  );
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch HSBC roles");
+};
+

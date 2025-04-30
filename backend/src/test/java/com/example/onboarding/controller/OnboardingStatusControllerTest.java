@@ -1,7 +1,8 @@
 package com.example.onboarding.controller;
 
-import com.example.onboarding.model.OnboardingStatus;
-import com.example.onboarding.service.OnboardingStatusService;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +10,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Arrays;
-import java.util.List;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.example.onboarding.model.OnboardingStatus;
+import com.example.onboarding.service.OnboardingStatusService;
 
 @WebMvcTest(OnboardingStatusController.class)
 public class OnboardingStatusControllerTest {
@@ -23,6 +23,7 @@ public class OnboardingStatusControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @SuppressWarnings("removal")
     @MockBean
     private OnboardingStatusService onboardingStatusService;
 
