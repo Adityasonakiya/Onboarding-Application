@@ -14,7 +14,7 @@ import {
   getSelectionDetailsByVendorCandidateId,
   getVendorCandidateById,
   getHsbcRoles,
-  getHsbcRolesById,
+  //getHsbcRolesById,
 } from "../services/api";
 import moment from "moment";
 import { Slide, ToastContainer, toast } from "react-toastify";
@@ -337,7 +337,6 @@ function SelectionTracker() {
         totalExp: employee.totalExperience,
         skill: employee.skill,
         email: employee.mailID,
-        baseBU: "BF",
         phone: employee.phoneNumber,
       }));
     } catch (error) {
@@ -354,7 +353,6 @@ function SelectionTracker() {
         phone: candidate.phoneNumber,
         fname: candidate.firstName,
         lname: candidate.lastName,
-        baseBU: "",
         grade: "", // Assuming grade is not available for candidate
         location: "", // Assuming location is not available for candidate
         pu: "", // Assuming pu is not available for candidate
@@ -375,7 +373,6 @@ function SelectionTracker() {
         phone: vendorCandidate.phoneNumber,
         fname: vendorCandidate.firstName,
         lname: vendorCandidate.lastName,
-        baseBU: "",
         grade: "", // Assuming grade is not available for candidate
         location: "", // Assuming location is not available for candidate
         pu: "", // Assuming pu is not available for candidate
@@ -451,7 +448,7 @@ function SelectionTracker() {
       setForm((prevForm) => ({
         ...prevForm,
         selectionDate: selectionDate,
-        bu: "BF",
+        bu: selectionDetails.baseBu || "BF",
         lob: selectionDetails.lob || "",
         subLob: selectionDetails.sublob || "",
         hiringManager: selectionDetails.hsbchiringManager,
@@ -472,9 +469,7 @@ function SelectionTracker() {
         evidence: selectionDetails.interviewEvidence,
         hsbcRoles: selectionDetails.hsbcRoles,
       }));
-
       setSelectedSubLobTemp(selectionDetails.subLob);
-
       if (
         !readOnly &&
         taggingDetails.onboardingStatus.onboardingStatus !==
@@ -494,9 +489,7 @@ function SelectionTracker() {
 
   const fetchSelectionDetailsByCandidateId = async (phoneNumber) => {
     try {
-      const selectionDetails = await getSelectionDetailsByCandidateId(
-        phoneNumber
-      );
+      const selectionDetails = await getSelectionDetailsByCandidateId(phoneNumber);
       const taggingDetails = await getTaggingDetailsByPsId(phoneNumber).catch(
         (err) => {
           console.error("Error fetching tagging details:", err);
@@ -506,7 +499,7 @@ function SelectionTracker() {
       setForm((prevForm) => ({
         ...prevForm,
         selectionDate: formatDate(selectionDetails.hsbcselectionDate),
-        bu: "BF",
+        bu: selectionDetails.baseBu || "BF",
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
@@ -547,19 +540,16 @@ function SelectionTracker() {
 
   const fetchSelectionDetailsByVendorCandidateId = async (phoneNumber) => {
     try {
-      const selectionDetails = await getSelectionDetailsByVendorCandidateId(
-        phoneNumber
-      );
-      const taggingDetails = await getTaggingDetailsByVendorCandidateId(
-        phoneNumber
-      ).catch((err) => {
+      const selectionDetails = await getSelectionDetailsByVendorCandidateId(phoneNumber);
+      const taggingDetails = await getTaggingDetailsByVendorCandidateId(phoneNumber).catch(
+        (err) => {
         console.error("Error fetching tagging details:", err);
         return {}; // Fallback to an empty object
       });
       setForm((prevForm) => ({
         ...prevForm,
         selectionDate: formatDate(selectionDetails.hsbcselectionDate),
-        bu: "BF",
+        bu: selectionDetails.baseBu || "BF",
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
@@ -597,22 +587,21 @@ function SelectionTracker() {
       console.error(error);
     }
   };
+
   //handle changes in form
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "radio") {
       setIsInternal(name === "internal" ? checked : !checked);
       setIsExternal(name === "external" ? checked : !checked);
-      //setVendor(name === "vendor" ? checked : !checked);
-    } else if (name === "phone") {
-      if (name === "phone") {
+    } 
+    else if (name === "phone") {
         const numericValue = value.replace(/\D/g, ""); // Remove non-numeric characters
         if (numericValue.length <= 10) {
           setForm((prevForm) => ({
             ...prevForm,
             [name]: numericValue,
           }));
-        }
       }
 
       // Clear errors if the input is valid
@@ -652,6 +641,7 @@ function SelectionTracker() {
       });
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -717,7 +707,7 @@ function SelectionTracker() {
           // Proceed with the rest of the form submission logic
           const requestBody = {
             hsbcselectionDate: form.selectionDate,
-            baseBU: form.bu,
+            baseBu: form.bu,
             lob: form.lob,
             subLob: form.subLob,
             hsbchiringManager: form.hiringManager,
@@ -761,7 +751,6 @@ function SelectionTracker() {
               vendorId: form.vendors.vendorId,
               firstName: form.fname,
               lastName: form.lname,
-              baseBU: "BF",
             };
 
             console.log("Candidate Payload:", candidate); // Step 1: Create vendor candidate
@@ -774,8 +763,6 @@ function SelectionTracker() {
                 body: JSON.stringify(candidate), // JSON payload for VendorCandidate
               }
             );
-
-            console.log("Candidate Response:", candidateResponse);
 
             if (!candidateResponse.ok) {
               const errorData = await candidateResponse.json();
@@ -811,7 +798,6 @@ function SelectionTracker() {
               vendor: form.vendors,
               firstName: form.fname,
               lastName: form.lname,
-              baseBU: "BF",
             };
 
             console.log("VendorCandidate Payload:", vendorCandidate); // Step 1: Create vendor candidate
@@ -1509,7 +1495,7 @@ function SelectionTracker() {
                       type="text"
                       name="hsbcRoles"
                       placeholder="Search or select a role..."
-                      value={form.hsbcRoles?.roleTitle || ""}
+                      value={form.hsbcRoles?.roleTitle}
                       className={`p-2 border w-full ${
                         errors.hsbcRoles ? "border-red-500" : ""
                       }`}
