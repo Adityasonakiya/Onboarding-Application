@@ -443,7 +443,7 @@ function UpdateDetails() {
             email: employee.mailID || "",
             phone: employee.phoneNumber,
             selectionDate: formatDate(selectionData.hsbcselectionDate),
-            bu: "BF",
+            bu: selectionData.baseBu,
             lob: selectionData.lob || "",
             subLob: selectionData.sublob || "",
             hiringManager: selectionData.hsbchiringManager || "",
@@ -511,7 +511,7 @@ function UpdateDetails() {
             skill: "", // Assuming skill is not available for candidate
             email: "", // Assuming email is not available for candidate
             selectionDate: formatDate(selectionData.hsbcselectionDate),
-            bu: "BF",
+            bu: selectionData.baseBu,
             lob: selectionData.lob || "",
             subLob: selectionData.sublob || "",
             hiringManager: selectionData.hsbchiringManager || "",
@@ -571,7 +571,7 @@ function UpdateDetails() {
             phone: vendorCandidate.phoneNumber,
             fname: vendorCandidate.firstName,
             lname: vendorCandidate.lastName,
-            grade: "", // Assuming grade is not available for candidate
+            grade: selectionData.baseBu, // Assuming grade is not available for candidate
             location: "", // Assuming location is not available for candidate
             pu: "", // Assuming pu is not available for candidate
             totalExp: "", // Assuming totalExperience is not available for candidate
@@ -657,18 +657,6 @@ function UpdateDetails() {
                     className="p-2"
                   />
                 </td>
-                {/* <td className="p-2 w-full md:w-1/3">
-                  <label className="font-bold">Vendor</label>
-                </td>
-                <td className="p-2 w-full md:w-1/3">
-                  <input
-                    type="checkbox"
-                    name="vendor"
-                    checked={isVendor}
-                    onChange={handleChange}
-                    className="p-2"
-                  />
-                </td> */}
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
@@ -714,43 +702,6 @@ function UpdateDetails() {
                     </p>
                   )}
                 </td>
-                {/* <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
-                    Candidate ID:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="text"
-                    name="candidateId"
-                    value={candidateId}
-                    onChange={handleCandidateIdChange}
-                    className="p-2 border rounded w-full"
-                    disabled={isInternal || isVendor}
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/3">
-                  <label className="font-semibold">
-                    Vendor Candidate ID:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    name="vendorCandidateId"
-                    value={form.vendorCandidateId || ""}
-                    onChange={handleVendorCandidateIdChange}
-                    required
-                    className={`p-2 border rounded w-full ${errors.vendorCandidateId ? "border-red-500" : ""
-                      }`}
-                    disabled={isInternal || isExternal}
-                    pattern="\d*"
-                  />
-                  {errors.vendorCandidateId && (
-                    <p className="text-red-500 text-sm mb-4">
-                      {errors.vendorCandidateId}
-                    </p>
-                  )}
-                </td> */}
               </tr>
 
               <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
@@ -1241,7 +1192,7 @@ function UpdateDetails() {
                     <input
                       type="text"
                       placeholder="Search or select a role..."
-                      value={form.hsbcRoles?.roleTitle || ""}
+                      value={form.hsbcRoles?.roleTitle}
                       className={`p-2 border w-full ${
                         errors.hsbcRoles ? "border-red-500" : ""
                       }`}

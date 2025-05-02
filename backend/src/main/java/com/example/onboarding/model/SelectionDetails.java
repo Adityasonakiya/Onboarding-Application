@@ -1,6 +1,7 @@
 package com.example.onboarding.model;
 
 import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +29,7 @@ public class SelectionDetails {
 
     private String deliveryManager;
 
+    private String baseBu;
 
     @ManyToOne
     @JoinColumn(name = "lobId")
@@ -174,6 +176,14 @@ public class SelectionDetails {
 
     public Integer getCToolRate() {
         return CToolRate;
+    }
+
+    public String getBaseBu() {
+        return baseBu;
+    }
+
+    public void setBaseBu(String baseBu) {
+        this.baseBu = baseBu;
     }
 
     public void setCToolRate(Integer cToolRate) {
