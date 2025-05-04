@@ -16,6 +16,20 @@ const SelectionTrackerDashboard = ({ user }) => {
   const [selectionFilter, setSelectionFilter] = useState('all'); // New state for selection filter
   const [ctoolFilter, setCtoolFilter] = useState('all'); // New state for ctool filter
   const [awaitedCasesFilter, setAwaitedCasesFilter] = useState('all'); // New state for awaited cases filter
+  const [data, setData] = useState([]);
+
+  const fetchToExport = async () => {
+    try {
+      const id = JSON.parse(localStorage.getItem("user")).psid;
+      console.log("id for export", id);
+      const response = await fetch(`http://localhost:8080/selection-details/excel?createdBy=${id}`);
+      const result = await response.json();
+      setData(result);
+      handleExportToExcel(result, "ExcelData", "export.xlsx");
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const handleExportToExcel = (data, sheetName, fileName) => {
     if (!data || data.length === 0) {
@@ -286,6 +300,9 @@ const SelectionTrackerDashboard = ({ user }) => {
                 <FaFileExcel />
               </button>
               <button onClick={handleRefresh} className=" px-2 py-2 bg-blue-500 text-white rounded-full" title='Refresh'><HiRefresh /></button>
+              <button onClick={fetchToExport} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                Export
+              </button>
               <div className="flex items-center font-medium text-sm">
                 <div className="flex items-center mr-4">
                   <input type="radio" id="7days" className="hidden" value="7days" name="filter" onChange={handleRadioChange} checked={filter === '7days'} />
@@ -394,7 +411,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                   <option value="external">External</option>
                 </select>
               </div>
-              </div>
+            </div>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border-2 border-gray-400 text-center">
                 <thead>
