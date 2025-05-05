@@ -7,20 +7,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*") // Allow CORS for all origins
 @RestController
 public class FileUploadController {
 
-    private static final String UPLOAD_DIR = "src/main/java/com/example/onboarding/uploads/";
+    private static final String UPLOAD_DIR = "src/main/resources/uploads/";
 
     @PostMapping("/upload")
     public String uploadFiles(@RequestParam("files") MultipartFile[] files) {
         for (MultipartFile file : files) {
             // Validate file type
             String fileType = file.getContentType();
-            if (!fileType.equals("image/png") && !fileType.equals("image/jpeg")
-                    && !fileType.equals("application/msword")) {
-                return "Invalid file type. Only, JPG, and DOC files are allowed.";
+            if (fileType == null || (!fileType.equals("image/png") && !fileType.equals("image/jpeg")
+                    && !fileType.equals("application/msword")
+                    && !fileType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))) {
+                return "Invalid file type. Only PNG, JPG, DOC, and DOCX files are allowed.";
             }
 
             // Validate file size
@@ -29,9 +30,15 @@ public class FileUploadController {
             }
 
             try {
-                byte[] bytes = file.getBytes();
-                Path path = Paths.get(UPLOAD_DIR + file.getOriginalFilename());
-                Files.write(path, bytes);
+                // Ensure the upload directory exists
+                Path uploadDir = Paths.get(UPLOAD_DIR);
+                if (!Files.exists(uploadDir)) {
+                    Files.createDirectories(uploadDir);
+                }
+
+                // Save the file
+                Path path = uploadDir.resolve(file.getOriginalFilename());
+                Files.write(path, file.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
                 return "Failed to upload files.";
