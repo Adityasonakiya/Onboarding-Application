@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import { FaEye } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
+import { FaDownload } from "react-icons/fa6";
 import {
   getCandidateById,
   getEmployeeByPsid,
@@ -52,6 +55,7 @@ function UpdateDetails() {
   const phoneNumber = state?.phoneNumber;
   const today = new Date().toISOString().split("T")[0];
   const [candidateStatuses, setCandidateStatuses] = useState([]);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:8080/candidate-status/all")
@@ -70,6 +74,15 @@ function UpdateDetails() {
         console.error("Error fetching candidate statuses:", error)
       );
   }, []);
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setUploadedFiles((prevFiles) => [...prevFiles, ...files]);
+  };
+
+  const handleFileRemove = (index) => {
+    setUploadedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -113,58 +126,58 @@ function UpdateDetails() {
   }, []);
 
   useEffect(() => {
-      const getRoles = async () => {
-        try {
-          const data = await getHsbcRoles();
-          setRoles(data);
-          setFilteredRoles(data);
-        } catch (error) {
-          console.error("There was an error fetching the Roles!", error);
-        }
-      };
-      getRoles();
-    }, []);
-  
-    // Filter roles as the user types
-    const handleSearch = (event) => {
-      const searchValue = event.target.value.toLowerCase();
-      setSearchTerm(searchValue); // Update the input value
-      if (searchValue.length >= 3) {
-        const filtered = roles.filter((role) =>
-          role.roleTitle.toLowerCase().includes(searchValue)
-        );
-        setFilteredRoles(filtered); // Update filtered roles
-      } else {
-        setFilteredRoles(roles); // Reset to all roles if fewer than 2 characters
+    const getRoles = async () => {
+      try {
+        const data = await getHsbcRoles();
+        setRoles(data);
+        setFilteredRoles(data);
+      } catch (error) {
+        console.error("There was an error fetching the Roles!", error);
       }
-      setShowDropdown(true); // Show dropdown when typing
     };
-  
-    // Select an option and update the input
-    const handleSelect = (roleTitle,ref) => {
-      setSearchTerm(roleTitle); // Populate the input with the selected role
-      setForm((prevState) => ({
-        ...prevState,
-        hsbcRoles: { ref:ref, roleTitle: roleTitle },
-      }));
-      setShowDropdown(false); // Hide dropdown after selection
+    getRoles();
+  }, []);
+
+  // Filter roles as the user types
+  const handleSearch = (event) => {
+    const searchValue = event.target.value.toLowerCase();
+    setSearchTerm(searchValue); // Update the input value
+    if (searchValue.length >= 3) {
+      const filtered = roles.filter((role) =>
+        role.roleTitle.toLowerCase().includes(searchValue)
+      );
+      setFilteredRoles(filtered); // Update filtered roles
+    } else {
+      setFilteredRoles(roles); // Reset to all roles if fewer than 2 characters
+    }
+    setShowDropdown(true); // Show dropdown when typing
+  };
+
+  // Select an option and update the input
+  const handleSelect = (roleTitle, ref) => {
+    setSearchTerm(roleTitle); // Populate the input with the selected role
+    setForm((prevState) => ({
+      ...prevState,
+      hsbcRoles: { ref: ref, roleTitle: roleTitle },
+    }));
+    setShowDropdown(false); // Hide dropdown after selection
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        comboboxRef.current &&
+        !comboboxRef.current.contains(event.target)
+      ) {
+        setShowDropdown(false); // Close dropdown if clicking outside
+      }
     };
-  
-    // Close dropdown when clicking outside
-    useEffect(() => {
-      const handleClickOutside = (event) => {
-        if (
-          comboboxRef.current &&
-          !comboboxRef.current.contains(event.target)
-        ) {
-          setShowDropdown(false); // Close dropdown if clicking outside
-        }
-      };
-  
-      document.addEventListener("mousedown", handleClickOutside);
-      return () =>
-        document.removeEventListener("mousedown", handleClickOutside);
-    }, []); 
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const getLobs = async () => {
@@ -292,7 +305,7 @@ function UpdateDetails() {
       ctoolRate: form.ctoolRate,
       ctoolProposedRate: form.ctoolPropRate,
       recruiterName: form.recruiterName,
-      interviewEvidence: form.evidence.name, // Save file name
+      interviewEvidence: uploadedFiles.map((file) => file.name), // Save file names
       offerReleaseStatus: form.offerReleaseStatus,
       ltionboardingDate: form.ltiOnboardDate,
       techSelectionDate: form.techSelectDate,
@@ -306,92 +319,42 @@ function UpdateDetails() {
     console.log("tagging details: ", taggingDetails);
     console.log("selection details: ", selectionDetails);
 
-    try {
-      // Validate file type and size
-      const file = form.evidence;
-      const validTypes = [
-        "image/png",
-        "image/jpeg",
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      ];
-      if (!validTypes.includes(file.type)) {
-        throw new Error(
-          "Invalid file type. Only PNG, JPG, and DOC files are allowed."
-        );
-      }
-      if (file.size > 10 * 1024 * 1024) {
-        // 10MB
-        throw new Error("File size exceeds the limit of 10MB.");
-      }
-
-      // Create FormData object for file upload
-      const formData = new FormData();
+    const formData = new FormData();
+    uploadedFiles.forEach((file) => {
       formData.append("files", file);
+    });
 
-      // Upload file
+    try {
       const uploadResponse = await fetch("http://localhost:8080/upload", {
         method: "POST",
         body: formData,
       });
 
       if (!uploadResponse.ok) {
-        throw new Error("Failed to upload file.");
+        throw new Error("Failed to upload files.");
       }
+
+      const responseText = await uploadResponse.text();
+      toast.success(responseText, { position: "top-right" });
 
       // Proceed with the rest of the form submission logic
       if (isInternal && psId) {
-        updateSelectionDetailsByPsId(psId, selectionDetails)
-          .then(() => {
-            updateTaggingDetailsByPsId(psId, taggingDetails) &&
-              toast.success("Details updated successfully!", {
-                position: "top-right",
-              });
-            setTimeout(() => {
-              navigate("/landing-page");
-            }, 2000);
-          })
-          .catch((error) => {
-            toast.error("Error updating details:", {
-              position: "top-right",
-            });
-            console.error("Error updating details by PsId:", error);
-          });
+        await updateSelectionDetailsByPsId(psId, selectionDetails);
+        await updateTaggingDetailsByPsId(psId, taggingDetails);
+        toast.success("Details updated successfully!", { position: "top-right" });
       } else if (isExternal && phone) {
-        updateSelectionDetailsByCandidateId(phone, selectionDetails)
-          .then(() => {
-            updateTaggingDetailsByCandidateId(phone, taggingDetails) &&
-              toast.success("Details updated successfully!", {
-                position: "top-right",
-              });
-            setTimeout(() => {
-              navigate("/landing-page");
-            }, 2000);
-          })
-          .catch((error) => {
-            toast.error("Error updating details:", {
-              position: "top-right",
-            });
-            console.error("Error updating details by CandidateId:", error);
-          });
+        await updateSelectionDetailsByCandidateId(phone, selectionDetails);
+        await updateTaggingDetailsByCandidateId(phone, taggingDetails);
+        toast.success("Details updated successfully!", { position: "top-right" });
       } else if (isVendor && phone) {
-        updateSelectionDetailsByVendorCandidateId(phone, selectionDetails)
-          .then(() => {
-            updateTaggingDetailsByVendorCandidateId(phone, taggingDetails) &&
-              toast.success("Details updated successfully!", {
-                position: "top-right",
-              });
-            setTimeout(() => {
-              navigate("/landing-page");
-            }, 2000);
-          })
-          .catch((error) => {
-            toast.error("Error updating details:", {
-              position: "top-right",
-            });
-            console.error("Error updating details by VendorId:", error);
-          });
+        await updateSelectionDetailsByVendorCandidateId(phone, selectionDetails);
+        await updateTaggingDetailsByVendorCandidateId(phone, taggingDetails);
+        toast.success("Details updated successfully!", { position: "top-right" });
       }
+
+      setTimeout(() => {
+        navigate("/landing-page");
+      }, 2000);
     } catch (error) {
       console.error("An error occurred:", error.message);
       toast.error(error.message, { position: "top-right" });
@@ -399,6 +362,7 @@ function UpdateDetails() {
   };
 
   useEffect(() => {
+    // Determine the type of user (Internal, External, Vendor) based on `id`
     if (id === 1) {
       setIsInternal(false);
       setIsExternal(true);
@@ -411,12 +375,16 @@ function UpdateDetails() {
       setIsInternal(true);
       setPsId(id);
     }
+
     const errors = validate();
+
     const formatDate = (date) => {
       if (!date) return "";
       return moment(date).format("YYYY-MM-DD");
     };
+
     if (isInternal && psId) {
+      // Fetch data for internal users
       Promise.all([
         getEmployeeByPsid(psId).catch((err) => {
           console.error("Error fetching employee data:", err);
@@ -471,30 +439,37 @@ function UpdateDetails() {
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
-            candidateStatusDate:
-              formatDate(selectionData.candidateStatusDate) || "",
+            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
             evidence: selectionData.interviewEvidence || "",
             hsbcRoles: selectionData.hsbcRoles || "",
           });
-          console.log(selectionData);
+
           setSelectedSubLobTemp(selectionData.subLob);
+
+          // Populate uploadedFiles state with File-like objects
+          setUploadedFiles(
+            Array.isArray(selectionData.interviewEvidence)
+              ? selectionData.interviewEvidence.map((fileName) => new File([], fileName))
+              : []
+          );
         })
         .catch((error) => {
           console.error("Error in Promise.all:", error);
         });
     } else if (isExternal && phone) {
+      // Fetch data for external users
       Promise.all([
         getCandidateById(phone).catch((err) => {
           console.error("Error fetching candidate data:", err);
           return {}; // Fallback to an empty object
         }),
         getSelectionDetailsByCandidateId(phone).catch((err) => {
-          console.error("Error fetching candidate data:", err);
+          console.error("Error fetching selection details:", err);
           return {}; // Fallback to an empty object
         }),
         getTaggingDetailsByCandidateId(phone).catch((err) => {
-          console.error("Error fetching candidate data:", err);
+          console.error("Error fetching tagging details:", err);
           return {}; // Fallback to an empty object
         }),
       ])
@@ -533,35 +508,43 @@ function UpdateDetails() {
             addRemark: taggingData.onboardingStatus?.remarks || "",
             bgvStatus: taggingData.bgvStatus?.bgvStatus || "",
             bgvRemark: taggingData.bgvStatus?.remarks || "",
+            candidateStatus: taggingData.candidateStatus?.candidateStatus || "",
+            candidateRemark: taggingData.candidateStatus?.remarks || "",
             tagDate: formatDate(taggingData.createDate) || "",
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
-            candidateStatus: taggingData.candidateStatus?.candidateStatus || "",
-            candidateRemark: taggingData.candidateStatus?.remarks || "",
-            candidateStatusDate:
-              formatDate(selectionData.candidateStatusDate) || "",
+            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
             evidence: selectionData.interviewEvidence || "",
             hsbcRoles: selectionData.hsbcRoles || "",
           });
+
           setSelectedSubLobTemp(selectionData.subLob);
+
+          // Populate uploadedFiles state with File-like objects
+          setUploadedFiles(
+            Array.isArray(selectionData.interviewEvidence)
+              ? selectionData.interviewEvidence.map((fileName) => new File([], fileName))
+              : []
+          );
         })
         .catch((error) => {
           console.error("Error fetching data by CandidateId:", error);
         });
     } else if (isVendor && phone) {
+      // Fetch data for vendor users
       Promise.all([
         getVendorCandidateById(phone).catch((err) => {
           console.error("Error fetching vendor data:", err);
           return {}; // Fallback to an empty object
         }),
         getSelectionDetailsByVendorCandidateId(phone).catch((err) => {
-          console.error("Error fetching vendor data:", err);
+          console.error("Error fetching selection details:", err);
           return {}; // Fallback to an empty object
         }),
         getTaggingDetailsByVendorCandidateId(phone).catch((err) => {
-          console.error("Error fetching vendor data:", err);
+          console.error("Error fetching tagging details:", err);
           return {}; // Fallback to an empty object
         }),
       ])
@@ -600,19 +583,26 @@ function UpdateDetails() {
             addRemark: taggingData.onboardingStatus?.remarks || "",
             bgvStatus: taggingData.bgvStatus?.bgvStatus || "",
             bgvRemark: taggingData.bgvStatus?.remarks || "",
+            candidateStatus: taggingData.candidateStatus?.candidateStatus || "",
+            candidateRemark: taggingData.candidateStatus?.remarks || "",
             tagDate: formatDate(taggingData.createDate) || "",
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
-            candidateStatus: taggingData.candidateStatus?.candidateStatus || "",
-            candidateRemark: taggingData.candidateStatus?.remarks || "",
-            candidateStatusDate:
-              formatDate(selectionData.candidateStatusDate) || "",
+            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
             evidence: selectionData.interviewEvidence || "",
             hsbcRoles: selectionData.hsbcRoles || "",
           });
+
           setSelectedSubLobTemp(selectionData.subLob);
+
+          // Populate uploadedFiles state with File-like objects
+          setUploadedFiles(
+            Array.isArray(selectionData.interviewEvidence)
+              ? selectionData.interviewEvidence.map((fileName) => new File([], fileName))
+              : []
+          );
         })
         .catch((error) => {
           console.error("Error fetching data by VendorCandidateId:", error);
@@ -621,7 +611,6 @@ function UpdateDetails() {
       setErrors(errors);
     }
   }, [psId, phone, isInternal, isExternal, isVendor]);
-
   return (
     <div className="w-full px-4 py-6">
       <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">
@@ -684,9 +673,8 @@ function UpdateDetails() {
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
                     required
-                    className={`p-2 border rounded w-full ${
-                      errors.vendorId ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
+                      }`}
                     disabled={isInternal}
                   >
                     <option value="">Select Vendor</option>
@@ -1138,11 +1126,52 @@ function UpdateDetails() {
                       type="file"
                       name="evidence"
                       accept=".png,.jpg,.jpeg,.doc,.docx"
-                      onChange={(e) =>
-                        setForm({ ...form, evidence: e.target.files[0] })
-                      }
+                      multiple
+                      onChange={handleFileChange}
                       className="p-2 border rounded w-full"
                     />
+                    <div className="mt-2">
+                      <p className="font-semibold">
+                        Uploaded Files ({uploadedFiles.length}):
+                      </p>
+                      <ul>
+                        {uploadedFiles.map((file, index) => (
+                          <li key={index} className="flex items-center space-x-4">
+                            <span>{file.name}</span>
+                            <button
+                              type="button"
+                              className="text-blue-500 border border-blue-500 rounded-full flex justify-center items-center p-1"
+                              onClick={() => {
+                                const url = URL.createObjectURL(file);
+                                window.open(url, "_blank");
+                              }}
+                            >
+                              <FaEye />
+                            </button>
+                            <button
+                              type="button"
+                              className="text-green-500 border border-green-500 rounded-full flex justify-center items-center p-1"
+                              onClick={() => {
+                                const url = URL.createObjectURL(file);
+                                const a = document.createElement("a");
+                                a.href = url;
+                                a.download = file.name;
+                                a.click();
+                              }}
+                            >
+                              <FaDownload />
+                            </button>
+                            <button
+                              type="button"
+                              className="text-red-500 border border-red-500 rounded-full flex justify-center items-center p-1"
+                              onClick={() => handleFileRemove(index)}
+                            >
+                              <ImCross />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </td>
                 </tr>
                 <tr className="flex flex-wrap md:flex-nowrap">
@@ -1181,88 +1210,87 @@ function UpdateDetails() {
                   </td>
                 </tr>
                 <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
-                    HSBC Roles:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <div ref={comboboxRef} style={{ position: "relative"}}>
-                    {/* Input field */}
-                    <input
-                      type="text"
-                      placeholder="Search or select a role..."
-                      value={form.hsbcRoles?.roleTitle}
-                      className={`p-2 border w-full ${
-                        errors.hsbcRoles ? "border-red-500" : ""
-                      }`}
-                      onChange={handleSearch}
-                      onFocus={() => setShowDropdown(true)} // Open dropdown on focus
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        border: "1px solid #ccc",
-                        borderRadius: "4px",
-                      }}
-                    />
-              
-                    {/* Dropdown options (conditionally rendered) */}
-                    {showDropdown && filteredRoles.length > 0 && (
-                      <ul
+                  <td className="p-2 w-full md:w-1/4">
+                    <label className="font-semibold">
+                      HSBC Roles:<span className="text-red-500">*</span>
+                    </label>
+                  </td>
+                  <td className="p-2 w-full md:w-1/4">
+                    <div ref={comboboxRef} style={{ position: "relative" }}>
+                      {/* Input field */}
+                      <input
+                        type="text"
+                        placeholder="Search or select a role..."
+                        value={form.hsbcRoles?.roleTitle}
+                        className={`p-2 border w-full ${errors.hsbcRoles ? "border-red-500" : ""
+                          }`}
+                        onChange={handleSearch}
+                        onFocus={() => setShowDropdown(true)} // Open dropdown on focus
                         style={{
-                          position: "absolute",
-                          top: "100%",
-                          left: "0",
                           width: "100%",
-                          maxHeight: "200px",
-                          overflowY: "auto",
-                          background: "#fff",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          zIndex: "1000",
-                          padding: "0",
-                          margin: "0",
-                          listStyleType: "none",
-                        }}
-                      >
-                        {filteredRoles.map((role) => (
-                          <li
-                            key={role.ref}
-                            onClick={() => handleSelect(role.roleTitle,role.ref)} // Properly update input value
-                            style={{
-                              padding: "8px",
-                              cursor: "pointer",
-                              borderBottom: "1px solid #f0f0f0",
-                            }}
-                          >
-                            {role.roleTitle}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-              
-                    {/* Fallback for no matches */}
-                    {showDropdown && filteredRoles.length === 0 && (
-                      <div
-                        style={{
                           padding: "8px",
-                          background: "#fff",
                           border: "1px solid #ccc",
                           borderRadius: "4px",
-                          marginTop: "4px",
                         }}
-                      >
-                        No matching roles found
-                      </div>
-                    )}
-                  </div>
+                      />
 
-                  {errors.lob && (
-                    <p className="text-red-500 text-sm">{errors.hsbcRoles}</p>
-                  )}
-                </td>
-                <td></td>
-              </tr>
+                      {/* Dropdown options (conditionally rendered) */}
+                      {showDropdown && filteredRoles.length > 0 && (
+                        <ul
+                          style={{
+                            position: "absolute",
+                            top: "100%",
+                            left: "0",
+                            width: "100%",
+                            maxHeight: "200px",
+                            overflowY: "auto",
+                            background: "#fff",
+                            border: "1px solid #ccc",
+                            borderRadius: "4px",
+                            zIndex: "1000",
+                            padding: "0",
+                            margin: "0",
+                            listStyleType: "none",
+                          }}
+                        >
+                          {filteredRoles.map((role) => (
+                            <li
+                              key={role.ref}
+                              onClick={() => handleSelect(role.roleTitle, role.ref)} // Properly update input value
+                              style={{
+                                padding: "8px",
+                                cursor: "pointer",
+                                borderBottom: "1px solid #f0f0f0",
+                              }}
+                            >
+                              {role.roleTitle}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {/* Fallback for no matches */}
+                      {showDropdown && filteredRoles.length === 0 && (
+                        <div
+                          style={{
+                            padding: "8px",
+                            background: "#fff",
+                            border: "1px solid #ccc",
+                            borderRadius: "4px",
+                            marginTop: "4px",
+                          }}
+                        >
+                          No matching roles found
+                        </div>
+                      )}
+                    </div>
+
+                    {errors.lob && (
+                      <p className="text-red-500 text-sm">{errors.hsbcRoles}</p>
+                    )}
+                  </td>
+                  <td></td>
+                </tr>
               </div>
 
               <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
