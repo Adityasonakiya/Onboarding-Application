@@ -25,10 +25,80 @@ const SelectionTrackerDashboard = ({ user }) => {
       const response = await fetch(`http://localhost:8080/selection-details/excel?createdBy=${id}`);
       const result = await response.json();
       setData(result);
-      handleExportToExcel(result, "ExcelData", "export.xlsx");
+      handleExportForMainExcel(result, "ExcelData", "export.xlsx");
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+  };
+
+  const handleExportForMainExcel = (data, sheetName, fileName) => {
+    if (!data || data.length === 0) {
+      alert("No data to export!");
+      return;
+    }
+  
+    // Mapping object to format the column headers
+    const columnMapping = {
+      onboardingStatus: "Onboarding Status",
+      ltiPsId: "Lti PsId",
+      firstName: "First Name",
+      lastName: "Last Name",
+      grade: "Grade",
+      location: "Location",
+      totalExperience: "Total Experience",
+      skill: "Skill",
+      hsbcSelectionDate: "HSBC Selection Date",
+      ltiJoiningDate: "Lti Joining Date",
+      createdDate: "Created Date",
+      selectionMonthYear: "Selection Month Year",
+      selectionAging: "Selection Aging",
+      category: "Category",
+      baseBu: "Base BU",
+      lobName: "LOB Name",
+      subLobName: "Sub LOB Name",
+      salesPoc: "Sales POC",
+      hsbcHiringManager: "HSBC Hiring Manager",
+      hsbcHead: "HSBC Head",
+      deliveryManager: "Delivery Manager",
+      irm: "IRM",
+      pricingModel: "Pricing Model",
+      hsbcCtoolId: "HSBC Ctool Id",
+      ctoolReceivedDate: "Ctool Received Date",
+      ctoolReceivedStatus: "Ctool Received Status",
+      ctoolAging: "Ctool Aging",
+      ctoolAgingWeekBucket: "Ctool Aging Week Bucket",
+      ctoolStartDate: "Ctool Start Date",
+      recruiterName: "Recruiter Name",
+      ctoolRate: "Ctool Rate",
+      proposedRate: "Proposed Rate",
+      hsbcRole: "HSBC Role",
+      roleGrade: "Role Grade",
+      finalBGVStatus: "Final BGV Status",
+      techSelectionStatus: "Tech Selection Status",
+      remarks: "Remarks",
+      interviewDocuments: "Interview Documents",
+      hsbcConfirmedDoj: "HSBC Confirmed DOJ",
+      agingSelectionWithDoj: "Aging Selection With DOJ",
+      hsbcDojAgingBucket: "HSBC DOJ Aging Bucket",
+      hsbcOnboardingDate: "HSBC Onboarding Date",
+      taggingDone: "Tagging Done",
+      techSelectionDone: "Tech Selection Done"
+    };
+  
+    // Transform data to use readable column headers
+    const formattedData = data.map(item => {
+      const newItem = {};
+      for (const key in item) {
+        newItem[columnMapping[key] || key] = item[key];
+      }
+      return newItem;
+    });
+  
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+    
+    XLSX.writeFile(workbook, fileName);
   };
 
   const handleExportToExcel = (data, sheetName, fileName) => {
