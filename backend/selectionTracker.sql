@@ -467,10 +467,6 @@ VALUES
 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108943, '2025-12-02', 'TM', 
 'Delhi', 130, 130, 'Nishant Sharma', NULL, 'Release', 
 '2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
--- (10830012, NULL, 'Mayuresh Nirantar', 14, 114, 10825932, 10713037, 10713037, '2025-03-21', 
--- 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108944, '2025-12-02', 'TM', 
--- 'Bangalore', 140, 140, 'Nishant Sharma', NULL, 'WIP', 
--- '2024-12-23', NULL, NULL, NULL, NOW(), NOW()),
 (10830013, NULL,NULL, 'Saber Sarode', 15, 115, 10825932, 10713037, 10713037, '2025-03-18', 
 'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108945, '2025-12-02', 'TM', 
 'Hyderabad', 150, 150, 'Nishant Sharma', NULL, 'Pending', 
@@ -491,10 +487,6 @@ VALUES
 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108949, '2025-12-02', 'TM', 
 'Bangalore', 190, 190, 'Nishant Sharma', NULL, 'Release', 
 '2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL);
--- (10830012, NULL, 'Saber Sarode', 9, 79, 10825932, 10713037, 10713037, '2025-01-20', 
--- 'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108950, '2025-12-02', 'TM', 
--- 'Hyderabad', 200, 200, 'Nishant Sharma', NULL, 'WIP', 
--- '2024-12-23', NULL, NULL, NULL, NOW(), NOW());
 
 
 INSERT INTO tagging_details 

@@ -811,8 +811,6 @@ function SelectionTracker() {
               }
             );
 
-            console.log("Vendor Response:", vendorResponse);
-
             if (!vendorResponse.ok) {
               const errorData = await vendorResponse.json();
               console.error("Vendor creation failed:", errorData.message);

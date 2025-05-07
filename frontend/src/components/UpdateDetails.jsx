@@ -289,7 +289,7 @@ function UpdateDetails() {
 
     const selectionDetails = {
       hsbcselectionDate: form.selectionDate,
-      baseBU: form.bu,
+      baseBu: form.bu,
       lob: form.lob,
       subLob: form.subLob,
       hsbchiringManager: form.hiringManager,
@@ -411,7 +411,7 @@ function UpdateDetails() {
             email: employee.mailID || "",
             phone: employee.phoneNumber,
             selectionDate: formatDate(selectionData.hsbcselectionDate),
-            bu: selectionData.baseBu,
+            bu: selectionData.baseBu || "BF",
             lob: selectionData.lob || "",
             subLob: selectionData.sublob || "",
             hiringManager: selectionData.hsbchiringManager || "",
@@ -486,7 +486,7 @@ function UpdateDetails() {
             skill: "", // Assuming skill is not available for candidate
             email: "", // Assuming email is not available for candidate
             selectionDate: formatDate(selectionData.hsbcselectionDate),
-            bu: selectionData.baseBu,
+            bu: selectionData.baseBu || "BF",
             lob: selectionData.lob || "",
             subLob: selectionData.sublob || "",
             hiringManager: selectionData.hsbchiringManager || "",
@@ -561,7 +561,7 @@ function UpdateDetails() {
             skill: "", // Assuming skill is not available for candidate
             email: "", // Assuming email is not available for candidate
             selectionDate: formatDate(selectionData.hsbcselectionDate),
-            bu: "BF",
+            bu: selectionData.baseBu || "BF",
             lob: selectionData.lob || "",
             subLob: selectionData.sublob || "",
             hiringManager: selectionData.hsbchiringManager || "",
