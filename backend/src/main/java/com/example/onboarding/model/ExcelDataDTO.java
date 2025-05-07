@@ -11,7 +11,7 @@ public class ExcelDataDTO {
 
     // Basic Information
     private String onboardingStatus;
-    private Integer ltiPsId;
+    private String ltiPsId;
     private String firstName;
     private String lastName;
     private String grade;
@@ -82,7 +82,7 @@ public class ExcelDataDTO {
     public ExcelDataDTO() {
     }
 
-    public ExcelDataDTO(String onboardingStatus, Integer ltiPsId, String firstName, String lastName, String grade,
+    public ExcelDataDTO(String onboardingStatus, String ltiPsId, String firstName, String lastName, String grade,
             String location, Double totalExperience, String skill, Date hsbcSelectionDate, Date ltiJoiningDate, Date createdDate,
             String selectionMonthYear, Long selectionAging, String category, String baseBu, String lobName, String subLobName, String salesPoc, String hsbcHiringManager,
             String hsbcHead, String deliveryManager, String irm, String pricingModel, Integer hsbcCtoolId, Date ctoolReceivedDate, String ctoolReceivedStatus,

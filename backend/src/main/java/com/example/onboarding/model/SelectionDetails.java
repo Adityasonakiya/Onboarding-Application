@@ -376,17 +376,19 @@ public class SelectionDetails {
     }
 
     public SelectionDetails(int selectionId, Employee employee, Candidate candidate, VendorCandidate vendorCandidate,
-            String deliveryManager, LOB lob, SubLOB subLob, String irm, HsbcRoles hsbcRoles, Employee createdBy,
-            Employee updatedBy, Date hSBCSelectionDate, String hSBCHiringManager, String hSBCHead, String salesPOC,
-            String pricingModel, Integer hSBCToolId, Date cToolReceivedDate, String cToolJobCategory, String cToolLocation,
-            Integer cToolRate, Integer cToolProposedRate, String recruiterName, String interviewEvidences,
-            String offerReleaseStatus, Date hSBCOnboardingDate, Date techSelectionDate, Date dOJReceivedDate,
-            Date lTIOnboardingDate, Date createDate, Date updateDate, Date candidateStatusDate, Date ctoolStartDate) {
+            String deliveryManager, String baseBu, LOB lob, SubLOB subLob, String irm, HsbcRoles hsbcRoles,
+            Employee createdBy, Employee updatedBy, Date hSBCSelectionDate, String hSBCHiringManager, String hSBCHead,
+            String salesPOC, String pricingModel, Integer hSBCToolId, Date cToolReceivedDate, String cToolJobCategory,
+            String cToolLocation, Integer cToolRate, Integer cToolProposedRate, String recruiterName,
+            String interviewEvidences, String offerReleaseStatus, Date hSBCOnboardingDate, Date techSelectionDate,
+            Date dOJReceivedDate, Date lTIOnboardingDate, Date createDate, Date updateDate, Date candidateStatusDate,
+            Date ctoolStartDate) {
         this.selectionId = selectionId;
         this.employee = employee;
         this.candidate = candidate;
         this.vendorCandidate = vendorCandidate;
         this.deliveryManager = deliveryManager;
+        this.baseBu = baseBu;
         this.lob = lob;
         this.subLob = subLob;
         this.irm = irm;
