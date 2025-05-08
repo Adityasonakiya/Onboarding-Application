@@ -68,15 +68,11 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
             + "LEFT JOIN BGVStatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id "
             + "WHERE selection.created_by = :createdBy "
-            + ")", countQuery = "SELECT COUNT(*) FROM ("
-            + "SELECT emp.psid AS id "
+            + ")", countQuery = "SELECT COUNT(*) FROM "
+            + "(SELECT emp.psid AS id "
             + "FROM employee emp "
             + "LEFT JOIN selection_details selection ON selection.ps_id = emp.psid "
-            + // Fixed
-            // emp.
-            // ->
-            // emp.psid
-            "WHERE selection.created_by = :createdBy "
+            + "WHERE selection.created_by = :createdBy "
             + "UNION ALL "
             + "SELECT cnd.candidate_id AS id "
             + "FROM candidate cnd "
@@ -120,7 +116,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
     List<SelectionDetails> findSelectionDetailsByFilter(@Param("filter") String filter);
 
 
-    @Query(value = "SELECT obs.onboarding_status AS onboardingStatus, emp.psid AS ltiPsId, emp.first_name AS firstName, emp.last_name AS lastName, "
+    @Query(value = "(SELECT obs.onboarding_status AS onboardingStatus, emp.psid AS ltiPsId, emp.first_name AS firstName, emp.last_name AS lastName, "
             + "emp.grade AS grade, emp.location AS location, emp.total_experience AS totalExperience, emp.skill AS skill, "
             + "Date(selection.hsbcselection_date) AS hsbcSelectionDate, CASE WHEN selection.ltionboarding_date IS NOT NULL THEN Date(selection.ltionboarding_date) ELSE NULL END AS ltiJoiningDate, Date(selection.create_date) AS createdDate, "
             + "DATE_FORMAT(selection.hsbcselection_date, '%Y-%m') AS selectionMonthYear ,CASE WHEN DATEDIFF(NOW(), selection.hsbcselection_date) >= 0 THEN DATEDIFF(NOW(), selection.hsbcselection_date) ELSE 0 END AS selectionAging, 'Internal' AS category, "
@@ -135,17 +131,17 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "CASE WHEN selection.dojreceived_date IS NOT NULL THEN FLOOR(DATEDIFF(selection.dojreceived_date, selection.hsbcselection_date) / 7) ELSE 0 END AS hsbcDojAgingBucket, "
             + "Date(selection.hsbconboarding_date) AS hsbcOnboardingDate, Date(td.create_date) AS taggingDone, "
             + "Date(selection.tech_selection_date) AS techSelectionDone "
-            + "FROM selection_details selection "
-            + "LEFT JOIN employee emp  ON selection.ps_id=emp.psid "
+            + "FROM  employee emp "
+            + "LEFT JOIN selection_details selection  ON selection.ps_id=emp.psid "
             + "LEFT JOIN lob lob ON selection.lob_id=lob.lob_id "
             + "LEFT JOIN sublob sublob ON selection.sub_lob_id = sublob.sublobid "
             + "LEFT JOIN hsbc_roles roles ON selection.hsbc_role_id = roles.ref "
             + "LEFT JOIN tagging_details td ON emp.psid=td.ps_id "
             + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id=obs.status_id "
             + "LEFT JOIN BGVStatus bgvs ON td.bgvstatus_id=bgvs.bgv_status_id "
-            + "WHERE selection.created_by = :createdBy "
+            + "WHERE selection.created_by = :createdBy ) "
             + "UNION "
-            + "SELECT obs.onboarding_status AS onboardingStatus, 'External' AS ltiPsId, cnd.first_name AS firstName, cnd.last_name AS lastName, '' AS grade, '' AS location, NULL AS totalExperience, '' AS skill, "
+            + "( SELECT obs.onboarding_status AS onboardingStatus, 'External' AS ltiPsId, cnd.first_name AS firstName, cnd.last_name AS lastName, '' AS grade, '' AS location, NULL AS totalExperience, '' AS skill, "
             + "Date(selection.hsbcselection_date) AS hsbcSelectionDate, CASE WHEN selection.ltionboarding_date IS NOT NULL THEN Date(selection.ltionboarding_date) ELSE NULL END AS ltiJoiningDate, Date(selection.create_date) AS createdDate, "
             + "DATE_FORMAT(selection.hsbcselection_date, '%Y-%m') AS selectionMonthYear , CASE WHEN DATEDIFF(NOW(), selection.hsbcselection_date) >= 0 THEN DATEDIFF(NOW(), selection.hsbcselection_date) ELSE 0 END as selectionAging, 'External' AS category, "
             + "selection.base_bu AS baseBu, lob.lob_name as lobName, sublob.sub_lob_name as subLobName, selection.salespoc AS salesPoc, selection.hsbchiring_manager AS hsbcHiringManager, "
@@ -159,17 +155,17 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "CASE WHEN selection.dojreceived_date IS NOT NULL THEN FLOOR(DATEDIFF(selection.dojreceived_date, selection.hsbcselection_date) / 7) ELSE 0 END AS hsbcDojAgingBucket, "
             + "Date(selection.hsbconboarding_date) AS hsbcOnboardingDate, Date(td.create_date) AS taggingDone, "
             + "Date(selection.tech_selection_date) AS techSelectionDone "
-            + "FROM selection_details selection "
-            + "LEFT JOIN candidate cnd ON selection.candidate_id=cnd.candidate_id "
+            + "FROM candidate cnd "
+            + "LEFT JOIN selection_details selection ON selection.candidate_id=cnd.candidate_id "
             + "LEFT JOIN lob lob ON selection.lob_id=lob.lob_id "
             + "LEFT JOIN sublob sublob ON selection.sub_lob_id = sublob.sublobid "
             + "LEFT JOIN hsbc_roles roles ON selection.hsbc_role_id = roles.ref "
             + "LEFT JOIN tagging_details td ON cnd.candidate_id=td.candidate_id "
             + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id=obs.status_id "
             + "LEFT JOIN BGVStatus bgvs ON td.bgvstatus_id=bgvs.bgv_status_id "
-            + "WHERE selection.created_by = :createdBy "
+            + "WHERE selection.created_by = :createdBy ) "
             + "UNION "
-            + "SELECT obs.onboarding_status AS onboardingStatus, v.vendor_name AS ltiPsId, vd.first_name AS firstName, vd.last_name AS lastName, '' AS grade, '' AS location, NULL AS totalExperience, '' AS skill, "
+            + "( SELECT obs.onboarding_status AS onboardingStatus, v.vendor_name AS ltiPsId, vd.first_name AS firstName, vd.last_name AS lastName, '' AS grade, '' AS location, NULL AS totalExperience, '' AS skill, "
             + "Date(selection.hsbcselection_date) AS hsbcSelectionDate, CASE WHEN selection.ltionboarding_date IS NOT NULL THEN Date(selection.ltionboarding_date) ELSE NULL END AS ltiJoiningDate, Date(selection.create_date) AS createdDate, "
             + "DATE_FORMAT(selection.hsbcselection_date, '%Y-%m') AS selectionMonthYear , CASE WHEN DATEDIFF(NOW(), selection.hsbcselection_date) >= 0 THEN DATEDIFF(NOW(), selection.hsbcselection_date) ELSE 0 END AS selectionAging, v.vendor_name AS category, "
             + "selection.base_bu AS baseBu, lob.lob_name as lobName, sublob.sub_lob_name as subLobName, selection.salespoc AS salesPoc, selection.hsbchiring_manager AS hsbcHiringManager, "
@@ -183,8 +179,8 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "CASE WHEN selection.dojreceived_date IS NOT NULL THEN FLOOR(DATEDIFF(selection.dojreceived_date, selection.hsbcselection_date) / 7) ELSE 0 END AS hsbcDojAgingBucket, "
             + "Date(selection.hsbconboarding_date) AS hsbcOnboardingDate, Date(td.create_date) AS taggingDone, "
             + "Date(selection.tech_selection_date) AS techSelectionDone "
-            + "FROM selection_details selection "
-            + "LEFT JOIN vendor_candidate vd ON selection.vendor_candidate_id=vd.vendor_candidate_id "
+            + "FROM vendor_candidate vd "
+            + "LEFT JOIN selection_details selection ON selection.vendor_candidate_id=vd.vendor_candidate_id "
             + "LEFT JOIN vendor v ON vd.vendor_id = v.vendor_id "
             + "LEFT JOIN lob lob ON selection.lob_id=lob.lob_id "
             + "LEFT JOIN sublob sublob ON selection.sub_lob_id = sublob.sublobid "
@@ -192,7 +188,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "LEFT JOIN tagging_details td ON vd.vendor_candidate_id=td.vendor_candidate_id "
             + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id=obs.status_id "
             + "LEFT JOIN BGVStatus bgvs ON td.bgvstatus_id=bgvs.bgv_status_id "
-            + "WHERE selection.created_by = :createdBy ",
+            + "WHERE selection.created_by = :createdBy )",
             nativeQuery = true)
     List<ExcelDataDTO> findCustomQueryResults(@Param("createdBy") Integer createdBy);
 
