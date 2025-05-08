@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class SelectionDetails {
@@ -65,7 +66,10 @@ public class SelectionDetails {
     private Integer CToolRate;
     private Integer CToolProposedRate;
     private String recruiterName;
-    private String interviewEvidences;
+
+    @OneToMany(mappedBy = "selectionDetails")
+    private EvidenceDTO interviewEvidences;
+
     private String offerReleaseStatus;
     private Date HSBCOnboardingDate;
     private Date techSelectionDate;
@@ -206,11 +210,11 @@ public class SelectionDetails {
         this.recruiterName = recruiterName;
     }
 
-    public String getInterviewEvidences() {
+    public EvidenceDTO getInterviewEvidences() {
         return interviewEvidences;
     }
 
-    public void setInterviewEvidences(String interviewEvidences) {
+    public void setInterviewEvidences(EvidenceDTO interviewEvidences) {
         this.interviewEvidences = interviewEvidences;
     }
 
@@ -380,7 +384,7 @@ public class SelectionDetails {
             Employee createdBy, Employee updatedBy, Date hSBCSelectionDate, String hSBCHiringManager, String hSBCHead,
             String salesPOC, String pricingModel, Integer hSBCToolId, Date cToolReceivedDate, String cToolJobCategory,
             String cToolLocation, Integer cToolRate, Integer cToolProposedRate, String recruiterName,
-            String interviewEvidences, String offerReleaseStatus, Date hSBCOnboardingDate, Date techSelectionDate,
+            EvidenceDTO interviewEvidences, String offerReleaseStatus, Date hSBCOnboardingDate, Date techSelectionDate,
             Date dOJReceivedDate, Date lTIOnboardingDate, Date createDate, Date updateDate, Date candidateStatusDate,
             Date ctoolStartDate) {
         this.selectionId = selectionId;

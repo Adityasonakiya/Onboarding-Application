@@ -246,16 +246,16 @@ VALUES
 INSERT INTO candidate
 (candidate_id,phone_number,vendor_id, first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date) 
 VALUES
-(1,1082980311, 1,'Harshita', NULL, 'Tripathi', '2024-09-23', 10713037, 10713037, '2024-09-23', NOW()),
-(2,1082058123,1, 'Komal', 'Vitthal', 'More', '2024-09-23', NULL, NULL, '2024-09-23', NOW()),
-(3,1083000611,1, 'Ankit', NULL, 'Jain', '2024-10-01', 10713037, 10713037, '2024-10-01', NOW()),
-(4,1083000721,1, 'Sneha', NULL, 'Reddy', '2024-10-05', 10713037, 10713037, '2024-10-05', NOW()),
-(5,1083000821,1, 'Rahul', NULL, 'Mehta', '2024-10-10', 10713037, 10713037, '2024-10-10', NOW()),
-(6,1083000911,1, 'Kiran', NULL, 'Patil', '2024-10-15', 10713037, 10713037, '2024-10-15', NOW()),
-(7,1083001023,1, 'Megha', NULL, 'Sharma', '2024-10-20', 10713037, 10713037, '2024-10-20', NOW()),
-(8,1083001121,1, 'Suresh', NULL, 'Kumar', '2024-10-25', 10713037, 10713037, '2024-10-25', NOW()),
-(9,1083001223,1, 'Anjali', NULL, 'Verma', '2024-10-30', 10713037, 10713037, '2024-10-30', NOW()),
-(10,1083001322,1, 'Vivek', NULL, 'Singh', '2024-11-05', 10713037, 10713037, '2024-11-05', NOW());
+(1,1082980311, 1,'Harshita', NULL, 'Tripathi', '2025-04-23', 10713037, 10713037, '2025-04-23', NOW()),
+(2,1082058123,1, 'Komal', 'Vitthal', 'More', '2025-04-23', 10713037, 10713037, '2025-04-23', NOW()),
+(3,1083000611,1, 'Ankit', NULL, 'Jain', '2025-10-01', 10713037, 10713037, '2025-10-01', NOW()),
+(4,1083000721,1, 'Sneha', NULL, 'Reddy', '2025-10-05', 10713037, 10713037, '2025-10-05', NOW()),
+(5,1083000821,1, 'Rahul', NULL, 'Mehta', '2025-10-10', 10713037, 10713037, '2025-10-10', NOW()),
+(6,1083000911,1, 'Kiran', NULL, 'Patil', '2025-10-15', 10713037, 10713037, '2025-10-15', NOW()),
+(7,1083001023,1, 'Megha', NULL, 'Sharma', '2025-10-20', 10713037, 10713037, '2025-10-20', NOW()),
+(8,1083001121,1, 'Suresh', NULL, 'Kumar', '2025-10-25', 10713037, 10713037, '2025-10-25', NOW()),
+(9,1083001223,1, 'Anjali', NULL, 'Verma', '2025-10-30', 10713037, 10713037, '2025-10-30', NOW()),
+(10,1083001322,1, 'Vivek', NULL, 'Singh', '2025-11-05', 10713037, 10713037, '2025-11-05', NOW());
 
 INSERT INTO vendor (vendor_id, vendor_name)
 VALUES
@@ -273,17 +273,17 @@ VALUES
 (12, 'Finsol');
 
 
--- INSERT INTO vendor_candidate (vendor_candidate_id,phone_number,vendor_id , first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date)
--- VALUES
--- (1,2321322222, 1, 'John', 'A.', 'Doe', '2025-01-15', 10713037, 10713037, '2025-01-01', '2025-01-10'),
--- (2,8887877788, 2, 'Jane', 'B.', 'Smith', '2025-01-20', 10713037, 10713037, '2025-01-02', '2025-01-11'),
+INSERT INTO vendor_candidate (vendor_candidate_id,phone_number,vendor_id , first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date)
+VALUES
+(1,2321322222, 1, 'John', 'A.', 'Doe', '2025-01-15', 10713037, 10713037, '2025-01-01', '2025-01-10'),
+(2,8887877788, 2, 'Jane', 'B.', 'Smith', '2025-01-20', 10713037, 10713037, '2025-01-02', '2025-01-11');
 -- (3,8787788898, 3, 'Michael', 'C.', 'Johnson', '2025-01-25', 10713037, 10713037, '2025-01-03', '2025-01-12'),
 -- (4,8979888778, 4, 'Emily', 'D.', 'Williams', '2025-02-01', 10713037, 10713037, '2025-01-04', '2025-01-13'),
 -- (5,8799989887, 5, 'David', 'E.', 'Brown', '2025-02-05', 10713037, 10713037, '2025-01-05', '2025-01-14'),
 -- (6,8979786678, 6, 'Sarah', 'F.', 'Jones', '2025-02-10', 10713037, 10713037, '2025-01-06', '2025-01-15'),
 -- (7,7879978898, 7, 'Daniel', 'G.', 'Garcia', '2025-02-15', 10713037, 10713037, '2025-01-07', '2025-01-16'),
 -- (8,8977897998, 8, 'Sophia', 'H.', 'Martinez', '2025-02-20', 10713037, 10713037, '2025-01-08', '2025-01-17'),
--- (9,8899978997, 9, 'James', 'I.', 'Hernandez', '2025-02-25', 10713037, 10713037, '2025-01-09', '2025-01-18'),
+-- (9,8899978997, 9, 'James', 'I.', 'Hernandez', '2025-02-25', 10713037, 10713037, '2025-01-04', '2025-01-18'),
 -- (10,9898980889, 10, 'Olivia', 'J.', 'Lopez', '2025-03-01', 10713037, 10713037, '2025-01-10', '2025-01-19'),
 -- (11,9889898988, 11, 'William', 'K.', 'Wilson', '2025-03-05', 10713037, 10713037, '2025-01-11', '2025-01-20');
 
@@ -400,117 +400,136 @@ VALUES
 (516,16,'WPB Technology Management',10713037,10713037,NOW(),NOW()),
 (616,16,'WPB UK Tech',10713037,10713037,NOW(),NOW());
 
-
 INSERT INTO selection_details 
-(ps_id, candidate_id,vendor_candidate_id, delivery_manager, lob_id, sub_lob_id, irm, created_by, updated_by, hsbcselection_date, 
+(ps_id, candidate_id, vendor_candidate_id, delivery_manager, lob_id, sub_lob_id, irm, created_by, updated_by, hsbcselection_date, 
 hsbchiring_manager, hsbchead, salespoc, pricing_model, hsbctool_id, ctool_received_date, ctool_job_category, 
-ctool_location, ctool_rate, ctool_proposed_rate, recruiter_name, interview_evidences, offer_release_status, 
-hsbconboarding_date, tech_selection_date, dojreceived_date, ltionboarding_date, create_date, update_date,candidate_status_date) 
+ctool_location, ctool_rate, ctool_proposed_rate, recruiter_name, interview_evidences, offer_release_status,base_bu,
+hsbconboarding_date, tech_selection_date, dojreceived_date, ltionboarding_date, create_date, update_date, candidate_status_date) 
 VALUES
-(10820984, NULL,NULL, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2023-03-05', 
-'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'T&M', 108933, '2023-12-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', NULL, 'Pending', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10715126, NULL,NULL, 'Abhijeet Sureshchandra More', 2, 22, 10825932, 10713037, 10713037, '2025-03-12', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108933, '2025-12-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', NULL, 'On Hold', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10825932, NULL,NULL, 'Aniruddha Deshpande', 6, 36, 10825932, 10713037, 10713037, '2025-03-18', 
-'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'T&M', 108933, '2025-12-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', NULL, 'Release', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(NULL, 1,NULL, 'Arvind Deogade', 1, 11, 10825932, 10713037, 10713037, '2025-03-17', 
-'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'FP', 108933, '2025-12-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', NULL, 'WIP', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10830001, NULL,NULL, 'Chinni Krishna Nakka', 4, 44, 10825932, 10713037, 10713037, '2025-03-08', 
-'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108934, '2025-12-02', 'TM', 
-'Mumbai', 40, 40, 'Nishant Sharma', NULL, 'Pending', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10830002, NULL,NULL, 'Mayuresh Nirantar', 4, 54, 10825932, 10713037, 10713037, '2025-03-15', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108935, '2025-12-02', 'TM', 
-'Bangalore', 50, 50, 'Nishant Sharma', NULL, 'On Hold', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10830003, NULL,NULL, 'Saber Sarode', 6, 66, 10825932, 10713037, 10713037, '2025-03-10', 
-'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108936, '2025-12-02', 'TM', 
-'Hyderabad', 60, 60, 'Nishant Sharma', NULL, 'Release', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-( 10830006,NULL,NULL, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2025-03-25', 
-'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'T&M', 108933, '2025-12-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', NULL, 'WIP', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10830004, NULL,NULL, 'Abhijeet Sureshchandra More', 6, 76, 10825932, 10713037, 10713037, '2025-03-14', 
-'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108937, '2025-12-02', 'TM', 
-'Chennai', 70, 70, 'Nishant Sharma', NULL, 'Pending', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10830005, NULL,NULL, 'Aniruddha Deshpande', 6, 86, 10825932, 10713037, 10713037, '2025-03-19', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108938, '2025-12-02', 'TM', 
-'Delhi', 80, 80, 'Nishant Sharma', NULL, 'On Hold', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10830007, NULL,NULL, 'Mayuresh Nirantar', 9, 19, 10825932, 10713037, 10713037, '2025-03-11', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108939, '2025-12-02', 'TM', 
-'Bangalore', 90, 90, 'Nishant Sharma', NULL, 'Release', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10830008, NULL,NULL, 'Saber Sarode', 10, 110, 10825932, 10713037, 10713037, '2025-03-20', 
-'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108940, '2025-12-02', 'TM', 
-'Hyderabad', 100, 100, 'Nishant Sharma', NULL, 'WIP', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(NULL, 6,NULL, 'Sachin Shaha', 11, 111, 10825932, 10713037, 10713037, '2025-03-13', 
-'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'T&M', 108941, '2025-12-02', 'TM', 
-'Pune', 110, 110, 'Nishant Sharma', NULL, 'Pending', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10830010, NULL,NULL, 'Abhijeet Sureshchandra More', 12, 112, 10825932, 10713037, 10713037, '2025-03-17', 
-'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108942, '2025-12-02', 'TM', 
-'Chennai', 120, 120, 'Nishant Sharma', NULL, 'On Hold', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10830011, NULL,NULL, 'Aniruddha Deshpande', 13, 113, 10825932, 10713037, 10713037, '2025-03-09', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108943, '2025-12-02', 'TM', 
-'Delhi', 130, 130, 'Nishant Sharma', NULL, 'Release', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10830013, NULL,NULL, 'Saber Sarode', 15, 115, 10825932, 10713037, 10713037, '2025-03-18', 
-'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108945, '2025-12-02', 'TM', 
-'Hyderabad', 150, 150, 'Nishant Sharma', NULL, 'Pending', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(NULL, 7,NULL, 'Sachin Shaha', 16, 116, 10825932, 10713037, 10713037, '2025-03-16', 
-'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'T&M', 108946, '2025-12-02', 'TM', 
-'Pune', 160, 160, 'Nishant Sharma', NULL, 'WIP', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10830014, NULL,NULL, 'Abhijeet Sureshchandra More', 16, 316, 10825932, 10713037, 10713037, '2025-02-28', 
-'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108947, '2025-12-02', 'TM', 
-'Chennai', 170, 170, 'Nishant Sharma', NULL, 'Pending', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(10830015, NULL,NULL, 'Aniruddha Deshpande', 15, 715, 10825932, 10713037, 10713037, '2025-02-15', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108948, '2025-12-02', 'TM', 
-'Delhi', 180, 180, 'Nishant Sharma', NULL, 'On Hold', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL),
-(NULL, 8,NULL, 'Mayuresh Nirantar', 8, 18, 10825932, 10713037, 10713037, '2025-01-30', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108949, '2025-12-02', 'TM', 
-'Bangalore', 190, 190, 'Nishant Sharma', NULL, 'Release', 
-'2024-12-23', NULL, NULL, NULL, NOW(), NOW(),NULL);
+(10820984, NULL, NULL, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2023-03-05', 
+'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'T&M', 108933, '2023-04-02', 'TM', 
+'Pune', 30, 30, 'Nishant Sharma', NULL, 'Pending','BFS', 
+'2025-04-23', '2025-04-23', '2025-04-23', '2023-02-28', NOW(), NOW(), NULL),
+
+(10715126, NULL, NULL, 'Abhijeet Sureshchandra More', 2, 22, 10825932, 10713037, 10713037, '2025-03-12', 
+'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108933, '2025-04-02', 'TM', 
+'Pune', 30, 30, 'Nishant Sharma', NULL, 'On Hold','BFS',  
+NULL, NULL, NULL, '2025-04-23', NOW(), NOW(), NULL),
+
+(10825932, NULL, NULL, 'Aniruddha Deshpande', 6, 36, 10825932, 10713037, 10713037, '2025-03-18', 
+'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'T&M', 108933, '2025-04-02', 'TM', 
+'Pune', 30, 30, 'Nishant Sharma', NULL, 'Release', 'BFS', 
+'2025-04-23', '2025-04-23', '2025-04-23', '2025-03-01', NOW(), NOW(), NULL),
+
+(NULL, 2, NULL, 'Arvind Deogade', 1, 11, 10825932, 10713037, 10713037, '2025-03-17', 
+'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'FP', 108933, '2025-04-02', 'TM', 
+'Pune', 30, 30, 'Nishant Sharma', NULL, 'WIP', 'BFS', 
+NULL, NULL, NULL, NULL, NOW(), NOW(), NULL),
+
+(10830001, NULL, NULL, 'Chinni Krishna Nakka', 4, 44, 10825932, 10713037, 10713037, '2025-03-08', 
+'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108934, '2025-04-02', 'TM', 
+'Mumbai', 40, 40, 'Nishant Sharma', NULL, 'Pending', 'BFS', 
+'2025-9-23', '2025-9-18', '2025-9-21', '2025-02-28', NOW(), NOW(), NULL),
+
+(10830002, NULL, NULL, 'Mayuresh Nirantar', 4, 54, 10825932, 10713037, 10713037, '2025-03-15', 
+'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108935, '2025-04-02', 'TM', 
+'Bangalore', 50, 50, 'Nishant Sharma', NULL, 'On Hold', 'BFS', 
+'2025-03-20', '2025-03-20', '2025-03-20', '2025-03-01', NOW(), NOW(), NULL),
+
+(10830003, NULL, NULL, 'Saber Sarode', 6, 66, 10825932, 10713037, 10713037, '2025-03-10', 
+'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108936, '2025-04-02', 'TM', 
+'Hyderabad', 60, 60, 'Nishant Sharma', NULL, 'Release', 'BFS', 
+'2025-03-23', '2025-02-23', '2025-03-23', '2025-03-01', NOW(), NOW(), NULL),
+
+(10830006, NULL, NULL, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2025-03-25', 
+'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'T&M', 108933, '2025-04-02', 'TM', 
+'Pune', 30, 30, 'Nishant Sharma', NULL, 'WIP', 'BFS', 
+'2025-03-30', '2025-03-30', '2025-03-30', '2025-03-01', NOW(), NOW(), NULL),
+
+(10830004, NULL, NULL, 'Abhijeet Sureshchandra More', 6, 76, 10825932, 10713037, 10713037, '2025-03-14', 
+'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108937, '2025-04-02', 'TM', 
+'Chennai', 70, 70, 'Nishant Sharma', NULL, 'Pending', 'BFS', 
+'2025-02-23', '2025-01-23', '2025-02-23', '2025-03-01', NOW(), NOW(), NULL),
+
+(10830005, NULL, NULL, 'Aniruddha Deshpande', 6, 86, 10825932, 10713037, 10713037, '2025-03-19', 
+'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108938, '2025-04-02', 'TM', 
+'Delhi', 80, 80, 'Nishant Sharma', NULL, 'On Hold', 'BFS', 
+'2025-03-22', '2025-03-22', '2025-03-22', '2025-03-01', NOW(), NOW(), NULL),
+
+(10830007, NULL, NULL, 'Mayuresh Nirantar', 9, 19, 10825932, 10713037, 10713037, '2025-03-11', 
+'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108939, '2025-04-02', 'TM', 
+'Bangalore', 90, 90, 'Nishant Sharma', NULL, 'Release', 'BFS', 
+'2025-03-15', '2025-03-15', '2025-03-15', '2025-03-01', NOW(), NOW(), NULL),
+
+(10830008, NULL, NULL, 'Saber Sarode', 10, 110, 10825932, 10713037, 10713037, '2025-03-20', 
+'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108940, '2025-04-02', 'TM', 
+'Hyderabad', 100, 100, 'Nishant Sharma', NULL, 'WIP', 'BFS', 
+'2025-03-25', '2025-03-25', '2025-03-25', '2025-03-01', NOW(), NOW(), NULL),
+
+(NULL, 6, NULL, 'Sachin Shaha', 11, 111, 10825932, 10713037, 10713037, '2025-03-13', 
+'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'T&M', 108941, '2025-04-02', 'TM', 
+'Pune', 110, 110, 'Nishant Sharma', NULL, 'Pending', 'BFS', 
+NULL, NULL, NULL, NULL, NOW(), NOW(), NULL),
+
+(10830010, NULL, NULL, 'Abhijeet Sureshchandra More', 12, 112, 10825932, 10713037, 10713037, '2025-03-17', 
+'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108942, '2025-04-02', 'TM', 
+'Chennai', 120, 120, 'Nishant Sharma', NULL, 'On Hold', 'BFS', 
+'2025-03-22', '2025-03-22', '2025-03-22', '2025-03-01', NOW(), NOW(), NULL),
+
+(10830011, NULL, NULL, 'Aniruddha Deshpande', 13, 113, 10825932, 10713037, 10713037, '2025-03-04', 
+'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108943, '2025-04-02', 'TM', 
+'Delhi', 130, 130, 'Nishant Sharma', NULL, 'Release', 'BFS', 
+'2025-03-15', '2025-03-15', '2025-03-15', '2025-03-01', NOW(), NOW(), NULL),
+
+(10830013, NULL, NULL, 'Saber Sarode', 15, 115, 10825932, 10713037, 10713037, '2025-03-18', 
+'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108945, '2025-04-02', 'TM', 
+'Hyderabad', 150, 150, 'Nishant Sharma', NULL, 'Pending', 'BFS', 
+'2025-03-25', '2025-03-25', '2025-03-25', '2025-03-01', NOW(), NOW(), NULL),
+
+(NULL, 7, NULL, 'Sachin Shaha', 16, 116, 10825932, 10713037, 10713037, '2025-03-16', 
+'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'T&M', 108946, '2025-04-02', 'TM', 
+'Pune', 160, 160, 'Nishant Sharma', NULL, 'WIP', 'BFS', 
+NULL, NULL, NULL, NULL, NOW(), NOW(), NULL),
+
+(10830014, NULL, NULL, 'Abhijeet Sureshchandra More', 16, 316, 10825932, 10713037, 10713037, '2025-02-28', 
+'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108947, '2025-04-02', 'TM', 
+'Chennai', 170, 170, 'Nishant Sharma', NULL, 'Pending', 'BFS', 
+'2025-03-05', '2025-02-05', '2025-02-30', '2025-02-20', NOW(), NOW(), NULL),
+
+(10830015, NULL, NULL, 'Aniruddha Deshpande', 15, 715, 10825932, 10713037, 10713037, '2025-02-15', 
+'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108948, '2025-04-02', 'TM', 
+'Delhi', 180, 180, 'Nishant Sharma', NULL, 'On Hold', 'BFS', 
+'2025-02-20', '2025-02-20', '2025-02-20', '2025-02-10', NOW(), NOW(), NULL),
+
+(NULL, 8, NULL, 'Mayuresh Nirantar', 8, 18, 10825932, 10713037, 10713037, '2025-01-30', 
+'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108949, '2025-04-02', 'TM', 
+'Bangalore', 190, 190, 'Nishant Sharma', NULL, 'Release', 'BFS', 
+NULL, NULL, '2025-01-20',NULL , NOW(), NOW(), NULL);
 
 
 INSERT INTO tagging_details 
-(ps_id,candidate_id, onboarding_status_id, bgvstatus_id, created_by_psid, updated_by_psid, status_remarks, create_date, update_date) 
+(ps_id, candidate_id, onboarding_status_id, bgvstatus_id, created_by_psid, updated_by_psid, status_remarks, create_date, update_date) 
 VALUES
-(10820984, NULL, 1, 2, 10713037, 10713037, 'Initial tagging', NOW(), '2025-03-03'),
-(NULL, 1, 2, 3, 10713037, 10713037, 'BGV in progress', NOW(), '2025-03-06'),
-(10821014, NULL, 3, 2, 10713037, 10713037, 'Minor discrepancy found', NOW(), '2025-03-18'),
-(10715126, NULL, 4, 4, 10713037, 10713037, 'Major discrepancy found', NOW(), '2025-03-19'),
-(10825932, NULL, 5, 6, 10713037, 10713037, 'Offer yet to be released', NOW(), '2025-03-11'),
-(10830001, NULL, 6, 6, 10713037, 10713037, 'Interim cleared', NOW(), '2025-03-15'),
-(10830002, NULL, 7, 3, 10713037, 10713037, 'Pending with employee', NOW(), '2025-03-12'),
-(10830003, NULL, 8, 5, 10713037, 10713037, 'BGV initiated', NOW(), '2025-03-17'),
-( 10830006,NULL, 9, 2, 10713037, 10713037, 'BGV in progress', NOW(), '2025-03-05'),
-(10830004, NULL, 10, 7, 10713037, 10713037, 'Minor discrepancy found', NOW(), '2025-03-14'),
-(10830005, NULL, 1, 2, 10713037, 10713037, 'Initial tagging', NOW(), '2025-03-11'),
-( 10830007,NULL, 2, 3, 10713037, 10713037, 'BGV in progress', NOW(), '2025-03-05'),
-(10830008, NULL, 3, 2, 10713037, 10713037, 'Minor discrepancy found', NOW(), '2025-03-17'),
-(10830009, NULL, 4, 4, 10713037, 10713037, 'Major discrepancy found', NOW(), '2025-02-28'),
-(10830010, NULL, 5, 6, 10713037, 10713037, 'Offer yet to be released', NOW(), '2025-01-01'),
-(10830011, NULL, 6, 6, 10713037, 10713037, 'Interim cleared', NOW(), '2025-01-22'),
--- (10830012, NULL, 7, 3, 10713037, 10713037, 'Pending with employee', NOW(), '2025-01-05'),
-(10830013, NULL, 8, 5, 10713037, 10713037, 'BGV initiated', NOW(), '2025-02-11'),
-(10830014, NULL, 10, 7, 10713037, 10713037, 'Minor discrepancy found', NOW(), '2025-02-02');
+(10820984, NULL, 4, 2, 10713037, 10713037, 'BGV Initiated', NOW(), NOW()),
+(NULL, 1, 4, 3, 10713037, 10713037, 'BGV in progress', NOW(), NOW()),
+(10821014, NULL, 4, 2, 10713037, 10713037, 'Minor discrepancy found', NOW(), NOW()),
+(10715126, NULL, 5, 4, 10713037, 10713037, 'Major discrepancy found', NOW(), NOW()),
+(10825932, NULL, 6, 6, 10713037, 10713037, 'Offer yet to be released', NOW(), NOW()),
+(10830001, NULL, 5, 6, 10713037, 10713037, 'Interim cleared', NOW(), NOW()),
+(10830002, NULL, 6, 3, 10713037, 10713037, 'Pending with employee', NOW(), NOW()),
+(10830003, NULL, 4, 5, 10713037, 10713037, 'BGV initiated', NOW(), NOW()),
+(10830006, NULL, 5, 2, 10713037, 10713037, 'BGV in progress', NOW(), NOW()),
+(10830004, NULL, 6, 7, 10713037, 10713037, 'Minor discrepancy found', NOW(), NOW()),
+(10830005, NULL, 4, 2, 10713037, 10713037, 'Initial tagging', NOW(), NOW()),
+(10830007, NULL, 4, 3, 10713037, 10713037, 'BGV in progress', NOW(), NOW()),
+(10830008, NULL, 4, 2, 10713037, 10713037, 'Minor discrepancy found', NOW(), NOW()),
+(10830009, NULL, 5, 4, 10713037, 10713037, 'Major discrepancy found', NOW(), NOW()),
+(10830010, NULL, 5, 6, 10713037, 10713037, 'Offer yet to be released', NOW(), NOW()),
+(10830011, NULL, 6, 6, 10713037, 10713037, 'Interim cleared', NOW(), NOW()),
+(10830013, NULL, 4, 5, 10713037, 10713037, 'BGV initiated', NOW(), NOW()),
+(10830014, NULL, 5, 7, 10713037, 10713037, 'Minor discrepancy found', NOW(), NOW()),
+(10830015, NULL, 6, 2, 10713037, 10713037, 'BGV in progress', NOW(), NOW()),
+(NULL, 8, 4, 3, 10713037, 10713037, 'BGV in progress', NOW(), NOW());
 
 
 
