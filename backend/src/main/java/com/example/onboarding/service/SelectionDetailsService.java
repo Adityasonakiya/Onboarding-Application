@@ -1,5 +1,6 @@
 package com.example.onboarding.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.example.onboarding.model.AwaitedCasesDTO;
 import com.example.onboarding.model.CtoolDto;
 import com.example.onboarding.model.EmployeeCandidateDTO;
+import com.example.onboarding.model.EvidenceDTO;
 import com.example.onboarding.model.ExcelDataDTO;
 import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
@@ -74,7 +76,16 @@ public class SelectionDetailsService {
             existingDetails.setCToolRate(updatedDetails.getCToolRate());
             existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
             existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
-            existingDetails.setInterviewEvidences(updatedDetails.getInterviewEvidences());
+
+            // Update interviewEvidences collection
+            if (existingDetails.getInterviewEvidences() == null) {
+                existingDetails.setInterviewEvidences(new ArrayList<>()); // Initialize if null
+            }
+            existingDetails.getInterviewEvidences().clear(); // Clear the existing collection
+            for (EvidenceDTO evidence : updatedDetails.getInterviewEvidences()) {
+                evidence.setSelectionDetails(existingDetails); // Set the parent reference
+                existingDetails.getInterviewEvidences().add(evidence); // Add the new evidence
+            }
             existingDetails.setOfferReleaseStatus(updatedDetails.getOfferReleaseStatus());
             existingDetails.setHSBCOnboardingDate(updatedDetails.getHSBCOnboardingDate());
             existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
@@ -109,7 +120,16 @@ public class SelectionDetailsService {
             existingDetails.setCToolRate(updatedDetails.getCToolRate());
             existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
             existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
-            existingDetails.setInterviewEvidences(updatedDetails.getInterviewEvidences());
+
+            // Update interviewEvidences collection
+            if (existingDetails.getInterviewEvidences() == null) {
+                existingDetails.setInterviewEvidences(new ArrayList<>()); // Initialize if null
+            }
+            existingDetails.getInterviewEvidences().clear(); // Clear the existing collection
+            for (EvidenceDTO evidence : updatedDetails.getInterviewEvidences()) {
+                evidence.setSelectionDetails(existingDetails); // Set the parent reference
+                existingDetails.getInterviewEvidences().add(evidence); // Add the new evidence
+            }
             existingDetails.setOfferReleaseStatus(updatedDetails.getOfferReleaseStatus());
             existingDetails.setHSBCOnboardingDate(updatedDetails.getHSBCOnboardingDate());
             existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
@@ -145,7 +165,16 @@ public class SelectionDetailsService {
             existingDetails.setCToolRate(updatedDetails.getCToolRate());
             existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
             existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
-            existingDetails.setInterviewEvidences(updatedDetails.getInterviewEvidences());
+
+            // Update interviewEvidences collection
+            if (existingDetails.getInterviewEvidences() == null) {
+                existingDetails.setInterviewEvidences(new ArrayList<>()); // Initialize if null
+            }
+            existingDetails.getInterviewEvidences().clear(); // Clear the existing collection
+            for (EvidenceDTO evidence : updatedDetails.getInterviewEvidences()) {
+                evidence.setSelectionDetails(existingDetails); // Set the parent reference
+                existingDetails.getInterviewEvidences().add(evidence); // Add the new evidence
+            }
             existingDetails.setOfferReleaseStatus(updatedDetails.getOfferReleaseStatus());
             existingDetails.setHSBCOnboardingDate(updatedDetails.getHSBCOnboardingDate());
             existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
@@ -241,8 +270,8 @@ public class SelectionDetailsService {
         return selectionDetailsRepository.findCtool(filter);
     }
 
-    public List<ExcelDataDTO> findExcelData(Integer createdBy){
-        System.out.println("Result"+ createdBy);
+    public List<ExcelDataDTO> findExcelData(Integer createdBy) {
+        System.out.println("Result" + createdBy);
         System.out.println(selectionDetailsRepository.findCustomQueryResults(createdBy));
         return selectionDetailsRepository.findCustomQueryResults(createdBy);
     }
