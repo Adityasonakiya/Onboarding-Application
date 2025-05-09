@@ -1,7 +1,10 @@
 package com.example.onboarding.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -67,8 +70,8 @@ public class SelectionDetails {
     private Integer CToolProposedRate;
     private String recruiterName;
 
-    @OneToMany(mappedBy = "selectionDetails")
-    private EvidenceDTO interviewEvidences;
+    @OneToMany(mappedBy = "selectionDetails", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EvidenceDTO> interviewEvidences = new ArrayList<>();
 
     private String offerReleaseStatus;
     private Date HSBCOnboardingDate;
@@ -80,302 +83,6 @@ public class SelectionDetails {
     private Date candidateStatusDate;
     private Date ctoolStartDate;
 
-    // Getters and Setters
-
-    public Date getCtoolStartDate() {
-        return ctoolStartDate;
-    }
-
-    public void setCtoolStartDate(Date ctoolStartDate) {
-        this.ctoolStartDate = ctoolStartDate;
-    }
-
-    public Date getCandidateStatusDate() {
-        return candidateStatusDate;
-    }
-
-    public void setCandidateStatusDate(Date candidateStatusDate) {
-        this.candidateStatusDate = candidateStatusDate;
-    }
-
-    public int getSelectionId() {
-        return selectionId;
-    }
-
-    public void setSelectionId(int selectionId) {
-        this.selectionId = selectionId;
-    }
-
-    public Date getHSBCSelectionDate() {
-        return HSBCSelectionDate;
-    }
-
-    public void setHSBCSelectionDate(Date HSBCSelectionDate) {
-        this.HSBCSelectionDate = HSBCSelectionDate;
-    }
-
-    public String getHSBCHiringManager() {
-        return HSBCHiringManager;
-    }
-
-    public void setHSBCHiringManager(String HSBCHiringManager) {
-        this.HSBCHiringManager = HSBCHiringManager;
-    }
-
-    public String getHSBCHead() {
-        return HSBCHead;
-    }
-
-    public void setHSBCHead(String HSBCHead) {
-        this.HSBCHead = HSBCHead;
-    }
-    
-    public String getSalesPOC() {
-        return salesPOC;
-    }
-
-    public void setSalesPOC(String salesPOC) {
-        this.salesPOC = salesPOC;
-    }
-
-    public String getPricingModel() {
-        return PricingModel;
-    }
-
-    public void setPricingModel(String PricingModel) {
-        this.PricingModel = PricingModel;
-    }
-
-    public Integer getHSBCToolId() {
-        return HSBCToolId;
-    }
-
-    public void setHSBCToolId(Integer HSBCToolId) {
-        this.HSBCToolId = HSBCToolId;
-    }
-
-    public Date getCToolReceivedDate() {
-        return CToolReceivedDate;
-    }
-
-    public void setCToolReceivedDate(Date CToolReceivedDate) {
-        this.CToolReceivedDate = CToolReceivedDate;
-    }
-
-    public String getCToolJobCategory() {
-        return CToolJobCategory;
-    }
-
-    public void setCToolJobCategory(String CToolJobCategory) {
-        this.CToolJobCategory = CToolJobCategory;
-    }
-
-    public String getCToolLocation() {
-        return CToolLocation;
-    }
-
-    public void setCToolLocation(String cToolLocation) {
-        CToolLocation = cToolLocation;
-    }
-
-    public Integer getCToolRate() {
-        return CToolRate;
-    }
-
-    public String getBaseBu() {
-        return baseBu;
-    }
-
-    public void setBaseBu(String baseBu) {
-        this.baseBu = baseBu;
-    }
-
-    public void setCToolRate(Integer cToolRate) {
-        CToolRate = cToolRate;
-    }
-
-    public Integer getCToolProposedRate() {
-        return CToolProposedRate;
-    }
-
-    public void setCToolProposedRate(Integer CToolProposedRate) {
-        this.CToolProposedRate = CToolProposedRate;
-    }
-
-    public String getRecruiterName() {
-        return recruiterName;
-    }
-
-    public void setRecruiterName(String recruiterName) {
-        this.recruiterName = recruiterName;
-    }
-
-    public EvidenceDTO getInterviewEvidences() {
-        return interviewEvidences;
-    }
-
-    public void setInterviewEvidences(EvidenceDTO interviewEvidences) {
-        this.interviewEvidences = interviewEvidences;
-    }
-
-    public String getOfferReleaseStatus() {
-        return offerReleaseStatus;
-    }
-
-    public void setOfferReleaseStatus(String offerReleaseStatus) {
-        this.offerReleaseStatus = offerReleaseStatus;
-    }
-
-    public Date getHSBCOnboardingDate() {
-        return HSBCOnboardingDate;
-    }
-
-    public void setHSBCOnboardingDate(Date HSBCOnboardingDate) {
-        this.HSBCOnboardingDate = HSBCOnboardingDate;
-    }
-
-    public Date getTechSelectionDate() {
-        return techSelectionDate;
-    }
-
-    public void setTechSelectionDate(Date techSelectionDate) {
-        this.techSelectionDate = techSelectionDate;
-    }
-
-    public Date getDOJReceivedDate() {
-        return DOJReceivedDate;
-    }
-
-    public void setDOJReceivedDate(Date DOJReceivedDate) {
-        this.DOJReceivedDate = DOJReceivedDate;
-    }
-
-    public Date getLTIOnboardingDate() {
-        return LTIOnboardingDate;
-    }
-
-    public void setLTIOnboardingDate(Date LTIOnboardingDate) {
-        this.LTIOnboardingDate = LTIOnboardingDate;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public Candidate getCandidate() {
-        return candidate;
-    }
-
-    public void setCandidate(Candidate candidate) {
-        this.candidate = candidate;
-    }
-
-    public LOB getLob() {
-        return lob;
-    }
-
-    public void setLob(LOB lob) {
-        this.lob = lob;
-    }
-
-    public SubLOB getSubLob() {
-        return subLob;
-    }
-
-    public void setSubLob(SubLOB subLob) {
-        this.subLob = subLob;
-    }
-
-    public String getIrm() {
-        return irm;
-    }
-
-    public void setIrm(String irm) {
-        this.irm = irm;
-    }
-
-    public Employee getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Employee createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Employee getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Employee updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public void setDeliveryManager(String deliveryManager) {
-        this.deliveryManager = deliveryManager;
-    }
-
-    public String getDeliveryManager() {
-        return deliveryManager;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    @Override
-    public String toString() {
-        return "SelectionDetails [selectionId=" + selectionId + ", employee=" + employee + ", candidate=" + candidate+ ", vendor candidate=" + vendorCandidate
-                + ", deliveryManager=" + deliveryManager + ", lob=" + lob + ", subLob=" + subLob + ", irm=" + irm
-                + ", createdBy=" + createdBy + ", updatedBy=" + updatedBy + ", HSBCSelectionDate=" + HSBCSelectionDate
-                + ", HSBCHiringManager=" + HSBCHiringManager + ", HSBCHead=" + HSBCHead + ", salesPOC=" + salesPOC
-                + ", PricingModel=" + PricingModel + ", HSBCToolId=" + HSBCToolId + ", CToolReceivedDate="
-                + CToolReceivedDate + ", CToolJobCategory=" + CToolJobCategory + ", CToolLocation=" + CToolLocation
-                + ", CToolRate=" + CToolRate + ", CToolProposedRate=" + CToolProposedRate + ", recruiterName="
-                + recruiterName + ", InterviewEvidences=" + interviewEvidences + ", offerReleaseStatus="
-                + offerReleaseStatus + ", HSBCOnboardingDate=" + HSBCOnboardingDate + ", techSelectionDate="
-                + techSelectionDate + ", DOJReceivedDate=" + DOJReceivedDate + ", LTIOnboardingDate="
-                + LTIOnboardingDate + ", createDate=" + createDate + ", updateDate=" + updateDate
-                + ", getSelectionId()=" + getSelectionId() + ", getHSBCSelectionDate()=" + getHSBCSelectionDate()
-                + ", getHSBCHiringManager()=" + getHSBCHiringManager() + ", getHSBCHead()=" + getHSBCHead()
-                + ", getClass()=" + getClass() + ", getSalesPOC()=" + getSalesPOC() + ", getPricingModel()="
-                + getPricingModel() + getHSBCToolId() + ", getCToolReceivedDate()="
-                + getCToolReceivedDate() + ", getCToolJobCategory()=" + getCToolJobCategory() + ", getCToolLocation()="
-                + getCToolLocation() + ", getCToolRate()=" + getCToolRate() + ", getCToolProposedRate()="
-                + getCToolProposedRate() + ", getRecruiterName()=" + getRecruiterName() + ", getInterviewEvidences()="
-                + getInterviewEvidences() + ", hashCode()=" + hashCode() + ", getOfferReleaseStatus()="
-                + getOfferReleaseStatus() + ", getHSBCOnboardingDate()=" + getHSBCOnboardingDate()
-                + ", getTechSelectionDate()=" + getTechSelectionDate() + ", getDOJReceivedDate()="
-                + getDOJReceivedDate() + ", getLTIOnboardingDate()=" + getLTIOnboardingDate() + ", getEmployee()="
-                + getEmployee() + ", getCandidate()=" + getCandidate() + ", getLob()=" + getLob() + ", getSubLob()="
-                + getSubLob() + ", getIrm()=" + getIrm() + ", getCreatedBy()=" + getCreatedBy() + ", getUpdatedBy()="
-                + getUpdatedBy() + ", getDeliveryManager()=" + getDeliveryManager() + ", getCreateDate()="
-                + getCreateDate() + ", getUpdateDate()=" + getUpdateDate() + ", toString()=" + super.toString() + "]";
-    }
-
-    public VendorCandidate getVendorCandidate() {
-        return vendorCandidate;
-    }
-
-    public void setVendorCandidate(VendorCandidate vendorCandidate) {
-        this.vendorCandidate = vendorCandidate;
-    }
-
     public SelectionDetails() {
     }
 
@@ -384,9 +91,9 @@ public class SelectionDetails {
             Employee createdBy, Employee updatedBy, Date hSBCSelectionDate, String hSBCHiringManager, String hSBCHead,
             String salesPOC, String pricingModel, Integer hSBCToolId, Date cToolReceivedDate, String cToolJobCategory,
             String cToolLocation, Integer cToolRate, Integer cToolProposedRate, String recruiterName,
-            EvidenceDTO interviewEvidences, String offerReleaseStatus, Date hSBCOnboardingDate, Date techSelectionDate,
-            Date dOJReceivedDate, Date lTIOnboardingDate, Date createDate, Date updateDate, Date candidateStatusDate,
-            Date ctoolStartDate) {
+            List<EvidenceDTO> interviewEvidences, String offerReleaseStatus, Date hSBCOnboardingDate,
+            Date techSelectionDate, Date dOJReceivedDate, Date lTIOnboardingDate, Date createDate, Date updateDate,
+            Date candidateStatusDate, Date ctoolStartDate) {
         this.selectionId = selectionId;
         this.employee = employee;
         this.candidate = candidate;
@@ -423,6 +130,78 @@ public class SelectionDetails {
         this.ctoolStartDate = ctoolStartDate;
     }
 
+    public int getSelectionId() {
+        return selectionId;
+    }
+
+    public void setSelectionId(int selectionId) {
+        this.selectionId = selectionId;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Candidate getCandidate() {
+        return candidate;
+    }
+
+    public void setCandidate(Candidate candidate) {
+        this.candidate = candidate;
+    }
+
+    public VendorCandidate getVendorCandidate() {
+        return vendorCandidate;
+    }
+
+    public void setVendorCandidate(VendorCandidate vendorCandidate) {
+        this.vendorCandidate = vendorCandidate;
+    }
+
+    public String getDeliveryManager() {
+        return deliveryManager;
+    }
+
+    public void setDeliveryManager(String deliveryManager) {
+        this.deliveryManager = deliveryManager;
+    }
+
+    public String getBaseBu() {
+        return baseBu;
+    }
+
+    public void setBaseBu(String baseBu) {
+        this.baseBu = baseBu;
+    }
+
+    public LOB getLob() {
+        return lob;
+    }
+
+    public void setLob(LOB lob) {
+        this.lob = lob;
+    }
+
+    public SubLOB getSubLob() {
+        return subLob;
+    }
+
+    public void setSubLob(SubLOB subLob) {
+        this.subLob = subLob;
+    }
+
+    public String getIrm() {
+        return irm;
+    }
+
+    public void setIrm(String irm) {
+        this.irm = irm;
+    }
+
     public HsbcRoles getHsbcRoles() {
         return hsbcRoles;
     }
@@ -430,5 +209,197 @@ public class SelectionDetails {
     public void setHsbcRoles(HsbcRoles hsbcRoles) {
         this.hsbcRoles = hsbcRoles;
     }
-    
+
+    public Employee getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Employee createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Employee getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Employee updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public Date getHSBCSelectionDate() {
+        return HSBCSelectionDate;
+    }
+
+    public void setHSBCSelectionDate(Date hSBCSelectionDate) {
+        HSBCSelectionDate = hSBCSelectionDate;
+    }
+
+    public String getHSBCHiringManager() {
+        return HSBCHiringManager;
+    }
+
+    public void setHSBCHiringManager(String hSBCHiringManager) {
+        HSBCHiringManager = hSBCHiringManager;
+    }
+
+    public String getHSBCHead() {
+        return HSBCHead;
+    }
+
+    public void setHSBCHead(String hSBCHead) {
+        HSBCHead = hSBCHead;
+    }
+
+    public String getSalesPOC() {
+        return salesPOC;
+    }
+
+    public void setSalesPOC(String salesPOC) {
+        this.salesPOC = salesPOC;
+    }
+
+    public String getPricingModel() {
+        return PricingModel;
+    }
+
+    public void setPricingModel(String pricingModel) {
+        PricingModel = pricingModel;
+    }
+
+    public Integer getHSBCToolId() {
+        return HSBCToolId;
+    }
+
+    public void setHSBCToolId(Integer hSBCToolId) {
+        HSBCToolId = hSBCToolId;
+    }
+
+    public Date getCToolReceivedDate() {
+        return CToolReceivedDate;
+    }
+
+    public void setCToolReceivedDate(Date cToolReceivedDate) {
+        CToolReceivedDate = cToolReceivedDate;
+    }
+
+    public String getCToolJobCategory() {
+        return CToolJobCategory;
+    }
+
+    public void setCToolJobCategory(String cToolJobCategory) {
+        CToolJobCategory = cToolJobCategory;
+    }
+
+    public String getCToolLocation() {
+        return CToolLocation;
+    }
+
+    public void setCToolLocation(String cToolLocation) {
+        CToolLocation = cToolLocation;
+    }
+
+    public Integer getCToolRate() {
+        return CToolRate;
+    }
+
+    public void setCToolRate(Integer cToolRate) {
+        CToolRate = cToolRate;
+    }
+
+    public Integer getCToolProposedRate() {
+        return CToolProposedRate;
+    }
+
+    public void setCToolProposedRate(Integer cToolProposedRate) {
+        CToolProposedRate = cToolProposedRate;
+    }
+
+    public String getRecruiterName() {
+        return recruiterName;
+    }
+
+    public void setRecruiterName(String recruiterName) {
+        this.recruiterName = recruiterName;
+    }
+
+    public List<EvidenceDTO> getInterviewEvidences() {
+        return interviewEvidences;
+    }
+
+    public void setInterviewEvidences(List<EvidenceDTO> interviewEvidences) {
+        this.interviewEvidences = interviewEvidences;
+    }
+
+    public String getOfferReleaseStatus() {
+        return offerReleaseStatus;
+    }
+
+    public void setOfferReleaseStatus(String offerReleaseStatus) {
+        this.offerReleaseStatus = offerReleaseStatus;
+    }
+
+    public Date getHSBCOnboardingDate() {
+        return HSBCOnboardingDate;
+    }
+
+    public void setHSBCOnboardingDate(Date hSBCOnboardingDate) {
+        HSBCOnboardingDate = hSBCOnboardingDate;
+    }
+
+    public Date getTechSelectionDate() {
+        return techSelectionDate;
+    }
+
+    public void setTechSelectionDate(Date techSelectionDate) {
+        this.techSelectionDate = techSelectionDate;
+    }
+
+    public Date getDOJReceivedDate() {
+        return DOJReceivedDate;
+    }
+
+    public void setDOJReceivedDate(Date dOJReceivedDate) {
+        DOJReceivedDate = dOJReceivedDate;
+    }
+
+    public Date getLTIOnboardingDate() {
+        return LTIOnboardingDate;
+    }
+
+    public void setLTIOnboardingDate(Date lTIOnboardingDate) {
+        LTIOnboardingDate = lTIOnboardingDate;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public Date getCandidateStatusDate() {
+        return candidateStatusDate;
+    }
+
+    public void setCandidateStatusDate(Date candidateStatusDate) {
+        this.candidateStatusDate = candidateStatusDate;
+    }
+
+    public Date getCtoolStartDate() {
+        return ctoolStartDate;
+    }
+
+    public void setCtoolStartDate(Date ctoolStartDate) {
+        this.ctoolStartDate = ctoolStartDate;
+    }
+
 }

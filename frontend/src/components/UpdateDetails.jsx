@@ -56,6 +56,7 @@ function UpdateDetails() {
   const today = new Date().toISOString().split("T")[0];
   const [candidateStatuses, setCandidateStatuses] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [evidence, setEvidence] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:8080/candidate-status/all")
@@ -77,8 +78,24 @@ function UpdateDetails() {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    setUploadedFiles((prevFiles) => [...prevFiles, ...files]);
+    const evidenceObjects = files.map((file) => ({
+      fileName: file.name,
+      fileObject: file,
+    }));
+    setUploadedFiles((prevFiles) => [...prevFiles, ...evidenceObjects]);
   };
+
+  // Populate uploadedFiles state with file names from backend
+  useEffect(() => {
+    if (Array.isArray(evidence)) {
+      setUploadedFiles(
+        evidence.map((evidenceObj) => ({
+          fileName: evidenceObj.fileName,
+          fileObject: new File([], evidenceObj.fileName), // Placeholder File object
+        }))
+      );
+    }
+  }, [evidence]);
 
   const handleFileRemove = (index) => {
     setUploadedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
@@ -271,57 +288,9 @@ function UpdateDetails() {
 
     const updateDate = new Date().toISOString();
 
-    const taggingDetails = {
-      onboardingStatus: {
-        onboardingStatus: form.status,
-        remarks: form.addRemark,
-      },
-      bgvStatus: {
-        bgvStatus: form.bgvStatus,
-        remarks: form.bgvRemark,
-      },
-      candidateStatus: {
-        candidateStatus: form.candidateStatus,
-        remarks: form.candidateRemark,
-      },
-      updateDate: updateDate,
-    };
-
-    const selectionDetails = {
-      hsbcselectionDate: form.selectionDate,
-      baseBu: form.bu,
-      lob: form.lob,
-      subLob: form.subLob,
-      hsbchiringManager: form.hiringManager,
-      hsbchead: form.head,
-      deliveryManager: form.deliveryManager,
-      salesPOC: form.salespoc,
-      pricingModel: form.pricingModel,
-      irm: form.irm,
-      hsbctoolId: form.ctoolId,
-      ctoolReceivedDate: form.ctoolRecDate,
-      ctoolJobCategory: form.ctoolJobCat,
-      ctoolLocation: form.ctoolLocation,
-      ctoolRate: form.ctoolRate,
-      ctoolProposedRate: form.ctoolPropRate,
-      recruiterName: form.recruiterName,
-      interviewEvidence: uploadedFiles.map((file) => file.name), // Save file names
-      offerReleaseStatus: form.offerReleaseStatus,
-      ltionboardingDate: form.ltiOnboardDate,
-      techSelectionDate: form.techSelectDate,
-      candidateStatusDate: form.candidateStatusDate,
-      dojreceivedDate: form.dojRecDate,
-      hsbconboardingDate: form.onboardingDate,
-      ctoolStartDate: form.ctoolStartDate,
-      hsbcRoles: form.hsbcRoles,
-    };
-
-    console.log("tagging details: ", taggingDetails);
-    console.log("selection details: ", selectionDetails);
-
     const formData = new FormData();
     uploadedFiles.forEach((file) => {
-      formData.append("files", file);
+      formData.append("files", file.fileObject);
     });
 
     try {
@@ -334,8 +303,55 @@ function UpdateDetails() {
         throw new Error("Failed to upload files.");
       }
 
-      const responseText = await uploadResponse.text();
-      toast.success(responseText, { position: "top-right" });
+      const uploadedEvidence = await uploadResponse.json();
+
+      const taggingDetails = {
+        onboardingStatus: {
+          onboardingStatus: form.status,
+          remarks: form.addRemark,
+        },
+        bgvStatus: {
+          bgvStatus: form.bgvStatus,
+          remarks: form.bgvRemark,
+        },
+        candidateStatus: {
+          candidateStatus: form.candidateStatus,
+          remarks: form.candidateRemark,
+        },
+        updateDate: updateDate,
+      };
+
+      const selectionDetails = {
+        hsbcselectionDate: form.selectionDate,
+        baseBu: form.bu,
+        lob: form.lob,
+        subLob: form.subLob,
+        hsbchiringManager: form.hiringManager,
+        hsbchead: form.head,
+        deliveryManager: form.deliveryManager,
+        salesPOC: form.salespoc,
+        pricingModel: form.pricingModel,
+        irm: form.irm,
+        hsbctoolId: form.ctoolId,
+        ctoolReceivedDate: form.ctoolRecDate,
+        ctoolJobCategory: form.ctoolJobCat,
+        ctoolLocation: form.ctoolLocation,
+        ctoolRate: form.ctoolRate,
+        ctoolProposedRate: form.ctoolPropRate,
+        recruiterName: form.recruiterName,
+        interviewEvidence: uploadedEvidence, // Save file names
+        offerReleaseStatus: form.offerReleaseStatus,
+        ltionboardingDate: form.ltiOnboardDate,
+        techSelectionDate: form.techSelectDate,
+        candidateStatusDate: form.candidateStatusDate,
+        dojreceivedDate: form.dojRecDate,
+        hsbconboardingDate: form.onboardingDate,
+        ctoolStartDate: form.ctoolStartDate,
+        hsbcRoles: form.hsbcRoles,
+      };
+
+      console.log("tagging details: ", taggingDetails);
+      console.log("selection details Payload: ", selectionDetails);
 
       // Proceed with the rest of the form submission logic
       if (isInternal && psId) {
@@ -441,16 +457,21 @@ function UpdateDetails() {
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
             candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
-            evidence: selectionData.interviewEvidence || "",
+            evidence: selectionData.interviewEvidence || [],
             hsbcRoles: selectionData.hsbcRoles || "",
           });
 
           setSelectedSubLobTemp(selectionData.subLob);
+          setEvidence(selectionData.interviewEvidence);
+
 
           // Populate uploadedFiles state with File-like objects
           setUploadedFiles(
             Array.isArray(selectionData.interviewEvidence)
-              ? selectionData.interviewEvidence.map((fileName) => new File([], fileName))
+              ? selectionData.interviewEvidence.map((evidence) => ({
+                fileName: evidence.fileName,
+                fileObject: new File([], evidence.fileName), // Placeholder File object
+              }))
               : []
           );
         })
@@ -521,6 +542,7 @@ function UpdateDetails() {
           });
 
           setSelectedSubLobTemp(selectionData.subLob);
+          setEvidence(selectionData.interviewEvidence);
 
           // Populate uploadedFiles state with File-like objects
           setUploadedFiles(
@@ -596,6 +618,7 @@ function UpdateDetails() {
           });
 
           setSelectedSubLobTemp(selectionData.subLob);
+          setEvidence(selectionData.interviewEvidence);
 
           // Populate uploadedFiles state with File-like objects
           setUploadedFiles(

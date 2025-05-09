@@ -16,7 +16,7 @@ public class EvidenceDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String interviewEvidences;
+    private String fileName;
 
     @ManyToOne
     @JoinColumn(name="selectionId")
@@ -27,7 +27,7 @@ public class EvidenceDTO {
 
     public EvidenceDTO(int id, String interviewEvidences, SelectionDetails selectionDetails) {
         this.id = id;
-        this.interviewEvidences = interviewEvidences;
+        this.fileName = interviewEvidences;
         this.selectionDetails = selectionDetails;
     }
     
