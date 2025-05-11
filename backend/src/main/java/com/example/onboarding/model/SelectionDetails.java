@@ -70,7 +70,7 @@ public class SelectionDetails {
     private Integer CToolProposedRate;
     private String recruiterName;
 
-    @OneToMany(mappedBy = "selectionDetails", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EvidenceDTO> interviewEvidences = new ArrayList<>();
 
     private String offerReleaseStatus;

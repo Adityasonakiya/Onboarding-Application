@@ -10,5 +10,5 @@ import com.example.onboarding.model.EvidenceDTO;
 @Repository
 public interface EvidenceRepository extends JpaRepository<EvidenceDTO, Integer>{
 
-    List<EvidenceDTO> findBySelectionDetails_SelectionId(int selectionId);
+    List<EvidenceDTO> findBySelectionId(int selectionId);
 }

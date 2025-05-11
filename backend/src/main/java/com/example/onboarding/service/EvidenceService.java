@@ -22,6 +22,6 @@ public class EvidenceService {
     }
 
     public List<EvidenceDTO> getEvidenceBySelectionId(int selectionId){
-        return evidenceRepository.findBySelectionDetails_SelectionId(selectionId);
+        return evidenceRepository.findBySelectionId(selectionId);
     }
 }

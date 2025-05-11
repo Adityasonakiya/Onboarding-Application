@@ -401,3 +401,12 @@ export const getHsbcRolesById = async (ref) => {
   throw new Error("Failed to fetch HSBC roles");
 };
 
+export const getEvidenceBySelectionId = async (selectionId) => {
+  const response = await fetch(
+    `http://localhost:8080/evidence/${selectionId}`
+  );
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch HSBC roles");
+};
