@@ -1,9 +1,5 @@
 package com.example.onboarding.controller;
 
-import com.example.onboarding.model.EvidenceDTO;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,15 +7,40 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.onboarding.model.EvidenceDTO;
+import com.example.onboarding.repository.EvidenceRepository;
+import com.example.onboarding.repository.SelectionDetailsRepository;
+
 @CrossOrigin(origins = "*") // Allow CORS for all origins
 @RestController
 public class FileUploadController {
 
-    private static final String UPLOAD_DIR = "src/main/resources/uploads/";
+    private static final String UPLOAD_DIR = "backend/src/main/resources/uploads/";
+
+    @Autowired
+    private SelectionDetailsRepository selectionDetailsRepository;
+
+    @Autowired
+    private EvidenceRepository evidenceRepository;
 
     @PostMapping("/upload")
-    public List<EvidenceDTO> uploadFiles(@RequestParam("files") MultipartFile[] files) {
+    public ResponseEntity<List<EvidenceDTO>> uploadFiles(@RequestParam("files") MultipartFile[] files, @RequestParam("selectionId") int selectionId) {
+        System.out.println("Received selectionId: " + selectionId);
         List<EvidenceDTO> evidenceList = new ArrayList<>();
+        selectionDetailsRepository.findById(selectionId)
+                .orElseThrow(() -> new RuntimeException("SelectionDetails not found for id: " + selectionId));
+
+        System.out.println("Number of files received: " + files.length);
+
+        
 
         for (MultipartFile file : files) {
             // Validate file type
@@ -45,17 +66,17 @@ public class FileUploadController {
                 // Save the file
                 Path path = uploadDir.resolve(file.getOriginalFilename());
                 Files.write(path, file.getBytes());
-
                 // Create EvidenceDTO object
                 EvidenceDTO evidence = new EvidenceDTO();
                 evidence.setFileName(file.getOriginalFilename()); // Set the file name
+                evidence.setSelectionId(selectionId);
                 evidenceList.add(evidence);
+                System.out.println("File uploaded successfully: " + file.getOriginalFilename() + evidence);
             } catch (IOException e) {
-                e.printStackTrace();
                 throw new RuntimeException("Failed to upload files.");
             }
         }
-
-        return evidenceList; // Return the list of EvidenceDTO objects
+        evidenceRepository.saveAll(evidenceList);
+        return ResponseEntity.ok(evidenceList); // Return the list of EvidenceDTO objects
     }
 }

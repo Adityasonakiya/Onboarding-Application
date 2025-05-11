@@ -403,107 +403,107 @@ VALUES
 INSERT INTO selection_details 
 (ps_id, candidate_id, vendor_candidate_id, delivery_manager, lob_id, sub_lob_id, irm, created_by, updated_by, hsbcselection_date, 
 hsbchiring_manager, hsbchead, salespoc, pricing_model, hsbctool_id, ctool_received_date, ctool_job_category, 
-ctool_location, ctool_rate, ctool_proposed_rate, recruiter_name, interview_evidences, offer_release_status,base_bu,
+ctool_location, ctool_rate, ctool_proposed_rate, recruiter_name, offer_release_status,base_bu,
 hsbconboarding_date, tech_selection_date, dojreceived_date, ltionboarding_date, create_date, update_date, candidate_status_date) 
 VALUES
 (10820984, NULL, NULL, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2023-03-05', 
 'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'T&M', 108933, '2023-04-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', NULL, 'Pending','BFS', 
+'Pune', 30, 30, 'Nishant Sharma', 'Pending','BFS', 
 '2025-04-23', '2025-04-23', '2025-04-23', '2023-02-28', NOW(), NOW(), NULL),
 
 (10715126, NULL, NULL, 'Abhijeet Sureshchandra More', 2, 22, 10825932, 10713037, 10713037, '2025-03-12', 
 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108933, '2025-04-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', NULL, 'On Hold','BFS',  
+'Pune', 30, 30, 'Nishant Sharma', 'On Hold','BFS',  
 NULL, NULL, NULL, '2025-04-23', NOW(), NOW(), NULL),
 
 (10825932, NULL, NULL, 'Aniruddha Deshpande', 6, 36, 10825932, 10713037, 10713037, '2025-03-18', 
 'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'T&M', 108933, '2025-04-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', NULL, 'Release', 'BFS', 
+'Pune', 30, 30, 'Nishant Sharma', 'Release', 'BFS', 
 '2025-04-23', '2025-04-23', '2025-04-23', '2025-03-01', NOW(), NOW(), NULL),
 
 (NULL, 2, NULL, 'Arvind Deogade', 1, 11, 10825932, 10713037, 10713037, '2025-03-17', 
 'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'FP', 108933, '2025-04-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', NULL, 'WIP', 'BFS', 
+'Pune', 30, 30, 'Nishant Sharma', 'WIP', 'BFS', 
 NULL, NULL, NULL, NULL, NOW(), NOW(), NULL),
 
 (10830001, NULL, NULL, 'Chinni Krishna Nakka', 4, 44, 10825932, 10713037, 10713037, '2025-03-08', 
 'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108934, '2025-04-02', 'TM', 
-'Mumbai', 40, 40, 'Nishant Sharma', NULL, 'Pending', 'BFS', 
+'Mumbai', 40, 40, 'Nishant Sharma', 'Pending', 'BFS', 
 '2025-9-23', '2025-9-18', '2025-9-21', '2025-02-28', NOW(), NOW(), NULL),
 
 (10830002, NULL, NULL, 'Mayuresh Nirantar', 4, 54, 10825932, 10713037, 10713037, '2025-03-15', 
 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108935, '2025-04-02', 'TM', 
-'Bangalore', 50, 50, 'Nishant Sharma', NULL, 'On Hold', 'BFS', 
+'Bangalore', 50, 50, 'Nishant Sharma', 'On Hold', 'BFS', 
 '2025-03-20', '2025-03-20', '2025-03-20', '2025-03-01', NOW(), NOW(), NULL),
 
 (10830003, NULL, NULL, 'Saber Sarode', 6, 66, 10825932, 10713037, 10713037, '2025-03-10', 
 'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108936, '2025-04-02', 'TM', 
-'Hyderabad', 60, 60, 'Nishant Sharma', NULL, 'Release', 'BFS', 
+'Hyderabad', 60, 60, 'Nishant Sharma', 'Release', 'BFS', 
 '2025-03-23', '2025-02-23', '2025-03-23', '2025-03-01', NOW(), NOW(), NULL),
 
 (10830006, NULL, NULL, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2025-03-25', 
 'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'T&M', 108933, '2025-04-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', NULL, 'WIP', 'BFS', 
+'Pune', 30, 30, 'Nishant Sharma', 'WIP', 'BFS', 
 '2025-03-30', '2025-03-30', '2025-03-30', '2025-03-01', NOW(), NOW(), NULL),
 
 (10830004, NULL, NULL, 'Abhijeet Sureshchandra More', 6, 76, 10825932, 10713037, 10713037, '2025-03-14', 
 'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108937, '2025-04-02', 'TM', 
-'Chennai', 70, 70, 'Nishant Sharma', NULL, 'Pending', 'BFS', 
+'Chennai', 70, 70, 'Nishant Sharma', 'Pending', 'BFS', 
 '2025-02-23', '2025-01-23', '2025-02-23', '2025-03-01', NOW(), NOW(), NULL),
 
 (10830005, NULL, NULL, 'Aniruddha Deshpande', 6, 86, 10825932, 10713037, 10713037, '2025-03-19', 
 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108938, '2025-04-02', 'TM', 
-'Delhi', 80, 80, 'Nishant Sharma', NULL, 'On Hold', 'BFS', 
+'Delhi', 80, 80, 'Nishant Sharma', 'On Hold', 'BFS', 
 '2025-03-22', '2025-03-22', '2025-03-22', '2025-03-01', NOW(), NOW(), NULL),
 
 (10830007, NULL, NULL, 'Mayuresh Nirantar', 9, 19, 10825932, 10713037, 10713037, '2025-03-11', 
 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108939, '2025-04-02', 'TM', 
-'Bangalore', 90, 90, 'Nishant Sharma', NULL, 'Release', 'BFS', 
+'Bangalore', 90, 90, 'Nishant Sharma', 'Release', 'BFS', 
 '2025-03-15', '2025-03-15', '2025-03-15', '2025-03-01', NOW(), NOW(), NULL),
 
 (10830008, NULL, NULL, 'Saber Sarode', 10, 110, 10825932, 10713037, 10713037, '2025-03-20', 
 'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108940, '2025-04-02', 'TM', 
-'Hyderabad', 100, 100, 'Nishant Sharma', NULL, 'WIP', 'BFS', 
+'Hyderabad', 100, 100, 'Nishant Sharma', 'WIP', 'BFS', 
 '2025-03-25', '2025-03-25', '2025-03-25', '2025-03-01', NOW(), NOW(), NULL),
 
 (NULL, 6, NULL, 'Sachin Shaha', 11, 111, 10825932, 10713037, 10713037, '2025-03-13', 
 'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'T&M', 108941, '2025-04-02', 'TM', 
-'Pune', 110, 110, 'Nishant Sharma', NULL, 'Pending', 'BFS', 
+'Pune', 110, 110, 'Nishant Sharma', 'Pending', 'BFS', 
 NULL, NULL, NULL, NULL, NOW(), NOW(), NULL),
 
 (10830010, NULL, NULL, 'Abhijeet Sureshchandra More', 12, 112, 10825932, 10713037, 10713037, '2025-03-17', 
 'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108942, '2025-04-02', 'TM', 
-'Chennai', 120, 120, 'Nishant Sharma', NULL, 'On Hold', 'BFS', 
+'Chennai', 120, 120, 'Nishant Sharma', 'On Hold', 'BFS', 
 '2025-03-22', '2025-03-22', '2025-03-22', '2025-03-01', NOW(), NOW(), NULL),
 
 (10830011, NULL, NULL, 'Aniruddha Deshpande', 13, 113, 10825932, 10713037, 10713037, '2025-03-04', 
 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108943, '2025-04-02', 'TM', 
-'Delhi', 130, 130, 'Nishant Sharma', NULL, 'Release', 'BFS', 
+'Delhi', 130, 130, 'Nishant Sharma', 'Release', 'BFS', 
 '2025-03-15', '2025-03-15', '2025-03-15', '2025-03-01', NOW(), NOW(), NULL),
 
 (10830013, NULL, NULL, 'Saber Sarode', 15, 115, 10825932, 10713037, 10713037, '2025-03-18', 
 'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108945, '2025-04-02', 'TM', 
-'Hyderabad', 150, 150, 'Nishant Sharma', NULL, 'Pending', 'BFS', 
+'Hyderabad', 150, 150, 'Nishant Sharma', 'Pending', 'BFS', 
 '2025-03-25', '2025-03-25', '2025-03-25', '2025-03-01', NOW(), NOW(), NULL),
 
 (NULL, 7, NULL, 'Sachin Shaha', 16, 116, 10825932, 10713037, 10713037, '2025-03-16', 
 'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'T&M', 108946, '2025-04-02', 'TM', 
-'Pune', 160, 160, 'Nishant Sharma', NULL, 'WIP', 'BFS', 
+'Pune', 160, 160, 'Nishant Sharma', 'WIP', 'BFS', 
 NULL, NULL, NULL, NULL, NOW(), NOW(), NULL),
 
 (10830014, NULL, NULL, 'Abhijeet Sureshchandra More', 16, 316, 10825932, 10713037, 10713037, '2025-02-28', 
 'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108947, '2025-04-02', 'TM', 
-'Chennai', 170, 170, 'Nishant Sharma', NULL, 'Pending', 'BFS', 
-'2025-03-05', '2025-02-05', '2025-02-30', '2025-02-20', NOW(), NOW(), NULL),
+'Chennai', 170, 170, 'Nishant Sharma', 'Pending', 'BFS', 
+'2025-03-05', '2025-02-05', '2025-02-28', '2025-02-20', NOW(), NOW(), NULL),
 
 (10830015, NULL, NULL, 'Aniruddha Deshpande', 15, 715, 10825932, 10713037, 10713037, '2025-02-15', 
 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108948, '2025-04-02', 'TM', 
-'Delhi', 180, 180, 'Nishant Sharma', NULL, 'On Hold', 'BFS', 
+'Delhi', 180, 180, 'Nishant Sharma', 'On Hold', 'BFS', 
 '2025-02-20', '2025-02-20', '2025-02-20', '2025-02-10', NOW(), NOW(), NULL),
 
 (NULL, 8, NULL, 'Mayuresh Nirantar', 8, 18, 10825932, 10713037, 10713037, '2025-01-30', 
 'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108949, '2025-04-02', 'TM', 
-'Bangalore', 190, 190, 'Nishant Sharma', NULL, 'Release', 'BFS', 
+'Bangalore', 190, 190, 'Nishant Sharma', 'Release', 'BFS', 
 NULL, NULL, '2025-01-20',NULL , NOW(), NOW(), NULL);
 
 

@@ -23,7 +23,7 @@ import {
   updateTaggingDetailsByVendorCandidateId,
   getVendorCandidateById,
   getHsbcRoles,
-  getHsbcRolesById,
+  getEvidenceBySelectionId,
 } from "../services/api";
 import moment from "moment";
 import { Slide, ToastContainer, toast } from "react-toastify";
@@ -57,6 +57,7 @@ function UpdateDetails() {
   const [candidateStatuses, setCandidateStatuses] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [evidence, setEvidence] = useState([]);
+  const [selectionId, setSelectionId] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:8080/candidate-status/all")
@@ -183,17 +184,13 @@ function UpdateDetails() {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        comboboxRef.current &&
-        !comboboxRef.current.contains(event.target)
-      ) {
+      if (comboboxRef.current && !comboboxRef.current.contains(event.target)) {
         setShowDropdown(false); // Close dropdown if clicking outside
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -291,6 +288,7 @@ function UpdateDetails() {
     const formData = new FormData();
     uploadedFiles.forEach((file) => {
       formData.append("files", file.fileObject);
+      formData.append("selectionId", selectionId);
     });
 
     try {
@@ -304,6 +302,8 @@ function UpdateDetails() {
       }
 
       const uploadedEvidence = await uploadResponse.json();
+
+      console.log("Uploaded evidence:", uploadedEvidence);
 
       const taggingDetails = {
         onboardingStatus: {
@@ -357,15 +357,24 @@ function UpdateDetails() {
       if (isInternal && psId) {
         await updateSelectionDetailsByPsId(psId, selectionDetails);
         await updateTaggingDetailsByPsId(psId, taggingDetails);
-        toast.success("Details updated successfully!", { position: "top-right" });
+        toast.success("Details updated successfully!", {
+          position: "top-right",
+        });
       } else if (isExternal && phone) {
         await updateSelectionDetailsByCandidateId(phone, selectionDetails);
         await updateTaggingDetailsByCandidateId(phone, taggingDetails);
-        toast.success("Details updated successfully!", { position: "top-right" });
+        toast.success("Details updated successfully!", {
+          position: "top-right",
+        });
       } else if (isVendor && phone) {
-        await updateSelectionDetailsByVendorCandidateId(phone, selectionDetails);
+        await updateSelectionDetailsByVendorCandidateId(
+          phone,
+          selectionDetails
+        );
         await updateTaggingDetailsByVendorCandidateId(phone, taggingDetails);
-        toast.success("Details updated successfully!", { position: "top-right" });
+        toast.success("Details updated successfully!", {
+          position: "top-right",
+        });
       }
 
       setTimeout(() => {
@@ -410,12 +419,16 @@ function UpdateDetails() {
           console.error("Error fetching selection details:", err);
           return {}; // Fallback to an empty object
         }),
+        getEvidenceBySelectionId(selectionId).catch((err) => {
+          console.error("Error fetching selection details:", err);
+          return {}; // Fallback to an empty object
+        }),
         getTaggingDetailsByPsId(psId).catch((err) => {
           console.error("Error fetching tagging details:", err);
           return {}; // Fallback to an empty object
         }),
       ])
-        .then(([employee, selectionData, taggingData]) => {
+        .then(([employee, selectionData, evidencedto, taggingData]) => {
           setForm({
             fname: employee.firstName || "",
             lname: employee.lastName || "",
@@ -455,25 +468,25 @@ function UpdateDetails() {
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
-            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
+            candidateStatusDate:
+              formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
-            evidence: selectionData.interviewEvidence || [],
+            evidence: evidencedto.map((evidence) => ({
+              fileName: evidence.fileName,
+              fileObject: new File([], evidence.fileName), // Placeholder File object
+            })),
             hsbcRoles: selectionData.hsbcRoles || "",
           });
 
-          setSelectedSubLobTemp(selectionData.subLob);
-          setEvidence(selectionData.interviewEvidence);
-
-
-          // Populate uploadedFiles state with File-like objects
           setUploadedFiles(
-            Array.isArray(selectionData.interviewEvidence)
-              ? selectionData.interviewEvidence.map((evidence) => ({
-                fileName: evidence.fileName,
-                fileObject: new File([], evidence.fileName), // Placeholder File object
-              }))
-              : []
+            evidencedto.map((evidence) => ({
+              fileName: evidence.fileName,
+              fileObject: new File([], evidence.fileName), // Placeholder File object
+            }))
           );
+
+          setSelectedSubLobTemp(selectionData.subLob);
+          setSelectionId(selectionData.selectionId);
         })
         .catch((error) => {
           console.error("Error in Promise.all:", error);
@@ -535,9 +548,10 @@ function UpdateDetails() {
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
-            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
+            candidateStatusDate:
+              formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
-            evidence: selectionData.interviewEvidence || "",
+            evidence: selectionData.interviewEvidences || "",
             hsbcRoles: selectionData.hsbcRoles || "",
           });
 
@@ -546,8 +560,10 @@ function UpdateDetails() {
 
           // Populate uploadedFiles state with File-like objects
           setUploadedFiles(
-            Array.isArray(selectionData.interviewEvidence)
-              ? selectionData.interviewEvidence.map((fileName) => new File([], fileName))
+            Array.isArray(selectionData.interviewEvidences)
+              ? selectionData.interviewEvidences.map(
+                  (fileName) => new File([], fileName)
+                )
               : []
           );
         })
@@ -611,9 +627,10 @@ function UpdateDetails() {
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
-            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
+            candidateStatusDate:
+              formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
-            evidence: selectionData.interviewEvidence || "",
+            evidence: selectionData.interviewEvidences || "",
             hsbcRoles: selectionData.hsbcRoles || "",
           });
 
@@ -622,8 +639,10 @@ function UpdateDetails() {
 
           // Populate uploadedFiles state with File-like objects
           setUploadedFiles(
-            Array.isArray(selectionData.interviewEvidence)
-              ? selectionData.interviewEvidence.map((fileName) => new File([], fileName))
+            Array.isArray(selectionData.interviewEvidences)
+              ? selectionData.interviewEvidences.map(
+                  (fileName) => new File([], fileName)
+                )
               : []
           );
         })
@@ -696,8 +715,9 @@ function UpdateDetails() {
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
                     required
-                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.vendorId ? "border-red-500" : ""
+                    }`}
                     disabled={isInternal}
                   >
                     <option value="">Select Vendor</option>
@@ -1159,7 +1179,10 @@ function UpdateDetails() {
                       </p>
                       <ul>
                         {uploadedFiles.map((file, index) => (
-                          <li key={index} className="flex items-center space-x-4">
+                          <li
+                            key={index}
+                            className="flex items-center space-x-4"
+                          >
                             <span>{file.name}</span>
                             <button
                               type="button"
@@ -1245,8 +1268,9 @@ function UpdateDetails() {
                         type="text"
                         placeholder="Search or select a role..."
                         value={form.hsbcRoles?.roleTitle}
-                        className={`p-2 border w-full ${errors.hsbcRoles ? "border-red-500" : ""
-                          }`}
+                        className={`p-2 border w-full ${
+                          errors.hsbcRoles ? "border-red-500" : ""
+                        }`}
                         onChange={handleSearch}
                         onFocus={() => setShowDropdown(true)} // Open dropdown on focus
                         style={{
@@ -1279,7 +1303,9 @@ function UpdateDetails() {
                           {filteredRoles.map((role) => (
                             <li
                               key={role.ref}
-                              onClick={() => handleSelect(role.roleTitle, role.ref)} // Properly update input value
+                              onClick={() =>
+                                handleSelect(role.roleTitle, role.ref)
+                              } // Properly update input value
                               style={{
                                 padding: "8px",
                                 cursor: "pointer",

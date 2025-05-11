@@ -4,8 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,18 +15,15 @@ public class EvidenceDTO {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String fileName;
-
-    @ManyToOne
-    @JoinColumn(name="selectionId")
-    private SelectionDetails selectionDetails;
+    private int selectionId;
 
     public EvidenceDTO() {
     }
 
-    public EvidenceDTO(int id, String interviewEvidences, SelectionDetails selectionDetails) {
+    public EvidenceDTO(int id, String interviewEvidences, int selectionId) {
         this.id = id;
         this.fileName = interviewEvidences;
-        this.selectionDetails = selectionDetails;
+        this.selectionId = selectionId;
     }
     
 }

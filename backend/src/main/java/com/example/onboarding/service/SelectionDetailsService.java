@@ -80,11 +80,15 @@ public class SelectionDetailsService {
             // Update interviewEvidences collection
             if (existingDetails.getInterviewEvidences() == null) {
                 existingDetails.setInterviewEvidences(new ArrayList<>()); // Initialize if null
+            } else {
+                existingDetails.getInterviewEvidences().clear(); // Clear the existing collection to avoid duplicates
             }
-            existingDetails.getInterviewEvidences().clear(); // Clear the existing collection
-            for (EvidenceDTO evidence : updatedDetails.getInterviewEvidences()) {
-                evidence.setSelectionDetails(existingDetails); // Set the parent reference
-                existingDetails.getInterviewEvidences().add(evidence); // Add the new evidence
+
+            if (updatedDetails.getInterviewEvidences() != null) {
+                for (EvidenceDTO evidence : updatedDetails.getInterviewEvidences()) {
+                    evidence.setSelectionId(existingDetails.getSelectionId()); // Set the parent reference
+                    existingDetails.getInterviewEvidences().add(evidence); // Add the new evidence
+                }
             }
             existingDetails.setOfferReleaseStatus(updatedDetails.getOfferReleaseStatus());
             existingDetails.setHSBCOnboardingDate(updatedDetails.getHSBCOnboardingDate());
@@ -127,7 +131,7 @@ public class SelectionDetailsService {
             }
             existingDetails.getInterviewEvidences().clear(); // Clear the existing collection
             for (EvidenceDTO evidence : updatedDetails.getInterviewEvidences()) {
-                evidence.setSelectionDetails(existingDetails); // Set the parent reference
+                evidence.setSelectionId(existingDetails.getSelectionId()); // Set the parent reference
                 existingDetails.getInterviewEvidences().add(evidence); // Add the new evidence
             }
             existingDetails.setOfferReleaseStatus(updatedDetails.getOfferReleaseStatus());
@@ -172,7 +176,7 @@ public class SelectionDetailsService {
             }
             existingDetails.getInterviewEvidences().clear(); // Clear the existing collection
             for (EvidenceDTO evidence : updatedDetails.getInterviewEvidences()) {
-                evidence.setSelectionDetails(existingDetails); // Set the parent reference
+                evidence.setSelectionId(existingDetails.getSelectionId()); // Set the parent reference
                 existingDetails.getInterviewEvidences().add(evidence); // Add the new evidence
             }
             existingDetails.setOfferReleaseStatus(updatedDetails.getOfferReleaseStatus());
@@ -257,7 +261,6 @@ public class SelectionDetailsService {
     }
 
     // In SelectionDetailsService.java
-
     public List<SelectionDTO> findSelections(String filter) {
         return selectionDetailsRepository.findSelections(filter);
     }
