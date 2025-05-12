@@ -403,10 +403,10 @@ export const getHsbcRolesById = async (ref) => {
 
 export const getEvidenceBySelectionId = async (selectionId) => {
   const response = await fetch(
-    `http://localhost:8080/evidence/${selectionId}`
+    `http://localhost:8080/evidence/selectionId/${selectionId}`
   );
   if (response.ok) {
     return response.json();
   }
-  throw new Error("Failed to fetch HSBC roles");
+  throw new Error("Failed to fetch Evidence");
 };

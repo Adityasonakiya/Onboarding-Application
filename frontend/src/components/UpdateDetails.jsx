@@ -419,16 +419,28 @@ function UpdateDetails() {
           console.error("Error fetching selection details:", err);
           return {}; // Fallback to an empty object
         }),
-        getEvidenceBySelectionId(selectionId).catch((err) => {
-          console.error("Error fetching selection details:", err);
-          return {}; // Fallback to an empty object
-        }),
         getTaggingDetailsByPsId(psId).catch((err) => {
           console.error("Error fetching tagging details:", err);
           return {}; // Fallback to an empty object
         }),
       ])
-        .then(([employee, selectionData, evidencedto, taggingData]) => {
+        .then(([employee, selectionData, taggingData]) => {
+          // Set selectionId from selectionData
+          setSelectionId(selectionData.selectionId);
+          console.log("Selection ID:", selectionData.selectionId);
+          // Fetch evidence after setting selectionId
+          return getEvidenceBySelectionId(selectionData.selectionId)
+            .then((evidenceDto) => {
+              return { employee, selectionData, taggingData, evidenceDto };
+            })
+            .catch((err) => {
+              console.error("Error fetching evidence:", err);
+              return { employee, selectionData, taggingData, evidenceDto: [] }; // Fallback to an empty array
+            });
+        })
+        .then(({employee, selectionData, taggingData, evidenceDto}) => {
+          console.log("evidenceDto response:", evidenceDto);
+
           setForm({
             fname: employee.firstName || "",
             lname: employee.lastName || "",
@@ -471,7 +483,7 @@ function UpdateDetails() {
             candidateStatusDate:
               formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
-            evidence: evidencedto.map((evidence) => ({
+            evidence: evidenceDto.map((evidence) => ({
               fileName: evidence.fileName,
               fileObject: new File([], evidence.fileName), // Placeholder File object
             })),
@@ -479,14 +491,13 @@ function UpdateDetails() {
           });
 
           setUploadedFiles(
-            evidencedto.map((evidence) => ({
+            evidenceDto.map((evidence) => ({
               fileName: evidence.fileName,
               fileObject: new File([], evidence.fileName), // Placeholder File object
             }))
           );
 
           setSelectedSubLobTemp(selectionData.subLob);
-          setSelectionId(selectionData.selectionId);
         })
         .catch((error) => {
           console.error("Error in Promise.all:", error);
