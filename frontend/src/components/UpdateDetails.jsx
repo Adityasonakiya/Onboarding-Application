@@ -79,6 +79,12 @@ function UpdateDetails() {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
+    // Combine with already uploaded files
+    const totalFiles = uploadedFiles.length + files.length;
+    if (totalFiles > 3) {
+      toast.error("You can upload a maximum of 3 files.", { position: "top-right" });
+      return;
+    }
     const evidenceObjects = files.map((file) => ({
       fileName: file.name,
       fileObject: file,
@@ -438,7 +444,7 @@ function UpdateDetails() {
               return { employee, selectionData, taggingData, evidenceDto: [] }; // Fallback to an empty array
             });
         })
-        .then(({employee, selectionData, taggingData, evidenceDto}) => {
+        .then(({ employee, selectionData, taggingData, evidenceDto }) => {
           console.log("evidenceDto response:", evidenceDto);
 
           setForm({
@@ -573,8 +579,8 @@ function UpdateDetails() {
           setUploadedFiles(
             Array.isArray(selectionData.interviewEvidences)
               ? selectionData.interviewEvidences.map(
-                  (fileName) => new File([], fileName)
-                )
+                (fileName) => new File([], fileName)
+              )
               : []
           );
         })
@@ -652,8 +658,8 @@ function UpdateDetails() {
           setUploadedFiles(
             Array.isArray(selectionData.interviewEvidences)
               ? selectionData.interviewEvidences.map(
-                  (fileName) => new File([], fileName)
-                )
+                (fileName) => new File([], fileName)
+              )
               : []
           );
         })
@@ -726,9 +732,8 @@ function UpdateDetails() {
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
                     required
-                    className={`p-2 border rounded w-full ${
-                      errors.vendorId ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
+                      }`}
                     disabled={isInternal}
                   >
                     <option value="">Select Vendor</option>
@@ -1189,44 +1194,98 @@ function UpdateDetails() {
                         Uploaded Files ({uploadedFiles.length}):
                       </p>
                       <ul>
-                        {uploadedFiles.map((file, index) => (
-                          <li
-                            key={index}
-                            className="flex items-center space-x-4"
-                          >
-                            <span>{file.name}</span>
-                            <button
-                              type="button"
-                              className="text-blue-500 border border-blue-500 rounded-full flex justify-center items-center p-1"
-                              onClick={() => {
-                                const url = URL.createObjectURL(file);
-                                window.open(url, "_blank");
-                              }}
-                            >
-                              <FaEye />
-                            </button>
-                            <button
-                              type="button"
-                              className="text-green-500 border border-green-500 rounded-full flex justify-center items-center p-1"
-                              onClick={() => {
-                                const url = URL.createObjectURL(file);
-                                const a = document.createElement("a");
-                                a.href = url;
-                                a.download = file.name;
-                                a.click();
-                              }}
-                            >
-                              <FaDownload />
-                            </button>
-                            <button
-                              type="button"
-                              className="text-red-500 border border-red-500 rounded-full flex justify-center items-center p-1"
-                              onClick={() => handleFileRemove(index)}
-                            >
-                              <ImCross />
-                            </button>
-                          </li>
-                        ))}
+                        {uploadedFiles.map((file, index) => {
+                          // If fileObject is a real File, use createObjectURL; else, use backend URL
+                          const isRealFile = file.fileObject instanceof File && file.fileObject.size > 0;
+                          const backendUrl = `http://localhost:8080/uploads/${encodeURIComponent(file.fileName)}`;
+                          return (
+                            <li key={index} className="flex items-center space-x-4">
+                              <span>{file.fileName || file.name}</span>
+                              {/* //download button */}
+                              <button
+                                type="button"
+                                className="text-green-500 border border-green-500 rounded-full flex justify-center items-center p-1"
+                                onClick={async () => {
+                                  if (isRealFile) {
+                                    // For newly uploaded files
+                                    const url = URL.createObjectURL(file.fileObject);
+                                    const a = document.createElement("a");
+                                    a.href = url;
+                                    a.download = file.fileName || file.name;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                    URL.revokeObjectURL(url);
+                                  } else {
+                                    // For files from backend, fetch as blob and download
+                                    try {
+                                      const response = await fetch(backendUrl);
+                                      const blob = await response.blob();
+                                      const url = window.URL.createObjectURL(blob);
+                                      const a = document.createElement("a");
+                                      a.href = url;
+                                      a.download = file.fileName || file.name;
+                                      document.body.appendChild(a);
+                                      a.click();
+                                      document.body.removeChild(a);
+                                      window.URL.revokeObjectURL(url);
+                                    } catch (err) {
+                                      toast.error("Failed to download file.", { position: "top-right" });
+                                    }
+                                  }
+                                }}
+                              >
+                                <FaDownload />
+                              </button>
+                              {/* View Button */}
+                              <button
+                                type="button"
+                                className="text-green-500 border border-green-500 rounded-full flex justify-center items-center p-1"
+                                onClick={() => {
+                                  if (isRealFile) {
+                                    const url = URL.createObjectURL(file.fileObject);
+                                    window.open(url, "_blank");
+                                    setTimeout(() => URL.revokeObjectURL(url), 60 * 1000); // Clean up after 1 min
+                                  } else {
+                                    window.open(backendUrl, "_blank");
+                                  }
+                                }}
+                              >
+                                <FaEye />
+                              </button>
+
+                              {/* Cancle or remove button */}
+                              <button
+                                type="button"
+                                className="text-red-500 border border-red-500 rounded-full flex justify-center items-center p-1"
+                                onClick={async () => {
+                                  if (!isRealFile) {
+                                    // Backend file: call delete API
+                                    try {
+                                      const response = await fetch(
+                                        `http://localhost:8080/evidence/delete?fileName=${encodeURIComponent(file.fileName)}&selectionId=${selectionId}`,
+                                        { method: "DELETE" }
+                                      );
+                                      if (response.ok) {
+                                        handleFileRemove(index);
+                                        toast.success("File deleted successfully.", { position: "top-right" });
+                                      } else {
+                                        toast.error("Failed to delete file.", { position: "top-right" });
+                                      }
+                                    } catch (err) {
+                                      toast.error("Error deleting file.", { position: "top-right" });
+                                    }
+                                  } else {
+                                    // Local file: just remove from UI
+                                    handleFileRemove(index);
+                                  }
+                                }}
+                              >
+                                <ImCross />
+                              </button>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   </td>
@@ -1279,9 +1338,8 @@ function UpdateDetails() {
                         type="text"
                         placeholder="Search or select a role..."
                         value={form.hsbcRoles?.roleTitle}
-                        className={`p-2 border w-full ${
-                          errors.hsbcRoles ? "border-red-500" : ""
-                        }`}
+                        className={`p-2 border w-full ${errors.hsbcRoles ? "border-red-500" : ""
+                          }`}
                         onChange={handleSearch}
                         onFocus={() => setShowDropdown(true)} // Open dropdown on focus
                         style={{
