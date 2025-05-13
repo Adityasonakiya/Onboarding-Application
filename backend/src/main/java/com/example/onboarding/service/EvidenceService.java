@@ -21,7 +21,18 @@ public class EvidenceService {
         return evidenceRepository.findById(id).orElse(null);
     }
 
-    public List<EvidenceDTO> getEvidenceBySelectionId(int selectionId){
+    public List<EvidenceDTO> getEvidenceBySelectionId(int selectionId) {
         return evidenceRepository.findBySelectionId(selectionId);
+    }
+
+    public boolean deleteEvidence(String fileName, int selectionId) {
+        List<EvidenceDTO> evidences = evidenceRepository.findBySelectionId(selectionId);
+        for (EvidenceDTO evidence : evidences) {
+            if (evidence.getFileName().equals(fileName)) {
+                evidenceRepository.deleteById(evidence.getId());
+                return true;
+            }
+        }
+        return false;
     }
 }
