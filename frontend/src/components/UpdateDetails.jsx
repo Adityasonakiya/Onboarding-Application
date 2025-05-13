@@ -492,7 +492,7 @@ function UpdateDetails() {
             evidence: evidenceDto.map((evidence) => ({
               fileName: evidence.fileName,
               fileObject: new File([], evidence.fileName), // Placeholder File object
-            })),
+            })) || [],
             hsbcRoles: selectionData.hsbcRoles || "",
           });
 
@@ -519,12 +519,28 @@ function UpdateDetails() {
           console.error("Error fetching selection details:", err);
           return {}; // Fallback to an empty object
         }),
-        getTaggingDetailsByCandidateId(phone).catch((err) => {
+        getTaggingDetailsByPsId(psId).catch((err) => {
           console.error("Error fetching tagging details:", err);
           return {}; // Fallback to an empty object
         }),
       ])
         .then(([candidate, selectionData, taggingData]) => {
+          // Set selectionId from selectionData
+          setSelectionId(selectionData.selectionId);
+          console.log("Selection ID:", selectionData.selectionId);
+          // Fetch evidence after setting selectionId
+          return getEvidenceBySelectionId(selectionData.selectionId)
+            .then((evidenceDto) => {
+              return { candidate, selectionData, taggingData, evidenceDto };
+            })
+            .catch((err) => {
+              console.error("Error fetching evidence:", err);
+              return { candidate, selectionData, taggingData, evidenceDto: [] }; // Fallback to an empty array
+            });
+        })
+        .then(({ candidate, selectionData, taggingData, evidenceDto }) => {
+          console.log("evidenceDto response:", evidenceDto);
+
           setForm({
             vendors: { vendorId: 1 },
             phone: candidate.phoneNumber,
@@ -568,20 +584,20 @@ function UpdateDetails() {
             candidateStatusDate:
               formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
-            evidence: selectionData.interviewEvidences || "",
+            evidence: evidenceDto.map((evidence) => ({
+              fileName: evidence.fileName,
+              fileObject: new File([], evidence.fileName), // Placeholder File object
+            })) || [],
             hsbcRoles: selectionData.hsbcRoles || "",
           });
 
           setSelectedSubLobTemp(selectionData.subLob);
-          setEvidence(selectionData.interviewEvidence);
 
-          // Populate uploadedFiles state with File-like objects
           setUploadedFiles(
-            Array.isArray(selectionData.interviewEvidences)
-              ? selectionData.interviewEvidences.map(
-                (fileName) => new File([], fileName)
-              )
-              : []
+            evidenceDto.map((evidence) => ({
+              fileName: evidence.fileName,
+              fileObject: new File([], evidence.fileName), // Placeholder File object
+            }))
           );
         })
         .catch((error) => {
@@ -598,12 +614,28 @@ function UpdateDetails() {
           console.error("Error fetching selection details:", err);
           return {}; // Fallback to an empty object
         }),
-        getTaggingDetailsByVendorCandidateId(phone).catch((err) => {
+        getTaggingDetailsByPsId(psId).catch((err) => {
           console.error("Error fetching tagging details:", err);
           return {}; // Fallback to an empty object
         }),
       ])
         .then(([vendorCandidate, selectionData, taggingData]) => {
+          // Set selectionId from selectionData
+          setSelectionId(selectionData.selectionId);
+          console.log("Selection ID:", selectionData.selectionId);
+          // Fetch evidence after setting selectionId
+          return getEvidenceBySelectionId(selectionData.selectionId)
+            .then((evidenceDto) => {
+              return { vendorCandidate, selectionData, taggingData, evidenceDto };
+            })
+            .catch((err) => {
+              console.error("Error fetching evidence:", err);
+              return { vendorCandidate, selectionData, taggingData, evidenceDto: [] }; // Fallback to an empty array
+            });
+        })
+        .then(({ vendorCandidate, selectionData, taggingData, evidenceDto }) => {
+          console.log("evidenceDto response:", evidenceDto);
+
           setForm({
             vendors: { vendorId: id },
             phone: vendorCandidate.phoneNumber,
@@ -647,20 +679,20 @@ function UpdateDetails() {
             candidateStatusDate:
               formatDate(selectionData.candidateStatusDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
-            evidence: selectionData.interviewEvidences || "",
+            evidence: evidenceDto.map((evidence) => ({
+              fileName: evidence.fileName,
+              fileObject: new File([], evidence.fileName), // Placeholder File object
+            })) || [],
             hsbcRoles: selectionData.hsbcRoles || "",
           });
 
           setSelectedSubLobTemp(selectionData.subLob);
-          setEvidence(selectionData.interviewEvidence);
 
-          // Populate uploadedFiles state with File-like objects
           setUploadedFiles(
-            Array.isArray(selectionData.interviewEvidences)
-              ? selectionData.interviewEvidences.map(
-                (fileName) => new File([], fileName)
-              )
-              : []
+            evidenceDto.map((evidence) => ({
+              fileName: evidence.fileName,
+              fileObject: new File([], evidence.fileName), // Placeholder File object
+            }))
           );
         })
         .catch((error) => {
@@ -1328,7 +1360,7 @@ function UpdateDetails() {
                 <tr className="flex flex-wrap md:flex-nowrap">
                   <td className="p-2 w-full md:w-1/4">
                     <label className="font-semibold">
-                      HSBC Roles:<span className="text-red-500">*</span>
+                      HSBC Roles:
                     </label>
                   </td>
                   <td className="p-2 w-full md:w-1/4">

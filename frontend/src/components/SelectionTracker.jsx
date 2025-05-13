@@ -466,7 +466,7 @@ function SelectionTracker() {
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: ltiOnboardDate,
-        evidence: selectionDetails.interviewEvidence,
+        evidence: selectionDetails.interviewEvidences,
         hsbcRoles: selectionDetails.hsbcRoles,
       }));
       setSelectedSubLobTemp(selectionDetails.subLob);
@@ -517,7 +517,7 @@ function SelectionTracker() {
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
-        evidence: selectionDetails.interviewEvidence,
+        evidence: selectionDetails.interviewEvidences,
         hsbcRoles: selectionDetails.hsbcRoles,
       }));
       setSelectedSubLobTemp(selectionDetails.subLob);
@@ -567,7 +567,7 @@ function SelectionTracker() {
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
-        evidence: selectionDetails.interviewEvidence,
+        evidence: selectionDetails.interviewEvidences,
         hsbcRoles: selectionDetails.hsbcRoles,
       }));
       setSelectedSubLobTemp(selectionDetails.subLob);
@@ -676,33 +676,33 @@ function SelectionTracker() {
       ) {
         try {
           // Validate file type and size
-          const file = form.evidence;
-          const validTypes = ["image/png", "image/jpeg", "application/msword"];
-          if (!validTypes.includes(file.type)) {
-            throw new Error(
-              "Invalid file type. Only PNG, JPG, and DOC files are allowed."
-            );
-          }
-          if (file.size > 10 * 1024 * 1024) {
-            // 10MB
-            throw new Error("File size exceeds the limit of 10MB.");
-          }
+          // const file = form.evidence;
+          // const validTypes = ["image/png", "image/jpeg", "application/msword"];
+          // if (!validTypes.includes(file.type)) {
+          //   throw new Error(
+          //     "Invalid file type. Only PNG, JPG, and DOC files are allowed."
+          //   );
+          // }
+          // if (file.size > 10 * 1024 * 1024) {
+          //   // 10MB
+          //   throw new Error("File size exceeds the limit of 10MB.");
+          // }
 
-          // Create FormData object for file upload
-          const formData = new FormData();
-          formData.append("files", file);
+          // // Create FormData object for file upload
+          // const formData = new FormData();
+          // formData.append("files", file);
 
-          // Upload file
-          const uploadResponse = await fetch("http://localhost:8080/upload", {
-            method: "POST",
-            body: formData,
-          });
+          // // Upload file
+          // const uploadResponse = await fetch("http://localhost:8080/upload", {
+          //   method: "POST",
+          //   body: formData,
+          // });
 
-          console.log("Upload response:", uploadResponse);
+          // console.log("Upload response:", uploadResponse);
 
-          if (!uploadResponse.ok) {
-            throw new Error("Failed to upload file.");
-          }
+          // if (!uploadResponse.ok) {
+          //   throw new Error("Failed to upload file.");
+          // }
 
           // Proceed with the rest of the form submission logic
           const requestBody = {
@@ -723,7 +723,7 @@ function SelectionTracker() {
             ctoolRate: form.ctoolRate,
             ctoolProposedRate: form.ctoolPropRate,
             recruiterName: form.recruiterName,
-            interviewEvidence: form.evidence.name, // Save file name
+            interviewEvidence: form.evidence, // Save file name
             offerReleaseStatus: form.offerReleaseStatus,
             ltionboardingDate: form.ltiOnboardDate,
             hsbcRoles: form.hsbcRoles,
@@ -1431,9 +1431,6 @@ function SelectionTracker() {
                     type="file"
                     name="evidence"
                     accept=".png,.jpg,.jpeg,.doc"
-                    onChange={(e) =>
-                      setForm({ ...form, evidence: e.target.files[0] })
-                    }
                     className="p-2 border rounded w-full"
                   />
                 </td>
@@ -1483,7 +1480,7 @@ function SelectionTracker() {
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">
-                    HSBC Roles:<span className="text-red-500">*</span>
+                    HSBC Roles:
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
