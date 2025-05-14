@@ -1224,7 +1224,7 @@ function UpdateDetails() {
                     )}
                   </td>
                   <td></td>
-                
+
                   <td className="p-2 w-full md:w-1/4">
                     <label className="font-semibold">CTOOL Location:</label>
                   </td>
@@ -1646,6 +1646,10 @@ function UpdateDetails() {
               </tr>
 
               <div className="border border-gray-300 rounded-md shadow">
+                <h1 className="text-l font-bold text-center text-gray-700 bg-gray-200 p-1 rounded-md shadow-md">
+                  For External Only
+                </h1>
+
                 <tr className="flex flex-wrap md:flex-nowrap">
                   <td className="p-2 w-full md:w-1/4">
                     <label className="font-bold">
