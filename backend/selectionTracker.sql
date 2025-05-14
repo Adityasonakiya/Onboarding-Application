@@ -318,7 +318,8 @@ INSERT INTO candidate_status VALUES
 (1,"Joined","candidate joined"),
 (2,"Dropped","candidate dropped"),
 (3,"Resigned","Resigned"),
-(4,"Joined date delayed"," candidate joined date delayed");
+(4,"Joined date delayed"," candidate joined date delayed"),
+(5,"Candidate yet to join Parent Company","Candidate yet to join Parent Company");
 
 INSERT INTO lob (lob_id, lob_name, remarks, created_by, updated_by, created_date, update_date) VALUES
 (1, 'Business & Data Architecture', 'Business & Data Architecture', 10713037, 10713037, NOW(), NOW()),
