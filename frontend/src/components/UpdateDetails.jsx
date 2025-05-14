@@ -1143,17 +1143,88 @@ function UpdateDetails() {
                 </tr>
                 <tr className="flex flex-wrap md:flex-nowrap">
                   <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">CTOOL Job Category:</label>
+                    <label className="font-semibold">
+                      HSBC Roles:
+                    </label>
                   </td>
                   <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="text"
-                      name="ctoolJobCat"
-                      value={form.ctoolJobCat || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
+                    <div ref={comboboxRef} style={{ position: "relative" }}>
+                      {/* Input field */}
+                      <input
+                        type="text"
+                        placeholder="Search or select a role..."
+                        value={form.hsbcRoles?.roleTitle}
+                        className={`p-2 border w-full ${errors.hsbcRoles ? "border-red-500" : ""
+                          }`}
+                        onChange={handleSearch}
+                        onFocus={() => setShowDropdown(true)} // Open dropdown on focus
+                        style={{
+                          width: "100%",
+                          padding: "8px",
+                          border: "1px solid #ccc",
+                          borderRadius: "4px",
+                        }}
+                      />
+
+                      {/* Dropdown options (conditionally rendered) */}
+                      {showDropdown && filteredRoles.length > 0 && (
+                        <ul
+                          style={{
+                            position: "absolute",
+                            top: "100%",
+                            left: "0",
+                            width: "100%",
+                            maxHeight: "200px",
+                            overflowY: "auto",
+                            background: "#fff",
+                            border: "1px solid #ccc",
+                            borderRadius: "4px",
+                            zIndex: "1000",
+                            padding: "0",
+                            margin: "0",
+                            listStyleType: "none",
+                          }}
+                        >
+                          {filteredRoles.map((role) => (
+                            <li
+                              key={role.ref}
+                              onClick={() =>
+                                handleSelect(role.roleTitle, role.ref)
+                              } // Properly update input value
+                              style={{
+                                padding: "8px",
+                                cursor: "pointer",
+                                borderBottom: "1px solid #f0f0f0",
+                              }}
+                            >
+                              {role.roleTitle}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {/* Fallback for no matches */}
+                      {showDropdown && filteredRoles.length === 0 && (
+                        <div
+                          style={{
+                            padding: "8px",
+                            background: "#fff",
+                            border: "1px solid #ccc",
+                            borderRadius: "4px",
+                            marginTop: "4px",
+                          }}
+                        >
+                          No matching roles found
+                        </div>
+                      )}
+                    </div>
+
+                    {errors.lob && (
+                      <p className="text-red-500 text-sm">{errors.hsbcRoles}</p>
+                    )}
                   </td>
+                  <td></td>
+                
                   <td className="p-2 w-full md:w-1/4">
                     <label className="font-semibold">CTOOL Location:</label>
                   </td>
@@ -1169,7 +1240,7 @@ function UpdateDetails() {
                 </tr>
                 <tr className="flex flex-wrap md:flex-nowrap">
                   <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">CTOOL Rate:</label>
+                    <label className="font-semibold">CTOOL Grade:</label>
                   </td>
                   <td className="p-2 w-full md:w-1/4">
                     <input
@@ -1182,7 +1253,7 @@ function UpdateDetails() {
                   </td>
                   <td className="p-2 w-full md:w-1/4">
                     <label className="font-semibold">
-                      CTOOL Proposed Rate:
+                      CTOOL Tagging Rate:
                     </label>
                   </td>
                   <td className="p-2 w-full md:w-1/4">
@@ -1356,90 +1427,6 @@ function UpdateDetails() {
                       className="p-2 border rounded w-full"
                     />
                   </td>
-                </tr>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">
-                      HSBC Roles:
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <div ref={comboboxRef} style={{ position: "relative" }}>
-                      {/* Input field */}
-                      <input
-                        type="text"
-                        placeholder="Search or select a role..."
-                        value={form.hsbcRoles?.roleTitle}
-                        className={`p-2 border w-full ${errors.hsbcRoles ? "border-red-500" : ""
-                          }`}
-                        onChange={handleSearch}
-                        onFocus={() => setShowDropdown(true)} // Open dropdown on focus
-                        style={{
-                          width: "100%",
-                          padding: "8px",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                        }}
-                      />
-
-                      {/* Dropdown options (conditionally rendered) */}
-                      {showDropdown && filteredRoles.length > 0 && (
-                        <ul
-                          style={{
-                            position: "absolute",
-                            top: "100%",
-                            left: "0",
-                            width: "100%",
-                            maxHeight: "200px",
-                            overflowY: "auto",
-                            background: "#fff",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                            zIndex: "1000",
-                            padding: "0",
-                            margin: "0",
-                            listStyleType: "none",
-                          }}
-                        >
-                          {filteredRoles.map((role) => (
-                            <li
-                              key={role.ref}
-                              onClick={() =>
-                                handleSelect(role.roleTitle, role.ref)
-                              } // Properly update input value
-                              style={{
-                                padding: "8px",
-                                cursor: "pointer",
-                                borderBottom: "1px solid #f0f0f0",
-                              }}
-                            >
-                              {role.roleTitle}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-
-                      {/* Fallback for no matches */}
-                      {showDropdown && filteredRoles.length === 0 && (
-                        <div
-                          style={{
-                            padding: "8px",
-                            background: "#fff",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                            marginTop: "4px",
-                          }}
-                        >
-                          No matching roles found
-                        </div>
-                      )}
-                    </div>
-
-                    {errors.lob && (
-                      <p className="text-red-500 text-sm">{errors.hsbcRoles}</p>
-                    )}
-                  </td>
-                  <td></td>
                 </tr>
               </div>
 
