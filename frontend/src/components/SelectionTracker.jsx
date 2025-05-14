@@ -675,35 +675,6 @@ function SelectionTracker() {
         Object.keys(dateErrors).length === 0
       ) {
         try {
-          // Validate file type and size
-          // const file = form.evidence;
-          // const validTypes = ["image/png", "image/jpeg", "application/msword"];
-          // if (!validTypes.includes(file.type)) {
-          //   throw new Error(
-          //     "Invalid file type. Only PNG, JPG, and DOC files are allowed."
-          //   );
-          // }
-          // if (file.size > 10 * 1024 * 1024) {
-          //   // 10MB
-          //   throw new Error("File size exceeds the limit of 10MB.");
-          // }
-
-          // // Create FormData object for file upload
-          // const formData = new FormData();
-          // formData.append("files", file);
-
-          // // Upload file
-          // const uploadResponse = await fetch("http://localhost:8080/upload", {
-          //   method: "POST",
-          //   body: formData,
-          // });
-
-          // console.log("Upload response:", uploadResponse);
-
-          // if (!uploadResponse.ok) {
-          //   throw new Error("Failed to upload file.");
-          // }
-
           // Proceed with the rest of the form submission logic
           const requestBody = {
             hsbcselectionDate: form.selectionDate,
@@ -718,15 +689,14 @@ function SelectionTracker() {
             irm: form.irm,
             hsbctoolId: form.ctoolId,
             ctoolReceivedDate: form.ctoolRecDate,
-            ctoolJobCategory: form.ctoolJobCat,
+            hsbcRoles: form.hsbcRoles,
             ctoolLocation: form.ctoolLocation,
             ctoolRate: form.ctoolRate,
             ctoolProposedRate: form.ctoolPropRate,
             recruiterName: form.recruiterName,
-            interviewEvidence: form.evidence, // Save file name
+            // interviewEvidence: form.evidence, // Save file name
             offerReleaseStatus: form.offerReleaseStatus,
             ltionboardingDate: form.ltiOnboardDate,
-            hsbcRoles: form.hsbcRoles,
           };
 
           if (form.psId) {
@@ -1355,130 +1325,6 @@ function SelectionTracker() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">CTOOL Job Category:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="text"
-                    name="ctoolJobCat"
-                    value={form.ctoolJobCat || ""}
-                    onChange={handleChange}
-                    className="p-2 border rounded w-full"
-                    disabled={isReadOnly}
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">CTOOL Location:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="text"
-                    name="ctoolLocation"
-                    value={form.ctoolLocation || ""}
-                    onChange={handleChange}
-                    className="p-2 border rounded w-full"
-                    disabled={isReadOnly}
-                  />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">CTOOL Rate:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="number"
-                    name="ctoolRate"
-                    value={form.ctoolRate || ""}
-                    onChange={handleChange}
-                    className="p-2 border rounded w-full"
-                    disabled={isReadOnly}
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">CTOOL Proposed Rate:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="number"
-                    name="ctoolPropRate"
-                    value={form.ctoolPropRate || ""}
-                    onChange={handleChange}
-                    className="p-2 border rounded w-full"
-                    disabled={isReadOnly}
-                  />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Recruiter Name:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="text"
-                    name="recruiterName"
-                    value={form.recruiterName || ""}
-                    onChange={handleChange}
-                    className="p-2 border rounded w-full"
-                    disabled={isReadOnly}
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Interview Evidences</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="file"
-                    name="evidence"
-                    accept=".png,.jpg,.jpeg,.doc"
-                    className="p-2 border rounded w-full"
-                  />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Offer Release Status:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <select
-                    name="offerReleaseStatus"
-                    value={form.offerReleaseStatus || ""}
-                    onChange={handleChange}
-                    className="p-2 border rounded w-full"
-                    disabled={isReadOnly}
-                  >
-                    <option value="">Choose...</option>
-                    <option value="Pending">Pending</option>
-                    <option value="On Hold">On Hold</option>
-                    <option value="Release">Released</option>
-                    <option value="WIP">WIP</option>
-                  </select>
-                </td>
-                <td className="p-2 w-full md:w-1/4 items-center">
-                  <label className="font-semibold">LTI Onboarding Date:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4 flex items-center">
-                  {" "}
-                  <input
-                    type="date"
-                    name="ltiOnboardDate"
-                    required
-                    value={form.ltiOnboardDate || ""}
-                    onChange={handleChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.ltiOnboardDate ? "border-red-500" : ""
-                    }`}
-                    disabled={readOnly}
-                  />{" "}
-                  {errors.ltiOnboardDate && (
-                    <p className="text-red-500 text-sm">
-                      {errors.ltiOnboardDate}
-                    </p>
-                  )}
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">
                     HSBC Roles:
                   </label>
@@ -1561,6 +1407,105 @@ function SelectionTracker() {
                   )}
                 </td>
                 <td></td>
+              
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-semibold">CTOOL Location:</label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    type="text"
+                    name="ctoolLocation"
+                    value={form.ctoolLocation || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
+                  />
+                </td>
+              </tr>
+              <tr className="flex flex-wrap md:flex-nowrap">
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-semibold">CTOOL Grade:</label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    type="number"
+                    name="ctoolRate"
+                    value={form.ctoolRate || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
+                  />
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-semibold">CTOOL Tagging Rate:</label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    type="number"
+                    name="ctoolPropRate"
+                    value={form.ctoolPropRate || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
+                  />
+                </td>
+              </tr>
+              <tr className="flex flex-wrap md:flex-nowrap">
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-semibold">Recruiter Name:</label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    type="text"
+                    name="recruiterName"
+                    value={form.recruiterName || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
+                  />
+                </td>
+                <td className="p-2 w-full md:w-1/4 items-center">
+                  <label className="font-semibold">LTI Onboarding Date:</label>
+                </td>
+                <td className="p-2 w-full md:w-1/4 flex items-center">
+                  {" "}
+                  <input
+                    type="date"
+                    name="ltiOnboardDate"
+                    required
+                    value={form.ltiOnboardDate || ""}
+                    onChange={handleChange}
+                    className={`p-2 border rounded w-full ${
+                      errors.ltiOnboardDate ? "border-red-500" : ""
+                    }`}
+                    disabled={readOnly}
+                  />{" "}
+                  {errors.ltiOnboardDate && (
+                    <p className="text-red-500 text-sm">
+                      {errors.ltiOnboardDate}
+                    </p>
+                  )}
+                </td>
+              </tr>
+              <tr className="flex flex-wrap md:flex-nowrap">
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-semibold">Offer Release Status:</label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <select
+                    name="offerReleaseStatus"
+                    value={form.offerReleaseStatus || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
+                  >
+                    <option value="">Choose...</option>
+                    <option value="Pending">Pending</option>
+                    <option value="On Hold">On Hold</option>
+                    <option value="Release">Released</option>
+                    <option value="WIP">WIP</option>
+                  </select>
+                </td>
               </tr>
               {!isReadOnly && (
                 <tr>
