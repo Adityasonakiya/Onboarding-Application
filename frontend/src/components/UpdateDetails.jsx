@@ -104,6 +104,11 @@ function UpdateDetails() {
     }
   }, [evidence]);
 
+
+  const handleCancel = () => {
+    navigate("/landing-page");
+  };
+
   const handleFileRemove = (index) => {
     setUploadedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
   };
@@ -283,18 +288,29 @@ function UpdateDetails() {
     setPhone(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const formattedTagDate = moment(form.tagDate, "YYYY-MM-DD").toISOString();
-    console.log("Formatted tagDate value:", formattedTagDate);
+  const formattedTagDate = moment(form.tagDate, "YYYY-MM-DD").toISOString();
+  console.log("Formatted tagDate value:", formattedTagDate);
 
-    const updateDate = new Date().toISOString();
+  const updateDate = new Date().toISOString();
 
+  // Check if there are any new files (real File objects with size > 0)
+  const hasNewFiles = uploadedFiles.some(
+    (file) => file.fileObject instanceof File && file.fileObject.size > 0
+  );
+
+  let uploadedEvidence = [];
+
+  if (hasNewFiles) {
+    // Only upload new files
     const formData = new FormData();
     uploadedFiles.forEach((file) => {
-      formData.append("files", file.fileObject);
-      formData.append("selectionId", selectionId);
+      if (file.fileObject instanceof File && file.fileObject.size > 0) {
+        formData.append("files", file.fileObject);
+        formData.append("selectionId", selectionId);
+      }
     });
 
     try {
@@ -307,90 +323,100 @@ function UpdateDetails() {
         throw new Error("Failed to upload files.");
       }
 
-      const uploadedEvidence = await uploadResponse.json();
-
-      console.log("Uploaded evidence:", uploadedEvidence);
-
-      const taggingDetails = {
-        onboardingStatus: {
-          onboardingStatus: form.status,
-          remarks: form.addRemark,
-        },
-        bgvStatus: {
-          bgvStatus: form.bgvStatus,
-          remarks: form.bgvRemark,
-        },
-        candidateStatus: {
-          candidateStatus: form.candidateStatus,
-          remarks: form.candidateRemark,
-        },
-        updateDate: updateDate,
-      };
-
-      const selectionDetails = {
-        hsbcselectionDate: form.selectionDate,
-        baseBu: form.bu,
-        lob: form.lob,
-        subLob: form.subLob,
-        hsbchiringManager: form.hiringManager,
-        hsbchead: form.head,
-        deliveryManager: form.deliveryManager,
-        salesPOC: form.salespoc,
-        pricingModel: form.pricingModel,
-        irm: form.irm,
-        hsbctoolId: form.ctoolId,
-        ctoolReceivedDate: form.ctoolRecDate,
-        ctoolJobCategory: form.ctoolJobCat,
-        ctoolLocation: form.ctoolLocation,
-        ctoolRate: form.ctoolRate,
-        ctoolProposedRate: form.ctoolPropRate,
-        recruiterName: form.recruiterName,
-        interviewEvidence: uploadedEvidence, // Save file names
-        offerReleaseStatus: form.offerReleaseStatus,
-        ltionboardingDate: form.ltiOnboardDate,
-        techSelectionDate: form.techSelectDate,
-        candidateStatusDate: form.candidateStatusDate,
-        dojreceivedDate: form.dojRecDate,
-        hsbconboardingDate: form.onboardingDate,
-        ctoolStartDate: form.ctoolStartDate,
-        hsbcRoles: form.hsbcRoles,
-      };
-
-      console.log("tagging details: ", taggingDetails);
-      console.log("selection details Payload: ", selectionDetails);
-
-      // Proceed with the rest of the form submission logic
-      if (isInternal && psId) {
-        await updateSelectionDetailsByPsId(psId, selectionDetails);
-        await updateTaggingDetailsByPsId(psId, taggingDetails);
-        toast.success("Details updated successfully!", {
-          position: "top-right",
-        });
-      } else if (isExternal && phone) {
-        await updateSelectionDetailsByCandidateId(phone, selectionDetails);
-        await updateTaggingDetailsByCandidateId(phone, taggingDetails);
-        toast.success("Details updated successfully!", {
-          position: "top-right",
-        });
-      } else if (isVendor && phone) {
-        await updateSelectionDetailsByVendorCandidateId(
-          phone,
-          selectionDetails
-        );
-        await updateTaggingDetailsByVendorCandidateId(phone, taggingDetails);
-        toast.success("Details updated successfully!", {
-          position: "top-right",
-        });
-      }
-
-      setTimeout(() => {
-        navigate("/landing-page");
-      }, 2000);
+      uploadedEvidence = await uploadResponse.json();
     } catch (error) {
       console.error("An error occurred:", error.message);
       toast.error(error.message, { position: "top-right" });
+      return;
     }
+  } else {
+    // No new files, use the already uploaded evidence
+    uploadedEvidence = uploadedFiles.map((file) => ({
+      fileName: file.fileName,
+      selectionId: selectionId,
+    }));
+  }
+
+  const taggingDetails = {
+    onboardingStatus: {
+      onboardingStatus: form.status,
+      remarks: form.addRemark,
+    },
+    bgvStatus: {
+      bgvStatus: form.bgvStatus,
+      remarks: form.bgvRemark,
+    },
+    candidateStatus: {
+      candidateStatus: form.candidateStatus,
+      remarks: form.candidateRemark,
+    },
+    updateDate: updateDate,
   };
+
+  const selectionDetails = {
+    hsbcselectionDate: form.selectionDate,
+    baseBu: form.bu,
+    lob: form.lob,
+    subLob: form.subLob,
+    hsbchiringManager: form.hiringManager,
+    hsbchead: form.head,
+    deliveryManager: form.deliveryManager,
+    salesPOC: form.salespoc,
+    pricingModel: form.pricingModel,
+    irm: form.irm,
+    hsbctoolId: form.ctoolId,
+    ctoolReceivedDate: form.ctoolRecDate,
+    ctoolJobCategory: form.ctoolJobCat,
+    ctoolLocation: form.ctoolLocation,
+    ctoolRate: form.ctoolRate,
+    ctoolProposedRate: form.ctoolPropRate,
+    recruiterName: form.recruiterName,
+    interviewEvidence: uploadedEvidence, // Always send the current evidence list
+    offerReleaseStatus: form.offerReleaseStatus,
+    ltionboardingDate: form.ltiOnboardDate,
+    techSelectionDate: form.techSelectDate,
+    candidateStatusDate: form.candidateStatusDate,
+    dojreceivedDate: form.dojRecDate,
+    hsbconboardingDate: form.onboardingDate,
+    ctoolStartDate: form.ctoolStartDate,
+    hsbcRoles: form.hsbcRoles,
+  };
+
+  console.log("tagging details: ", taggingDetails);
+  console.log("selection details Payload: ", selectionDetails);
+
+  try {
+    if (isInternal && psId) {
+      await updateSelectionDetailsByPsId(psId, selectionDetails);
+      await updateTaggingDetailsByPsId(psId, taggingDetails);
+      toast.success("Details updated successfully!", {
+        position: "top-right",
+      });
+    } else if (isExternal && phone) {
+      await updateSelectionDetailsByCandidateId(phone, selectionDetails);
+      await updateTaggingDetailsByCandidateId(phone, taggingDetails);
+      toast.success("Details updated successfully!", {
+        position: "top-right",
+      });
+    } else if (isVendor && phone) {
+      await updateSelectionDetailsByVendorCandidateId(
+        phone,
+        selectionDetails
+      );
+      await updateTaggingDetailsByVendorCandidateId(phone, taggingDetails);
+      toast.success("Details updated successfully!", {
+        position: "top-right",
+      });
+    }
+
+    setTimeout(() => {
+      navigate("/landing-page");
+    }, 2000);
+  } catch (error) {
+    console.error("An error occurred:", error.message);
+    toast.error(error.message, { position: "top-right" });
+  }
+};
 
   useEffect(() => {
     // Determine the type of user (Internal, External, Vendor) based on `id`
@@ -1707,6 +1733,7 @@ function UpdateDetails() {
                     <button
                       type="button"
                       className="bg-gray-500 text-white py-2 px-10 rounded"
+                      onClick={handleCancel}
                     >
                       Cancel
                     </button>
