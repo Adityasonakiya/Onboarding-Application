@@ -447,27 +447,25 @@ function SelectionTracker() {
 
       setForm((prevForm) => ({
         ...prevForm,
-        selectionDate: selectionDate,
+        selectionDate: formatDate(selectionDetails.hsbcselectionDate),
         bu: selectionDetails.baseBu || "BF",
-        lob: selectionDetails.lob || "",
-        subLob: selectionDetails.sublob || "",
+        lob: selectionDetails.lob,
+        subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
-        head: selectionDetails.hsbchead,
-        deliveryManager: selectionDetails.deliveryManager,
-        salespoc: selectionDetails.salesPOC,
+        head: selectionDetails.lob.hsbchead,
+        deliveryManager: selectionDetails.lob.deliveryManager,
+        salespoc: selectionDetails.lob.salesPOC,
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
         ctoolId: selectionDetails.hsbctoolId,
-        ctoolRecDate: ctoolRecDate,
-        ctoolJobCat: selectionDetails.ctoolJobCategory,
+        ctoolRecDate: formatDate(selectionDetails.ctoolReceivedDate),
         ctoolLocation: selectionDetails.ctoolLocation,
-        ctoolRate: selectionDetails.ctoolRate,
-        ctoolPropRate: selectionDetails.ctoolProposedRate,
+        hsbcRoles: selectionDetails.hsbcRoles,
+        ctoolGrade: selectionDetails.hsbcRoles.grade,
+        ctoolTaggingRate: selectionDetails.ctoolTaggingRate,
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
-        ltiOnboardDate: ltiOnboardDate,
-        evidence: selectionDetails.interviewEvidences,
-        hsbcRoles: selectionDetails.hsbcRoles,
+        ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
       }));
       setSelectedSubLobTemp(selectionDetails.subLob);
       if (
@@ -503,22 +501,20 @@ function SelectionTracker() {
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
-        head: selectionDetails.hsbchead,
-        deliveryManager: selectionDetails.deliveryManager,
-        salespoc: selectionDetails.salesPOC,
+        head: selectionDetails.lob.hsbchead,
+        deliveryManager: selectionDetails.lob.deliveryManager,
+        salespoc: selectionDetails.lob.salesPOC,
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
         ctoolId: selectionDetails.hsbctoolId,
         ctoolRecDate: formatDate(selectionDetails.ctoolReceivedDate),
-        ctoolJobCat: selectionDetails.ctoolJobCategory,
         ctoolLocation: selectionDetails.ctoolLocation,
-        ctoolRate: selectionDetails.ctoolRate,
-        ctoolPropRate: selectionDetails.ctoolProposedRate,
+        hsbcRoles: selectionDetails.hsbcRoles,
+        ctoolGrade: selectionDetails.hsbcRoles.grade,
+        ctoolTaggingRate: selectionDetails.ctoolTaggingRate,
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
-        evidence: selectionDetails.interviewEvidences,
-        hsbcRoles: selectionDetails.hsbcRoles,
       }));
       setSelectedSubLobTemp(selectionDetails.subLob);
       if (
@@ -553,22 +549,20 @@ function SelectionTracker() {
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
-        head: selectionDetails.hsbchead,
-        deliveryManager: selectionDetails.deliveryManager,
-        salespoc: selectionDetails.salesPOC,
+        head: selectionDetails.lob.hsbchead,
+        deliveryManager: selectionDetails.lob.deliveryManager,
+        salespoc: selectionDetails.lob.salesPOC,
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
         ctoolId: selectionDetails.hsbctoolId,
         ctoolRecDate: formatDate(selectionDetails.ctoolReceivedDate),
-        ctoolJobCat: selectionDetails.ctoolJobCategory,
         ctoolLocation: selectionDetails.ctoolLocation,
-        ctoolRate: selectionDetails.ctoolRate,
-        ctoolPropRate: selectionDetails.ctoolProposedRate,
+        hsbcRoles: selectionDetails.hsbcRoles,
+        ctoolGrade: selectionDetails.hsbcRoles.grade,
+        ctoolTaggingRate: selectionDetails.ctoolTaggingRate,
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
-        evidence: selectionDetails.interviewEvidences,
-        hsbcRoles: selectionDetails.hsbcRoles,
       }));
       setSelectedSubLobTemp(selectionDetails.subLob);
       if (
@@ -691,10 +685,9 @@ function SelectionTracker() {
             ctoolReceivedDate: form.ctoolRecDate,
             hsbcRoles: form.hsbcRoles,
             ctoolLocation: form.ctoolLocation,
-            ctoolRate: form.ctoolRate,
-            ctoolProposedRate: form.ctoolPropRate,
+            ctoolGrade: form.ctoolGrade,
+            ctoolTaggingRate: form.ctoolTaggingRate,
             recruiterName: form.recruiterName,
-            // interviewEvidence: form.evidence, // Save file name
             offerReleaseStatus: form.offerReleaseStatus,
             ltionboardingDate: form.ltiOnboardDate,
           };
@@ -1216,6 +1209,7 @@ function SelectionTracker() {
                       Chinni Krishna Nakka
                     </option>
                     <option value="Mayuresh Nirantar">Mayuresh Nirantar</option>
+                    <option value="Rupali Khedekar">Rupali Khedekar</option>
                     <option value="Saber Sarode">Saber Sarode</option>
                     <option value="Sachin Shaha">Sachin Shaha</option>
                   </select>
@@ -1429,8 +1423,8 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <input
                     type="number"
-                    name="ctoolRate"
-                    value={form.ctoolRate || ""}
+                    name="ctoolGrade"
+                    value={form.ctoolGrade || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                     disabled={isReadOnly}
@@ -1442,8 +1436,8 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <input
                     type="number"
-                    name="ctoolPropRate"
-                    value={form.ctoolPropRate || ""}
+                    name="ctoolTaggingRate"
+                    value={form.ctoolTaggingRate || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                     disabled={isReadOnly}

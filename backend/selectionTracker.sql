@@ -321,23 +321,24 @@ INSERT INTO candidate_status VALUES
 (4,"Joined date delayed"," candidate joined date delayed"),
 (5,"Candidate yet to join Parent Company","Candidate yet to join Parent Company");
 
-INSERT INTO lob (lob_id, lob_name, remarks, created_by, updated_by, created_date, update_date) VALUES
-(1, 'Business & Data Architecture', 'Business & Data Architecture', 10713037, 10713037, NOW(), NOW()),
-(2, 'CTO', 'Chief Technology Officer', 10713037, 10713037, NOW(), NOW()),
-(3, 'Cybersecurity', 'Cybersecurity Assessment and testing', 10713037, 10713037, NOW(), NOW()),
-(4, 'Enterprise Technology', 'Finance & banking', 10713037, 10713037, NOW(), NOW()),
-(5, 'Global Ops & Automation Tech', 'Automation Technology', 10713037, 10713037, NOW(), NOW()),
-(6, 'Group Data Technology', 'Group data Technology', 10713037, 10713037, NOW(), NOW()),
-(7, 'HDPI', 'Pixel density', 10713037, 10713037, NOW(), NOW()),
-(8, 'INM', 'INM', 10713037, 10713037, NOW(), NOW()),
-(9, 'Markets & Sec Services Tech', 'Services', 10713037, 10713037, NOW(), NOW()),
-(10, 'MDS & DAO ESG', 'Data& Analytics', 10713037, 10713037, NOW(), NOW()),
-(11, 'Regional CIO - Europe', 'Regional CIO for Europe', 10713037, 10713037, NOW(), NOW()),
-(12, 'SAB Technology', 'SAB Tech', 10713037, 10713037, NOW(), NOW()),
-(13, 'Strategic Services Technology', 'SST Group', 10713037, 10713037, NOW(), NOW()),
-(14, 'Technology COO', 'Tech COO', 10713037, 10713037, NOW(), NOW()),
-(15, 'Wholesale Technology', 'WS Tech', 10713037, 10713037, NOW(), NOW()),
-(16, 'WPB Technology', 'WPB', 10713037, 10713037, NOW(), NOW());
+INSERT INTO lob (lob_id, lob_name, remarks, created_by, updated_by, created_date, update_date,delivery_manager, salespoc,hsbchead,active) VALUES
+(1, 'Business & Data Architecture', 'Business & Data Architecture', 10713037, 10713037, NOW(), NOW(),NULL,NULL,NULL,false),
+(2, 'CTO', 'Chief Technology Officer', 10713037, 10713037, NOW(), NOW(),'Arvind Deogade','Anand Devi','abcd',true),
+(3, 'Cybersecurity', 'Cybersecurity Assessment and testing', 10713037, 10713037, NOW(), NOW(),'Arvind Deogade','Anand Devi','abcd',true),
+(4, 'Enterprise Technology', 'Finance & banking', 10713037, 10713037, NOW(), NOW(),'Rupali Khedekar','Anand Devi','Sameer Sagade',true),
+(5, 'Global Ops & Automation Tech', 'Automation Technology', 10713037, 10713037, NOW(), NOW(),'Mayuresh Nirantar','Anand Devi','abcd',true),
+(6, 'Group Data Technology', 'Group data Technology', 10713037, 10713037, NOW(), NOW(),'Chinni Krishna Nakka','Kinshuk Awasthi','abcd',true),
+(7, 'HDPI', 'Pixel density', 10713037, 10713037, NOW(), NOW(),NULL,NULL,NULL,false),
+(8, 'INM', 'INM', 10713037, 10713037, NOW(), NOW(),'Mayuresh Nirantar','Anand Devi','abcd',true),
+(9, 'Markets & Sec Services Tech', 'Services', 10713037, 10713037, NOW(), NOW(),'Abhijeet More','Ajay Pillai','abcd',true),
+(10, 'MDS & DAO ESG', 'Data& Analytics', 10713037, 10713037, NOW(), NOW(),NULL,NULL,NULL,false),
+(11, 'Regional CIO - Europe', 'Regional CIO for Europe', 10713037, 10713037, NOW(), NOW(),'Arvind Deogade','Anand Devi','abcd',true),
+(12, 'SAB Technology', 'SAB Tech', 10713037, 10713037, NOW(), NOW(),'Rupali Khedekar','Anand Devi','abcd',true),
+(13, 'Strategic Services Technology', 'SST Group', 10713037, 10713037, NOW(), NOW(),'Rupali Khedekar','Anand Devi','abcd',true),
+(14, 'Technology COO', 'Tech COO', 10713037, 10713037, NOW(), NOW(),'Arvind Deogade','Anand Devi','abcd',true),
+(15, 'Wholesale Technology', 'WS Tech', 10713037, 10713037, NOW(), NOW(),'Saber Sarode','Ajay Pillai','Smita Jamalamadaka',true),
+(16, 'WPB Technology', 'WPB', 10713037, 10713037, NOW(), NOW(),'Aniruddha Deshpande','Nishant Sharma','abcd',true),
+(17, 'Wholesale Payments', 'Wholesale Payments', 10713037, 10713037, NOW(), NOW(),'Saber Sarode','Rajiv Lakhanpal','Smita Jamalamadaka',true);
 
 INSERT INTO sublob 
 (sublobid, lob_id, sub_lob_name, created_by_ps_id, update_by_ps_id, create_date, update_date) 
@@ -383,148 +384,116 @@ VALUES
 (113,13,'SST Group Enterprise Arch',10713037,10713037,NOW(),NOW()),
 (114,14,'Tech COO - Enterprise Tech',10713037,10713037,NOW(),NOW()),
 (214,14,'Tech Third Party Mgmt',10713037,10713037,NOW(),NOW()),
-(115,15,'WS Global Payment Solutions',10713037,10713037,NOW(),NOW()),
-(215,15,'WS Tech Client Services',10713037,10713037,NOW(),NOW()),
-(315,15,'WS Tech Credit & Lending',10713037,10713037,NOW(),NOW()),
-(415,15,'WS Tech Digital',10713037,10713037,NOW(),NOW()),
-(515,15,'WS Tech FEM&S',10713037,10713037,NOW(),NOW()),
-(615,15,'WS Tech General',10713037,10713037,NOW(),NOW()),
-(715,15,'WS Tech Global Banking',10713037,10713037,NOW(),NOW()),
-(815,15,'WS Tech Global Trade and RF',10713037,10713037,NOW(),NOW()),
-(915,15,'WS Tech Regional',10713037,10713037,NOW(),NOW()),
-(1015,15,'WS Tech Shared Services',10713037,10713037,NOW(),NOW()),
-(1115,15,'WSIT General',10713037,10713037,NOW(),NOW()),
+(115,15,'WS Tech Client Services',10713037,10713037,NOW(),NOW()),
+(215,15,'WS Tech Credit & Lending',10713037,10713037,NOW(),NOW()),
+(315,15,'WS Tech Digital',10713037,10713037,NOW(),NOW()),
+(415,15,'WS Tech FEM&S',10713037,10713037,NOW(),NOW()),
+(515,15,'WS Tech General',10713037,10713037,NOW(),NOW()),
+(615,15,'WS Tech Global Banking',10713037,10713037,NOW(),NOW()),
+(715,15,'WS Tech Global Trade and RF',10713037,10713037,NOW(),NOW()),
+(815,15,'WS Tech Regional',10713037,10713037,NOW(),NOW()),
+(915,15,'WS Tech Shared Services',10713037,10713037,NOW(),NOW()),
+(1015,15,'WSIT General',10713037,10713037,NOW(),NOW()),
 (116,16,'Enabler Platforms',10713037,10713037,NOW(),NOW()),
 (216,16,'GPBW and AMG Tech',10713037,10713037,NOW(),NOW()),
 (316,16,'Insurance',10713037,10713037,NOW(),NOW()),
 (416,16,'Retail Banking Technology',10713037,10713037,NOW(),NOW()),
 (516,16,'WPB Technology Management',10713037,10713037,NOW(),NOW()),
-(616,16,'WPB UK Tech',10713037,10713037,NOW(),NOW());
+(616,16,'WPB UK Tech',10713037,10713037,NOW(),NOW()),
+(117,17,'WS Global Payment Solutions',10713037,10713037,NOW(),NOW());
 
-INSERT INTO selection_details 
-(ps_id, candidate_id, vendor_candidate_id, delivery_manager, lob_id, sub_lob_id, irm, created_by, updated_by, hsbcselection_date, 
-hsbchiring_manager, hsbchead, salespoc, pricing_model, hsbctool_id, ctool_received_date, ctool_job_category, 
-ctool_location, ctool_rate, ctool_proposed_rate, recruiter_name, offer_release_status,base_bu,
-hsbconboarding_date, tech_selection_date, dojreceived_date, ltionboarding_date, create_date, update_date, candidate_status_date) 
+INSERT INTO selection_details (
+  ps_id,candidate_id,vendor_candidate_id,base_bu,lob_id,sub_lob_id,irm,hsbc_role_id,created_by,updated_by,hsbcselection_date,
+  hsbchiring_manager,pricing_model,hsbctool_id,ctool_received_date,ctool_location,ctool_grade,ctool_tagging_rate,recruiter_name,offer_release_status,
+  hsbconboarding_date,tech_selection_date,dojreceived_date,ltionboarding_date,create_date,update_date,candidate_status_date,ctool_start_date,bgv_initiated_date)
 VALUES
-(10820984, NULL, NULL, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2023-03-05', 
-'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'T&M', 108933, '2023-04-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', 'Pending','BFS', 
-'2025-04-23', '2025-04-23', '2025-04-23', '2023-02-28', NOW(), NOW(), NULL),
-
-(10715126, NULL, NULL, 'Abhijeet Sureshchandra More', 2, 22, 10825932, 10713037, 10713037, '2025-03-12', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108933, '2025-04-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', 'On Hold','BFS',  
-NULL, NULL, NULL, '2025-04-23', NOW(), NOW(), NULL),
-
-(10825932, NULL, NULL, 'Aniruddha Deshpande', 6, 36, 10825932, 10713037, 10713037, '2025-03-18', 
-'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'T&M', 108933, '2025-04-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', 'Release', 'BFS', 
-'2025-04-23', '2025-04-23', '2025-04-23', '2025-03-01', NOW(), NOW(), NULL),
-
-(NULL, 2, NULL, 'Arvind Deogade', 1, 11, 10825932, 10713037, 10713037, '2025-03-17', 
-'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'FP', 108933, '2025-04-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', 'WIP', 'BFS', 
-NULL, NULL, NULL, NULL, NOW(), NOW(), NULL),
-
-(10830001, NULL, NULL, 'Chinni Krishna Nakka', 4, 44, 10825932, 10713037, 10713037, '2025-03-08', 
-'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108934, '2025-04-02', 'TM', 
-'Mumbai', 40, 40, 'Nishant Sharma', 'Pending', 'BFS', 
-'2025-9-23', '2025-9-18', '2025-9-21', '2025-02-28', NOW(), NOW(), NULL),
-
-(10830002, NULL, NULL, 'Mayuresh Nirantar', 4, 54, 10825932, 10713037, 10713037, '2025-03-15', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108935, '2025-04-02', 'TM', 
-'Bangalore', 50, 50, 'Nishant Sharma', 'On Hold', 'BFS', 
-'2025-03-20', '2025-03-20', '2025-03-20', '2025-03-01', NOW(), NOW(), NULL),
-
-(10830003, NULL, NULL, 'Saber Sarode', 6, 66, 10825932, 10713037, 10713037, '2025-03-10', 
-'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108936, '2025-04-02', 'TM', 
-'Hyderabad', 60, 60, 'Nishant Sharma', 'Release', 'BFS', 
-'2025-03-23', '2025-02-23', '2025-03-23', '2025-03-01', NOW(), NOW(), NULL),
-
-(10830006, NULL, NULL, 'Sachin Shaha', 1, 11, 10825932, 10713037, 10713037, '2025-03-25', 
-'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'T&M', 108933, '2025-04-02', 'TM', 
-'Pune', 30, 30, 'Nishant Sharma', 'WIP', 'BFS', 
-'2025-03-30', '2025-03-30', '2025-03-30', '2025-03-01', NOW(), NOW(), NULL),
-
-(10830004, NULL, NULL, 'Abhijeet Sureshchandra More', 6, 76, 10825932, 10713037, 10713037, '2025-03-14', 
-'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108937, '2025-04-02', 'TM', 
-'Chennai', 70, 70, 'Nishant Sharma', 'Pending', 'BFS', 
-'2025-02-23', '2025-01-23', '2025-02-23', '2025-03-01', NOW(), NOW(), NULL),
-
-(10830005, NULL, NULL, 'Aniruddha Deshpande', 6, 86, 10825932, 10713037, 10713037, '2025-03-19', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108938, '2025-04-02', 'TM', 
-'Delhi', 80, 80, 'Nishant Sharma', 'On Hold', 'BFS', 
-'2025-03-22', '2025-03-22', '2025-03-22', '2025-03-01', NOW(), NOW(), NULL),
-
-(10830007, NULL, NULL, 'Mayuresh Nirantar', 9, 19, 10825932, 10713037, 10713037, '2025-03-11', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108939, '2025-04-02', 'TM', 
-'Bangalore', 90, 90, 'Nishant Sharma', 'Release', 'BFS', 
-'2025-03-15', '2025-03-15', '2025-03-15', '2025-03-01', NOW(), NOW(), NULL),
-
-(10830008, NULL, NULL, 'Saber Sarode', 10, 110, 10825932, 10713037, 10713037, '2025-03-20', 
-'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108940, '2025-04-02', 'TM', 
-'Hyderabad', 100, 100, 'Nishant Sharma', 'WIP', 'BFS', 
-'2025-03-25', '2025-03-25', '2025-03-25', '2025-03-01', NOW(), NOW(), NULL),
-
-(NULL, 6, NULL, 'Sachin Shaha', 11, 111, 10825932, 10713037, 10713037, '2025-03-13', 
-'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'T&M', 108941, '2025-04-02', 'TM', 
-'Pune', 110, 110, 'Nishant Sharma', 'Pending', 'BFS', 
-NULL, NULL, NULL, NULL, NOW(), NOW(), NULL),
-
-(10830010, NULL, NULL, 'Abhijeet Sureshchandra More', 12, 112, 10825932, 10713037, 10713037, '2025-03-17', 
-'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108942, '2025-04-02', 'TM', 
-'Chennai', 120, 120, 'Nishant Sharma', 'On Hold', 'BFS', 
-'2025-03-22', '2025-03-22', '2025-03-22', '2025-03-01', NOW(), NOW(), NULL),
-
-(10830011, NULL, NULL, 'Aniruddha Deshpande', 13, 113, 10825932, 10713037, 10713037, '2025-03-04', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108943, '2025-04-02', 'TM', 
-'Delhi', 130, 130, 'Nishant Sharma', 'Release', 'BFS', 
-'2025-03-15', '2025-03-15', '2025-03-15', '2025-03-01', NOW(), NOW(), NULL),
-
-(10830013, NULL, NULL, 'Saber Sarode', 15, 115, 10825932, 10713037, 10713037, '2025-03-18', 
-'Sachin Shaha', 'Sachin Shaha', 'Indranil Moolay', 'FP', 108945, '2025-04-02', 'TM', 
-'Hyderabad', 150, 150, 'Nishant Sharma', 'Pending', 'BFS', 
-'2025-03-25', '2025-03-25', '2025-03-25', '2025-03-01', NOW(), NOW(), NULL),
-
-(NULL, 7, NULL, 'Sachin Shaha', 16, 116, 10825932, 10713037, 10713037, '2025-03-16', 
-'Sachin Shaha', 'Sachin Shaha', 'Ajay Pillai', 'T&M', 108946, '2025-04-02', 'TM', 
-'Pune', 160, 160, 'Nishant Sharma', 'WIP', 'BFS', 
-NULL, NULL, NULL, NULL, NOW(), NOW(), NULL),
-
-(10830014, NULL, NULL, 'Abhijeet Sureshchandra More', 16, 316, 10825932, 10713037, 10713037, '2025-02-28', 
-'Sachin Shaha', 'Sachin Shaha', 'Anand Devi', 'FP', 108947, '2025-04-02', 'TM', 
-'Chennai', 170, 170, 'Nishant Sharma', 'Pending', 'BFS', 
-'2025-03-05', '2025-02-05', '2025-02-28', '2025-02-20', NOW(), NOW(), NULL),
-
-(10830015, NULL, NULL, 'Aniruddha Deshpande', 15, 715, 10825932, 10713037, 10713037, '2025-02-15', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'FP', 108948, '2025-04-02', 'TM', 
-'Delhi', 180, 180, 'Nishant Sharma', 'On Hold', 'BFS', 
-'2025-02-20', '2025-02-20', '2025-02-20', '2025-02-10', NOW(), NOW(), NULL),
-
-(NULL, 8, NULL, 'Mayuresh Nirantar', 8, 18, 10825932, 10713037, 10713037, '2025-01-30', 
-'Sachin Shaha', 'Sachin Shaha', 'Nishant Sharma', 'T&M', 108949, '2025-04-02', 'TM', 
-'Bangalore', 190, 190, 'Nishant Sharma', 'Release', 'BFS', 
-NULL, NULL, '2025-01-20',NULL , NOW(), NOW(), NULL);
-
+-- 1. CTO (lob_id 2, active), sublob 12 (active)
+(10820984, NULL, NULL, 'BFS', 2, 12, '10825932', 1, 10713037, 10713037, '2023-03-05',
+ 'Sachin Shaha', 'T&M', 108933, '2023-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'Pending',
+ '2025-04-23', '2025-04-23', '2025-04-23', '2023-02-28', NOW(), NOW(), NULL, NULL, NULL),
+-- 2. CTO (lob_id 2, active), sublob 22 (active)
+(10715126, NULL, NULL, 'BFS', 2, 22, '10825932', 2, 10713037, 10713037, '2025-03-12',
+ 'Sachin Shaha', 'FP', 108933, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'On Hold',
+ NULL, NULL, NULL, '2025-04-23', NOW(), NOW(), NULL, NULL, NULL),
+-- 3. Group Data Technology (lob_id 6, active), sublob 36 (active)
+(10825932, NULL, NULL, 'BFS', 6, 36, '10825932', 3, 10713037, 10713037, '2025-03-18',
+ 'Sachin Shaha', 'T&M', 108933, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'Release',
+ '2025-04-23', '2025-04-23', '2025-04-23', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
+-- 4. CTO (lob_id 2, active), sublob 12 (active)
+(NULL, 2, NULL, 'BFS', 2, 12, '10825932', 4, 10713037, 10713037, '2025-03-17',
+ 'Sachin Shaha', 'FP', 108933, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'WIP',
+ NULL, NULL, NULL, NULL, NOW(), NOW(), NULL, NULL, NULL),
+-- 5. Enterprise Technology (lob_id 4, active), sublob 44 (active)
+(10830001, NULL, NULL, 'BFS', 4, 44, '10825932', 5, 10713037, 10713037, '2025-03-08',
+ 'Sachin Shaha', 'FP', 108934, '2025-04-02', 'Mumbai', NULL, NULL, 'Nishant Sharma', 'Pending',
+ '2025-09-23', '2025-09-18', '2025-09-21', '2025-02-28', NOW(), NOW(), NULL, NULL, NULL),
+-- 6. Enterprise Technology (lob_id 4, active), sublob 54 (active)
+(10830002, NULL, NULL, 'BFS', 4, 54, '10825932', 6, 10713037, 10713037, '2025-03-15',
+ 'Sachin Shaha', 'T&M', 108935, '2025-04-02', 'Bangalore', NULL, NULL, 'Nishant Sharma', 'On Hold',
+ '2025-03-20', '2025-03-20', '2025-03-20', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
+-- 7. Group Data Technology (lob_id 6, active), sublob 66 (active)
+(10830003, NULL, NULL, 'BFS', 6, 66, '10825932', 7, 10713037, 10713037, '2025-03-10',
+ 'Sachin Shaha', 'FP', 108936, '2025-04-02', 'Hyderabad', NULL, NULL, 'Nishant Sharma', 'Release',
+ '2025-03-23', '2025-02-23', '2025-03-23', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
+-- 8. Group Data Technology (lob_id 6, active), sublob 76 (active)
+(10830004, NULL, NULL, 'BFS', 6, 76, '10825932', 8, 10713037, 10713037, '2025-03-14',
+ 'Sachin Shaha', 'FP', 108937, '2025-04-02', 'Chennai', NULL, NULL, 'Nishant Sharma', 'Pending',
+ '2025-02-23', '2025-01-23', '2025-02-23', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
+-- 9. Group Data Technology (lob_id 6, active), sublob 86 (active)
+(10830005, NULL, NULL, 'BFS', 6, 86, '10825932', 9, 10713037, 10713037, '2025-03-19',
+ 'Sachin Shaha', 'FP', 108938, '2025-04-02', 'Delhi', NULL, NULL, 'Nishant Sharma', 'On Hold',
+ '2025-03-22', '2025-03-22', '2025-03-22', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
+-- 10. Markets & Sec Services Tech (lob_id 9, active), sublob 19 (active)
+(10830007, NULL, NULL, 'BFS', 9, 19, '10825932', 10, 10713037, 10713037, '2025-03-11',
+ 'Sachin Shaha', 'T&M', 108939, '2025-04-02', 'Bangalore', NULL, NULL, 'Nishant Sharma', 'Release',
+ '2025-03-15', '2025-03-15', '2025-03-15', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
+-- 11. MDS & DAO ESG (lob_id 10, inactive) -- SKIPPED
+-- 12. Regional CIO - Europe (lob_id 11, active), sublob 111 (active)
+(NULL, 6, NULL, 'BFS', 11, 111, '10825932', 11, 10713037, 10713037, '2025-03-13',
+ 'Sachin Shaha', 'T&M', 108941, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'Pending',
+ NULL, NULL, NULL, NULL, NOW(), NOW(), NULL, NULL, NULL),
+-- 13. SAB Technology (lob_id 12, active), sublob 112 (active)
+(10830010, NULL, NULL, 'BFS', 12, 112, '10825932', 12, 10713037, 10713037, '2025-03-17',
+ 'Sachin Shaha', 'FP', 108942, '2025-04-02', 'Chennai', NULL, NULL, 'Nishant Sharma', 'On Hold',
+ '2025-03-22', '2025-03-22', '2025-03-22', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
+-- 14. Strategic Services Technology (lob_id 13, active), sublob 113 (active)
+(10830011, NULL, NULL, 'BFS', 13, 113, '10825932', 13, 10713037, 10713037, '2025-03-04',
+ 'Sachin Shaha', 'FP', 108943, '2025-04-02', 'Delhi', NULL, NULL, 'Nishant Sharma', 'Release',
+ '2025-03-15', '2025-03-15', '2025-03-15', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
+-- 15. Wholesale Technology (lob_id 15, active), sublob 115 (active)
+(10830013, NULL, NULL, 'BFS', 15, 115, '10825932', 15, 10713037, 10713037, '2025-03-18',
+ 'Sachin Shaha', 'FP', 108945, '2025-04-02', 'Hyderabad', NULL, NULL, 'Nishant Sharma', 'Pending',
+ '2025-03-25', '2025-03-25', '2025-03-25', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
+-- 16. WPB Technology (lob_id 16, active), sublob 116 (active)
+(NULL, 7, NULL, 'BFS', 16, 116, '10825932', 16, 10713037, 10713037, '2025-03-16',
+ 'Sachin Shaha', 'T&M', 108946, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'WIP',
+ NULL, NULL, NULL, NULL, NOW(), NOW(), NULL, NULL, NULL),
+-- 17. WPB Technology (lob_id 16, active), sublob 316 (active)
+(10830014, NULL, NULL, 'BFS', 16, 316, '10825932', 17, 10713037, 10713037, '2025-02-28',
+ 'Sachin Shaha', 'FP', 108947, '2025-04-02', 'Chennai', NULL, NULL, 'Nishant Sharma', 'Pending',
+ '2025-03-05', '2025-02-05', '2025-02-28', '2025-02-20', NOW(), NOW(), NULL, NULL, NULL),
+-- 18. Wholesale Technology (lob_id 15, active), sublob 715 (active)
+(10830015, NULL, NULL, 'BFS', 15, 715, '10825932', 18, 10713037, 10713037, '2025-02-15',
+ 'Sachin Shaha', 'FP', 108948, '2025-04-02', 'Delhi', NULL, NULL, 'Nishant Sharma', 'On Hold',
+ '2025-02-20', '2025-02-20', '2025-02-20', '2025-02-10', NOW(), NOW(), NULL, NULL, NULL),
+-- 19. INM (lob_id 8, active), sublob 18 (active)
+(NULL, 8, NULL, 'BFS', 8, 18, '10825932', 19, 10713037, 10713037, '2025-01-30',
+ 'Sachin Shaha', 'T&M', 108949, '2025-04-02', 'Bangalore', NULL, NULL, 'Nishant Sharma', 'Release',
+ NULL, NULL, '2025-01-20', NULL, NOW(), NOW(), NULL, NULL, NULL);
 
 INSERT INTO tagging_details 
 (ps_id, candidate_id, onboarding_status_id, bgvstatus_id, created_by_psid, updated_by_psid, status_remarks, create_date, update_date) 
 VALUES
 (10820984, NULL, 4, 2, 10713037, 10713037, 'BGV Initiated', NOW(), NOW()),
-(NULL, 1, 4, 3, 10713037, 10713037, 'BGV in progress', NOW(), NOW()),
-(10821014, NULL, 4, 2, 10713037, 10713037, 'Minor discrepancy found', NOW(), NOW()),
+(NULL, 2, 4, 3, 10713037, 10713037, 'BGV in progress', NOW(), NOW()),
 (10715126, NULL, 5, 4, 10713037, 10713037, 'Major discrepancy found', NOW(), NOW()),
 (10825932, NULL, 6, 6, 10713037, 10713037, 'Offer yet to be released', NOW(), NOW()),
 (10830001, NULL, 5, 6, 10713037, 10713037, 'Interim cleared', NOW(), NOW()),
 (10830002, NULL, 6, 3, 10713037, 10713037, 'Pending with employee', NOW(), NOW()),
 (10830003, NULL, 4, 5, 10713037, 10713037, 'BGV initiated', NOW(), NOW()),
-(10830006, NULL, 5, 2, 10713037, 10713037, 'BGV in progress', NOW(), NOW()),
 (10830004, NULL, 6, 7, 10713037, 10713037, 'Minor discrepancy found', NOW(), NOW()),
 (10830005, NULL, 4, 2, 10713037, 10713037, 'Initial tagging', NOW(), NOW()),
 (10830007, NULL, 4, 3, 10713037, 10713037, 'BGV in progress', NOW(), NOW()),
-(10830008, NULL, 4, 2, 10713037, 10713037, 'Minor discrepancy found', NOW(), NOW()),
-(10830009, NULL, 5, 4, 10713037, 10713037, 'Major discrepancy found', NOW(), NOW()),
 (10830010, NULL, 5, 6, 10713037, 10713037, 'Offer yet to be released', NOW(), NOW()),
 (10830011, NULL, 6, 6, 10713037, 10713037, 'Interim cleared', NOW(), NOW()),
 (10830013, NULL, 4, 5, 10713037, 10713037, 'BGV initiated', NOW(), NOW()),
@@ -601,70 +570,71 @@ and td.onboarding_status_id = os.status_id
 and td.bgvstatus_id = bs.bgv_status_id
 group by lb.lob_id,os.status_id,bs.bgv_status_id;
 
-SELECT count(*) as awaited_count,sd.delivery_manager,sd.pricing_model,bs.bgv_status,os.onboarding_status 
-from selection_details sd,tagging_details td,BGVStatus bs,onboarding_status os 
+SELECT count(*) as awaited_count,lb.delivery_manager,sd.pricing_model,bs.bgv_status,os.onboarding_status 
+from selection_details sd,tagging_details td,BGVStatus bs,onboarding_status os,lob lb 
 where sd.ps_id = td.ps_id 
+and sd.lob_id=lb.lob_id
 and td.bgvstatus_id = bs.bgv_status_id 
 and td.onboarding_status_id = os.status_id 
-group by bs.bgv_status_id,sd.pricing_model,sd.delivery_manager,os.status_id;
+group by bs.bgv_status_id,sd.pricing_model,lb.delivery_manager,os.status_id;
 
-Select obs.onboarding_status as onboardingStatus, emp.psid as lti_ps_id,emp.first_name as firstName,emp.last_name as lastName,emp.grade as grade,emp.location as location,emp.total_experience as totalExperience,emp.skill as skill,
-selection.hsbcselection_date as hsbcselectionDate,selection.ltionboarding_date as ltijoiningDate,selection.create_date as createdDate,DATE_FORMAT(hsbcselection_date, '%Y-%m') as selectionMonthYear,datediff(now(),hsbcselection_date) as selectionAging,
-'Internal' as category, emp.pu as basebu, lob.lob_name,sublob.sub_lob_name,selection.salespoc as salesPoc, selection.hsbchiring_manager as hsbchiringManager,selection.hsbchead as hsbcHead, selection.delivery_manager as deliveryManager, 
-selection.irm as IRM, selection.pricing_model as pricingModel, selection.hsbctool_id as hsbcctoolId, selection.ctool_received_date as ctoolRecievedDate,
-CASE WHEN hsbctool_id IS NOT NULL THEN 'Yes' ELSE 'No' END AS CtoolRecievedStatus,
-datediff(now(),selection.ctool_received_date) as ctoolAging,  CASE WHEN DATEDIFF(NOW(), selection.ctool_received_date) >= 0 THEN FLOOR(DATEDIFF(NOW(), selection.ctool_received_date) / 7) ELSE 0 END AS ctoolAgingWeekBucket, selection.ctool_start_date as ctoolStartDate, selection.recruiter_name as recruiterName,selection.ctool_rate as ctoolRate,
-selection.ctool_proposed_rate as proposedRate, roles.role_title as hsbcRole,roles.grade, bgvs.bgv_status as finalBGVStatus, 
-CASE WHEN selection.tech_selection_date IS NOT NULL THEN 'Done' ELSE 'Pending' END as techSelectionStatus, 
-td.status_remarks as remarks,CASE WHEN selection.interview_evidences IS NOT NULL THEN '' ELSE 'Location Mismatch' END AS interviewDocuments, selection.dojreceived_date as hsbcConfirmedDoj, datediff(selection.dojreceived_date, selection.hsbcselection_date) as agingSelectionWithDoj, 
-floor(datediff(selection.dojreceived_date, selection.hsbcselection_date)/7) as hsbcDojAgingBucket, selection.hsbconboarding_date as hsbcOnboardingDate, td.create_date as taggingDone, selection.tech_selection_date as techSelectionDone
-from employee emp
-left join selection_details selection on selection.ps_id=emp.psid
-left join lob lob on selection.lob_id=lob.lob_id
-left join sublob sublob on selection.sub_lob_id = sublob.sublobid
-left join hsbc_roles roles on selection.hsbc_role_id = roles.ref
-left join tagging_details td on emp.psid=td.ps_id
-left join onboarding_status obs on td.onboarding_status_id=obs.status_id
-left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
-where selection.created_by = 10713037
-UNION
-Select obs.onboarding_status as onboardingStatus, "External" as lti_ps_id,cnd.first_name as firstName,cnd.last_name as lastName,'' as grade,'' as location,'' as totalExperience,'' as skill,
-selection.hsbcselection_date as hsbcselectionDate,selection.ltionboarding_date as ltijoiningDate,selection.create_date as createdDate,DATE_FORMAT(hsbcselection_date, '%Y-%m') as selectionMonthYear,datediff(now(),hsbcselection_date) as selectionAging,
-'External' as category,'BB' as basebu, lob.lob_name,sublob.sub_lob_name,selection.salespoc as salesPoc, selection.hsbchiring_manager as hsbchiringManager,selection.hsbchead as hsbcHead, selection.delivery_manager as deliveryManager, 
-selection.irm as IRM, selection.pricing_model as pricingModel, selection.hsbctool_id as hsbcctoolId, selection.ctool_received_date as ctoolRecievedDate,
-CASE WHEN hsbctool_id IS NOT NULL THEN 'Yes' ELSE 'No' END AS CtoolRecievedStatus,
-datediff(now(),selection.ctool_received_date) as ctoolAging, floor(datediff(now(),selection.ctool_received_date)/7) as ctoolAgingWeekBucket, selection.ctool_start_date as ctoolStartDate, selection.recruiter_name as recruiterName,selection.ctool_rate as ctoolRate,
-selection.ctool_proposed_rate as proposedRate, roles.role_title as hsbcRole,roles.grade, bgvs.bgv_status as finalBGVStatus, 
-CASE WHEN selection.tech_selection_date IS NOT NULL THEN 'Done' ELSE 'Pending' END as techSelectionStatus, 
-td.status_remarks as remarks,CASE WHEN selection.interview_evidences IS NOT NULL THEN '' ELSE 'Location Mismatch' END AS interviewDocuments, selection.dojreceived_date as hsbcConfirmedDoj, datediff(selection.dojreceived_date, selection.hsbcselection_date) as agingSelectionWithDoj, 
-floor(datediff(selection.dojreceived_date, selection.hsbcselection_date)/7) as hsbcDojAgingBucket, selection.hsbconboarding_date as hsbcOnboardingDate, td.create_date as taggingDone, selection.tech_selection_date as techSelectionDone
-from candidate cnd
-left join selection_details selection on selection.candidate_id=cnd.candidate_id
-left join lob lob on selection.lob_id=lob.lob_id
-left join sublob sublob on selection.sub_lob_id = sublob.sublobid
-left join hsbc_roles roles on selection.hsbc_role_id = roles.ref
-left join tagging_details td on cnd.candidate_id=td.candidate_id
-left join onboarding_status obs on td.onboarding_status_id=obs.status_id
-left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
-where selection.created_by = 10713037
-UNION
-Select obs.onboarding_status as onboardingStatus, v.vendor_name as lti_ps_id,vd.first_name as firstName,vd.last_name as lastName,'' as grade,'' as location,'' as totalExperience,'' as skill,
-selection.hsbcselection_date as hsbcselectionDate,selection.ltionboarding_date as ltijoiningDate,selection.create_date as createdDate,DATE_FORMAT(hsbcselection_date, '%Y-%m') as selectionMonthYear,datediff(now(),hsbcselection_date) as selectionAging,
-v.vendor_name as category,'BB' as basebu, lob.lob_name,sublob.sub_lob_name,selection.salespoc as salesPoc, selection.hsbchiring_manager as hsbchiringManager,selection.hsbchead as hsbcHead, selection.delivery_manager as deliveryManager, 
-selection.irm as IRM, selection.pricing_model as pricingModel, selection.hsbctool_id as hsbcctoolId, selection.ctool_received_date as ctoolRecievedDate,
-CASE WHEN hsbctool_id IS NOT NULL THEN 'Yes' ELSE 'No' END AS CtoolRecievedStatus,
-datediff(now(),selection.ctool_received_date) as ctoolAging, floor(datediff(now(),selection.ctool_received_date)/7) as ctoolAgingWeekBucket, selection.ctool_start_date as ctoolStartDate, selection.recruiter_name as recruiterName,selection.ctool_rate as ctoolRate,
-selection.ctool_proposed_rate as proposedRate, roles.role_title as hsbcRole,roles.grade, bgvs.bgv_status as finalBGVStatus, 
-CASE WHEN selection.tech_selection_date IS NOT NULL THEN 'Done' ELSE 'Pending' END as techSelectionStatus, 
-td.status_remarks as remarks,CASE WHEN selection.interview_evidences IS NOT NULL THEN '' ELSE 'Location Mismatch' END AS interviewDocuments, selection.dojreceived_date as hsbcConfirmedDoj, datediff(selection.dojreceived_date, selection.hsbcselection_date) as agingSelectionWithDoj, 
-floor(datediff(selection.dojreceived_date, selection.hsbcselection_date)/7) as hsbcDojAgingBucket, selection.hsbconboarding_date as hsbcOnboardingDate, td.create_date as taggingDone, selection.tech_selection_date as techSelectionDone
-from vendor_candidate vd
-left join selection_details selection on selection.vendor_candidate_id=vd.vendor_candidate_id
-left join vendor v on vd.vendor_id = v.vendor_id
-left join lob lob on selection.lob_id=lob.lob_id
-left join sublob sublob on selection.sub_lob_id = sublob.sublobid
-left join hsbc_roles roles on selection.hsbc_role_id = roles.ref
-left join tagging_details td on vd.vendor_candidate_id=td.vendor_candidate_id
-left join onboarding_status obs on td.onboarding_status_id=obs.status_id
-left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
-where selection.created_by = 10713037;
+-- Select obs.onboarding_status as onboardingStatus, emp.psid as lti_ps_id,emp.first_name as firstName,emp.last_name as lastName,emp.grade as grade,emp.location as location,emp.total_experience as totalExperience,emp.skill as skill,
+-- selection.hsbcselection_date as hsbcselectionDate,selection.ltionboarding_date as ltijoiningDate,selection.create_date as createdDate,DATE_FORMAT(hsbcselection_date, '%Y-%m') as selectionMonthYear,datediff(now(),hsbcselection_date) as selectionAging,
+-- 'Internal' as category, emp.pu as basebu, lob.lob_name,sublob.sub_lob_name,selection.salespoc as salesPoc, selection.hsbchiring_manager as hsbchiringManager,selection.hsbchead as hsbcHead, selection.delivery_manager as deliveryManager, 
+-- selection.irm as IRM, selection.pricing_model as pricingModel, selection.hsbctool_id as hsbcctoolId, selection.ctool_received_date as ctoolRecievedDate,
+-- CASE WHEN hsbctool_id IS NOT NULL THEN 'Yes' ELSE 'No' END AS CtoolRecievedStatus,
+-- datediff(now(),selection.ctool_received_date) as ctoolAging,  CASE WHEN DATEDIFF(NOW(), selection.ctool_received_date) >= 0 THEN FLOOR(DATEDIFF(NOW(), selection.ctool_received_date) / 7) ELSE 0 END AS ctoolAgingWeekBucket, selection.ctool_start_date as ctoolStartDate, selection.recruiter_name as recruiterName,selection.ctool_rate as ctoolRate,
+-- selection.ctool_proposed_rate as proposedRate, roles.role_title as hsbcRole,roles.grade, bgvs.bgv_status as finalBGVStatus, 
+-- CASE WHEN selection.tech_selection_date IS NOT NULL THEN 'Done' ELSE 'Pending' END as techSelectionStatus, 
+-- td.status_remarks as remarks,CASE WHEN  IS NOT NULL THEN '' ELSE 'Location Mismatch' END AS interviewDocuments, selection.dojreceived_date as hsbcConfirmedDoj, datediff(selection.dojreceived_date, selection.hsbcselection_date) as agingSelectionWithDoj, 
+-- floor(datediff(selection.dojreceived_date, selection.hsbcselection_date)/7) as hsbcDojAgingBucket, selection.hsbconboarding_date as hsbcOnboardingDate, td.create_date as taggingDone, selection.tech_selection_date as techSelectionDone
+-- from employee emp
+-- left join selection_details selection on selection.ps_id=emp.psid
+-- left join lob lob on selection.lob_id=lob.lob_id
+-- left join sublob sublob on selection.sub_lob_id = sublob.sublobid
+-- left join hsbc_roles roles on selection.hsbc_role_id = roles.ref
+-- left join tagging_details td on emp.psid=td.ps_id
+-- left join onboarding_status obs on td.onboarding_status_id=obs.status_id
+-- left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
+-- where selection.created_by = 10713037
+-- UNION
+-- Select obs.onboarding_status as onboardingStatus, "External" as lti_ps_id,cnd.first_name as firstName,cnd.last_name as lastName,'' as grade,'' as location,'' as totalExperience,'' as skill,
+-- selection.hsbcselection_date as hsbcselectionDate,selection.ltionboarding_date as ltijoiningDate,selection.create_date as createdDate,DATE_FORMAT(hsbcselection_date, '%Y-%m') as selectionMonthYear,datediff(now(),hsbcselection_date) as selectionAging,
+-- 'External' as category,'BB' as basebu, lob.lob_name,sublob.sub_lob_name,selection.salespoc as salesPoc, selection.hsbchiring_manager as hsbchiringManager,selection.hsbchead as hsbcHead, selection.delivery_manager as deliveryManager, 
+-- selection.irm as IRM, selection.pricing_model as pricingModel, selection.hsbctool_id as hsbcctoolId, selection.ctool_received_date as ctoolRecievedDate,
+-- CASE WHEN hsbctool_id IS NOT NULL THEN 'Yes' ELSE 'No' END AS CtoolRecievedStatus,
+-- datediff(now(),selection.ctool_received_date) as ctoolAging, floor(datediff(now(),selection.ctool_received_date)/7) as ctoolAgingWeekBucket, selection.ctool_start_date as ctoolStartDate, selection.recruiter_name as recruiterName,selection.ctool_rate as ctoolRate,
+-- selection.ctool_proposed_rate as proposedRate, roles.role_title as hsbcRole,roles.grade, bgvs.bgv_status as finalBGVStatus, 
+-- CASE WHEN selection.tech_selection_date IS NOT NULL THEN 'Done' ELSE 'Pending' END as techSelectionStatus, 
+-- td.status_remarks as remarks,CASE WHEN selection.interview_evidences IS NOT NULL THEN '' ELSE 'Location Mismatch' END AS interviewDocuments, selection.dojreceived_date as hsbcConfirmedDoj, datediff(selection.dojreceived_date, selection.hsbcselection_date) as agingSelectionWithDoj, 
+-- floor(datediff(selection.dojreceived_date, selection.hsbcselection_date)/7) as hsbcDojAgingBucket, selection.hsbconboarding_date as hsbcOnboardingDate, td.create_date as taggingDone, selection.tech_selection_date as techSelectionDone
+-- from candidate cnd
+-- left join selection_details selection on selection.candidate_id=cnd.candidate_id
+-- left join lob lob on selection.lob_id=lob.lob_id
+-- left join sublob sublob on selection.sub_lob_id = sublob.sublobid
+-- left join hsbc_roles roles on selection.hsbc_role_id = roles.ref
+-- left join tagging_details td on cnd.candidate_id=td.candidate_id
+-- left join onboarding_status obs on td.onboarding_status_id=obs.status_id
+-- left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
+-- where selection.created_by = 10713037
+-- UNION
+-- Select obs.onboarding_status as onboardingStatus, v.vendor_name as lti_ps_id,vd.first_name as firstName,vd.last_name as lastName,'' as grade,'' as location,'' as totalExperience,'' as skill,
+-- selection.hsbcselection_date as hsbcselectionDate,selection.ltionboarding_date as ltijoiningDate,selection.create_date as createdDate,DATE_FORMAT(hsbcselection_date, '%Y-%m') as selectionMonthYear,datediff(now(),hsbcselection_date) as selectionAging,
+-- v.vendor_name as category,'BB' as basebu, lob.lob_name,sublob.sub_lob_name,selection.salespoc as salesPoc, selection.hsbchiring_manager as hsbchiringManager,selection.hsbchead as hsbcHead, selection.delivery_manager as deliveryManager, 
+-- selection.irm as IRM, selection.pricing_model as pricingModel, selection.hsbctool_id as hsbcctoolId, selection.ctool_received_date as ctoolRecievedDate,
+-- CASE WHEN hsbctool_id IS NOT NULL THEN 'Yes' ELSE 'No' END AS CtoolRecievedStatus,
+-- datediff(now(),selection.ctool_received_date) as ctoolAging, floor(datediff(now(),selection.ctool_received_date)/7) as ctoolAgingWeekBucket, selection.ctool_start_date as ctoolStartDate, selection.recruiter_name as recruiterName,selection.ctool_rate as ctoolRate,
+-- selection.ctool_proposed_rate as proposedRate, roles.role_title as hsbcRole,roles.grade, bgvs.bgv_status as finalBGVStatus, 
+-- CASE WHEN selection.tech_selection_date IS NOT NULL THEN 'Done' ELSE 'Pending' END as techSelectionStatus, 
+-- td.status_remarks as remarks,CASE WHEN selection.interview_evidences IS NOT NULL THEN '' ELSE 'Location Mismatch' END AS interviewDocuments, selection.dojreceived_date as hsbcConfirmedDoj, datediff(selection.dojreceived_date, selection.hsbcselection_date) as agingSelectionWithDoj, 
+-- floor(datediff(selection.dojreceived_date, selection.hsbcselection_date)/7) as hsbcDojAgingBucket, selection.hsbconboarding_date as hsbcOnboardingDate, td.create_date as taggingDone, selection.tech_selection_date as techSelectionDone
+-- from vendor_candidate vd
+-- left join selection_details selection on selection.vendor_candidate_id=vd.vendor_candidate_id
+-- left join vendor v on vd.vendor_id = v.vendor_id
+-- left join lob lob on selection.lob_id=lob.lob_id
+-- left join sublob sublob on selection.sub_lob_id = sublob.sublobid
+-- left join hsbc_roles roles on selection.hsbc_role_id = roles.ref
+-- left join tagging_details td on vd.vendor_candidate_id=td.vendor_candidate_id
+-- left join onboarding_status obs on td.onboarding_status_id=obs.status_id
+-- left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
+-- where selection.created_by = 10713037;
