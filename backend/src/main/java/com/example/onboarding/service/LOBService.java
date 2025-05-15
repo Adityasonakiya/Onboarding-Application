@@ -14,11 +14,13 @@ public class LOBService {
     @Autowired
     LOBRepository lobrepo;
 
-    public LOB findById(int lobId){
+    public LOB findById(int lobId) {
         Optional<LOB> lob = lobrepo.findById(lobId);
         return lob.orElse(null);
     }
-    public List<LOB> findAll(){
-        return lobrepo.findAll();
+
+    public List<LOB> findAll() {
+        return lobrepo.findByActiveTrue();
     }
+
 }
