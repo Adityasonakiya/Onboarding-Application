@@ -63,18 +63,19 @@ public class SelectionDetailsService {
         if (existingDetails != null) {
             existingDetails.setLob(updatedDetails.getLob());
             existingDetails.setSubLob(updatedDetails.getSubLob());
-            existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());
             existingDetails.setHSBCSelectionDate(updatedDetails.getHSBCSelectionDate());
             existingDetails.setHSBCHiringManager(updatedDetails.getHSBCHiringManager());
-            existingDetails.setHSBCHead(updatedDetails.getHSBCHead());
-            existingDetails.setSalesPOC(updatedDetails.getSalesPOC());
+            existingDetails.getLob().setDeliveryManager(updatedDetails.getLob().getDeliveryManager());
+            existingDetails.getLob().setSalesPOC(updatedDetails.getLob().getSalesPOC());
+            existingDetails.getLob().setHSBCHead(updatedDetails.getLob().getHSBCHead());
+            existingDetails.setLob(updatedDetails.getLob());
+            existingDetails.setSubLob(updatedDetails.getSubLob());
             existingDetails.setPricingModel(updatedDetails.getPricingModel());
             existingDetails.setHSBCToolId(updatedDetails.getHSBCToolId());
             existingDetails.setCToolReceivedDate(updatedDetails.getCToolReceivedDate());
-            existingDetails.setCToolJobCategory(updatedDetails.getCToolJobCategory());
             existingDetails.setCToolLocation(updatedDetails.getCToolLocation());
-            existingDetails.setCToolRate(updatedDetails.getCToolRate());
-            existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
+            existingDetails.setCToolGrade(updatedDetails.getCToolGrade());
+            existingDetails.setCToolTaggingRate(updatedDetails.getCToolTaggingRate());
             existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
 
             // Update interviewEvidences collection
@@ -95,6 +96,7 @@ public class SelectionDetailsService {
             existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
+            existingDetails.setBgvInitiatedDate(updatedDetails.getBgvInitiatedDate());
             existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
@@ -111,18 +113,19 @@ public class SelectionDetailsService {
             SelectionDetails updatedDetails) {
         SelectionDetails existingDetails = selectionDetailsRepository.findByCandidate_PhoneNumber(phoneNumber);
         if (existingDetails != null) {
-            existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());
             existingDetails.setHSBCSelectionDate(updatedDetails.getHSBCSelectionDate());
+            existingDetails.getLob().setDeliveryManager(updatedDetails.getLob().getDeliveryManager());
+            existingDetails.getLob().setSalesPOC(updatedDetails.getLob().getSalesPOC());
+            existingDetails.getLob().setHSBCHead(updatedDetails.getLob().getHSBCHead());
+            existingDetails.setLob(updatedDetails.getLob());
+            existingDetails.setSubLob(updatedDetails.getSubLob());
             existingDetails.setHSBCHiringManager(updatedDetails.getHSBCHiringManager());
-            existingDetails.setHSBCHead(updatedDetails.getHSBCHead());
-            existingDetails.setSalesPOC(updatedDetails.getSalesPOC());
             existingDetails.setPricingModel(updatedDetails.getPricingModel());
             existingDetails.setHSBCToolId(updatedDetails.getHSBCToolId());
             existingDetails.setCToolReceivedDate(updatedDetails.getCToolReceivedDate());
-            existingDetails.setCToolJobCategory(updatedDetails.getCToolJobCategory());
             existingDetails.setCToolLocation(updatedDetails.getCToolLocation());
-            existingDetails.setCToolRate(updatedDetails.getCToolRate());
-            existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
+            existingDetails.setCToolGrade(updatedDetails.getCToolGrade());
+            existingDetails.setCToolTaggingRate(updatedDetails.getCToolTaggingRate());
             existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
 
             // Update interviewEvidences collection
@@ -140,6 +143,7 @@ public class SelectionDetailsService {
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
+            existingDetails.setBgvInitiatedDate(updatedDetails.getBgvInitiatedDate());
             existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
             existingDetails.setCtoolStartDate(updatedDetails.getCtoolStartDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
@@ -156,18 +160,19 @@ public class SelectionDetailsService {
             SelectionDetails updatedDetails) {
         SelectionDetails existingDetails = selectionDetailsRepository.findByVendorCandidate_PhoneNumber(phoneNumber);
         if (existingDetails != null) {
-            existingDetails.setDeliveryManager(updatedDetails.getDeliveryManager());
             existingDetails.setHSBCSelectionDate(updatedDetails.getHSBCSelectionDate());
+            existingDetails.getLob().setDeliveryManager(updatedDetails.getLob().getDeliveryManager());
+            existingDetails.getLob().setSalesPOC(updatedDetails.getLob().getSalesPOC());
+            existingDetails.getLob().setHSBCHead(updatedDetails.getLob().getHSBCHead());
+            existingDetails.setLob(updatedDetails.getLob());
+            existingDetails.setSubLob(updatedDetails.getSubLob());
             existingDetails.setHSBCHiringManager(updatedDetails.getHSBCHiringManager());
-            existingDetails.setHSBCHead(updatedDetails.getHSBCHead());
-            existingDetails.setSalesPOC(updatedDetails.getSalesPOC());
             existingDetails.setPricingModel(updatedDetails.getPricingModel());
             existingDetails.setHSBCToolId(updatedDetails.getHSBCToolId());
             existingDetails.setCToolReceivedDate(updatedDetails.getCToolReceivedDate());
-            existingDetails.setCToolJobCategory(updatedDetails.getCToolJobCategory());
             existingDetails.setCToolLocation(updatedDetails.getCToolLocation());
-            existingDetails.setCToolRate(updatedDetails.getCToolRate());
-            existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
+            existingDetails.setCToolGrade(updatedDetails.getCToolGrade());
+            existingDetails.setCToolTaggingRate(updatedDetails.getCToolTaggingRate());
             existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
 
             // Update interviewEvidences collection
@@ -184,9 +189,10 @@ public class SelectionDetailsService {
             existingDetails.setTechSelectionDate(updatedDetails.getTechSelectionDate());
             existingDetails.setDOJReceivedDate(updatedDetails.getDOJReceivedDate());
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
+            existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
+            existingDetails.setBgvInitiatedDate(updatedDetails.getBgvInitiatedDate());
             existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
             existingDetails.setCtoolStartDate(updatedDetails.getCtoolStartDate());
-            existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setUpdateDate(new Date());
             existingDetails.setIrm(updatedDetails.getIrm());

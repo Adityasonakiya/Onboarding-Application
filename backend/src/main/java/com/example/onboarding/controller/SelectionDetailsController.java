@@ -103,7 +103,6 @@ public class SelectionDetailsController {
     public ResponseEntity<?> updateSelectionDetailsByPsId(@PathVariable int psId,
             @RequestBody SelectionDetails updatedDetails) {
         System.out.println("Incoming request payload: " + updatedDetails);
-        System.out.println("CToolJobCategory in payload: " + updatedDetails.getCToolJobCategory());
 
         SelectionDetails details = selectionDetailsService.updateSelectionDetailsByPsId(psId, updatedDetails);
         if (details != null) {
@@ -145,29 +144,6 @@ public class SelectionDetailsController {
             @RequestParam int size) {
         return selectionDetailsService.getEmployeeCandidates(createdBy, page, size);
     }
-
-    // @GetMapping("/selections")
-    // public ResponseEntity<List<SelectionDTO>> findSelections(){
-    // List<SelectionDTO> selections = selectionDetailsService.findSelections();
-    // return ResponseEntity.ok(selections);
-    // }
-
-    // @GetMapping("/ctool")
-    // public ResponseEntity<List<CtoolDto>> findCtool(){
-    // List<CtoolDto> ctool = selectionDetailsService.findCtool();
-    // return ResponseEntity.ok(ctool);
-    // }
-
-    // @GetMapping("/awaited-cases")
-    // public ResponseEntity<List<AwaitedCasesDTO>> findAwaitedCases(){
-    // List<AwaitedCasesDTO> awaitedCases =
-    // selectionDetailsService.findAwaitedCases();
-    // return ResponseEntity.ok(awaitedCases);
-    // }
-
-    // In SelectionDetailsController.java
-
-    // In SelectionDetailsController.java
 
     @GetMapping("/selections")
     public ResponseEntity<List<SelectionDTO>> findSelections(@RequestParam String filter) {

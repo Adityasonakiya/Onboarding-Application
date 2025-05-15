@@ -31,8 +31,6 @@ public class SelectionDetails {
     @JoinColumn(name = "vendor_candidate_id")
     private VendorCandidate vendorCandidate;
 
-    private String deliveryManager;
-
     private String baseBu;
 
     @ManyToOne
@@ -59,15 +57,12 @@ public class SelectionDetails {
 
     private Date HSBCSelectionDate;
     private String HSBCHiringManager;
-    private String HSBCHead;
-    private String salesPOC;
     private String PricingModel;
     private Integer HSBCToolId;
     private Date CToolReceivedDate;
-    private String CToolJobCategory;
     private String CToolLocation;
-    private Integer CToolRate;
-    private Integer CToolProposedRate;
+    private Integer CToolGrade;
+    private Integer CToolTaggingRate;
     private String recruiterName;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -82,23 +77,23 @@ public class SelectionDetails {
     private Date updateDate;
     private Date candidateStatusDate;
     private Date ctoolStartDate;
+    private Date bgvInitiatedDate;
 
     public SelectionDetails() {
     }
 
     public SelectionDetails(int selectionId, Employee employee, Candidate candidate, VendorCandidate vendorCandidate,
-            String deliveryManager, String baseBu, LOB lob, SubLOB subLob, String irm, HsbcRoles hsbcRoles,
-            Employee createdBy, Employee updatedBy, Date hSBCSelectionDate, String hSBCHiringManager, String hSBCHead,
-            String salesPOC, String pricingModel, Integer hSBCToolId, Date cToolReceivedDate, String cToolJobCategory,
-            String cToolLocation, Integer cToolRate, Integer cToolProposedRate, String recruiterName,
-            List<EvidenceDTO> interviewEvidences, String offerReleaseStatus, Date hSBCOnboardingDate,
-            Date techSelectionDate, Date dOJReceivedDate, Date lTIOnboardingDate, Date createDate, Date updateDate,
-            Date candidateStatusDate, Date ctoolStartDate) {
+            String baseBu, LOB lob, SubLOB subLob, String irm, HsbcRoles hsbcRoles, Employee createdBy,
+            Employee updatedBy, Date hSBCSelectionDate, String hSBCHiringManager, String pricingModel,
+            Integer hSBCToolId, Date cToolReceivedDate, String cToolLocation, Integer cToolGrade,
+            Integer cToolTaggingRate, String recruiterName, List<EvidenceDTO> interviewEvidences,
+            String offerReleaseStatus, Date hSBCOnboardingDate, Date techSelectionDate, Date dOJReceivedDate,
+            Date lTIOnboardingDate, Date createDate, Date updateDate, Date candidateStatusDate, Date ctoolStartDate,
+            Date bgvInitiatedDate) {
         this.selectionId = selectionId;
         this.employee = employee;
         this.candidate = candidate;
         this.vendorCandidate = vendorCandidate;
-        this.deliveryManager = deliveryManager;
         this.baseBu = baseBu;
         this.lob = lob;
         this.subLob = subLob;
@@ -108,15 +103,12 @@ public class SelectionDetails {
         this.updatedBy = updatedBy;
         HSBCSelectionDate = hSBCSelectionDate;
         HSBCHiringManager = hSBCHiringManager;
-        HSBCHead = hSBCHead;
-        this.salesPOC = salesPOC;
         PricingModel = pricingModel;
         HSBCToolId = hSBCToolId;
         CToolReceivedDate = cToolReceivedDate;
-        CToolJobCategory = cToolJobCategory;
         CToolLocation = cToolLocation;
-        CToolRate = cToolRate;
-        CToolProposedRate = cToolProposedRate;
+        CToolGrade = cToolGrade;
+        CToolTaggingRate = cToolTaggingRate;
         this.recruiterName = recruiterName;
         this.interviewEvidences = interviewEvidences;
         this.offerReleaseStatus = offerReleaseStatus;
@@ -128,6 +120,7 @@ public class SelectionDetails {
         this.updateDate = updateDate;
         this.candidateStatusDate = candidateStatusDate;
         this.ctoolStartDate = ctoolStartDate;
+        this.bgvInitiatedDate = bgvInitiatedDate;
     }
 
     public int getSelectionId() {
@@ -160,14 +153,6 @@ public class SelectionDetails {
 
     public void setVendorCandidate(VendorCandidate vendorCandidate) {
         this.vendorCandidate = vendorCandidate;
-    }
-
-    public String getDeliveryManager() {
-        return deliveryManager;
-    }
-
-    public void setDeliveryManager(String deliveryManager) {
-        this.deliveryManager = deliveryManager;
     }
 
     public String getBaseBu() {
@@ -242,22 +227,6 @@ public class SelectionDetails {
         HSBCHiringManager = hSBCHiringManager;
     }
 
-    public String getHSBCHead() {
-        return HSBCHead;
-    }
-
-    public void setHSBCHead(String hSBCHead) {
-        HSBCHead = hSBCHead;
-    }
-
-    public String getSalesPOC() {
-        return salesPOC;
-    }
-
-    public void setSalesPOC(String salesPOC) {
-        this.salesPOC = salesPOC;
-    }
-
     public String getPricingModel() {
         return PricingModel;
     }
@@ -282,14 +251,6 @@ public class SelectionDetails {
         CToolReceivedDate = cToolReceivedDate;
     }
 
-    public String getCToolJobCategory() {
-        return CToolJobCategory;
-    }
-
-    public void setCToolJobCategory(String cToolJobCategory) {
-        CToolJobCategory = cToolJobCategory;
-    }
-
     public String getCToolLocation() {
         return CToolLocation;
     }
@@ -298,20 +259,20 @@ public class SelectionDetails {
         CToolLocation = cToolLocation;
     }
 
-    public Integer getCToolRate() {
-        return CToolRate;
+    public Integer getCToolGrade() {
+        return CToolGrade;
     }
 
-    public void setCToolRate(Integer cToolRate) {
-        CToolRate = cToolRate;
+    public void setCToolGrade(Integer cToolGrade) {
+        CToolGrade = cToolGrade;
     }
 
-    public Integer getCToolProposedRate() {
-        return CToolProposedRate;
+    public Integer getCToolTaggingRate() {
+        return CToolTaggingRate;
     }
 
-    public void setCToolProposedRate(Integer cToolProposedRate) {
-        CToolProposedRate = cToolProposedRate;
+    public void setCToolTaggingRate(Integer cToolTaggingRate) {
+        CToolTaggingRate = cToolTaggingRate;
     }
 
     public String getRecruiterName() {
@@ -400,6 +361,14 @@ public class SelectionDetails {
 
     public void setCtoolStartDate(Date ctoolStartDate) {
         this.ctoolStartDate = ctoolStartDate;
+    }
+
+    public Date getBgvInitiatedDate() {
+        return bgvInitiatedDate;
+    }
+
+    public void setBgvInitiatedDate(Date bgvInitiatedDate) {
+        this.bgvInitiatedDate = bgvInitiatedDate;
     }
 
 }
