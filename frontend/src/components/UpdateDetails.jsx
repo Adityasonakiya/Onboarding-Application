@@ -376,6 +376,7 @@ function UpdateDetails() {
       ltionboardingDate: form.ltiOnboardDate,
       techSelectionDate: form.techSelectDate,
       candidateStatusDate: form.candidateStatusDate,
+      bgvInitiatedDate: form.bgvInitiatedDate,
       dojreceivedDate: form.dojRecDate,
       hsbconboardingDate: form.onboardingDate,
       ctoolStartDate: form.ctoolStartDate,
@@ -514,6 +515,7 @@ function UpdateDetails() {
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
             candidateStatusDate:
               formatDate(selectionData.candidateStatusDate) || "",
+            bgvInitiatedDate: formatDate(selectionData.bgvInitiatedDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
             evidence:
               evidenceDto.map((evidence) => ({
@@ -609,6 +611,7 @@ function UpdateDetails() {
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
             candidateStatusDate:
               formatDate(selectionData.candidateStatusDate) || "",
+            bgvInitiatedDate: formatDate(selectionData.bgvInitiatedDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
             evidence:
               evidenceDto.map((evidence) => ({
@@ -717,6 +720,7 @@ function UpdateDetails() {
                 formatDate(selectionData.hsbconboardingDate) || "",
               candidateStatusDate:
                 formatDate(selectionData.candidateStatusDate) || "",
+              bgvInitiatedDate: formatDate(selectionData.bgvInitiatedDate) || "",
               ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
               evidence:
                 evidenceDto.map((evidence) => ({
@@ -1706,6 +1710,23 @@ function UpdateDetails() {
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
                     min={form.dojRecDate}
+                  />
+                </td>
+              </tr>
+              <tr className="flex flex-wrap md:flex-nowrap">
+              <td className="p-2 w-full md:w-1/4">
+                  <label className="font-bold">
+                    BGV Initiated Date:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    type="date"
+                    name="bgvInitiatedDate"
+                    value={form.bgvInitiatedDate || ""}
+                    required
+                    onChange={handleChange}
+                    className="p-2 mb-2 border rounded w-full"
                   />
                 </td>
               </tr>
