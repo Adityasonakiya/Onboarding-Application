@@ -1598,9 +1598,25 @@ function UpdateDetails() {
                     required
                   />
                 </td>
-              </tr>
+              </tr> 
 
               <tr className="flex flex-wrap md:flex-nowrap">
+              <td className="p-2 w-full md:w-1/4">
+                  <label className="font-bold">
+                    CTool Start Date:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    type="date"
+                    name="ctoolStartDate"
+                    value={form.ctoolStartDate || ""}
+                    required
+                    onChange={handleChange}
+                    className="p-2 mb-2 border rounded w-full"
+                    min={form.dojRecDate}
+                  />
+                </td>
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
                     BGV Initiated Date:<span className="text-red-500">*</span>
@@ -1614,23 +1630,6 @@ function UpdateDetails() {
                     required
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    Onboarding Date:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="date"
-                    name="onboardingDate"
-                    value={form.onboardingDate || ""}
-                    required
-                    disabled={!form.onboardingDateEnabled}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                    min={today}
                   />
                 </td>
               </tr>
@@ -1692,22 +1691,22 @@ function UpdateDetails() {
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
-                    CTool Start Date:<span className="text-red-500">*</span>
+                    Onboarding Date:<span className="text-red-500">*</span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
                     type="date"
-                    name="ctoolStartDate"
-                    value={form.ctoolStartDate || ""}
+                    name="onboardingDate"
+                    value={form.onboardingDate || ""}
                     required
+                    disabled={!form.onboardingDateEnabled}
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
-                    min={form.dojRecDate}
+                    min={today}
                   />
                 </td>
               </tr>
-
 
               <div className="border border-gray-300 rounded-md shadow">
                 <h1 className="text-l font-bold text-center text-gray-700 bg-gray-200 p-1 rounded-md shadow-md">
