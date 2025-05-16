@@ -808,9 +808,8 @@ function UpdateDetails() {
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
                     required
-                    className={`p-2 border rounded w-full ${
-                      errors.vendorId ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
+                      }`}
                     disabled={isInternal}
                   >
                     <option value="">Select Vendor</option>
@@ -1198,9 +1197,8 @@ function UpdateDetails() {
                         type="text"
                         placeholder="Search or select a role..."
                         value={form.hsbcRoles?.roleTitle}
-                        className={`p-2 border w-full ${
-                          errors.hsbcRoles ? "border-red-500" : ""
-                        }`}
+                        className={`p-2 border w-full ${errors.hsbcRoles ? "border-red-500" : ""
+                          }`}
                         onChange={handleSearch}
                         onFocus={() => setShowDropdown(true)} // Open dropdown on focus
                         style={{
@@ -1605,21 +1603,17 @@ function UpdateDetails() {
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
-                    Candidate Selection Date:
-                    <span className="text-red-500">*</span>
+                    BGV Initiated Date:<span className="text-red-500">*</span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
                     type="date"
-                    name="candidateStatusDate"
-                    value={form.candidateStatusDate || ""}
+                    name="bgvInitiatedDate"
+                    value={form.bgvInitiatedDate || ""}
                     required
-                    // disabled={!form.candSelectDateEnabled}
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
-                    disabled={isInternal}
-                    min={today}
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -1713,23 +1707,7 @@ function UpdateDetails() {
                   />
                 </td>
               </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-              <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    BGV Initiated Date:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="date"
-                    name="bgvInitiatedDate"
-                    value={form.bgvInitiatedDate || ""}
-                    required
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                  />
-                </td>
-              </tr>
+
 
               <div className="border border-gray-300 rounded-md shadow">
                 <h1 className="text-l font-bold text-center text-gray-700 bg-gray-200 p-1 rounded-md shadow-md">
@@ -1776,6 +1754,27 @@ function UpdateDetails() {
                       className="p-2 mb-2 border rounded w-full resize-none"
                       disabled={isInternal}
                       required
+                    />
+                  </td>
+                </tr>
+                <tr className="flex flex-wrap md:flex-nowrap">
+                  <td className="p-2 w-full md:w-1/4">
+                    <label className="font-bold">
+                      Candidate Selection Date:
+                      <span className="text-red-500">*</span>
+                    </label>
+                  </td>
+                  <td className="p-2 w-full md:w-1/4">
+                    <input
+                      type="date"
+                      name="candidateStatusDate"
+                      value={form.candidateStatusDate || ""}
+                      required
+                      // disabled={!form.candSelectDateEnabled}
+                      onChange={handleChange}
+                      className="p-2 mb-2 border rounded w-full"
+                      disabled={isInternal}
+                      min={today}
                     />
                   </td>
                 </tr>
