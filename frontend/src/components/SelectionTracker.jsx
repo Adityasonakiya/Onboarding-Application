@@ -208,11 +208,12 @@ function SelectionTracker() {
   };
 
   // Select an option and update the input
-  const handleSelect = (roleTitle,ref) => {
+  const handleSelect = (roleTitle, ref, grade) => {
     setSearchTerm(roleTitle); // Populate the input with the selected role
     setForm((prevForm) => ({
       ...prevForm,
       hsbcRoles: { ref: ref, roleTitle: roleTitle },
+      ctoolGrade: grade,
     }));
     setShowDropdown(false); // Hide dropdown after selection
   };
@@ -220,17 +221,13 @@ function SelectionTracker() {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        comboboxRef.current &&
-        !comboboxRef.current.contains(event.target)
-      ) {
+      if (comboboxRef.current && !comboboxRef.current.contains(event.target)) {
         setShowDropdown(false); // Close dropdown if clicking outside
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -261,10 +258,21 @@ function SelectionTracker() {
 
   const handleLobChange = async (event) => {
     const { value } = event.target;
+    // Find the full LOB object from the lobs array
+    const selectedLob = lobs.find((lob) => lob.lobId === Number(value));
+
     setForm((prevForm) => ({
       ...prevForm,
-      lob: { lobId: value },
+      lob: selectedLob ? selectedLob : { lobId: value },
+      head: selectedLob?.hsbchead || "",
+      deliveryManager: selectedLob?.deliveryManager || "",
+      salespoc: selectedLob?.salesPOC || "",
     }));
+    console.log(
+      form.lob.hsbcheadhead,
+      form.lob.deliveryManager,
+      form.lob.salesPOC
+    );
     setErrors((prevErrors) => ({
       ...prevErrors,
       lob: value ? "" : "This field is required.",
@@ -452,9 +460,9 @@ function SelectionTracker() {
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
-        head: selectionDetails.lob.hsbchead,
-        deliveryManager: selectionDetails.lob.deliveryManager,
-        salespoc: selectionDetails.lob.salesPOC,
+        head: selectionDetails.hsbchead || selectionDetails.lob.hsbchead,
+        deliveryManager:selectionDetails.deliveryManager || selectionDetails.lob.deliveryManager,
+        salespoc: selectionDetails.salesPOC || selectionDetails.lob.salesPOC,
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
         ctoolId: selectionDetails.hsbctoolId,
@@ -467,6 +475,7 @@ function SelectionTracker() {
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
       }));
+      setSearchTerm(selectionDetails.hsbcRoles?.roleTitle || "");
       setSelectedSubLobTemp(selectionDetails.subLob);
       if (
         !readOnly &&
@@ -487,7 +496,9 @@ function SelectionTracker() {
 
   const fetchSelectionDetailsByCandidateId = async (phoneNumber) => {
     try {
-      const selectionDetails = await getSelectionDetailsByCandidateId(phoneNumber);
+      const selectionDetails = await getSelectionDetailsByCandidateId(
+        phoneNumber
+      );
       const taggingDetails = await getTaggingDetailsByPsId(phoneNumber).catch(
         (err) => {
           console.error("Error fetching tagging details:", err);
@@ -501,9 +512,9 @@ function SelectionTracker() {
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
-        head: selectionDetails.lob.hsbchead,
-        deliveryManager: selectionDetails.lob.deliveryManager,
-        salespoc: selectionDetails.lob.salesPOC,
+        head: selectionDetails.hsbchead || selectionDetails.lob.hsbchead,
+        deliveryManager:selectionDetails.deliveryManager ||selectionDetails.lob.deliveryManager,
+        salespoc: selectionDetails.salesPOC || selectionDetails.lob.salesPOC,
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
         ctoolId: selectionDetails.hsbctoolId,
@@ -516,6 +527,7 @@ function SelectionTracker() {
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
       }));
+      setSearchTerm(selectionDetails.hsbcRoles?.roleTitle || "");
       setSelectedSubLobTemp(selectionDetails.subLob);
       if (
         !readOnly ||
@@ -536,9 +548,12 @@ function SelectionTracker() {
 
   const fetchSelectionDetailsByVendorCandidateId = async (phoneNumber) => {
     try {
-      const selectionDetails = await getSelectionDetailsByVendorCandidateId(phoneNumber);
-      const taggingDetails = await getTaggingDetailsByVendorCandidateId(phoneNumber).catch(
-        (err) => {
+      const selectionDetails = await getSelectionDetailsByVendorCandidateId(
+        phoneNumber
+      );
+      const taggingDetails = await getTaggingDetailsByVendorCandidateId(
+        phoneNumber
+      ).catch((err) => {
         console.error("Error fetching tagging details:", err);
         return {}; // Fallback to an empty object
       });
@@ -549,9 +564,9 @@ function SelectionTracker() {
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
-        head: selectionDetails.lob.hsbchead,
-        deliveryManager: selectionDetails.lob.deliveryManager,
-        salespoc: selectionDetails.lob.salesPOC,
+        head: selectionDetails.hsbchead || selectionDetails.lob.hsbchead,
+        deliveryManager:selectionDetails.deliveryManager ||selectionDetails.lob.deliveryManager,
+        salespoc: selectionDetails.salesPOC || selectionDetails.lob.salesPOC,
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
         ctoolId: selectionDetails.hsbctoolId,
@@ -564,6 +579,7 @@ function SelectionTracker() {
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
       }));
+      setSearchTerm(selectionDetails.hsbcRoles?.roleTitle || "");
       setSelectedSubLobTemp(selectionDetails.subLob);
       if (
         !readOnly ||
@@ -588,14 +604,13 @@ function SelectionTracker() {
     if (type === "radio") {
       setIsInternal(name === "internal" ? checked : !checked);
       setIsExternal(name === "external" ? checked : !checked);
-    } 
-    else if (name === "phone") {
-        const numericValue = value.replace(/\D/g, ""); // Remove non-numeric characters
-        if (numericValue.length <= 10) {
-          setForm((prevForm) => ({
-            ...prevForm,
-            [name]: numericValue,
-          }));
+    } else if (name === "phone") {
+      const numericValue = value.replace(/\D/g, ""); // Remove non-numeric characters
+      if (numericValue.length <= 10) {
+        setForm((prevForm) => ({
+          ...prevForm,
+          [name]: numericValue,
+        }));
       }
 
       // Clear errors if the input is valid
@@ -1229,6 +1244,8 @@ function SelectionTracker() {
                     <option value="Anand Devi">Anand Devi</option>
                     <option value="Nishant sharma">Nishant sharma</option>
                     <option value="Indranil Moolay">Indranil Moolay</option>
+                    <option value="Rajiv Lakhanpal">Rajiv Lakhanpal</option>
+                    <option value="Kinshuk Awasthi">Kinshuk Awasthi</option>
                     <option value="Ajay Pillai">Ajay Pillai</option>
                   </select>
                 </td>
@@ -1319,18 +1336,16 @@ function SelectionTracker() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
-                    HSBC Roles:
-                  </label>
+                  <label className="font-semibold">HSBC Roles:</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <div ref={comboboxRef} style={{ position: "relative"}}>
+                  <div ref={comboboxRef} style={{ position: "relative" }}>
                     {/* Input field */}
                     <input
                       type="text"
                       name="hsbcRoles"
                       placeholder="Search or select a role..."
-                      value={form.hsbcRoles?.roleTitle}
+                      value={searchTerm}
                       className={`p-2 border w-full ${
                         errors.hsbcRoles ? "border-red-500" : ""
                       }`}
@@ -1344,7 +1359,7 @@ function SelectionTracker() {
                         borderRadius: "4px",
                       }}
                     />
-              
+
                     {/* Dropdown options (conditionally rendered) */}
                     {showDropdown && filteredRoles.length > 0 && (
                       <ul
@@ -1367,7 +1382,9 @@ function SelectionTracker() {
                         {filteredRoles.map((role) => (
                           <li
                             key={role.ref}
-                            onClick={() => handleSelect(role.roleTitle,role.ref)} // Properly update input value
+                            onClick={() =>
+                              handleSelect(role.roleTitle, role.ref, role.grade)
+                            } // Properly update input value
                             style={{
                               padding: "8px",
                               cursor: "pointer",
@@ -1379,7 +1396,7 @@ function SelectionTracker() {
                         ))}
                       </ul>
                     )}
-              
+
                     {/* Fallback for no matches */}
                     {showDropdown && filteredRoles.length === 0 && (
                       <div
@@ -1401,7 +1418,7 @@ function SelectionTracker() {
                   )}
                 </td>
                 <td></td>
-              
+
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">CTOOL Location:</label>
                 </td>

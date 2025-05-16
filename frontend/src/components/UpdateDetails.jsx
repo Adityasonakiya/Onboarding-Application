@@ -184,11 +184,12 @@ function UpdateDetails() {
   };
 
   // Select an option and update the input
-  const handleSelect = (roleTitle, ref) => {
+  const handleSelect = (roleTitle, ref,grade) => {
     setSearchTerm(roleTitle); // Populate the input with the selected role
     setForm((prevState) => ({
       ...prevState,
       hsbcRoles: { ref: ref, roleTitle: roleTitle },
+      ctoolGrade: grade,
     }));
     setShowDropdown(false); // Hide dropdown after selection
   };
@@ -232,13 +233,19 @@ function UpdateDetails() {
   }, [form.lob]);
 
   const handleLobChange = async (event) => {
+    const { value } = event.target;
+    const selectedLob = lobs.find((lob) => lob.lobId === Number(value));
+    setForm((prevForm) => ({
+      ...prevForm,
+      lob: selectedLob ? selectedLob : { lobId: value },
+      head: selectedLob?.hsbchead || "",
+      deliveryManager: selectedLob?.deliveryManager || "",
+      salespoc: selectedLob?.salesPOC || "",
+    }));
     setSelectedSubLobTemp({});
-    const lobId = event.target.value;
-    console.log("LOB: ", lobId);
-    form.lob.lobId = event.target.value;
 
     try {
-      const data = await fetchSubLobs(lobId);
+      const data = await fetchSubLobs(value);
       setSubLobs(data);
     } catch (error) {
       console.error("There was an error fetching the SubLOBs!", error);
@@ -489,9 +496,9 @@ function UpdateDetails() {
             lob: selectionData.lob || "",
             subLob: selectionData.sublob || "",
             hiringManager: selectionData.hsbchiringManager || "",
-            head: selectionData.lob.hsbchead || "",
-            deliveryManager: selectionData.lob.deliveryManager || "",
-            salespoc: selectionData.lob.salesPOC || "",
+            head: selectionData.hsbchead || selectionData.lob.hsbchead,
+            deliveryManager: selectionData.deliveryManager || selectionData.lob.deliveryManager,
+            salespoc: selectionData.salesPOC || selectionData.lob.salesPOC,
             pricingModel: selectionData.pricingModel || "",
             irm: selectionData.irm || "",
             ctoolId: selectionData.hsbctoolId || "",
@@ -523,7 +530,7 @@ function UpdateDetails() {
                 fileObject: new File([], evidence.fileName), // Placeholder File object
               })) || [],
           });
-
+          setSearchTerm(selectionData.hsbcRoles?.roleTitle || "");
           setUploadedFiles(
             evidenceDto.map((evidence) => ({
               fileName: evidence.fileName,
@@ -585,9 +592,9 @@ function UpdateDetails() {
             lob: selectionData.lob || "",
             subLob: selectionData.sublob || "",
             hiringManager: selectionData.hsbchiringManager || "",
-            head: selectionData.lob.hsbchead || "",
-            deliveryManager: selectionData.lob.deliveryManager || "",
-            salespoc: selectionData.lob.salesPOC || "",
+            head: selectionData.hsbchead || selectionData.lob.hsbchead,
+            deliveryManager: selectionData.deliveryManager || selectionData.lob.deliveryManager,
+            salespoc: selectionData.salesPOC || selectionData.lob.salesPOC,
             pricingModel: selectionData.pricingModel || "",
             irm: selectionData.irm || "",
             ctoolId: selectionData.hsbctoolId || "",
@@ -619,7 +626,7 @@ function UpdateDetails() {
                 fileObject: new File([], evidence.fileName), // Placeholder File object
               })) || [],
           });
-
+          setSearchTerm(selectionData.hsbcRoles?.roleTitle || "");
           setSelectedSubLobTemp(selectionData.subLob);
 
           setUploadedFiles(
@@ -692,9 +699,9 @@ function UpdateDetails() {
               lob: selectionData.lob || "",
               subLob: selectionData.sublob || "",
               hiringManager: selectionData.hsbchiringManager || "",
-              head: selectionData.lob.hsbchead || "",
-              deliveryManager: selectionData.lob.deliveryManager || "",
-              salespoc: selectionData.lob.salesPOC || "",
+              head: selectionData.hsbchead || selectionData.lob.hsbchead,
+            deliveryManager: selectionData.deliveryManager || selectionData.lob.deliveryManager,
+            salespoc: selectionData.salesPOC || selectionData.lob.salesPOC,
               pricingModel: selectionData.pricingModel || "",
               irm: selectionData.irm || "",
               ctoolId: selectionData.hsbctoolId || "",
@@ -720,7 +727,8 @@ function UpdateDetails() {
                 formatDate(selectionData.hsbconboardingDate) || "",
               candidateStatusDate:
                 formatDate(selectionData.candidateStatusDate) || "",
-              bgvInitiatedDate: formatDate(selectionData.bgvInitiatedDate) || "",
+              bgvInitiatedDate:
+                formatDate(selectionData.bgvInitiatedDate) || "",
               ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
               evidence:
                 evidenceDto.map((evidence) => ({
@@ -728,7 +736,7 @@ function UpdateDetails() {
                   fileObject: new File([], evidence.fileName), // Placeholder File object
                 })) || [],
             });
-
+            setSearchTerm(selectionData.hsbcRoles?.roleTitle || "");
             setSelectedSubLobTemp(selectionData.subLob);
 
             setUploadedFiles(
@@ -808,8 +816,9 @@ function UpdateDetails() {
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
                     required
-                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.vendorId ? "border-red-500" : ""
+                    }`}
                     disabled={isInternal}
                   >
                     <option value="">Select Vendor</option>
@@ -1114,6 +1123,8 @@ function UpdateDetails() {
                       <option value="Anand Devi">Anand Devi</option>
                       <option value="Nishant sharma">Nishant sharma</option>
                       <option value="Indranil Moolay">Indranil Moolay</option>
+                      <option value="Rajiv Lakhanpal">Rajiv Lakhanpal</option>
+                      <option value="Kinshuk Awasthi">Kinshuk Awasthi</option>
                       <option value="Ajay Pillai">Ajay Pillai</option>
                     </select>
                   </td>
@@ -1196,9 +1207,10 @@ function UpdateDetails() {
                       <input
                         type="text"
                         placeholder="Search or select a role..."
-                        value={form.hsbcRoles?.roleTitle}
-                        className={`p-2 border w-full ${errors.hsbcRoles ? "border-red-500" : ""
-                          }`}
+                        value={searchTerm}
+                        className={`p-2 border w-full ${
+                          errors.hsbcRoles ? "border-red-500" : ""
+                        }`}
                         onChange={handleSearch}
                         onFocus={() => setShowDropdown(true)} // Open dropdown on focus
                         style={{
@@ -1232,7 +1244,7 @@ function UpdateDetails() {
                             <li
                               key={role.ref}
                               onClick={() =>
-                                handleSelect(role.roleTitle, role.ref)
+                                handleSelect(role.roleTitle, role.ref,role.grade)
                               } // Properly update input value
                               style={{
                                 padding: "8px",
