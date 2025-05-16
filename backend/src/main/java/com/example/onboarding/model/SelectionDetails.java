@@ -64,6 +64,9 @@ public class SelectionDetails {
     private Integer CToolGrade;
     private Integer CToolTaggingRate;
     private String recruiterName;
+    private String deliveryManager;
+    private String HSBCHead;
+    private String salesPOC;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EvidenceDTO> interviewEvidences = new ArrayList<>();
@@ -86,10 +89,10 @@ public class SelectionDetails {
             String baseBu, LOB lob, SubLOB subLob, String irm, HsbcRoles hsbcRoles, Employee createdBy,
             Employee updatedBy, Date hSBCSelectionDate, String hSBCHiringManager, String pricingModel,
             Integer hSBCToolId, Date cToolReceivedDate, String cToolLocation, Integer cToolGrade,
-            Integer cToolTaggingRate, String recruiterName, List<EvidenceDTO> interviewEvidences,
-            String offerReleaseStatus, Date hSBCOnboardingDate, Date techSelectionDate, Date dOJReceivedDate,
-            Date lTIOnboardingDate, Date createDate, Date updateDate, Date candidateStatusDate, Date ctoolStartDate,
-            Date bgvInitiatedDate) {
+            Integer cToolTaggingRate, String recruiterName, String deliveryManager, String hSBCHead, String salesPOC,
+            List<EvidenceDTO> interviewEvidences, String offerReleaseStatus, Date hSBCOnboardingDate,
+            Date techSelectionDate, Date dOJReceivedDate, Date lTIOnboardingDate, Date createDate, Date updateDate,
+            Date candidateStatusDate, Date ctoolStartDate, Date bgvInitiatedDate) {
         this.selectionId = selectionId;
         this.employee = employee;
         this.candidate = candidate;
@@ -110,6 +113,9 @@ public class SelectionDetails {
         CToolGrade = cToolGrade;
         CToolTaggingRate = cToolTaggingRate;
         this.recruiterName = recruiterName;
+        this.deliveryManager = deliveryManager;
+        HSBCHead = hSBCHead;
+        this.salesPOC = salesPOC;
         this.interviewEvidences = interviewEvidences;
         this.offerReleaseStatus = offerReleaseStatus;
         HSBCOnboardingDate = hSBCOnboardingDate;
@@ -369,6 +375,30 @@ public class SelectionDetails {
 
     public void setBgvInitiatedDate(Date bgvInitiatedDate) {
         this.bgvInitiatedDate = bgvInitiatedDate;
+    }
+
+    public String getDeliveryManager() {
+        return deliveryManager;
+    }
+
+    public void setDeliveryManager(String deliveryManager) {
+        this.deliveryManager = deliveryManager;
+    }
+
+    public String getHSBCHead() {
+        return HSBCHead;
+    }
+
+    public void setHSBCHead(String hSBCHead) {
+        HSBCHead = hSBCHead;
+    }
+
+    public String getSalesPOC() {
+        return salesPOC;
+    }
+
+    public void setSalesPOC(String salesPoc) {
+        this.salesPOC = salesPoc;
     }
 
 }
