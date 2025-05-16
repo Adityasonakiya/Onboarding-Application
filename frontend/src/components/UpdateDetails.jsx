@@ -127,11 +127,26 @@ function UpdateDetails() {
       if (value === "Tagging Completed") {
         setForm((prevForm) => ({ ...prevForm, tagDateEnabled: true }));
       } else if (value === "Tech Selection Done") {
-        setForm((prevForm) => ({ ...prevForm, techSelectDateEnabled: true }));
+        setForm((prevForm) => ({
+          ...prevForm,
+          tagDateEnabled: true,
+          techSelectDateEnabled: true,
+        }));
       } else if (value === "DOJ Recieved") {
-        setForm((prevForm) => ({ ...prevForm, dojRecDateEnabled: true }));
+        setForm((prevForm) => ({
+          ...prevForm,
+          tagDateEnabled: true,
+          techSelectDateEnabled: true,
+          dojRecDateEnabled: true,
+        }));
       } else if (value === "Onboarding Completed") {
-        setForm((prevForm) => ({ ...prevForm, onboardingDateEnabled: true }));
+        setForm((prevForm) => ({
+          ...prevForm,
+          tagDateEnabled: true,
+          techSelectDateEnabled: true,
+          dojRecDateEnabled: true,
+          onboardingDateEnabled: true,
+        }));
       }
     }
   };
@@ -184,7 +199,7 @@ function UpdateDetails() {
   };
 
   // Select an option and update the input
-  const handleSelect = (roleTitle, ref,grade) => {
+  const handleSelect = (roleTitle, ref, grade) => {
     setSearchTerm(roleTitle); // Populate the input with the selected role
     setForm((prevState) => ({
       ...prevState,
@@ -497,7 +512,9 @@ function UpdateDetails() {
             subLob: selectionData.sublob || "",
             hiringManager: selectionData.hsbchiringManager || "",
             head: selectionData.hsbchead || selectionData.lob.hsbchead,
-            deliveryManager: selectionData.deliveryManager || selectionData.lob.deliveryManager,
+            deliveryManager:
+              selectionData.deliveryManager ||
+              selectionData.lob.deliveryManager,
             salespoc: selectionData.salesPOC || selectionData.lob.salesPOC,
             pricingModel: selectionData.pricingModel || "",
             irm: selectionData.irm || "",
@@ -593,7 +610,9 @@ function UpdateDetails() {
             subLob: selectionData.sublob || "",
             hiringManager: selectionData.hsbchiringManager || "",
             head: selectionData.hsbchead || selectionData.lob.hsbchead,
-            deliveryManager: selectionData.deliveryManager || selectionData.lob.deliveryManager,
+            deliveryManager:
+              selectionData.deliveryManager ||
+              selectionData.lob.deliveryManager,
             salespoc: selectionData.salesPOC || selectionData.lob.salesPOC,
             pricingModel: selectionData.pricingModel || "",
             irm: selectionData.irm || "",
@@ -700,8 +719,10 @@ function UpdateDetails() {
               subLob: selectionData.sublob || "",
               hiringManager: selectionData.hsbchiringManager || "",
               head: selectionData.hsbchead || selectionData.lob.hsbchead,
-            deliveryManager: selectionData.deliveryManager || selectionData.lob.deliveryManager,
-            salespoc: selectionData.salesPOC || selectionData.lob.salesPOC,
+              deliveryManager:
+                selectionData.deliveryManager ||
+                selectionData.lob.deliveryManager,
+              salespoc: selectionData.salesPOC || selectionData.lob.salesPOC,
               pricingModel: selectionData.pricingModel || "",
               irm: selectionData.irm || "",
               ctoolId: selectionData.hsbctoolId || "",
@@ -1244,7 +1265,11 @@ function UpdateDetails() {
                             <li
                               key={role.ref}
                               onClick={() =>
-                                handleSelect(role.roleTitle, role.ref,role.grade)
+                                handleSelect(
+                                  role.roleTitle,
+                                  role.ref,
+                                  role.grade
+                                )
                               } // Properly update input value
                               style={{
                                 padding: "8px",
@@ -1610,10 +1635,10 @@ function UpdateDetails() {
                     required
                   />
                 </td>
-              </tr> 
+              </tr>
 
               <tr className="flex flex-wrap md:flex-nowrap">
-              <td className="p-2 w-full md:w-1/4">
+                <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
                     CTool Start Date:<span className="text-red-500">*</span>
                   </label>
