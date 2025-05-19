@@ -45,8 +45,9 @@ public class SubLOBControllerTest {
         SubLOB sublob = new SubLOB();
         Mockito.when(sublobService.findById(subLobId)).thenReturn(sublob);
 
-        mockMvc.perform(get("users/sublob/{subLobId}",subLobId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        mockMvc.perform(get("/users/sublob/{subLobId}", subLobId))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
     }
 }
