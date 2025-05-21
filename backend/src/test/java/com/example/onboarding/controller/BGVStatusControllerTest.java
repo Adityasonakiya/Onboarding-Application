@@ -24,6 +24,7 @@ public class BGVStatusControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @SuppressWarnings("removal")
     @MockBean
     private BGVStatusService bgvStatusService;
 
@@ -48,4 +49,12 @@ public class BGVStatusControllerTest {
         mockMvc.perform(get("/Bgvs"))
                 .andExpect(status().isNotFound());
     }
+
+    public BGVStatusService getBgvStatusService() {
+        return bgvStatusService;
+    }
+    public void setBgvStatusService(BGVStatusService bgvStatusService) {
+        this.bgvStatusService = bgvStatusService;
+    }
+    
 }

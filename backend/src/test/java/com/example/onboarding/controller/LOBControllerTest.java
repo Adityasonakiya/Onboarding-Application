@@ -48,4 +48,13 @@ public class LOBControllerTest {
                 .andExpect(status().isOk())
                 .andExpectAll(content().contentType(MediaType.APPLICATION_JSON));
     }
+
+    public LOBService getLobService() {
+        return lobService;
+    }
+
+    public void setLobService(LOBService lobService) {
+        this.lobService = lobService;
+    }
+    
 }
