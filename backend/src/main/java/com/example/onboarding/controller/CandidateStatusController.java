@@ -21,7 +21,7 @@ public class CandidateStatusController {
 
     @GetMapping("/all")
     public ResponseEntity<List<CandidateStatus>> getAllCandidateStatus() {
-        List<CandidateStatus> statuses = candidateStatusService.getAllcandiadteStatus();
+        List<CandidateStatus> statuses = candidateStatusService.getAllCandidateStatus();
         if(statuses!=null){
             return new ResponseEntity<>(statuses, HttpStatus.OK);
         }

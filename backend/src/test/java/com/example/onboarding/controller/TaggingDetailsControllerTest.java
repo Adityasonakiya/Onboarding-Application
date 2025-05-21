@@ -42,7 +42,18 @@ public class TaggingDetailsControllerTest {
         TaggingDetails taggingDetails = new TaggingDetails();
         Mockito.when(taggingDetailsService.getTaggingDetailsByCandidatePhoneNumber(phoneNumber)).thenReturn(taggingDetails);
 
-        mockMvc.perform(get("/api/tagging-details/candidate/{candidateId}", phoneNumber))
+        mockMvc.perform(get("/api/tagging-details/candidate/{phoneNumber}", phoneNumber))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    public void testGetTaggingDetailsByVendorCandidateId() throws Exception {
+        Long phoneNumber = (long) 1;
+        TaggingDetails taggingDetails = new TaggingDetails();
+        Mockito.when(taggingDetailsService.getTaggingDetailsByVendorPhoneNumber(phoneNumber)).thenReturn(taggingDetails);
+
+        mockMvc.perform(get("/api/tagging-details/vendor/{phoneNumber}", phoneNumber))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
@@ -69,6 +80,20 @@ public class TaggingDetailsControllerTest {
                 .thenReturn(taggingDetails);
 
         mockMvc.perform(put("/api/tagging-details/candidate/{phoneNumber}", phoneNumber)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"bgvStatus\": {\"bgvStatus\": \"In progress\"}}"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    public void testUpdateTaggingDetailsByVendorCandidateId() throws Exception {
+        Long phoneNumber = (long) 1;
+        TaggingDetails taggingDetails = new TaggingDetails();
+        Mockito.when(taggingDetailsService.updateTaggingDetailsByVendorPhoneNumber(Mockito.eq(phoneNumber), Mockito.any(TaggingDetails.class)))
+                .thenReturn(taggingDetails);
+
+        mockMvc.perform(put("/api/tagging-details/vendor-candidate/{phoneNumber}", phoneNumber)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"bgvStatus\": {\"bgvStatus\": \"In progress\"}}"))
                 .andExpect(status().isOk())

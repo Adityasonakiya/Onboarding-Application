@@ -48,6 +48,15 @@ public class SubLOBControllerTest {
         mockMvc.perform(get("/users/sublob/{subLobId}", subLobId))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-
     }
+
+    public SubLOBService getSublobService() {
+        return sublobService;
+    }
+
+    public void setSublobService(SubLOBService sublobService) {
+        this.sublobService = sublobService;
+    }
+
+    
 }

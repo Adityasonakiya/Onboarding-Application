@@ -47,4 +47,13 @@ public class OnboardingStatusControllerTest {
         mockMvc.perform(get("/OnboardingStatuses"))
                 .andExpect(status().isNotFound());
     }
+
+    public OnboardingStatusService getOnboardingStatusService() {
+        return onboardingStatusService;
+    }
+
+    public void setOnboardingStatusService(OnboardingStatusService onboardingStatusService) {
+        this.onboardingStatusService = onboardingStatusService;
+    }
+    
 }
