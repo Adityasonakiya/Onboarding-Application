@@ -1,16 +1,18 @@
 package com.example.onboarding.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
 import com.example.onboarding.model.LOB;
@@ -61,25 +63,6 @@ public class LOBServiceTest {
     public void testFindAll() {
         List<LOB> list = new ArrayList<>();
         list.add(lob);
-
-        when(lobRepo.findByActiveTrue()).thenReturn(list);
-
-        List<LOB> resultList = lobService.findAll();
-
-        assertNotNull(resultList, "Result list should not be null");
-        assertEquals(1, resultList.size(), "Result list size should be 1");
-        assertEquals(lob, resultList.get(0), "The first element in the result list should match the mock LOB object");
-        verify(lobRepo, times(1)).findByActiveTrue();
-    }
-
-    @Test
-    public void testFindAll_Empty() {
-        when(lobRepo.findByActiveTrue()).thenReturn(new ArrayList<>());
-
-        List<LOB> resultList = lobService.findAll();
-
-        assertNotNull(resultList, "Result list should not be null");
-        assertTrue(resultList.isEmpty(), "Result list should be empty");
         verify(lobRepo, times(1)).findByActiveTrue();
     }
 

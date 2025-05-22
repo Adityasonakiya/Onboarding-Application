@@ -13,7 +13,8 @@ public class CandidateStatusService {
 
     @Autowired
     CandidateStatusRepository candidateStatusRepository;
-    public List<CandidateStatus> getAllcandiadteStatus(){
+
+    public List<CandidateStatus> getAllCandidateStatus(){
         return candidateStatusRepository.findAll();
     }
 }

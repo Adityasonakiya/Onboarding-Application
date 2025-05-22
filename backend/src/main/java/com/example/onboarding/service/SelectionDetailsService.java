@@ -21,7 +21,6 @@ import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
 import com.example.onboarding.model.VendorCandidate;
 import com.example.onboarding.repository.EmployeeRepository;
-import com.example.onboarding.repository.LOBRepository;
 import com.example.onboarding.repository.SelectionDetailsRepository;
 import com.example.onboarding.repository.VendorCandidateRepository;
 
@@ -45,8 +44,6 @@ public class SelectionDetailsService {
     @Autowired
     private VendorCandidateRepository vendorCandidateRepository;
 
-    @Autowired
-    private LOBRepository lobRepository;
 
     public SelectionDetails getSelectionDetailsByPsid(int psid) {
         return selectionDetailsRepository.findSelectionDetailsByPsId(psid);
