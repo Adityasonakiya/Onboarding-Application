@@ -16,32 +16,32 @@ import com.example.onboarding.model.CandidateStatus;
 import com.example.onboarding.repository.CandidateStatusRepository;
 
 public class CandidateStatusServiceTest {
+
     @InjectMocks
-    private CandidateStatusService cndStatusService;
+    private CandidateStatusService candidateStatusService;
 
     @Mock
-    private CandidateStatusRepository cndStatusRepository;
+    private CandidateStatusRepository candidateStatusRepository;
 
-    private CandidateStatus cndStatus;
+    private CandidateStatus candidateStatus;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        cndStatus = new CandidateStatus();
+        candidateStatus = new CandidateStatus();
     }
 
     @Test
-    public void testGetAllCandidateStatus(){
-        List<CandidateStatus> cndStatusList = new ArrayList<>();
-        cndStatusList.add(cndStatus);
+    public void testGetAllCandidateStatus() {
+        List<CandidateStatus> candidateStatusList = new ArrayList<>();
+        candidateStatusList.add(candidateStatus);
 
-        when(cndStatusRepository.findAll()).thenReturn(cndStatusList);
+        when(candidateStatusRepository.findAll()).thenReturn(candidateStatusList);
 
-        List<CandidateStatus> result = cndStatusService.getAllCandidateStatus();
+        List<CandidateStatus> result = candidateStatusService.getAllCandidateStatus();
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(cndStatus, result.get(0));
-        verify(cndStatusRepository, times(1)).findAll();
+        assertEquals(candidateStatus, result.get(0));
+        verify(candidateStatusRepository, times(1)).findAll();
     }
-
 }
