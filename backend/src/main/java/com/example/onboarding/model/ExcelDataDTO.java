@@ -16,7 +16,7 @@ public class ExcelDataDTO {
     private String lastName;
     private String grade;
     private String location;
-    private Double totalExperience;
+    private String totalExperience;
     private String skill;
 
     // Selection Dates and Details
@@ -82,7 +82,7 @@ public class ExcelDataDTO {
     }
 
     public ExcelDataDTO(String onboardingStatus, String ltiPsId, String firstName, String lastName, String grade,
-            String location, Double totalExperience, String skill, Date hsbcSelectionDate, Date ltiJoiningDate, Date createdDate,
+            String location, String totalExperience, String skill, Date hsbcSelectionDate, Date ltiJoiningDate, Date createdDate,
             String selectionMonthYear, Long selectionAging, String category, String baseBu, String lobName, String subLobName, String salesPoc, String hsbcHiringManager,
             String hsbcHead, String deliveryManager, String irm, String pricingModel, Integer hsbcCtoolId, Date ctoolReceivedDate, String ctoolReceivedStatus,
             Long ctoolAging, Long ctoolAgingWeekBucket, Date ctoolStartDate, String recruiterName, Integer ctoolTaggingRate, String hsbcRole, Integer roleGrade,

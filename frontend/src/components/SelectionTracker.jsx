@@ -1264,7 +1264,7 @@ function SelectionTracker() {
                   >
                     <option value="0">Choose..</option>
                     <option value="T&M">T&M</option>
-                    <option value="FP">FP</option>
+                    <option value="Fixed Price">Fixed Price</option>
                   </select>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
