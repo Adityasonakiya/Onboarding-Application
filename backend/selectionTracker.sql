@@ -409,76 +409,76 @@ INSERT INTO selection_details (
 VALUES
 -- 1. CTO (lob_id 2, active), sublob 12 (active)
 (10820984, NULL, NULL, 'BFS', 2, 12, '10825932', 1, 10713037, 10713037, '2023-03-05',
- 'Sachin Shaha', 'T&M', 108933, '2023-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'Pending',
+ 'Sachin Shaha', 'Time & Material', 108933, '2023-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'Pending',
  '2025-04-23', '2025-04-23', '2025-04-23', '2023-02-28', NOW(), NOW(), NULL, NULL, NULL),
 -- 2. CTO (lob_id 2, active), sublob 22 (active)
 (10715126, NULL, NULL, 'BFS', 2, 22, '10825932', 2, 10713037, 10713037, '2025-03-12',
- 'Sachin Shaha', 'FP', 108933, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'On Hold',
+ 'Sachin Shaha', 'Fixed Price', 108933, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'On Hold',
  NULL, NULL, NULL, '2025-04-23', NOW(), NOW(), NULL, NULL, NULL),
 -- 3. Group Data Technology (lob_id 6, active), sublob 36 (active)
 (10825932, NULL, NULL, 'BFS', 6, 36, '10825932', 3, 10713037, 10713037, '2025-03-18',
- 'Sachin Shaha', 'T&M', 108933, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'Release',
+ 'Sachin Shaha', 'Time & Material', 108933, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'Release',
  '2025-04-23', '2025-04-23', '2025-04-23', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 4. CTO (lob_id 2, active), sublob 12 (active)
 (NULL, 2, NULL, 'BFS', 2, 12, '10825932', 4, 10713037, 10713037, '2025-03-17',
- 'Sachin Shaha', 'FP', 108933, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'WIP',
+ 'Sachin Shaha', 'Fixed Price', 108933, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'WIP',
  NULL, NULL, NULL, NULL, NOW(), NOW(), NULL, NULL, NULL),
 -- 5. Enterprise Technology (lob_id 4, active), sublob 44 (active)
 (10830001, NULL, NULL, 'BFS', 4, 44, '10825932', 5, 10713037, 10713037, '2025-03-08',
- 'Sachin Shaha', 'FP', 108934, '2025-04-02', 'Mumbai', NULL, NULL, 'Nishant Sharma', 'Pending',
+ 'Sachin Shaha', 'Fixed Price', 108934, '2025-04-02', 'Mumbai', NULL, NULL, 'Nishant Sharma', 'Pending',
  '2025-09-23', '2025-09-18', '2025-09-21', '2025-02-28', NOW(), NOW(), NULL, NULL, NULL),
 -- 6. Enterprise Technology (lob_id 4, active), sublob 54 (active)
 (10830002, NULL, NULL, 'BFS', 4, 54, '10825932', 6, 10713037, 10713037, '2025-03-15',
- 'Sachin Shaha', 'T&M', 108935, '2025-04-02', 'Bangalore', NULL, NULL, 'Nishant Sharma', 'On Hold',
+ 'Sachin Shaha', 'Time & Material', 108935, '2025-04-02', 'Bangalore', NULL, NULL, 'Nishant Sharma', 'On Hold',
  '2025-03-20', '2025-03-20', '2025-03-20', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 7. Group Data Technology (lob_id 6, active), sublob 66 (active)
 (10830003, NULL, NULL, 'BFS', 6, 66, '10825932', 7, 10713037, 10713037, '2025-03-10',
- 'Sachin Shaha', 'FP', 108936, '2025-04-02', 'Hyderabad', NULL, NULL, 'Nishant Sharma', 'Release',
+ 'Sachin Shaha', 'Fixed Price', 108936, '2025-04-02', 'Hyderabad', NULL, NULL, 'Nishant Sharma', 'Release',
  '2025-03-23', '2025-02-23', '2025-03-23', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 8. Group Data Technology (lob_id 6, active), sublob 76 (active)
 (10830004, NULL, NULL, 'BFS', 6, 76, '10825932', 8, 10713037, 10713037, '2025-03-14',
- 'Sachin Shaha', 'FP', 108937, '2025-04-02', 'Chennai', NULL, NULL, 'Nishant Sharma', 'Pending',
+ 'Sachin Shaha', 'Fixed Price', 108937, '2025-04-02', 'Chennai', NULL, NULL, 'Nishant Sharma', 'Pending',
  '2025-02-23', '2025-01-23', '2025-02-23', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 9. Group Data Technology (lob_id 6, active), sublob 86 (active)
 (10830005, NULL, NULL, 'BFS', 6, 86, '10825932', 9, 10713037, 10713037, '2025-03-19',
- 'Sachin Shaha', 'FP', 108938, '2025-04-02', 'Delhi', NULL, NULL, 'Nishant Sharma', 'On Hold',
+ 'Sachin Shaha', 'Fixed Price', 108938, '2025-04-02', 'Delhi', NULL, NULL, 'Nishant Sharma', 'On Hold',
  '2025-03-22', '2025-03-22', '2025-03-22', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 10. Markets & Sec Services Tech (lob_id 9, active), sublob 19 (active)
 (10830007, NULL, NULL, 'BFS', 9, 19, '10825932', 10, 10713037, 10713037, '2025-03-11',
- 'Sachin Shaha', 'T&M', 108939, '2025-04-02', 'Bangalore', NULL, NULL, 'Nishant Sharma', 'Release',
+ 'Sachin Shaha', 'Time & Material', 108939, '2025-04-02', 'Bangalore', NULL, NULL, 'Nishant Sharma', 'Release',
  '2025-03-15', '2025-03-15', '2025-03-15', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 11. MDS & DAO ESG (lob_id 10, inactive) -- SKIPPED
 -- 12. Regional CIO - Europe (lob_id 11, active), sublob 111 (active)
 (NULL, 6, NULL, 'BFS', 11, 111, '10825932', 11, 10713037, 10713037, '2025-03-13',
- 'Sachin Shaha', 'T&M', 108941, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'Pending',
+ 'Sachin Shaha', 'Time & Material', 108941, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'Pending',
  NULL, NULL, NULL, NULL, NOW(), NOW(), NULL, NULL, NULL),
 -- 13. SAB Technology (lob_id 12, active), sublob 112 (active)
 (10830010, NULL, NULL, 'BFS', 12, 112, '10825932', 12, 10713037, 10713037, '2025-03-17',
- 'Sachin Shaha', 'FP', 108942, '2025-04-02', 'Chennai', NULL, NULL, 'Nishant Sharma', 'On Hold',
+ 'Sachin Shaha', 'Fixed Price', 108942, '2025-04-02', 'Chennai', NULL, NULL, 'Nishant Sharma', 'On Hold',
  '2025-03-22', '2025-03-22', '2025-03-22', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 14. Strategic Services Technology (lob_id 13, active), sublob 113 (active)
 (10830011, NULL, NULL, 'BFS', 13, 113, '10825932', 13, 10713037, 10713037, '2025-03-04',
- 'Sachin Shaha', 'FP', 108943, '2025-04-02', 'Delhi', NULL, NULL, 'Nishant Sharma', 'Release',
+ 'Sachin Shaha', 'Fixed Price', 108943, '2025-04-02', 'Delhi', NULL, NULL, 'Nishant Sharma', 'Release',
  '2025-03-15', '2025-03-15', '2025-03-15', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 15. Wholesale Technology (lob_id 15, active), sublob 115 (active)
 (10830013, NULL, NULL, 'BFS', 15, 115, '10825932', 15, 10713037, 10713037, '2025-03-18',
- 'Sachin Shaha', 'FP', 108945, '2025-04-02', 'Hyderabad', NULL, NULL, 'Nishant Sharma', 'Pending',
+ 'Sachin Shaha', 'Fixed Price', 108945, '2025-04-02', 'Hyderabad', NULL, NULL, 'Nishant Sharma', 'Pending',
  '2025-03-25', '2025-03-25', '2025-03-25', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 16. WPB Technology (lob_id 16, active), sublob 116 (active)
 (NULL, 7, NULL, 'BFS', 16, 116, '10825932', 16, 10713037, 10713037, '2025-03-16',
- 'Sachin Shaha', 'T&M', 108946, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'WIP',
+ 'Sachin Shaha', 'Time & Material', 108946, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'WIP',
  NULL, NULL, NULL, NULL, NOW(), NOW(), NULL, NULL, NULL),
 -- 17. WPB Technology (lob_id 16, active), sublob 316 (active)
 (10830014, NULL, NULL, 'BFS', 16, 316, '10825932', 17, 10713037, 10713037, '2025-02-28',
- 'Sachin Shaha', 'FP', 108947, '2025-04-02', 'Chennai', NULL, NULL, 'Nishant Sharma', 'Pending',
+ 'Sachin Shaha', 'Fixed Price', 108947, '2025-04-02', 'Chennai', NULL, NULL, 'Nishant Sharma', 'Pending',
  '2025-03-05', '2025-02-05', '2025-02-28', '2025-02-20', NOW(), NOW(), NULL, NULL, NULL),
 -- 18. Wholesale Technology (lob_id 15, active), sublob 715 (active)
 (10830015, NULL, NULL, 'BFS', 15, 715, '10825932', 18, 10713037, 10713037, '2025-02-15',
- 'Sachin Shaha', 'FP', 108948, '2025-04-02', 'Delhi', NULL, NULL, 'Nishant Sharma', 'On Hold',
+ 'Sachin Shaha', 'Fixed Price', 108948, '2025-04-02', 'Delhi', NULL, NULL, 'Nishant Sharma', 'On Hold',
  '2025-02-20', '2025-02-20', '2025-02-20', '2025-02-10', NOW(), NOW(), NULL, NULL, NULL),
 -- 19. INM (lob_id 8, active), sublob 18 (active)
 (NULL, 8, NULL, 'BFS', 8, 18, '10825932', 19, 10713037, 10713037, '2025-01-30',
- 'Sachin Shaha', 'T&M', 108949, '2025-04-02', 'Bangalore', NULL, NULL, 'Nishant Sharma', 'Release',
+ 'Sachin Shaha', 'Time & Material', 108949, '2025-04-02', 'Bangalore', NULL, NULL, 'Nishant Sharma', 'Release',
  NULL, NULL, '2025-01-20', NULL, NOW(), NOW(), NULL, NULL, NULL);
 
 INSERT INTO tagging_details 
