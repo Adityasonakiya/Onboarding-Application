@@ -27,6 +27,9 @@ public class User {
     private String password;
     private Timestamp lastLogin;
     private Timestamp lastLogout;
+
+    public User() {}
+
     
     public int getPsid() {
         return psid;
