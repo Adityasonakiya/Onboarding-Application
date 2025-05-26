@@ -23,13 +23,19 @@ import com.example.onboarding.service.UserService;
 public class UserController {
     @Autowired
     private UserService userService;
- 
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
-        return userService.getUserById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+        try {
+            Optional<User> user = userService.getUserById(id);
+            return user.map(ResponseEntity::ok)
+                       .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            e.printStackTrace(); // This will print the real cause of the 500 error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
+    
 
     @PostMapping("/create")
     public ResponseEntity<String> createUser(@RequestBody User user) {
@@ -44,7 +50,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody LoginDTO loginDTO) {
         User user = userService.loginUser(loginDTO);
-        if(user != null){
+        if (user != null) {
             return ResponseEntity.status(HttpStatus.OK).body("User Logged in successfully");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
