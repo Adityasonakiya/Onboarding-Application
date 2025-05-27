@@ -81,6 +81,8 @@ public class SelectionDetails {
     private Date candidateStatusDate;
     private Date ctoolStartDate;
     private Date bgvInitiatedDate;
+    private Date billingStartDate;
+    private Integer hsbcId;
 
     public SelectionDetails() {
     }
@@ -92,7 +94,7 @@ public class SelectionDetails {
             Integer cToolTaggingRate, String recruiterName, String deliveryManager, String hSBCHead, String salesPOC,
             List<EvidenceDTO> interviewEvidences, String offerReleaseStatus, Date hSBCOnboardingDate,
             Date techSelectionDate, Date dOJReceivedDate, Date lTIOnboardingDate, Date createDate, Date updateDate,
-            Date candidateStatusDate, Date ctoolStartDate, Date bgvInitiatedDate) {
+            Date candidateStatusDate, Date ctoolStartDate, Date bgvInitiatedDate, Date billingStartDate, Integer hsbcId) {
         this.selectionId = selectionId;
         this.employee = employee;
         this.candidate = candidate;
@@ -127,6 +129,8 @@ public class SelectionDetails {
         this.candidateStatusDate = candidateStatusDate;
         this.ctoolStartDate = ctoolStartDate;
         this.bgvInitiatedDate = bgvInitiatedDate;
+        this.billingStartDate=billingStartDate;
+        this.hsbcId=hsbcId;
     }
 
     public int getSelectionId() {
@@ -399,6 +403,22 @@ public class SelectionDetails {
 
     public void setSalesPOC(String salesPoc) {
         this.salesPOC = salesPoc;
+    }
+
+    public Date getBillingStartDate() {
+        return billingStartDate;
+    }
+
+    public void setBillingStartDate(Date billingStartDate) {
+        this.billingStartDate = billingStartDate;
+    }
+
+    public Integer getHsbcId() {
+        return hsbcId;
+    }
+
+    public void setHsbcId(Integer hsbcId) {
+        this.hsbcId = hsbcId;
     }
 
 }
