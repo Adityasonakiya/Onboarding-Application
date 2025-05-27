@@ -101,6 +101,8 @@ public class SelectionDetailsService {
             existingDetails.setBgvInitiatedDate(updatedDetails.getBgvInitiatedDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
+            existingDetails.setBillingStartDate(updatedDetails.getBillingStartDate());
+            existingDetails.setHsbcId(updatedDetails.getHsbcId());
             existingDetails.setCtoolStartDate(updatedDetails.getCtoolStartDate());
             existingDetails.setUpdateDate(new Date());
             existingDetails.setCreatedBy(existingDetails.getCreatedBy());
@@ -146,6 +148,8 @@ public class SelectionDetailsService {
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setBgvInitiatedDate(updatedDetails.getBgvInitiatedDate());
             existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
+            existingDetails.setBillingStartDate(updatedDetails.getBillingStartDate());
+            existingDetails.setHsbcId(updatedDetails.getHsbcId());
             existingDetails.setCtoolStartDate(updatedDetails.getCtoolStartDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setUpdateDate(new Date());
@@ -193,6 +197,8 @@ public class SelectionDetailsService {
             existingDetails.setLTIOnboardingDate(updatedDetails.getLTIOnboardingDate());
             existingDetails.setBgvInitiatedDate(updatedDetails.getBgvInitiatedDate());
             existingDetails.setCandidateStatusDate(updatedDetails.getCandidateStatusDate());
+            existingDetails.setBillingStartDate(updatedDetails.getBillingStartDate());
+            existingDetails.setHsbcId(updatedDetails.getHsbcId());
             existingDetails.setCtoolStartDate(updatedDetails.getCtoolStartDate());
             existingDetails.setCreateDate(existingDetails.getCreateDate());
             existingDetails.setUpdateDate(new Date());

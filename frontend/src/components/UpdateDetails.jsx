@@ -398,6 +398,8 @@ function UpdateDetails() {
       ltionboardingDate: form.ltiOnboardDate,
       techSelectionDate: form.techSelectDate,
       candidateStatusDate: form.candidateStatusDate,
+      billingStartDate: form.billingStartDate,
+      hsbcId: form.hsbcId,
       bgvInitiatedDate: form.bgvInitiatedDate,
       dojreceivedDate: form.dojRecDate,
       hsbconboardingDate: form.onboardingDate,
@@ -539,6 +541,10 @@ function UpdateDetails() {
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
             candidateStatusDate:
               formatDate(selectionData.candidateStatusDate) || "",
+            billingStartDate:
+              formatDate(selectionData.billingStartDate) || "",
+            hsbcId:
+              selectionData.hsbcId || "",
             bgvInitiatedDate: formatDate(selectionData.bgvInitiatedDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
             evidence:
@@ -637,6 +643,10 @@ function UpdateDetails() {
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
             candidateStatusDate:
               formatDate(selectionData.candidateStatusDate) || "",
+            billingStartDate:
+              formatDate(selectionData.billingStartDate) || "",
+            hsbcId:
+              selectionData.hsbcId || "",  
             bgvInitiatedDate: formatDate(selectionData.bgvInitiatedDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
             evidence:
@@ -748,6 +758,10 @@ function UpdateDetails() {
                 formatDate(selectionData.hsbconboardingDate) || "",
               candidateStatusDate:
                 formatDate(selectionData.candidateStatusDate) || "",
+              billingStartDate:
+                formatDate(selectionData.billingStartDate) || "",
+              hsbcId:
+                selectionData.hsbcId || "",  
               bgvInitiatedDate:
                 formatDate(selectionData.bgvInitiatedDate) || "",
               ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
@@ -1743,6 +1757,38 @@ function UpdateDetails() {
                     min={today}
                   />
                 </td>
+              </tr>
+
+              <tr className="flex flex-wrap md:flex-nowrap">
+              <td className="p-2 w-full md:w-1/4">
+                  <label className="font-bold">
+                    Billing Start Date:<span className="text-red-500">*</span>
+                  </label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    type="date"
+                    name="billingStartDate"
+                    value={form.billingStartDate || ""}
+                    required
+                    onChange={handleChange}
+                    className="p-2 mb-2 border rounded w-full"
+                    min={today}
+                  />
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                    <label className="font-semibold">HSBC ID:</label>
+                  </td>
+                  <td className="p-2 w-full md:w-1/4">
+                    <input
+                      type="number"
+                      name="hsbcId"
+                      value={form.hsbcId || ""}
+                      // minLength={6}
+                      onChange={handleChange}
+                      className="p-2 border rounded w-full"
+                    />
+                  </td>
               </tr>
 
               <div className="border border-gray-300 rounded-md shadow">
