@@ -218,6 +218,10 @@ function SelectionTracker() {
     setShowDropdown(false); // Hide dropdown after selection
   };
 
+  const handleCancel = () => {
+    navigate("/landing-page");
+  };
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -1534,6 +1538,7 @@ function SelectionTracker() {
                       <button
                         type="button"
                         className="bg-gray-500 text-white py-2 px-10 rounded"
+                        onClick={handleCancel}
                       >
                         Cancel
                       </button>
