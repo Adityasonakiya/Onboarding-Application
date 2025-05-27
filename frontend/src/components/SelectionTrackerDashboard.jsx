@@ -80,9 +80,10 @@ const SelectionTrackerDashboard = ({ user }) => {
       hsbcConfirmedDoj: "HSBC Confirmed DOJ",
       agingSelectionWithDoj: "Aging Selection With DOJ",
       hsbcDojAgingBucket: "HSBC DOJ Aging Bucket",
-      hsbcOnboardingDate: "HSBC Onboarding Date",
+      billingStartDate: "BSD",
       taggingDone: "Tagging Done",
-      techSelectionDone: "Tech Selection Done"
+      techSelectionDone: "Tech Selection Done",
+      dojRecievedDate: "DOJ Mail Recieved Date"
     };
   
     // Transform data to use readable column headers

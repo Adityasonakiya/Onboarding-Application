@@ -11,6 +11,7 @@ public class ExcelDataDTO {
 
     // Basic Information
     private String onboardingStatus;
+    private Integer hsbcId;
     private String ltiPsId;
     private String firstName;
     private String lastName;
@@ -74,23 +75,25 @@ public class ExcelDataDTO {
     private Long hsbcDojAgingBucket;
 
     // Onboarding Information
-    private Date hsbcOnboardingDate;
+    private Date billingStartDate;
     private Date taggingDone;
     private Date techSelectionDone;
+    private Date dojRecievedDate;
 
     public ExcelDataDTO() {
     }
 
-    public ExcelDataDTO(String onboardingStatus, String ltiPsId, String firstName, String lastName, String grade,
+    public ExcelDataDTO(String onboardingStatus,Integer hsbcId, String ltiPsId, String firstName, String lastName, String grade,
             String location, String totalExperience, String skill, Date hsbcSelectionDate, Date ltiJoiningDate, Date createdDate,
             String selectionMonthYear, Long selectionAging, String category, String baseBu, String lobName, String subLobName, String salesPoc, String hsbcHiringManager,
             String hsbcHead, String deliveryManager, String irm, String pricingModel, Integer hsbcCtoolId, Date ctoolReceivedDate, String ctoolReceivedStatus,
             Long ctoolAging, Long ctoolAgingWeekBucket, Date ctoolStartDate, String recruiterName, Integer ctoolTaggingRate, String hsbcRole, Integer roleGrade,
             String finalBGVStatus, String techSelectionStatus, String remarks, String interviewDocuments, Date hsbcConfirmedDoj, Long agingSelectionWithDoj,
-            Long hsbcDojAgingBucket, Date hsbcOnboardingDate, Date taggingDone, Date techSelectionDone) {
+            Long hsbcDojAgingBucket, Date billingStartDate, Date taggingDone, Date techSelectionDone,Date dojRecievedDate) {
 
         this.onboardingStatus = onboardingStatus;
         this.ltiPsId = ltiPsId;
+        this.hsbcId = hsbcId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.grade = grade;
@@ -129,15 +132,16 @@ public class ExcelDataDTO {
         this.hsbcConfirmedDoj = hsbcConfirmedDoj;
         this.agingSelectionWithDoj = agingSelectionWithDoj;
         this.hsbcDojAgingBucket = hsbcDojAgingBucket;
-        this.hsbcOnboardingDate = hsbcOnboardingDate;
+        this.billingStartDate = billingStartDate;
         this.taggingDone = taggingDone;
         this.techSelectionDone = techSelectionDone;
+        this.dojRecievedDate = dojRecievedDate;
     }
 
     @Override
     public String toString() {
-        return "ExcelDataDTO [onboardingStatus=" + onboardingStatus + ", ltiPsId=" + ltiPsId + ", firstName="
-                + firstName + ", lastName=" + lastName + ", grade=" + grade + ", location=" + location
+        return "ExcelDataDTO [onboardingStatus=" + onboardingStatus + ", ltiPsId=" + ltiPsId + ", hsbcId=" + hsbcId
+                + ", firstName=" + firstName + ", lastName=" + lastName + ", grade=" + grade + ", location=" + location
                 + ", totalExperience=" + totalExperience + ", skill=" + skill + ", hsbcSelectionDate="
                 + hsbcSelectionDate + ", ltiJoiningDate=" + ltiJoiningDate + ", createdDate=" + createdDate
                 + ", selectionMonthYear=" + selectionMonthYear + ", selectionAging=" + selectionAging + ", category="
@@ -146,13 +150,14 @@ public class ExcelDataDTO {
                 + ", deliveryManager=" + deliveryManager + ", irm=" + irm + ", pricingModel=" + pricingModel
                 + ", hsbcCtoolId=" + hsbcCtoolId + ", ctoolReceivedDate=" + ctoolReceivedDate + ", ctoolReceivedStatus="
                 + ctoolReceivedStatus + ", ctoolAging=" + ctoolAging + ", ctoolAgingWeekBucket=" + ctoolAgingWeekBucket
-                + ", ctoolStartDate=" + ctoolStartDate + ", recruiterName=" + recruiterName + ", ctoolRate=" + ctoolTaggingRate
-                + ", hsbcRole=" + hsbcRole + ", roleGrade=" + roleGrade
-                + ", finalBGVStatus=" + finalBGVStatus + ", techSelectionStatus=" + techSelectionStatus + ", remarks="
-                + remarks + ", interviewDocuments=" + interviewDocuments + ", hsbcConfirmedDoj=" + hsbcConfirmedDoj
+                + ", ctoolStartDate=" + ctoolStartDate + ", recruiterName=" + recruiterName + ", ctoolTaggingRate="
+                + ctoolTaggingRate + ", hsbcRole=" + hsbcRole + ", roleGrade=" + roleGrade + ", finalBGVStatus="
+                + finalBGVStatus + ", techSelectionStatus=" + techSelectionStatus + ", remarks=" + remarks
+                + ", interviewDocuments=" + interviewDocuments + ", hsbcConfirmedDoj=" + hsbcConfirmedDoj
                 + ", agingSelectionWithDoj=" + agingSelectionWithDoj + ", hsbcDojAgingBucket=" + hsbcDojAgingBucket
-                + ", hsbcOnboardingDate=" + hsbcOnboardingDate + ", taggingDone=" + taggingDone + ", techSelectionDone="
-                + techSelectionDone + "]";
+                + ", billingStartDate=" + billingStartDate + ", taggingDone=" + taggingDone + ", techSelectionDone="
+                + techSelectionDone + ", dojRecievedDate=" + dojRecievedDate + "]";
     }
 
+    
 }
