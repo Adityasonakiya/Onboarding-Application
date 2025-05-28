@@ -1773,7 +1773,8 @@ function UpdateDetails() {
                     required
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
-                    min={today}
+                    disabled={!form.onboardingDateEnabled}
+                    min={form.onboardingDate}
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
