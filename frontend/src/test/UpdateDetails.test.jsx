@@ -3,44 +3,50 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import UpdateDetails from "../components/UpdateDetails";
 
+// ✅ Mock API services
 jest.mock("../services/api", () => ({
   getAllVendors: jest.fn(() => Promise.resolve([{ vendorId: 1, vendorName: "Vendor A" }])),
   getHsbcRoles: jest.fn(() => Promise.resolve([{ ref: "1", roleTitle: "Role A", grade: "Grade A" }])),
   fetchLobs: jest.fn(() => Promise.resolve([{ lobId: 1, lobName: "LOB A" }])),
   fetchSubLobs: jest.fn(() => Promise.resolve([{ subLOBid: 1, subLobName: "SubLOB A" }])),
+  getCandidateById: jest.fn(() => Promise.resolve({ name: "Test Candidate", psId: "123456" })), // ✅ Added
 }));
 
-describe("UpdateDetails Component", () => {
-  const mockNavigate = jest.fn();
-  jest.mock("react-router-dom", () => ({
-    ...jest.requireActual("react-router-dom"),
+// ✅ Mock navigation
+const mockNavigate = jest.fn();
+jest.mock("react-router-dom", () => {
+  const actual = jest.requireActual("react-router-dom");
+  return {
+    ...actual,
     useNavigate: () => mockNavigate,
     useLocation: () => ({ state: { id: 1, phoneNumber: "1234567890" } }),
-  }));
+  };
+});
 
+describe("UpdateDetails Component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("renders UpdateDetails component", async () => {
+  test("renders UpdateDetails component and loads dropdowns", async () => {
     render(
       <BrowserRouter>
         <UpdateDetails />
       </BrowserRouter>
     );
 
-    expect(screen.getByText("HSBC Updation Form")).toBeInTheDocument();
-    await waitFor(() => expect(screen.getByText("Vendor A")).toBeInTheDocument());
+    expect(await screen.findByText("HSBC Updation Form")).toBeInTheDocument();
+    expect(await screen.findByText("Vendor A")).toBeInTheDocument();
   });
 
-  test("updates form inputs", async () => {
+  test("updates form inputs correctly", async () => {
     render(
       <BrowserRouter>
         <UpdateDetails />
       </BrowserRouter>
     );
 
-    const psIdInput = screen.getByLabelText(/PS ID/i);
+    const psIdInput = await screen.findByLabelText(/PS ID/i);
     fireEvent.change(psIdInput, { target: { value: "123456" } });
     expect(psIdInput.value).toBe("123456");
 
@@ -49,58 +55,68 @@ describe("UpdateDetails Component", () => {
     expect(statusSelect.value).toBe("Tagging Completed");
   });
 
-  test("handles file upload", async () => {
+  test("handles file upload and displays file name", async () => {
     render(
       <BrowserRouter>
         <UpdateDetails />
       </BrowserRouter>
     );
 
-    const fileInput = screen.getByLabelText(/Interview Evidences/i);
+    const fileInput = await screen.findByLabelText(/Interview Evidences/i);
     const file = new File(["dummy content"], "example.png", { type: "image/png" });
     fireEvent.change(fileInput, { target: { files: [file] } });
 
-    await waitFor(() => expect(screen.getByText("example.png")).toBeInTheDocument());
+    await waitFor(() => {
+      expect(screen.getByText("example.png")).toBeInTheDocument();
+    });
   });
 
-  test("filters HSBC Roles dropdown", async () => {
+  test("filters and selects HSBC Roles from dropdown", async () => {
     render(
       <BrowserRouter>
         <UpdateDetails />
       </BrowserRouter>
     );
 
-    const roleInput = screen.getByPlaceholderText(/Search or select a role/i);
+    const roleInput = await screen.findByPlaceholderText(/Search or select a role/i);
     fireEvent.change(roleInput, { target: { value: "Role" } });
 
-    await waitFor(() => expect(screen.getByText("Role A")).toBeInTheDocument());
-    fireEvent.click(screen.getByText("Role A"));
+    const roleOption = await screen.findByText("Role A");
+    fireEvent.click(roleOption);
+
     expect(roleInput.value).toBe("Role A");
   });
 
-  test("calls handleSubmit on form submission", async () => {
+  test("submits form and navigates on success", async () => {
     render(
       <BrowserRouter>
         <UpdateDetails />
       </BrowserRouter>
     );
+
+    fireEvent.change(await screen.findByLabelText(/PS ID/i), { target: { value: "123456" } });
+    fireEvent.change(screen.getByLabelText(/Status/i), { target: { value: "Tagging Completed" } });
 
     const submitButton = screen.getByText(/Update/i);
     fireEvent.click(submitButton);
 
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/landing-page"));
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/landing-page");
+    });
   });
 
-  test("navigates on cancel button click", async () => {
+  test("navigates to landing page on cancel", async () => {
     render(
       <BrowserRouter>
         <UpdateDetails />
       </BrowserRouter>
     );
 
-    const cancelButton = screen.getByText(/Cancel/i);
+    const cancelButton = await screen.findByText(/Cancel/i);
     fireEvent.click(cancelButton);
 
-    expect(mockNavigate).toHaveBeenCalledWith("/landing-page");
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/landing-page");
+    });
   });
 });
