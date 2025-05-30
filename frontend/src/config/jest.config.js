@@ -1,10 +1,11 @@
 module.exports = {
-    moduleNameMapper: {
-      "^react-router-dom$": "<rootDir>/node_modules/react-router-dom",
-    },
-    testEnvironment: "jsdom",
-    transform: {
-      "^.+\\.jsx?$": "babel-jest", // Ensure JSX files are transformed
-    },
-    moduleFileExtensions: ["js", "jsx", "json", "node"],
-  };
+  testEnvironment: "jsdom",
+  transform: {
+    "^.+\\.jsx?$": "babel-jest",
+  },
+  moduleFileExtensions: ["js", "jsx", "json", "node"],
+  setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
+  moduleNameMapper: {
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+  },
+};
