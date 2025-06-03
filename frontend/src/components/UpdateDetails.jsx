@@ -567,33 +567,43 @@ function UpdateDetails() {
           console.error("Error in Promise.all:", error);
         });
     } else if (isExternal && phone) {
-      // Fetch data for external users
       Promise.all([
-        getCandidateById(phone).catch((err) => {
-          console.error("Error fetching candidate data:", err);
-          return {}; // Fallback to an empty object
-        }),
-        getSelectionDetailsByCandidateId(phone).catch((err) => {
-          console.error("Error fetching selection details:", err);
-          return {}; // Fallback to an empty object
-        }),
-        getTaggingDetailsByPsId(psId).catch((err) => {
-          console.error("Error fetching tagging details:", err);
-          return {}; // Fallback to an empty object
-        }),
+        (async () => {
+          try {
+            return await getCandidateById(phone);
+          } catch (err) {
+            console.error("Error fetching candidate data:", err);
+            return {};
+          }
+        })(),
+        (async () => {
+          try {
+            return await getSelectionDetailsByCandidateId(phone);
+          } catch (err) {
+            console.error("Error fetching selection details:", err);
+            return {};
+          }
+        })(),
+        (async () => {
+          try {
+            return await getTaggingDetailsByPsId(psId);
+          } catch (err) {
+            console.error("Error fetching tagging details:", err);
+            return {};
+          }
+        })(),
       ])
         .then(([candidate, selectionData, taggingData]) => {
-          // Set selectionId from selectionData
           setSelectionId(selectionData.selectionId);
           console.log("Selection ID:", selectionData.selectionId);
-          // Fetch evidence after setting selectionId
+
           return getEvidenceBySelectionId(selectionData.selectionId)
             .then((evidenceDto) => {
               return { candidate, selectionData, taggingData, evidenceDto };
             })
             .catch((err) => {
               console.error("Error fetching evidence:", err);
-              return { candidate, selectionData, taggingData, evidenceDto: [] }; // Fallback to an empty array
+              return { candidate, selectionData, taggingData, evidenceDto: [] };
             });
         })
         .then(({ candidate, selectionData, taggingData, evidenceDto }) => {
@@ -604,29 +614,28 @@ function UpdateDetails() {
             phone: candidate.phoneNumber,
             fname: candidate.firstName,
             lname: candidate.lastName,
-            grade: "", // Assuming grade is not available for candidate
-            location: "", // Assuming location is not available for candidate
-            pu: "", // Assuming pu is not available for candidate
-            totalExp: "", // Assuming totalExperience is not available for candidate
-            skill: "", // Assuming skill is not available for candidate
-            email: "", // Assuming email is not available for candidate
+            grade: "",
+            location: "",
+            pu: "",
+            totalExp: "",
+            skill: "",
+            email: "",
             selectionDate: formatDate(selectionData.hsbcselectionDate),
             bu: selectionData.baseBu || "BF",
             lob: selectionData.lob || "",
             subLob: selectionData.sublob || "",
             hiringManager: selectionData.hsbchiringManager || "",
-            head: selectionData.hsbchead || selectionData.lob.hsbchead,
+            head: selectionData.hsbchead || selectionData.lob?.hsbchead,
             deliveryManager:
-              selectionData.deliveryManager ||
-              selectionData.lob.deliveryManager,
-            salespoc: selectionData.salesPOC || selectionData.lob.salesPOC,
+              selectionData.deliveryManager || selectionData.lob?.deliveryManager,
+            salespoc: selectionData.salesPOC || selectionData.lob?.salesPOC,
             pricingModel: selectionData.pricingModel || "",
             irm: selectionData.irm || "",
             ctoolId: selectionData.hsbctoolId || "",
             ctoolRecDate: formatDate(selectionData.ctoolReceivedDate),
             ctoolLocation: selectionData.ctoolLocation || "",
             hsbcRoles: selectionData.hsbcRoles || "",
-            ctoolGrade: selectionData.hsbcRoles.grade || "",
+            ctoolGrade: selectionData.hsbcRoles?.grade || "",
             ctoolTaggingRate: selectionData.ctoolTaggingRate || "",
             recruiterName: selectionData.recruiterName || "",
             offerReleaseStatus: selectionData.offerReleaseStatus || "",
@@ -641,34 +650,33 @@ function UpdateDetails() {
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
-            candidateStatusDate:
-              formatDate(selectionData.candidateStatusDate) || "",
-            billingStartDate:
-              formatDate(selectionData.billingStartDate) || "",
-            hsbcId:
-              selectionData.hsbcId || "",  
+            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
+            billingStartDate: formatDate(selectionData.billingStartDate) || "",
+            hsbcId: selectionData.hsbcId || "",
             bgvInitiatedDate: formatDate(selectionData.bgvInitiatedDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
             evidence:
               evidenceDto.map((evidence) => ({
                 fileName: evidence.fileName,
-                fileObject: new File([], evidence.fileName), // Placeholder File object
+                fileObject: new File([], evidence.fileName),
               })) || [],
           });
+
           setSearchTerm(selectionData.hsbcRoles?.roleTitle || "");
           setSelectedSubLobTemp(selectionData.subLob);
 
           setUploadedFiles(
             evidenceDto.map((evidence) => ({
               fileName: evidence.fileName,
-              fileObject: new File([], evidence.fileName), // Placeholder File object
+              fileObject: new File([], evidence.fileName),
             }))
           );
         })
         .catch((error) => {
           console.error("Error fetching data by CandidateId:", error);
         });
-    } else if (isVendor && phone) {
+    }
+    else if (isVendor && phone) {
       // Fetch data for vendor users
       Promise.all([
         getVendorCandidateById(phone).catch((err) => {
@@ -761,7 +769,7 @@ function UpdateDetails() {
               billingStartDate:
                 formatDate(selectionData.billingStartDate) || "",
               hsbcId:
-                selectionData.hsbcId || "",  
+                selectionData.hsbcId || "",
               bgvInitiatedDate:
                 formatDate(selectionData.bgvInitiatedDate) || "",
               ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
@@ -801,10 +809,11 @@ function UpdateDetails() {
             <tbody>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">Internal</label>
+                  <label htmlFor="internal" className="font-bold">Internal</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
+                    id="internal"
                     type="radio"
                     name="internal"
                     checked={isInternal}
@@ -813,10 +822,11 @@ function UpdateDetails() {
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">External</label>
+                  <label htmlFor="external" className="font-bold">External</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
+                    id="external"
                     type="radio"
                     name="external"
                     checked={!isInternal}
@@ -851,9 +861,8 @@ function UpdateDetails() {
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
                     required
-                    className={`p-2 border rounded w-full ${
-                      errors.vendorId ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
+                      }`}
                     disabled={isInternal}
                   >
                     <option value="">Select Vendor</option>
@@ -871,9 +880,12 @@ function UpdateDetails() {
                 </td>
               </tr>
 
-              <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
-                Basic Info
-              </h4>
+              <tr>
+                <td colSpan="4">
+                  <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">Basic Info</h4>
+                </td>
+              </tr>
+
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">First Name:</label>
@@ -1243,9 +1255,8 @@ function UpdateDetails() {
                         type="text"
                         placeholder="Search or select a role..."
                         value={searchTerm}
-                        className={`p-2 border w-full ${
-                          errors.hsbcRoles ? "border-red-500" : ""
-                        }`}
+                        className={`p-2 border w-full ${errors.hsbcRoles ? "border-red-500" : ""
+                          }`}
                         onChange={handleSearch}
                         onFocus={() => setShowDropdown(true)} // Open dropdown on focus
                         style={{
@@ -1379,6 +1390,7 @@ function UpdateDetails() {
                     <input
                       type="file"
                       name="evidence"
+                      data-testid="evidence-upload"
                       accept=".png,.jpg,.jpeg,.doc,.docx"
                       multiple
                       onChange={handleFileChange}
@@ -1760,7 +1772,7 @@ function UpdateDetails() {
               </tr>
 
               <tr className="flex flex-wrap md:flex-nowrap">
-              <td className="p-2 w-full md:w-1/4">
+                <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
                     Billing Start Date:<span className="text-red-500">*</span>
                   </label>
@@ -1778,18 +1790,18 @@ function UpdateDetails() {
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">HSBC ID:</label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="number"
-                      name="hsbcId"
-                      value={form.hsbcId || ""}
-                      // minLength={6}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
-                  </td>
+                  <label className="font-semibold">HSBC ID:</label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    type="number"
+                    name="hsbcId"
+                    value={form.hsbcId || ""}
+                    // minLength={6}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                  />
+                </td>
               </tr>
 
               <div className="border border-gray-300 rounded-md shadow">
