@@ -411,7 +411,7 @@ const SelectionTrackerDashboard = ({ user }) => {
               </div>
               <div className="flex items-center ml-auto">
                 <label htmlFor="selectionFilter" className="mr-2 font-semibold">Filter:</label>
-                <select id="selectionFilter" value={selectionFilter} onChange={(e) => setSelectionFilter(e.target.value)} className="p-2 border border-gray-400 rounded-full">
+                <select id="selectionFilter" data-testid="selection-filter" value={selectionFilter} onChange={(e) => setSelectionFilter(e.target.value)} className="p-2 border border-gray-400 rounded-full">
                   <option value="all">All</option>
                   <option value="internal">Internal</option>
                   <option value="external">External</option>
@@ -476,7 +476,7 @@ const SelectionTrackerDashboard = ({ user }) => {
               </button>
               <div className="flex items-center ml-auto">
                 <label htmlFor="ctoolFilter" className="mr-2 font-semibold">Filter:</label>
-                <select id="ctoolFilter" value={ctoolFilter} onChange={(e) => setCtoolFilter(e.target.value)} className="p-2 border border-gray-400 rounded-full">
+                <select id="ctoolFilter" data-testid="ctool-filter" value={ctoolFilter} onChange={(e) => setCtoolFilter(e.target.value)} className="p-2 border border-gray-400 rounded-full">
                   <option value="all">All</option>
                   <option value="internal">Internal</option>
                   <option value="external">External</option>
@@ -545,7 +545,7 @@ const SelectionTrackerDashboard = ({ user }) => {
               </button>
               <div className="flex items-center ml-auto">
                 <label htmlFor="awaitedCasesFilter" className="mr-2 font-semibold">Filter:</label>
-                <select id="awaitedCasesFilter" value={awaitedCasesFilter} onChange={(e) => setAwaitedCasesFilter(e.target.value)} className="p-2 border border-gray-400 rounded-full">
+                <select id="awaitedCasesFilter" data-testid="awaited-cases-filter" value={awaitedCasesFilter} onChange={(e) => setAwaitedCasesFilter(e.target.value)} className="p-2 border border-gray-400 rounded-full">
                   <option value="all">All</option>
                   <option value="internal">Internal</option>
                   <option value="external">External</option>
