@@ -1001,7 +1001,7 @@ function UpdateDetails() {
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">
-                    Phone Number:<span className="text-red-500">*</span>
+                    Phone Number:<span className="text-red-500" hidden={isInternal}>*</span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4" colSpan="2">

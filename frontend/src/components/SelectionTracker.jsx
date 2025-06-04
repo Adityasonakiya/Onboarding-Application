@@ -899,11 +899,12 @@ function SelectionTracker() {
                   )}
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Vendor:</label>
+                  <label className="font-semibold" htmlFor = "vendor-select">Vendor:</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4" colSpan="2">
                   <select
                     name="vendors"
+                    id="vendor-select"
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
                     className={`p-2 border rounded w-full ${
@@ -1044,7 +1045,7 @@ function SelectionTracker() {
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">
-                    Phone Number:<span className="text-red-500">*</span>
+                    Phone Number:<span className="text-red-500" hidden={isInternal}>*</span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4" colSpan="2">
@@ -1114,8 +1115,7 @@ function SelectionTracker() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
-                    LOB:<span className="text-red-500">*</span>
+                  <label htmlFor="lob-select" className="font-semibold">LOB:<span className="text-red-500">*</span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -1123,6 +1123,7 @@ function SelectionTracker() {
                     value={form.lob?.lobId || ""}
                     onChange={handleLobChange}
                     name="lob"
+                    id="lob-select"
                     className={`p-2 bordered w-full ${
                       errors.lob ? "border-red-500" : ""
                     }`}
@@ -1142,13 +1143,13 @@ function SelectionTracker() {
                 </td>
 
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
-                    Sub LOB:<span className="text-red-500">*</span>
+                  <label className="font-semibold" htmlFor="sub-lob-select">Sub LOB:<span className="text-red-500">*</span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <select
                     name="subLob"
+                    id="sub-lob-select"
                     value={form.subLob?.subLOBid || ""}
                     className={`p-2 border w-full ${
                       errors.subLob ? "border-red-500" : ""
