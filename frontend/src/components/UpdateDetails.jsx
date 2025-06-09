@@ -58,6 +58,47 @@ function UpdateDetails() {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [evidence, setEvidence] = useState([]);
   const [selectionId, setSelectionId] = useState(null);
+  const [irmName, setIrmName] = useState("");
+
+  const handleIrmChange = async (e) => {
+    const inputValue = e.target.value;
+    const psid = inputValue.split(" ")[0];
+    setForm((prev) => ({ ...prev, irm: psid }));
+
+    if (psid.trim().length > 7) {
+      try {
+        const data = await getEmployeeByPsid(psid.trim());
+        const fullName = [data.firstName, data.middleName, data.lastName]
+          .filter(Boolean)
+          .join(" ");
+        setIrmName(fullName);
+      } catch (error) {
+        setIrmName("");
+        console.error("Error fetching employee:", error);
+      }
+    } else {
+      setIrmName("");
+    }
+  };
+
+  useEffect(() => {
+    const fetchIrmName = async () => {
+      if (form.irm && form.irm.trim().length > 7 ) {
+        try {
+          const data = await getEmployeeByPsid(form.irm);
+          const fullName = [data.firstName, data.middleName, data.lastName]
+            .filter(Boolean)
+            .join(" ");
+          setIrmName(fullName);
+        } catch (error) {
+          console.error("Failed to fetch IRM name on load:", error);
+        }
+      }
+    };
+
+    fetchIrmName();
+  }, [form.irm]);
+
 
   useEffect(() => {
     fetch("http://localhost:8080/candidate-status/all")
@@ -1198,13 +1239,33 @@ function UpdateDetails() {
                     </label>
                   </td>
                   <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="text"
-                      name="irm"
-                      value={form.irm || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
+                    <div className="relative w-full">
+                      <input
+                        type="text"
+                        name="irm"
+                        value={
+                          irmName && form.irm
+                            ? `${form.irm} (${irmName})`
+                            : form.irm || ""
+                        }
+                        onChange={handleIrmChange}
+                        className="p-2 border rounded w-full pr-10"
+                      />
+
+                      {/* Clear button */}
+                      {irmName && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setForm((prev) => ({ ...prev, irm: "" }));
+                            setIrmName("");
+                          }}
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
                 <tr className="flex flex-wrap md:flex-nowrap">
@@ -1523,41 +1584,6 @@ function UpdateDetails() {
                     </div>
                   </td>
                 </tr>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">
-                      Offer Release Status:
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <select
-                      name="offerReleaseStatus"
-                      onChange={handleChange}
-                      value={form.offerReleaseStatus || ""}
-                      className="p-2 border rounded w-full"
-                    >
-                      <option value="">Choose...</option>
-                      <option value="Pending">Pending</option>
-                      <option value="On Hold">On Hold</option>
-                      <option value="Released">Released</option>
-                      <option value="WIP">WIP</option>
-                    </select>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">
-                      LTI Onboarding Date:
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="date"
-                      name="ltiOnboardDate"
-                      value={form.ltiOnboardDate || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
-                  </td>
-                </tr>
               </div>
 
               <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
@@ -1808,7 +1834,41 @@ function UpdateDetails() {
                 <h1 className="text-l font-bold text-center text-gray-700 bg-gray-200 p-1 rounded-md shadow-md">
                   For External Only
                 </h1>
-
+                <tr className="flex flex-wrap md:flex-nowrap">
+                  <td className="p-2 w-full md:w-1/4">
+                    <label className="font-semibold">
+                      Offer Release Status:
+                    </label>
+                  </td>
+                  <td className="p-2 w-full md:w-1/4">
+                    <select
+                      name="offerReleaseStatus"
+                      onChange={handleChange}
+                      value={form.offerReleaseStatus || ""}
+                      className="p-2 border rounded w-full"
+                    >
+                      <option value="">Choose...</option>
+                      <option value="Pending">Pending</option>
+                      <option value="On Hold">On Hold</option>
+                      <option value="Released">Released</option>
+                      <option value="WIP">WIP</option>
+                    </select>
+                  </td>
+                  <td className="p-2 w-full md:w-1/4">
+                    <label className="font-semibold">
+                      LTI Onboarding Date:
+                    </label>
+                  </td>
+                  <td className="p-2 w-full md:w-1/4">
+                    <input
+                      type="date"
+                      name="ltiOnboardDate"
+                      value={form.ltiOnboardDate || ""}
+                      onChange={handleChange}
+                      className="p-2 border rounded w-full"
+                    />
+                  </td>
+                </tr>
                 <tr className="flex flex-wrap md:flex-nowrap">
                   <td className="p-2 w-full md:w-1/4">
                     <label className="font-bold">
