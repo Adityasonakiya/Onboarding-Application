@@ -73,6 +73,7 @@ public class SelectionDetailsService {
             existingDetails.setSubLob(updatedDetails.getSubLob());
             existingDetails.setPricingModel(updatedDetails.getPricingModel());
             existingDetails.setHSBCToolId(updatedDetails.getHSBCToolId());
+            existingDetails.setIrm(updatedDetails.getIrm());
             existingDetails.setCToolReceivedDate(updatedDetails.getCToolReceivedDate());
             existingDetails.setCToolLocation(updatedDetails.getCToolLocation());
             existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
