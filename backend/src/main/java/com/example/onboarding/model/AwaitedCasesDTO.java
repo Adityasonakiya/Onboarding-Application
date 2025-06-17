@@ -4,16 +4,16 @@ import java.util.Date;
 
 public class AwaitedCasesDTO {
     Long awaited_count;
-    String delivery_manager, pricing_model, bgv_status, onboarding_status;
+    String lobName, pricing_model, bgv_status, onboarding_status;
     Date updateDate;
 
     public AwaitedCasesDTO() {
     }
 
-    public AwaitedCasesDTO(Long awaited_count, String delivery_manager, String pricing_model, String bgv_status,
+    public AwaitedCasesDTO(Long awaited_count, String lobName, String pricing_model, String bgv_status,
             String onboarding_status, Date updateDate) {
         this.awaited_count = awaited_count;
-        this.delivery_manager = delivery_manager;
+        this.lobName = lobName;
         this.pricing_model = pricing_model;
         this.bgv_status = bgv_status;
         this.onboarding_status = onboarding_status;
@@ -28,14 +28,13 @@ public class AwaitedCasesDTO {
         this.awaited_count = awaited_count;
     }
 
-    public String getDelivery_manager() {
-        return delivery_manager;
+    public String getLobName() {
+        return lobName;
     }
-
-    public void setDelivery_manager(String delivery_manager) {
-        this.delivery_manager = delivery_manager;
+    public void setLobName(String lobName) {
+        this.lobName = lobName;
     }
-
+    
     public String getPricing_model() {
         return pricing_model;
     }

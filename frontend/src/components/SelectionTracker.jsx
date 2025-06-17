@@ -1284,7 +1284,7 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   >
                     <option value="0">Choose..</option>
-                    <option value="T&M">T&M</option>
+                    <option value="Time & Material">Time & Material</option>
                     <option value="Fixed Price">Fixed Price</option>
                   </select>
                 </td>

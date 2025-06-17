@@ -103,14 +103,14 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "GROUP BY lb.lob_id, os.status_id, bs.bgv_status_id, td.update_date", nativeQuery = true)
     List<CtoolDto> findCtool(@Param("filter") String filter);
 
-    @Query(value = "SELECT count(*) as awaited_count, lb.delivery_manager, sd.pricing_model, bs.bgv_status, os.onboarding_status, td.update_date "
+    @Query(value = "SELECT count(*) as awaited_count, lb.lob_name, sd.pricing_model, bs.bgv_status, os.onboarding_status, td.update_date "
             + "FROM selection_details sd, tagging_details td, BGVStatus bs, onboarding_status os,lob lb "
             + "WHERE sd.ps_id = td.ps_id "
             + "AND td.bgvstatus_id = bs.bgv_status_id "
             + "AND sd.lob_id = lb.lob_id "
             + "AND td.onboarding_status_id = os.status_id "
             + "AND (:filter = 'all' OR (:filter = 'internal' AND sd.ps_id IS NOT NULL) OR (:filter = 'external' AND sd.ps_id IS NULL)) "
-            + "GROUP BY bs.bgv_status_id, sd.pricing_model, lb.delivery_manager, os.status_id, td.update_date", nativeQuery = true)
+            + "GROUP BY bs.bgv_status_id, sd.pricing_model, lb.lob_name, os.status_id, td.update_date", nativeQuery = true)
     List<AwaitedCasesDTO> findAwaitedCases(@Param("filter") String filter);
 
     @Query(value = "SELECT * FROM selection_details sd WHERE (:filter = 'all' OR (:filter = 'internal' AND sd.ps_id IS NOT NULL) OR (:filter = 'external' AND sd.ps_id IS NULL))", nativeQuery = true)
