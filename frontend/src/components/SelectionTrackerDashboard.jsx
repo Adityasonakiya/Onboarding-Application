@@ -130,7 +130,7 @@ const SelectionTrackerDashboard = ({ user }) => {
           }
           if (pricingModel === 'FP') {
             acc[lobName].FP += selectionCount;
-          } else if (pricingModel === 'T&M') {
+          } else if (pricingModel === 'Time & Material') {
             acc[lobName].TnM += selectionCount;
           }
           acc[lobName].total += selectionCount;
@@ -180,10 +180,10 @@ const SelectionTrackerDashboard = ({ user }) => {
         console.log('Awaited Cases data:', data); // Check if data is fetched correctly
 
         const counts = data.reduce((acc, item) => {
-          const { delivery_manager, pricing_model, bgv_status, onboarding_status, awaited_count, updateDate } = item;
+          const { lobName, pricing_model, bgv_status, onboarding_status, awaited_count, updateDate } = item;
 
-          if (!acc[delivery_manager]) {
-            acc[delivery_manager] = {
+          if (!acc[lobName]) {
+            acc[lobName] = {
               pricingModel: pricing_model,
               bgvCompleted: 0,
               inProgressCompleted: 0,
@@ -195,27 +195,27 @@ const SelectionTrackerDashboard = ({ user }) => {
           }
 
           if (bgv_status === 'BGV Completed') {
-            acc[delivery_manager].bgvCompleted += awaited_count;
-            acc[delivery_manager].total += awaited_count;
+            acc[lobName].bgvCompleted += awaited_count;
+            acc[lobName].total += awaited_count;
           }
           if (onboarding_status === 'Onboarding Completed' && bgv_status === 'In progress') {
-            acc[delivery_manager].inProgressCompleted += awaited_count;
-            acc[delivery_manager].total += awaited_count;
+            acc[lobName].inProgressCompleted += awaited_count;
+            acc[lobName].total += awaited_count;
           }
           if (onboarding_status !== 'Onboarding Completed' && bgv_status === 'In progress') {
-            acc[delivery_manager].inProgressNotCompleted += awaited_count;
-            acc[delivery_manager].total += awaited_count;
+            acc[lobName].inProgressNotCompleted += awaited_count;
+            acc[lobName].total += awaited_count;
           }
           if (bgv_status === 'Offer yet to be released') {
-            acc[delivery_manager].offerYetToBeReleased += awaited_count;
-            acc[delivery_manager].total += awaited_count;
+            acc[lobName].offerYetToBeReleased += awaited_count;
+            acc[lobName].total += awaited_count;
           }
 
           return acc;
         }, {});
 
         const processedData = Object.keys(counts).map(dm => ({
-          delivery_manager: dm,
+          lobName: dm,
           pricing_model: counts[dm].pricingModel,
           bgvCompleted: counts[dm].bgvCompleted,
           inProgressCompleted: counts[dm].inProgressCompleted,
@@ -563,7 +563,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                     <th className="p-1 border border-gray-500 ">Grand Total</th>
                   </tr>
                   <tr className="bg-blue-100">
-                    <th className="p-1 border border-gray-500">DM</th>
+                    <th className="p-1 border border-gray-500">LOB</th>
                     <th className="p-1 border border-gray-500">Pricing Model</th>
                     <th className="p-1 border border-gray-500">BGV Completed</th>
                     <th className="p-1 border border-gray-500">In progress</th>
@@ -576,7 +576,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                   {awaitedCases.length > 0 ? (
                     awaitedCases.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-3 border border-gray-500 text-left">{item.delivery_manager}</td>
+                        <td className="p-3 border border-gray-500 text-left">{item.lobName}</td>
                         <td className="p-3 border border-gray-500">{item.pricing_model}</td>
                         <td className="p-3 border border-gray-500">{item.bgvCompleted}</td>
                         <td className="p-3 border border-gray-500">{item.inProgressCompleted}</td>
