@@ -126,12 +126,14 @@ const SelectionTrackerDashboard = ({ user }) => {
         const lobCounts = data.reduce((acc, selection) => {
           const { lobName, pricingModel, selectionCount, hsbcselectionDate } = selection;
           if (!acc[lobName]) {
-            acc[lobName] = { FP: 0, TnM: 0, total: 0, hsbcselectionDate };
+            acc[lobName] = { FP: 0, TnM: 0, buffer: 0, total: 0, hsbcselectionDate };
           }
-          if (pricingModel === 'FP') {
+          if (pricingModel === 'Fixed Price') {
             acc[lobName].FP += selectionCount;
           } else if (pricingModel === 'Time & Material') {
             acc[lobName].TnM += selectionCount;
+          } else if (pricingModel === 'Buffer') {
+            acc[lobName].buffer += selectionCount;
           }
           acc[lobName].total += selectionCount;
           return acc;
@@ -142,6 +144,7 @@ const SelectionTrackerDashboard = ({ user }) => {
           lobName,
           fp: lobCounts[lobName].FP,
           tnm: lobCounts[lobName].TnM,
+          buffer: lobCounts[lobName].buffer,
           total: lobCounts[lobName].total,
           hsbcselectionDate: lobCounts[lobName].hsbcselectionDate,
         }));
@@ -430,6 +433,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                       <th className="p-1 border border-gray-500">LOB</th>
                       <th className="p-1 border border-gray-500">FP</th>
                       <th className="p-1 border border-gray-500">TnM</th>
+                      <th className="p-1 border border-gray-500">Buffer</th>
                       <th className="p-1 border border-gray-500">Total</th>
                     </tr>
                   </thead>
@@ -440,6 +444,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                           <td className="p-1 border border-gray-500 text-left">{selection.lobName}</td>
                           <td className="p-1 border border-gray-500">{selection.fp}</td>
                           <td className="p-1 border border-gray-500">{selection.tnm}</td>
+                          <td className="p-1 border border-gray-500">{selection.buffer}</td>
                           <td className="p-1 border border-gray-500">{selection.total}</td>
                         </tr>
                       ))
@@ -452,6 +457,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                       <td className="p-1 border font-semibold ">Total</td>
                       <td className="p-1 border">{selections.reduce((acc, selection) => acc + selection.fp, 0)}</td>
                       <td className="p-1 border">{selections.reduce((acc, selection) => acc + selection.tnm, 0)}</td>
+                      <td className="p-1 border">{selections.reduce((acc, selection) => acc + selection.buffer, 0)}</td>
                       <td className="p-1 border">{selections.reduce((acc, selection) => acc + selection.total, 0)}</td>
                     </tr>
                   </tbody>

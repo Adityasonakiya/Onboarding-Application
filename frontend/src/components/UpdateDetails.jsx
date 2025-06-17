@@ -1231,6 +1231,7 @@ function UpdateDetails() {
                       <option value="">Choose..</option>
                       <option value="Time & Material">Time & Material</option>
                       <option value="Fixed Price">Fixed Price</option>
+                    <option value="Buffer">Buffer</option>
                     </select>
                   </td>
                   <td className="p-2 w-full md:w-1/4">
