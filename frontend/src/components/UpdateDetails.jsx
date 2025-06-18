@@ -83,7 +83,7 @@ function UpdateDetails() {
 
   useEffect(() => {
     const fetchIrmName = async () => {
-      if (form.irm && form.irm.trim().length > 7 ) {
+      if (form.irm && form.irm.trim().length > 7) {
         try {
           const data = await getEmployeeByPsid(form.irm);
           const fullName = [data.firstName, data.middleName, data.lastName]
@@ -98,7 +98,6 @@ function UpdateDetails() {
 
     fetchIrmName();
   }, [form.irm]);
-
 
   useEffect(() => {
     fetch("http://localhost:8080/candidate-status/all")
@@ -433,6 +432,7 @@ function UpdateDetails() {
       ctoolLocation: form.ctoolLocation,
       ctoolGrade: form.ctoolGrade,
       ctoolTaggingRate: form.ctoolTaggingRate,
+      ctoolProposedRate: form.proposedRate,
       recruiterName: form.recruiterName,
       interviewEvidence: uploadedEvidence, // Always send the current evidence list
       offerReleaseStatus: form.offerReleaseStatus,
@@ -567,6 +567,7 @@ function UpdateDetails() {
             hsbcRoles: selectionData.hsbcRoles || "",
             ctoolGrade: selectionData.hsbcRoles.grade || "",
             ctoolTaggingRate: selectionData.ctoolTaggingRate || "",
+            proposedRate: selectionData.ctoolProposedRate || "",
             recruiterName: selectionData.recruiterName || "",
             offerReleaseStatus: selectionData.offerReleaseStatus || "",
             ltiOnboardDate: formatDate(selectionData.ltionboardingDate),
@@ -582,10 +583,8 @@ function UpdateDetails() {
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
             candidateStatusDate:
               formatDate(selectionData.candidateStatusDate) || "",
-            billingStartDate:
-              formatDate(selectionData.billingStartDate) || "",
-            hsbcId:
-              selectionData.hsbcId || "",
+            billingStartDate: formatDate(selectionData.billingStartDate) || "",
+            hsbcId: selectionData.hsbcId || "",
             bgvInitiatedDate: formatDate(selectionData.bgvInitiatedDate) || "",
             ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
             evidence:
@@ -668,7 +667,8 @@ function UpdateDetails() {
             hiringManager: selectionData.hsbchiringManager || "",
             head: selectionData.hsbchead || selectionData.lob?.hsbchead,
             deliveryManager:
-              selectionData.deliveryManager || selectionData.lob?.deliveryManager,
+              selectionData.deliveryManager ||
+              selectionData.lob?.deliveryManager,
             salespoc: selectionData.salesPOC || selectionData.lob?.salesPOC,
             pricingModel: selectionData.pricingModel || "",
             irm: selectionData.irm || "",
@@ -678,6 +678,7 @@ function UpdateDetails() {
             hsbcRoles: selectionData.hsbcRoles || "",
             ctoolGrade: selectionData.hsbcRoles?.grade || "",
             ctoolTaggingRate: selectionData.ctoolTaggingRate || "",
+            proposedRate: selectionData.ctoolProposedRate || "",
             recruiterName: selectionData.recruiterName || "",
             offerReleaseStatus: selectionData.offerReleaseStatus || "",
             ltiOnboardDate: formatDate(selectionData.ltionboardingDate),
@@ -691,7 +692,8 @@ function UpdateDetails() {
             techSelectDate: formatDate(selectionData.techSelectionDate) || "",
             dojRecDate: formatDate(selectionData.dojreceivedDate) || "",
             onboardingDate: formatDate(selectionData.hsbconboardingDate) || "",
-            candidateStatusDate: formatDate(selectionData.candidateStatusDate) || "",
+            candidateStatusDate:
+              formatDate(selectionData.candidateStatusDate) || "",
             billingStartDate: formatDate(selectionData.billingStartDate) || "",
             hsbcId: selectionData.hsbcId || "",
             bgvInitiatedDate: formatDate(selectionData.bgvInitiatedDate) || "",
@@ -716,8 +718,7 @@ function UpdateDetails() {
         .catch((error) => {
           console.error("Error fetching data by CandidateId:", error);
         });
-    }
-    else if (isVendor && phone) {
+    } else if (isVendor && phone) {
       // Fetch data for vendor users
       Promise.all([
         getVendorCandidateById(phone).catch((err) => {
@@ -790,6 +791,7 @@ function UpdateDetails() {
               hsbcRoles: selectionData.hsbcRoles || "",
               ctoolGrade: selectionData.hsbcRoles.grade || "",
               ctoolTaggingRate: selectionData.ctoolTaggingRate || "",
+              proposedRate: selectionData.ctoolProposedRate || "",
               recruiterName: selectionData.recruiterName || "",
               offerReleaseStatus: selectionData.offerReleaseStatus || "",
               ltiOnboardDate: formatDate(selectionData.ltionboardingDate),
@@ -809,8 +811,7 @@ function UpdateDetails() {
                 formatDate(selectionData.candidateStatusDate) || "",
               billingStartDate:
                 formatDate(selectionData.billingStartDate) || "",
-              hsbcId:
-                selectionData.hsbcId || "",
+              hsbcId: selectionData.hsbcId || "",
               bgvInitiatedDate:
                 formatDate(selectionData.bgvInitiatedDate) || "",
               ctoolStartDate: formatDate(selectionData.ctoolStartDate) || "",
@@ -850,7 +851,9 @@ function UpdateDetails() {
             <tbody>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label htmlFor="internal" className="font-bold">Internal</label>
+                  <label htmlFor="internal" className="font-bold">
+                    Internal
+                  </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -863,7 +866,9 @@ function UpdateDetails() {
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label htmlFor="external" className="font-bold">External</label>
+                  <label htmlFor="external" className="font-bold">
+                    External
+                  </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <input
@@ -902,8 +907,9 @@ function UpdateDetails() {
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
                     required
-                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.vendorId ? "border-red-500" : ""
+                    }`}
                     disabled={isInternal}
                   >
                     <option value="">Select Vendor</option>
@@ -923,7 +929,9 @@ function UpdateDetails() {
 
               <tr>
                 <td colSpan="4">
-                  <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">Basic Info</h4>
+                  <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
+                    Basic Info
+                  </h4>
                 </td>
               </tr>
 
@@ -1042,7 +1050,10 @@ function UpdateDetails() {
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">
-                    Phone Number:<span className="text-red-500" hidden={isInternal}>*</span>
+                    Phone Number:
+                    <span className="text-red-500" hidden={isInternal}>
+                      *
+                    </span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4" colSpan="2">
@@ -1231,7 +1242,7 @@ function UpdateDetails() {
                       <option value="">Choose..</option>
                       <option value="Time & Material">Time & Material</option>
                       <option value="Fixed Price">Fixed Price</option>
-                    <option value="Buffer">Buffer</option>
+                      <option value="Buffer">Buffer</option>
                     </select>
                   </td>
                   <td className="p-2 w-full md:w-1/4">
@@ -1317,8 +1328,9 @@ function UpdateDetails() {
                         type="text"
                         placeholder="Search or select a role..."
                         value={searchTerm}
-                        className={`p-2 border w-full ${errors.hsbcRoles ? "border-red-500" : ""
-                          }`}
+                        className={`p-2 border w-full ${
+                          errors.hsbcRoles ? "border-red-500" : ""
+                        }`}
                         onChange={handleSearch}
                         onFocus={() => setShowDropdown(true)} // Open dropdown on focus
                         style={{
@@ -1445,9 +1457,22 @@ function UpdateDetails() {
                     />
                   </td>
                   <td className="p-2 w-full md:w-1/4">
+                    <label className="font-semibold">Proposed Rate:</label>
+                  </td>
+                  <td className="p-2 w-full md:w-1/4">
+                    <input
+                      type="number"
+                      name="proposedRate"
+                      value={form.proposedRate || ""}
+                      onChange={handleChange}
+                      className="p-2 border rounded w-full"
+                    />
+                  </td>
+                </tr>
+                <tr className="flex flex-wrap md:flex-nowrap">
+                  <td className="p-2 w-full md:w-1/4">
                     <label className="font-semibold">Interview Evidences</label>
                   </td>
-
                   <td className="p-2 w-full md:w-1/4">
                     <input
                       type="file"

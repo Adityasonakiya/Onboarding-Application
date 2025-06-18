@@ -293,7 +293,7 @@ function SelectionTracker() {
       salespoc: selectedLob?.salesPOC || "",
     }));
     console.log(
-      form.lob.hsbcheadhead,
+      form.lob.hsbchead,
       form.lob.deliveryManager,
       form.lob.salesPOC
     );
@@ -497,6 +497,7 @@ function SelectionTracker() {
         hsbcRoles: selectionDetails.hsbcRoles,
         ctoolGrade: selectionDetails.hsbcRoles.grade,
         ctoolTaggingRate: selectionDetails.ctoolTaggingRate,
+        proposedRate: selectionDetails.ctoolProposedRate,
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
@@ -551,6 +552,7 @@ function SelectionTracker() {
         hsbcRoles: selectionDetails.hsbcRoles,
         ctoolGrade: selectionDetails.hsbcRoles.grade,
         ctoolTaggingRate: selectionDetails.ctoolTaggingRate,
+        proposedRate: selectionDetails.ctoolProposedRate,
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
@@ -605,6 +607,7 @@ function SelectionTracker() {
         hsbcRoles: selectionDetails.hsbcRoles,
         ctoolGrade: selectionDetails.hsbcRoles.grade,
         ctoolTaggingRate: selectionDetails.ctoolTaggingRate,
+        proposedRate: selectionDetails.ctoolProposedRate,
         recruiterName: selectionDetails.recruiterName,
         offerReleaseStatus: selectionDetails.offerReleaseStatus,
         ltiOnboardDate: formatDate(selectionDetails.ltionboardingDate),
@@ -754,6 +757,7 @@ function SelectionTracker() {
             ctoolLocation: form.ctoolLocation,
             ctoolGrade: form.ctoolGrade,
             ctoolTaggingRate: form.ctoolTaggingRate,
+            ctoolProposedRate: form.proposedRate,
             recruiterName: form.recruiterName,
             offerReleaseStatus: form.offerReleaseStatus,
             ltionboardingDate: form.ltiOnboardDate,
@@ -1553,6 +1557,19 @@ function SelectionTracker() {
                     type="text"
                     name="recruiterName"
                     value={form.recruiterName || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
+                  />
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <label className="font-semibold">Proposed Rate:</label>
+                </td>
+                <td className="p-2 w-full md:w-1/4">
+                  <input
+                    type="number"
+                    name="proposedRate"
+                    value={form.proposedRate || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                     disabled={isReadOnly}
