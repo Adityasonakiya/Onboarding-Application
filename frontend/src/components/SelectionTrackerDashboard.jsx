@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import PieChart from './PieChart';
-import Navbar from './Navbar';
+import React, { useState, useEffect } from "react";
+import PieChart from "./PieChart";
+import Navbar from "./Navbar";
 import * as XLSX from "xlsx";
 import { FaFileExcel } from "react-icons/fa6";
 import { HiRefresh } from "react-icons/hi";
@@ -9,20 +9,22 @@ const SelectionTrackerDashboard = ({ user }) => {
   const [selections, setSelections] = useState([]);
   const [ctool, setCtool] = useState([]);
   const [awaitedCases, setAwaitedCases] = useState([]);
-  const [filter, setFilter] = useState('7days'); // State for selected filter
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const [filter, setFilter] = useState("7days"); // State for selected filter
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const [chartData, setChartData] = useState({ labels: [], values: [] });
-  const [selectionFilter, setSelectionFilter] = useState('all'); // New state for selection filter
-  const [ctoolFilter, setCtoolFilter] = useState('all'); // New state for ctool filter
-  const [awaitedCasesFilter, setAwaitedCasesFilter] = useState('all'); // New state for awaited cases filter
+  const [selectionFilter, setSelectionFilter] = useState("all"); // New state for selection filter
+  const [ctoolFilter, setCtoolFilter] = useState("all"); // New state for ctool filter
+  const [awaitedCasesFilter, setAwaitedCasesFilter] = useState("all"); // New state for awaited cases filter
   const [data, setData] = useState([]);
 
   const fetchToExport = async () => {
     try {
       const id = JSON.parse(localStorage.getItem("user")).psid;
       console.log("id for export", id);
-      const response = await fetch(`http://localhost:8080/selection-details/excel?createdBy=${id}`);
+      const response = await fetch(
+        `http://localhost:8080/selection-details/excel?createdBy=${id}`
+      );
       const result = await response.json();
       setData(result);
       handleExportForMainExcel(result, "ExcelData", "export.xlsx");
@@ -36,7 +38,7 @@ const SelectionTrackerDashboard = ({ user }) => {
       alert("No data to export!");
       return;
     }
-  
+
     // Mapping object to format the column headers
     const columnMapping = {
       onboardingStatus: "Onboarding Status",
@@ -83,22 +85,22 @@ const SelectionTrackerDashboard = ({ user }) => {
       billingStartDate: "BSD",
       taggingDone: "Tagging Done",
       techSelectionDone: "Tech Selection Done",
-      dojRecievedDate: "DOJ Mail Recieved Date"
+      dojRecievedDate: "DOJ Mail Recieved Date",
     };
-  
+
     // Transform data to use readable column headers
-    const formattedData = data.map(item => {
+    const formattedData = data.map((item) => {
       const newItem = {};
       for (const key in item) {
         newItem[columnMapping[key] || key] = item[key];
       }
       return newItem;
     });
-  
+
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-    
+
     XLSX.writeFile(workbook, fileName);
   };
 
@@ -117,22 +119,31 @@ const SelectionTrackerDashboard = ({ user }) => {
 
   const fetchData = () => {
     // Fetch selections data
-    fetch(`http://localhost:8080/selection-details/selections?filter=${selectionFilter}`)
-      .then(response => response.json())
-      .then(data => {
-        console.log('Selections data:', data); // Check if data is fetched correctly
+    fetch(
+      `http://localhost:8080/selection-details/selections?filter=${selectionFilter}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Selections data:", data); // Check if data is fetched correctly
 
         // Process data to map counts based on pricing model
         const lobCounts = data.reduce((acc, selection) => {
-          const { lobName, pricingModel, selectionCount, hsbcselectionDate } = selection;
+          const { lobName, pricingModel, selectionCount, hsbcselectionDate } =
+            selection;
           if (!acc[lobName]) {
-            acc[lobName] = { FP: 0, TnM: 0, buffer: 0, total: 0, hsbcselectionDate };
+            acc[lobName] = {
+              FP: 0,
+              TnM: 0,
+              buffer: 0,
+              total: 0,
+              hsbcselectionDate,
+            };
           }
-          if (pricingModel === 'Fixed Price') {
+          if (pricingModel === "Fixed Price") {
             acc[lobName].FP += selectionCount;
-          } else if (pricingModel === 'Time & Material') {
+          } else if (pricingModel === "Time & Material") {
             acc[lobName].TnM += selectionCount;
-          } else if (pricingModel === 'Buffer') {
+          } else if (pricingModel === "Buffer") {
             acc[lobName].buffer += selectionCount;
           }
           acc[lobName].total += selectionCount;
@@ -140,7 +151,7 @@ const SelectionTrackerDashboard = ({ user }) => {
         }, {});
 
         // Convert the counts object to an array for rendering
-        const processedSelections = Object.keys(lobCounts).map(lobName => ({
+        const processedSelections = Object.keys(lobCounts).map((lobName) => ({
           lobName,
           fp: lobCounts[lobName].FP,
           tnm: lobCounts[lobName].TnM,
@@ -149,22 +160,33 @@ const SelectionTrackerDashboard = ({ user }) => {
           hsbcselectionDate: lobCounts[lobName].hsbcselectionDate,
         }));
 
-        const filteredSelections = applyFilter(processedSelections, filter, fromDate, toDate, 'hsbcselectionDate');
-        const sortedSelections = filteredSelections.sort((a, b) => b.total - a.total);
+        const filteredSelections = applyFilter(
+          processedSelections,
+          filter,
+          fromDate,
+          toDate,
+          "hsbcselectionDate"
+        );
+        const sortedSelections = filteredSelections.sort(
+          (a, b) => b.total - a.total
+        );
 
         if (filteredSelections.length > 0) {
           const topSelections = sortedSelections.slice(0, 4);
           const otherSelections = sortedSelections.slice(4);
-          const otherTotal = otherSelections.reduce((sum, selection) => sum + selection.total, 0);
+          const otherTotal = otherSelections.reduce(
+            (sum, selection) => sum + selection.total,
+            0
+          );
 
           setSelections(filteredSelections);
           const pieChartData = {
             labels: [
-              ...topSelections.map(selection => selection.lobName),
-              'Other',
+              ...topSelections.map((selection) => selection.lobName),
+              "Other",
             ],
             values: [
-              ...topSelections.map(selection => selection.total),
+              ...topSelections.map((selection) => selection.total),
               otherTotal,
             ],
           };
@@ -172,18 +194,27 @@ const SelectionTrackerDashboard = ({ user }) => {
           setChartData(pieChartData);
         }
       })
-      .catch(error => {
-        console.error('Error fetching selections data:', error);
+      .catch((error) => {
+        console.error("Error fetching selections data:", error);
       });
 
     // Fetch awaited cases data
-    fetch(`http://localhost:8080/selection-details/awaited-cases?filter=${awaitedCasesFilter}`)
-      .then(response => response.json())
-      .then(data => {
-        console.log('Awaited Cases data:', data); // Check if data is fetched correctly
+    fetch(
+      `http://localhost:8080/selection-details/awaited-cases?filter=${awaitedCasesFilter}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Awaited Cases data:", data); // Check if data is fetched correctly
 
         const counts = data.reduce((acc, item) => {
-          const { lobName, pricing_model, bgv_status, onboarding_status, awaited_count, updateDate } = item;
+          const {
+            lobName,
+            pricing_model,
+            bgv_status,
+            onboarding_status,
+            awaited_count,
+            updateDate,
+          } = item;
 
           if (!acc[lobName]) {
             acc[lobName] = {
@@ -193,23 +224,29 @@ const SelectionTrackerDashboard = ({ user }) => {
               inProgressNotCompleted: 0,
               offerYetToBeReleased: 0,
               total: 0,
-              updateDate
+              updateDate,
             };
           }
 
-          if (bgv_status === 'BGV Completed') {
+          if (bgv_status === "BGV Completed") {
             acc[lobName].bgvCompleted += awaited_count;
             acc[lobName].total += awaited_count;
           }
-          if (onboarding_status === 'Onboarding Completed' && bgv_status === 'In progress') {
+          if (
+            onboarding_status === "Onboarding Completed" &&
+            bgv_status === "In progress"
+          ) {
             acc[lobName].inProgressCompleted += awaited_count;
             acc[lobName].total += awaited_count;
           }
-          if (onboarding_status !== 'Onboarding Completed' && bgv_status === 'In progress') {
+          if (
+            onboarding_status !== "Onboarding Completed" &&
+            bgv_status === "In progress"
+          ) {
             acc[lobName].inProgressNotCompleted += awaited_count;
             acc[lobName].total += awaited_count;
           }
-          if (bgv_status === 'Offer yet to be released') {
+          if (bgv_status === "Offer yet to be released") {
             acc[lobName].offerYetToBeReleased += awaited_count;
             acc[lobName].total += awaited_count;
           }
@@ -217,7 +254,7 @@ const SelectionTrackerDashboard = ({ user }) => {
           return acc;
         }, {});
 
-        const processedData = Object.keys(counts).map(dm => ({
+        const processedData = Object.keys(counts).map((dm) => ({
           lobName: dm,
           pricing_model: counts[dm].pricingModel,
           bgvCompleted: counts[dm].bgvCompleted,
@@ -225,21 +262,27 @@ const SelectionTrackerDashboard = ({ user }) => {
           inProgressNotCompleted: counts[dm].inProgressNotCompleted,
           offerYetToBeReleased: counts[dm].offerYetToBeReleased,
           total: counts[dm].total,
-          updateDate: counts[dm].updateDate
+          updateDate: counts[dm].updateDate,
         }));
 
-        const filteredAwaitedCases = applyFilter(processedData, filter, fromDate, toDate, 'updateDate');
+        const filteredAwaitedCases = applyFilter(
+          processedData,
+          filter,
+          fromDate,
+          toDate,
+          "updateDate"
+        );
         setAwaitedCases(filteredAwaitedCases);
       })
-      .catch(error => {
-        console.error('Error fetching awaited cases data:', error);
+      .catch((error) => {
+        console.error("Error fetching awaited cases data:", error);
       });
 
     // Fetch ctool data
     fetch(`http://localhost:8080/selection-details/ctool?filter=${ctoolFilter}`)
-      .then(response => response.json())
-      .then(data => {
-        console.log('CTool data:', data); // Check if data is fetched correctly
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("CTool data:", data); // Check if data is fetched correctly
         const counts = data.reduce((acc, item) => {
           const { lobName, onboarding_status, bgv_status, updateDate } = item;
 
@@ -251,27 +294,30 @@ const SelectionTrackerDashboard = ({ user }) => {
               hsbcDojAwaited: 0,
               hsbcDojConfirmed: 0,
               total: 0,
-              updateDate
+              updateDate,
             };
           }
 
-          if (onboarding_status === 'CTool Pending' || onboarding_status === 'CTool Recieved') {
+          if (
+            onboarding_status === "CTool Pending" ||
+            onboarding_status === "CTool Recieved"
+          ) {
             acc[lobName].taggingPending++;
             acc[lobName].total++;
           }
-          if (onboarding_status === 'Tagging Completed') {
+          if (onboarding_status === "Tagging Completed") {
             acc[lobName].techSelectPending++;
             acc[lobName].total++;
           }
-          if (bgv_status === "In progress" || bgv_status === 'BGV Initiated') {
+          if (bgv_status === "In progress" || bgv_status === "BGV Initiated") {
             acc[lobName].bgvPending++;
             acc[lobName].total++;
           }
-          if (onboarding_status === 'Tech Selection Done') {
+          if (onboarding_status === "Tech Selection Done") {
             acc[lobName].hsbcDojAwaited++;
             acc[lobName].total++;
           }
-          if (onboarding_status === 'DOJ Recieved') {
+          if (onboarding_status === "DOJ Recieved") {
             acc[lobName].hsbcDojConfirmed++;
             acc[lobName].total++;
           }
@@ -279,16 +325,22 @@ const SelectionTrackerDashboard = ({ user }) => {
           return acc;
         }, {});
 
-        const processedData = Object.keys(counts).map(lobName => ({
+        const processedData = Object.keys(counts).map((lobName) => ({
           lobName,
-          ...counts[lobName]
+          ...counts[lobName],
         }));
 
-        const filteredCtool = applyFilter(processedData, filter, fromDate, toDate, 'updateDate');
+        const filteredCtool = applyFilter(
+          processedData,
+          filter,
+          fromDate,
+          toDate,
+          "updateDate"
+        );
         setCtool(filteredCtool);
       })
-      .catch(error => {
-        console.error('Error fetching ctool data:', error);
+      .catch((error) => {
+        console.error("Error fetching ctool data:", error);
       });
   };
 
@@ -296,7 +348,14 @@ const SelectionTrackerDashboard = ({ user }) => {
     fetchData();
     const intervalId = setInterval(fetchData, 60000); // Poll every 60 seconds
     return () => clearInterval(intervalId); // Cleanup interval on component unmount
-  }, [filter, fromDate, toDate, selectionFilter, ctoolFilter, awaitedCasesFilter]);
+  }, [
+    filter,
+    fromDate,
+    toDate,
+    selectionFilter,
+    ctoolFilter,
+    awaitedCasesFilter,
+  ]);
 
   const applyFilter = (data, filter, fromDate, toDate, dateField) => {
     if (!filter && !fromDate && !toDate) {
@@ -304,14 +363,17 @@ const SelectionTrackerDashboard = ({ user }) => {
     }
 
     const currentDate = new Date();
-    return data.filter(item => {
+    return data.filter((item) => {
       const itemDate = new Date(item[dateField]); // Use the specified date field for filtering
-      if (filter === '7days') {
+      if (filter === "7days") {
         const past7Days = new Date(currentDate);
         past7Days.setDate(currentDate.getDate() - 7);
         return itemDate >= past7Days && itemDate <= currentDate;
-      } else if (filter === 'currentMonth') {
-        return itemDate.getMonth() === currentDate.getMonth() && itemDate.getFullYear() === currentDate.getFullYear();
+      } else if (filter === "currentMonth") {
+        return (
+          itemDate.getMonth() === currentDate.getMonth() &&
+          itemDate.getFullYear() === currentDate.getFullYear()
+        );
       } else if (fromDate && toDate) {
         const from = new Date(fromDate);
         const to = new Date(toDate);
@@ -323,30 +385,30 @@ const SelectionTrackerDashboard = ({ user }) => {
 
   const handleRadioChange = (e) => {
     setFilter(e.target.id);
-    setFromDate('');
-    setToDate('');
+    setFromDate("");
+    setToDate("");
   };
 
   const handleDateChange = (event) => {
     const { name, value } = event.target;
-    if (name === 'fromDate') {
+    if (name === "fromDate") {
       setFromDate(value);
-      setToDate(''); // Reset toDate when fromDate changes
-    } else if (name === 'toDate') {
+      setToDate(""); // Reset toDate when fromDate changes
+    } else if (name === "toDate") {
       setToDate(value);
     }
   };
 
   useEffect(() => {
     if (fromDate && toDate) {
-      setFilter('custom');
+      setFilter("custom");
     }
   }, [fromDate, toDate]);
 
   const handleRefresh = () => {
-    setFilter('');
-    setFromDate('');
-    setToDate('');
+    setFilter("");
+    setFromDate("");
+    setToDate("");
     fetchData();
   };
 
@@ -354,11 +416,21 @@ const SelectionTrackerDashboard = ({ user }) => {
     <div>
       <Navbar user={user} className="navbar" />
       <div className="w-full px-8 py-16">
-        <h1 className="mt-8 py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">
-          HSBC Selection Tracker Dashboard
-        </h1>
+        <div className="mt-8 px-4">
+          <h1 className="py-2 text-center bg-blue-300 font-bold text-lg md:text-xl">
+            HSBC Selection Tracker Dashboard
+          </h1>
+          <div className="flex justify-end mt-4 mb-3">
+            <button
+              onClick={fetchToExport}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            >
+              Export
+            </button>
+          </div>
+        </div>
         <div className="mx-4">
-          <div className="flex items-center mt-9 mb-3">
+          <div className="flex items-center mt-1 mb-0 text-sm font-medium">
             <div className="flex items-center gap-[1vw]">
               <h2 className="font-semibold text-lg">Current Selections</h2>
               <button
@@ -369,52 +441,125 @@ const SelectionTrackerDashboard = ({ user }) => {
                     "FilteredSelections.xlsx"
                   )
                 }
-                className=" px-2 py-2 bg-green-700 text-white rounded-full flex justify-center items-center" title='Export Selections'
+                className=" px-2 py-2 bg-green-700 text-white rounded-full flex justify-center items-center"
+                title="Export Selections"
               >
                 <FaFileExcel />
               </button>
-              <button onClick={handleRefresh} className=" px-2 py-2 bg-blue-500 text-white rounded-full" title='Refresh'><HiRefresh /></button>
-              <button onClick={fetchToExport} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-                Export
+              <button
+                onClick={handleRefresh}
+                className=" px-2 py-2 bg-blue-500 text-white rounded-full"
+                title="Refresh"
+              >
+                <HiRefresh />
               </button>
+              {/* <button onClick={fetchToExport} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                Export
+              </button> */}
               <div className="flex items-center font-medium text-sm">
                 <div className="flex items-center mr-4">
-                  <input type="radio" id="7days" className="hidden" value="7days" name="filter" onChange={handleRadioChange} checked={filter === '7days'} />
-                  <label htmlFor="7days" className="flex items-center cursor-pointer text-black font-semibold">
-                    <span className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${filter === '7days' ? 'bg-blue-500' : ''}`}></span>
+                  <input
+                    type="radio"
+                    id="7days"
+                    className="hidden"
+                    value="7days"
+                    name="filter"
+                    onChange={handleRadioChange}
+                    checked={filter === "7days"}
+                  />
+                  <label
+                    htmlFor="7days"
+                    className="flex items-center cursor-pointer text-black font-semibold"
+                  >
+                    <span
+                      className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${
+                        filter === "7days" ? "bg-blue-500" : ""
+                      }`}
+                    ></span>
                     7 Days
                   </label>
                 </div>
                 <div className="flex items-center mr-4">
-                  <input type="radio" id="currentMonth" className="hidden" value="currentMonth" name="filter" onChange={handleRadioChange} checked={filter === 'currentMonth'} />
-                  <label htmlFor="currentMonth" className="flex items-center cursor-pointer text-black font-semibold">
-                    <span className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${filter === 'currentMonth' ? 'bg-blue-500' : ''}`}></span>
+                  <input
+                    type="radio"
+                    id="currentMonth"
+                    className="hidden"
+                    value="currentMonth"
+                    name="filter"
+                    onChange={handleRadioChange}
+                    checked={filter === "currentMonth"}
+                  />
+                  <label
+                    htmlFor="currentMonth"
+                    className="flex items-center cursor-pointer text-black font-semibold"
+                  >
+                    <span
+                      className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${
+                        filter === "currentMonth" ? "bg-blue-500" : ""
+                      }`}
+                    ></span>
                     Current Month
                   </label>
                 </div>
                 <div className="flex items-center mr-4">
-                  <input type="radio" id="custom" className="hidden" value="custom" name="filter" onChange={handleRadioChange} checked={filter === 'custom'} />
-                  <label htmlFor="custom" className="flex items-center cursor-pointer text-black font-semibold">
-                    <span className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${filter === 'custom' ? 'bg-blue-500' : ''}`}></span>
+                  <input
+                    type="radio"
+                    id="custom"
+                    className="hidden"
+                    value="custom"
+                    name="filter"
+                    onChange={handleRadioChange}
+                    checked={filter === "custom"}
+                  />
+                  <label
+                    htmlFor="custom"
+                    className="flex items-center cursor-pointer text-black font-semibold"
+                  >
+                    <span
+                      className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${
+                        filter === "custom" ? "bg-blue-500" : ""
+                      }`}
+                    ></span>
                     Custom
                   </label>
                 </div>
-                {filter === 'custom' && (
+                {filter === "custom" && (
                   <div className="flex items-center ml-4">
                     <label className="flex items-center cursor-pointer text-black font-semibold mr-4">
                       <span className="mr-2">From:</span>
-                      <input type="date" name="fromDate" value={fromDate} onChange={handleDateChange} className="p-2 border h-[2.2vw] border-gray-400 rounded-full" />
+                      <input
+                        type="date"
+                        name="fromDate"
+                        value={fromDate}
+                        onChange={handleDateChange}
+                        className="p-2 border h-[2.2vw] border-gray-400 rounded-full"
+                      />
                     </label>
                     <label className="flex items-center cursor-pointer text-black font-semibold">
                       <span className="mr-2">To:</span>
-                      <input type="date" name="toDate" value={toDate} onChange={handleDateChange} className="p-2 border h-[2.2vw] border-gray-400 rounded-full" disabled={!fromDate} />
+                      <input
+                        type="date"
+                        name="toDate"
+                        value={toDate}
+                        onChange={handleDateChange}
+                        className="p-2 border h-[2.2vw] border-gray-400 rounded-full"
+                        disabled={!fromDate}
+                      />
                     </label>
                   </div>
                 )}
               </div>
               <div className="flex items-center ml-auto">
-                <label htmlFor="selectionFilter" className="mr-2 font-semibold">Filter:</label>
-                <select id="selectionFilter" data-testid="selection-filter" value={selectionFilter} onChange={(e) => setSelectionFilter(e.target.value)} className="p-2 border border-gray-400 rounded-full">
+                <label htmlFor="selectionFilter" className="mr-2 font-semibold">
+                  Filter:
+                </label>
+                <select
+                  id="selectionFilter"
+                  data-testid="selection-filter"
+                  value={selectionFilter}
+                  onChange={(e) => setSelectionFilter(e.target.value)}
+                  className="p-2 border border-gray-400 rounded-full"
+                >
                   <option value="all">All</option>
                   <option value="internal">Internal</option>
                   <option value="external">External</option>
@@ -426,7 +571,7 @@ const SelectionTrackerDashboard = ({ user }) => {
         <div className="mx-2">
           <div className="flex">
             <section className="mb-4 w-1/2">
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto mt-3 mb-4">
                 <table className="w-full border-collapse border-2 border-gray-400 text-center">
                   <thead>
                     <tr className="bg-blue-100">
@@ -441,31 +586,66 @@ const SelectionTrackerDashboard = ({ user }) => {
                     {selections.length > 0 ? (
                       selections.map((selection, index) => (
                         <tr key={index}>
-                          <td className="p-1 border border-gray-500 text-left">{selection.lobName}</td>
-                          <td className="p-1 border border-gray-500">{selection.fp}</td>
-                          <td className="p-1 border border-gray-500">{selection.tnm}</td>
-                          <td className="p-1 border border-gray-500">{selection.buffer}</td>
-                          <td className="p-1 border border-gray-500">{selection.total}</td>
+                          <td className="p-1 border border-gray-500 text-left">
+                            {selection.lobName}
+                          </td>
+                          <td className="p-1 border border-gray-500">
+                            {selection.fp}
+                          </td>
+                          <td className="p-1 border border-gray-500">
+                            {selection.tnm}
+                          </td>
+                          <td className="p-1 border border-gray-500">
+                            {selection.buffer}
+                          </td>
+                          <td className="p-1 border border-gray-500">
+                            {selection.total}
+                          </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td className="p-1 border border-gray-500" colSpan="4">No data available</td>
+                        <td className="p-1 border border-gray-500" colSpan="4">
+                          No data available
+                        </td>
                       </tr>
                     )}
                     <tr className="bg-blue-100">
                       <td className="p-1 border font-semibold ">Total</td>
-                      <td className="p-1 border">{selections.reduce((acc, selection) => acc + selection.fp, 0)}</td>
-                      <td className="p-1 border">{selections.reduce((acc, selection) => acc + selection.tnm, 0)}</td>
-                      <td className="p-1 border">{selections.reduce((acc, selection) => acc + selection.buffer, 0)}</td>
-                      <td className="p-1 border">{selections.reduce((acc, selection) => acc + selection.total, 0)}</td>
+                      <td className="p-1 border">
+                        {selections.reduce(
+                          (acc, selection) => acc + selection.fp,
+                          0
+                        )}
+                      </td>
+                      <td className="p-1 border">
+                        {selections.reduce(
+                          (acc, selection) => acc + selection.tnm,
+                          0
+                        )}
+                      </td>
+                      <td className="p-1 border">
+                        {selections.reduce(
+                          (acc, selection) => acc + selection.buffer,
+                          0
+                        )}
+                      </td>
+                      <td className="p-1 border">
+                        {selections.reduce(
+                          (acc, selection) => acc + selection.total,
+                          0
+                        )}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </section>
             <div className="flex-grow"></div> {/* Spacer */}
-            <section className="w-1/3" style={{ zIndex: 1, position: "relative" }}>
+            <section
+              className="w-1/3"
+              style={{ zIndex: 1, position: "relative" }}
+            >
               <PieChart data={chartData} />
             </section>
           </div>
@@ -476,13 +656,22 @@ const SelectionTrackerDashboard = ({ user }) => {
                 onClick={() =>
                   handleExportToExcel(ctool, "CTool", "CTool.xlsx")
                 }
-                className="px-2 py-2 bg-green-700 text-white rounded-full flex justify-center items-center" title='Export Ctool Clear Cases'
+                className="px-2 py-2 bg-green-700 text-white rounded-full flex justify-center items-center"
+                title="Export Ctool Clear Cases"
               >
                 <FaFileExcel />
               </button>
               <div className="flex items-center ml-auto">
-                <label htmlFor="ctoolFilter" className="mr-2 font-semibold">Filter:</label>
-                <select id="ctoolFilter" data-testid="ctool-filter" value={ctoolFilter} onChange={(e) => setCtoolFilter(e.target.value)} className="p-2 border border-gray-400 rounded-full">
+                <label htmlFor="ctoolFilter" className="mr-2 font-semibold">
+                  Filter:
+                </label>
+                <select
+                  id="ctoolFilter"
+                  data-testid="ctool-filter"
+                  value={ctoolFilter}
+                  onChange={(e) => setCtoolFilter(e.target.value)}
+                  className="p-2 border border-gray-400 rounded-full"
+                >
                   <option value="all">All</option>
                   <option value="internal">Internal</option>
                   <option value="external">External</option>
@@ -494,11 +683,19 @@ const SelectionTrackerDashboard = ({ user }) => {
                 <thead>
                   <tr className="bg-blue-100">
                     <th className="p-1 border border-gray-500">LOB</th>
-                    <th className="p-1 border border-gray-500">Tagging Pending</th>
-                    <th className="p-1 border border-gray-500">Tech Select Pending</th>
+                    <th className="p-1 border border-gray-500">
+                      Tagging Pending
+                    </th>
+                    <th className="p-1 border border-gray-500">
+                      Tech Select Pending
+                    </th>
                     <th className="p-1 border border-gray-500">BGV Pending</th>
-                    <th className="p-1 border border-gray-500">HSBC DOJ Awaited</th>
-                    <th className="p-1 border border-gray-500">HSBC DOJ Confirmed</th>
+                    <th className="p-1 border border-gray-500">
+                      HSBC DOJ Awaited
+                    </th>
+                    <th className="p-1 border border-gray-500">
+                      HSBC DOJ Confirmed
+                    </th>
                     <th className="p-1 border border-gray-500">Total</th>
                   </tr>
                 </thead>
@@ -506,28 +703,70 @@ const SelectionTrackerDashboard = ({ user }) => {
                   {ctool.length > 0 ? (
                     ctool.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-3 border border-gray-500 text-left">{item.lobName}</td>
-                        <td className="p-3 border border-gray-500">{item.taggingPending}</td>
-                        <td className="p-3 border border-gray-500">{item.techSelectPending}</td>
-                        <td className="p-3 border border-gray-500">{item.bgvPending}</td>
-                        <td className="p-3 border border-gray-500">{item.hsbcDojAwaited}</td>
-                        <td className="p-3 border border-gray-500">{item.hsbcDojConfirmed}</td>
-                        <td className="p-3 border border-gray-500">{item.total}</td>
+                        <td className="p-3 border border-gray-500 text-left">
+                          {item.lobName}
+                        </td>
+                        <td className="p-3 border border-gray-500">
+                          {item.taggingPending}
+                        </td>
+                        <td className="p-3 border border-gray-500">
+                          {item.techSelectPending}
+                        </td>
+                        <td className="p-3 border border-gray-500">
+                          {item.bgvPending}
+                        </td>
+                        <td className="p-3 border border-gray-500">
+                          {item.hsbcDojAwaited}
+                        </td>
+                        <td className="p-3 border border-gray-500">
+                          {item.hsbcDojConfirmed}
+                        </td>
+                        <td className="p-3 border border-gray-500">
+                          {item.total}
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td className="p-1 border border-gray-500" colSpan="7">No data available</td>
+                      <td className="p-1 border border-gray-500" colSpan="7">
+                        No data available
+                      </td>
                     </tr>
                   )}
                   <tr>
-                    <td className="p-1 border border-gray-500 bg-blue-100 font-semibold text-left">Total</td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.taggingPending, 0)}</td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.techSelectPending, 0)}</td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.bgvPending, 0)}</td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.hsbcDojAwaited, 0)}</td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.hsbcDojConfirmed, 0)}</td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">{ctool.reduce((acc, item) => acc + item.total, 0)}</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100 font-semibold text-left">
+                      Total
+                    </td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">
+                      {ctool.reduce(
+                        (acc, item) => acc + item.taggingPending,
+                        0
+                      )}
+                    </td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">
+                      {ctool.reduce(
+                        (acc, item) => acc + item.techSelectPending,
+                        0
+                      )}
+                    </td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">
+                      {ctool.reduce((acc, item) => acc + item.bgvPending, 0)}
+                    </td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">
+                      {ctool.reduce(
+                        (acc, item) => acc + item.hsbcDojAwaited,
+                        0
+                      )}
+                    </td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">
+                      {ctool.reduce(
+                        (acc, item) => acc + item.hsbcDojConfirmed,
+                        0
+                      )}
+                    </td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">
+                      {ctool.reduce((acc, item) => acc + item.total, 0)}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -545,13 +784,25 @@ const SelectionTrackerDashboard = ({ user }) => {
                     "AwaitedCases.xlsx"
                   )
                 }
-                className="px-2 py-2 bg-green-700 text-white rounded-full flex justify-center items-center" title='Export Ctool Awaited Cases'
+                className="px-2 py-2 bg-green-700 text-white rounded-full flex justify-center items-center"
+                title="Export Ctool Awaited Cases"
               >
                 <FaFileExcel />
               </button>
               <div className="flex items-center ml-auto">
-                <label htmlFor="awaitedCasesFilter" className="mr-2 font-semibold">Filter:</label>
-                <select id="awaitedCasesFilter" data-testid="awaited-cases-filter" value={awaitedCasesFilter} onChange={(e) => setAwaitedCasesFilter(e.target.value)} className="p-2 border border-gray-400 rounded-full">
+                <label
+                  htmlFor="awaitedCasesFilter"
+                  className="mr-2 font-semibold"
+                >
+                  Filter:
+                </label>
+                <select
+                  id="awaitedCasesFilter"
+                  data-testid="awaited-cases-filter"
+                  value={awaitedCasesFilter}
+                  onChange={(e) => setAwaitedCasesFilter(e.target.value)}
+                  className="p-2 border border-gray-400 rounded-full"
+                >
                   <option value="all">All</option>
                   <option value="internal">Internal</option>
                   <option value="external">External</option>
@@ -564,17 +815,27 @@ const SelectionTrackerDashboard = ({ user }) => {
                   <tr className="bg-blue-100">
                     <th className="p-1 border border-gray-500"></th>
                     <th className="p-1 border border-gray-500"></th>
-                    <th colSpan="2" className="p-1 border border-gray-500">Joined</th>
-                    <th colSpan="2" className="p-1 border border-gray-500">YTJ</th>
+                    <th colSpan="2" className="p-1 border border-gray-500">
+                      Joined
+                    </th>
+                    <th colSpan="2" className="p-1 border border-gray-500">
+                      YTJ
+                    </th>
                     <th className="p-1 border border-gray-500 ">Grand Total</th>
                   </tr>
                   <tr className="bg-blue-100">
                     <th className="p-1 border border-gray-500">LOB</th>
-                    <th className="p-1 border border-gray-500">Pricing Model</th>
-                    <th className="p-1 border border-gray-500">BGV Completed</th>
+                    <th className="p-1 border border-gray-500">
+                      Pricing Model
+                    </th>
+                    <th className="p-1 border border-gray-500">
+                      BGV Completed
+                    </th>
                     <th className="p-1 border border-gray-500">In progress</th>
                     <th className="p-1 border border-gray-500">In progress</th>
-                    <th className="p-1 border border-gray-500">Offer Yet to be Released</th>
+                    <th className="p-1 border border-gray-500">
+                      Offer Yet to be Released
+                    </th>
                     <th className="p-1 border border-gray-500 ">Grand Total</th>
                   </tr>
                 </thead>
@@ -582,28 +843,68 @@ const SelectionTrackerDashboard = ({ user }) => {
                   {awaitedCases.length > 0 ? (
                     awaitedCases.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-3 border border-gray-500 text-left">{item.lobName}</td>
-                        <td className="p-3 border border-gray-500">{item.pricing_model}</td>
-                        <td className="p-3 border border-gray-500">{item.bgvCompleted}</td>
-                        <td className="p-3 border border-gray-500">{item.inProgressCompleted}</td>
-                        <td className="p-3 border border-gray-500">{item.inProgressNotCompleted}</td>
-                        <td className="p-3 border border-gray-500">{item.offerYetToBeReleased}</td>
-                        <td className="p-3 border border-gray-500">{item.total}</td>
+                        <td className="p-3 border border-gray-500 text-left">
+                          {item.lobName}
+                        </td>
+                        <td className="p-3 border border-gray-500">
+                          {item.pricing_model}
+                        </td>
+                        <td className="p-3 border border-gray-500">
+                          {item.bgvCompleted}
+                        </td>
+                        <td className="p-3 border border-gray-500">
+                          {item.inProgressCompleted}
+                        </td>
+                        <td className="p-3 border border-gray-500">
+                          {item.inProgressNotCompleted}
+                        </td>
+                        <td className="p-3 border border-gray-500">
+                          {item.offerYetToBeReleased}
+                        </td>
+                        <td className="p-3 border border-gray-500">
+                          {item.total}
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td className="p-1 border border-gray-500" colSpan="7">No data available</td>
+                      <td className="p-1 border border-gray-500" colSpan="7">
+                        No data available
+                      </td>
                     </tr>
                   )}
                   <tr>
-                    <td className="p-1 border border-gray-500 bg-blue-100 font-semibold text-left">Grand Total</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100 font-semibold text-left">
+                      Grand Total
+                    </td>
                     <td className="p-1 border border-gray-500 bg-blue-100"></td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.bgvCompleted, 0)}</td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.inProgressCompleted, 0)}</td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.inProgressNotCompleted, 0)}</td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.offerYetToBeReleased, 0)}</td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">{awaitedCases.reduce((acc, item) => acc + item.total, 0)}</td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">
+                      {awaitedCases.reduce(
+                        (acc, item) => acc + item.bgvCompleted,
+                        0
+                      )}
+                    </td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">
+                      {awaitedCases.reduce(
+                        (acc, item) => acc + item.inProgressCompleted,
+                        0
+                      )}
+                    </td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">
+                      {awaitedCases.reduce(
+                        (acc, item) => acc + item.inProgressNotCompleted,
+                        0
+                      )}
+                    </td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">
+                      {awaitedCases.reduce(
+                        (acc, item) => acc + item.offerYetToBeReleased,
+                        0
+                      )}
+                    </td>
+                    <td className="p-1 border border-gray-500 bg-blue-100">
+                      {awaitedCases.reduce((acc, item) => acc + item.total, 0)}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -613,6 +914,6 @@ const SelectionTrackerDashboard = ({ user }) => {
       </div>
     </div>
   );
-}
+};
 
 export default SelectionTrackerDashboard;

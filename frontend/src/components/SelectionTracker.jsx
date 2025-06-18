@@ -76,8 +76,6 @@ function SelectionTracker() {
     }
   };
 
-
-
   const validateForm = () => {
     const newErrors = {};
     if (!form.lob.lobId) newErrors.lob = "This field is required.";
@@ -487,7 +485,9 @@ function SelectionTracker() {
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
         head: selectionDetails.hsbchead || selectionDetails.lob.hsbchead,
-        deliveryManager: selectionDetails.deliveryManager || selectionDetails.lob.deliveryManager,
+        deliveryManager:
+          selectionDetails.deliveryManager ||
+          selectionDetails.lob.deliveryManager,
         salespoc: selectionDetails.salesPOC || selectionDetails.lob.salesPOC,
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
@@ -506,7 +506,7 @@ function SelectionTracker() {
       if (
         !readOnly &&
         taggingDetails.onboardingStatus.onboardingStatus !==
-        "Onboarding Completed"
+          "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -539,7 +539,9 @@ function SelectionTracker() {
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
         head: selectionDetails.hsbchead || selectionDetails.lob.hsbchead,
-        deliveryManager: selectionDetails.deliveryManager || selectionDetails.lob.deliveryManager,
+        deliveryManager:
+          selectionDetails.deliveryManager ||
+          selectionDetails.lob.deliveryManager,
         salespoc: selectionDetails.salesPOC || selectionDetails.lob.salesPOC,
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
@@ -558,7 +560,7 @@ function SelectionTracker() {
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-        "Onboarding Completed"
+          "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -591,7 +593,9 @@ function SelectionTracker() {
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
         head: selectionDetails.hsbchead || selectionDetails.lob.hsbchead,
-        deliveryManager: selectionDetails.deliveryManager || selectionDetails.lob.deliveryManager,
+        deliveryManager:
+          selectionDetails.deliveryManager ||
+          selectionDetails.lob.deliveryManager,
         salespoc: selectionDetails.salesPOC || selectionDetails.lob.salesPOC,
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
@@ -610,7 +614,7 @@ function SelectionTracker() {
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-        "Onboarding Completed"
+          "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -625,6 +629,28 @@ function SelectionTracker() {
   };
 
   //handle changes in form
+  const refetchForm = (type) => {
+    if (type === "internal") {
+      setIsInternal(true);
+      setIsExternal(false);
+      setForm({
+        internalPsid: "",
+        externalPsid: "",
+        phone: "",
+        // reset other fields if needed
+      });
+    } else if (type === "external") {
+      setIsInternal(false);
+      setIsExternal(true);
+      setForm({
+        internalPsid: "",
+        externalPsid: "",
+        phone: "",
+        // reset other fields if needed
+      });
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "radio") {
@@ -876,9 +902,10 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <input
                     type="radio"
-                    name="internal"
+                    name="psidType"
+                    value="internal"
                     checked={isInternal}
-                    onChange={handleChange}
+                    onChange={() => refetchForm("internal")}
                     className="p-2"
                     disabled={isReadOnly}
                   />
@@ -889,9 +916,10 @@ function SelectionTracker() {
                 <td className="p-2 w-full md:w-1/4">
                   <input
                     type="radio"
-                    name="external"
-                    checked={!isInternal && isExternal}
-                    onChange={handleChange}
+                    name="psidType"
+                    value="external"
+                    checked={!isInternal}
+                    onChange={() => refetchForm("external")}
                     className="p-2"
                     disabled={isReadOnly}
                   />
@@ -910,8 +938,9 @@ function SelectionTracker() {
                     value={form.psId || ""}
                     onChange={handleChange}
                     required
-                    className={`p-2 border rounded w-full ${errors.psId ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.psId ? "border-red-500" : ""
+                    }`}
                     disabled={!isInternal || readOnly}
                     pattern="\d*"
                   />
@@ -920,7 +949,9 @@ function SelectionTracker() {
                   )}
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold" htmlFor="vendor-select">Vendor:</label>
+                  <label className="font-semibold" htmlFor="vendor-select">
+                    Vendor:
+                  </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4" colSpan="2">
                   <select
@@ -928,8 +959,9 @@ function SelectionTracker() {
                     id="vendor-select"
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
-                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.vendorId ? "border-red-500" : ""
+                    }`}
                     disabled={isInternal || readOnly}
                   >
                     <option value="">Select Vendor</option>
@@ -1065,7 +1097,10 @@ function SelectionTracker() {
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-semibold">
-                    Phone Number:<span className="text-red-500" hidden={isInternal}>*</span>
+                    Phone Number:
+                    <span className="text-red-500" hidden={isInternal}>
+                      *
+                    </span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4" colSpan="2">
@@ -1074,8 +1109,9 @@ function SelectionTracker() {
                     name="phone"
                     value={form.phone || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full bg-slate-100 ${errors.phone ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full bg-slate-100 ${
+                      errors.phone ? "border-red-500" : ""
+                    }`}
                     disabled={isInternal || readOnly}
                     maxLength="10"
                   />
@@ -1107,8 +1143,9 @@ function SelectionTracker() {
                     required
                     value={form.selectionDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.selectionDate ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.selectionDate ? "border-red-500" : ""
+                    }`}
                     disabled={readOnly}
                   />{" "}
                   {errors.selectionDate && (
@@ -1133,7 +1170,8 @@ function SelectionTracker() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label htmlFor="lob-select" className="font-semibold">LOB:<span className="text-red-500">*</span>
+                  <label htmlFor="lob-select" className="font-semibold">
+                    LOB:<span className="text-red-500">*</span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -1142,8 +1180,9 @@ function SelectionTracker() {
                     onChange={handleLobChange}
                     name="lob"
                     id="lob-select"
-                    className={`p-2 bordered w-full ${errors.lob ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 bordered w-full ${
+                      errors.lob ? "border-red-500" : ""
+                    }`}
                     disabled={isReadOnly}
                     required
                   >
@@ -1160,7 +1199,8 @@ function SelectionTracker() {
                 </td>
 
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold" htmlFor="sub-lob-select">Sub LOB:<span className="text-red-500">*</span>
+                  <label className="font-semibold" htmlFor="sub-lob-select">
+                    Sub LOB:<span className="text-red-500">*</span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -1168,8 +1208,9 @@ function SelectionTracker() {
                     name="subLob"
                     id="sub-lob-select"
                     value={form.subLob?.subLOBid || ""}
-                    className={`p-2 border w-full ${errors.subLob ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border w-full ${
+                      errors.subLob ? "border-red-500" : ""
+                    }`}
                     onChange={handleSubLobChange}
                     disabled={isReadOnly}
                   >
@@ -1305,8 +1346,9 @@ function SelectionTracker() {
                           : form.irm || ""
                       }
                       onChange={handleIrmChange}
-                      className={`p-2 border rounded w-full pr-10 ${errors.irm ? "border-red-500" : ""
-                        }`}
+                      className={`p-2 border rounded w-full pr-10 ${
+                        errors.irm ? "border-red-500" : ""
+                      }`}
                       disabled={isReadOnly}
                     />
 
@@ -1328,7 +1370,6 @@ function SelectionTracker() {
                     <p className="text-red-500 text-sm">{errors.irm}</p>
                   )}
                 </td>
-
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
@@ -1364,8 +1405,9 @@ function SelectionTracker() {
                     required
                     value={form.ctoolRecDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.ctoolRecDate ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.ctoolRecDate ? "border-red-500" : ""
+                    }`}
                     disabled={readOnly}
                   />{" "}
                   {errors.ctoolRecDate && (
@@ -1387,8 +1429,9 @@ function SelectionTracker() {
                       name="hsbcRoles"
                       placeholder="Search or select a role..."
                       value={searchTerm}
-                      className={`p-2 border w-full ${errors.hsbcRoles ? "border-red-500" : ""
-                        }`}
+                      className={`p-2 border w-full ${
+                        errors.hsbcRoles ? "border-red-500" : ""
+                      }`}
                       disabled={isReadOnly}
                       onChange={handleSearch}
                       onFocus={() => setShowDropdown(true)} // Open dropdown on focus
@@ -1566,7 +1609,7 @@ function SelectionTracker() {
                         onClick={handleSubmit}
                         className="bg-blue-500 text-white py-2 px-10 rounded"
                         disabled={form.invalid}
-                      // disabled={isSubmitting}
+                        // disabled={isSubmitting}
                       >
                         Submit
                       </button>
