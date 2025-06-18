@@ -63,6 +63,7 @@ public class SelectionDetails {
     private String CToolLocation;
     private Integer CToolGrade;
     private Integer CToolTaggingRate;
+    private Integer CToolProposedRate;
     private String recruiterName;
     private String deliveryManager;
     private String HSBCHead;
@@ -91,7 +92,7 @@ public class SelectionDetails {
             String baseBu, LOB lob, SubLOB subLob, String irm, HsbcRoles hsbcRoles, Employee createdBy,
             Employee updatedBy, Date hSBCSelectionDate, String hSBCHiringManager, String pricingModel,
             Integer hSBCToolId, Date cToolReceivedDate, String cToolLocation, Integer cToolGrade,
-            Integer cToolTaggingRate, String recruiterName, String deliveryManager, String hSBCHead, String salesPOC,
+            Integer cToolTaggingRate,Integer cToolProposedRate, String recruiterName, String deliveryManager, String hSBCHead, String salesPOC,
             List<EvidenceDTO> interviewEvidences, String offerReleaseStatus, Date hSBCOnboardingDate,
             Date techSelectionDate, Date dOJReceivedDate, Date lTIOnboardingDate, Date createDate, Date updateDate,
             Date candidateStatusDate, Date ctoolStartDate, Date bgvInitiatedDate, Date billingStartDate, Integer hsbcId) {
@@ -114,6 +115,7 @@ public class SelectionDetails {
         CToolLocation = cToolLocation;
         CToolGrade = cToolGrade;
         CToolTaggingRate = cToolTaggingRate;
+        CToolProposedRate = cToolProposedRate;
         this.recruiterName = recruiterName;
         this.deliveryManager = deliveryManager;
         HSBCHead = hSBCHead;
@@ -283,6 +285,14 @@ public class SelectionDetails {
 
     public void setCToolTaggingRate(Integer cToolTaggingRate) {
         CToolTaggingRate = cToolTaggingRate;
+    }
+
+    public Integer getCToolProposedRate() {
+        return CToolProposedRate;
+    }
+
+    public void setCToolProposedRate(Integer cToolProposedRate) {
+        CToolProposedRate = cToolProposedRate;
     }
 
     public String getRecruiterName() {

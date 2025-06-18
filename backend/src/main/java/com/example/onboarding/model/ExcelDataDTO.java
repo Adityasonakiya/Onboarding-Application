@@ -56,6 +56,7 @@ public class ExcelDataDTO {
     // Recruiter and Compensation
     private String recruiterName;
     private Integer ctoolTaggingRate;
+    private Integer cToolProposedRate;
 
     // Role Information
     private String hsbcRole;
@@ -87,7 +88,7 @@ public class ExcelDataDTO {
             String location, String totalExperience, String skill, Date hsbcSelectionDate, Date ltiJoiningDate, Date createdDate,
             String selectionMonthYear, Long selectionAging, String category, String baseBu, String lobName, String subLobName, String salesPoc, String hsbcHiringManager,
             String hsbcHead, String deliveryManager, String irm, String pricingModel, Integer hsbcCtoolId, Date ctoolReceivedDate, String ctoolReceivedStatus,
-            Long ctoolAging, Long ctoolAgingWeekBucket, Date ctoolStartDate, String recruiterName, Integer ctoolTaggingRate, String hsbcRole, Integer roleGrade,
+            Long ctoolAging, Long ctoolAgingWeekBucket, Date ctoolStartDate, String recruiterName, Integer ctoolTaggingRate,Integer cToolProposedRate, String hsbcRole, Integer roleGrade,
             String finalBGVStatus, String techSelectionStatus, String remarks, String interviewDocuments, Date hsbcConfirmedDoj, Long agingSelectionWithDoj,
             Long hsbcDojAgingBucket, Date billingStartDate, Date taggingDone, Date techSelectionDone,Date dojRecievedDate) {
 
@@ -123,6 +124,7 @@ public class ExcelDataDTO {
         this.ctoolStartDate = ctoolStartDate;
         this.recruiterName = recruiterName;
         this.ctoolTaggingRate = ctoolTaggingRate;
+        this.cToolProposedRate = cToolProposedRate;
         this.hsbcRole = hsbcRole;
         this.roleGrade = roleGrade;
         this.finalBGVStatus = finalBGVStatus;
@@ -151,7 +153,7 @@ public class ExcelDataDTO {
                 + ", hsbcCtoolId=" + hsbcCtoolId + ", ctoolReceivedDate=" + ctoolReceivedDate + ", ctoolReceivedStatus="
                 + ctoolReceivedStatus + ", ctoolAging=" + ctoolAging + ", ctoolAgingWeekBucket=" + ctoolAgingWeekBucket
                 + ", ctoolStartDate=" + ctoolStartDate + ", recruiterName=" + recruiterName + ", ctoolTaggingRate="
-                + ctoolTaggingRate + ", hsbcRole=" + hsbcRole + ", roleGrade=" + roleGrade + ", finalBGVStatus="
+                + ctoolTaggingRate + ", cToolProposedRate=" + cToolProposedRate + ", hsbcRole=" + hsbcRole + ", roleGrade=" + roleGrade + ", finalBGVStatus="
                 + finalBGVStatus + ", techSelectionStatus=" + techSelectionStatus + ", remarks=" + remarks
                 + ", interviewDocuments=" + interviewDocuments + ", hsbcConfirmedDoj=" + hsbcConfirmedDoj
                 + ", agingSelectionWithDoj=" + agingSelectionWithDoj + ", hsbcDojAgingBucket=" + hsbcDojAgingBucket

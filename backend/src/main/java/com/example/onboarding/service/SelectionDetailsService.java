@@ -79,6 +79,7 @@ public class SelectionDetailsService {
             existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
             existingDetails.setCToolGrade(updatedDetails.getHsbcRoles().getGrade());
             existingDetails.setCToolTaggingRate(updatedDetails.getCToolTaggingRate());
+            existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
             existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
 
             // Update interviewEvidences collection
@@ -131,6 +132,7 @@ public class SelectionDetailsService {
             existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
             existingDetails.setCToolGrade(updatedDetails.getHsbcRoles().getGrade());
             existingDetails.setCToolTaggingRate(updatedDetails.getCToolTaggingRate());
+            existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
             existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
 
             // Update interviewEvidences collection
@@ -180,6 +182,7 @@ public class SelectionDetailsService {
             existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
             existingDetails.setCToolGrade(updatedDetails.getHsbcRoles().getGrade());
             existingDetails.setCToolTaggingRate(updatedDetails.getCToolTaggingRate());
+            existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
             existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
 
             // Update interviewEvidences collection
