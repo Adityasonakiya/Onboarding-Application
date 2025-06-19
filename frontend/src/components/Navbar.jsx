@@ -99,10 +99,12 @@ export default function Navbar() {
     const fetchStatusOptions = async () => {
       if (selectedOption === 'CTool Status') {
         const statuses = await getCToolStatuses();
-        setStatusOptions(statuses.map(status => status.onboardingStatus));
+        const uniqueStatuses = [...new Set(statuses.map(status => status.onboardingStatus))];
+        setStatusOptions(uniqueStatuses);
       } else if (selectedOption === 'BgvStatus') {
         const statuses = await getBgvStatuses();
-        setStatusOptions(statuses.map(status => status.bgvStatus));
+        const uniqueStatuses = [...new Set(statuses.map(status => status.bgvStatus))];
+        setStatusOptions(uniqueStatuses);
       } else {
         setStatusOptions([]);
       }
