@@ -163,31 +163,32 @@ function UpdateDetails() {
     } else {
       setForm({ ...form, [name]: value });
     }
-    if (name === "status") {
-      if (value === "Tagging Completed") {
-        setForm((prevForm) => ({ ...prevForm, tagDateEnabled: true }));
-      } else if (value === "Tech Selection Done") {
-        setForm((prevForm) => ({
-          ...prevForm,
-          tagDateEnabled: true,
-          techSelectDateEnabled: true,
-        }));
-      } else if (value === "DOJ Recieved") {
-        setForm((prevForm) => ({
-          ...prevForm,
-          tagDateEnabled: true,
-          techSelectDateEnabled: true,
-          dojRecDateEnabled: true,
-        }));
-      } else if (value === "Onboarding Completed") {
-        setForm((prevForm) => ({
-          ...prevForm,
-          tagDateEnabled: true,
-          techSelectDateEnabled: true,
-          dojRecDateEnabled: true,
-          onboardingDateEnabled: true,
-        }));
-      }
+
+    if (name === "tagDate" && value && form.status !== "Tagging Completed") {
+      setForm((prevForm) => ({
+        ...prevForm,
+        status: "Tagging Completed",
+        tagDate: value,
+      }));
+    }
+    if (name === "techSelectDate" && value && form.status != "Tech Selection Done"){
+      setForm((prevForm) => ({
+        ...prevForm,
+        status: "Tech Selection Done",
+        techSelectDate: value,
+      }));
+    } else if (name === "dojRecDate" && value && form.status != "DOJ Recieved") {
+      setForm((prevForm) => ({
+        ...prevForm,
+        status: "DOJ Recieved",
+        dojRecDate: value,
+      }));
+    } else if (name === "onboardingDate" && value && form.status != "Onboarding Completed") {
+      setForm((prevForm) => ({
+        ...prevForm,
+        status: "Onboarding Completed",
+        onboardingDate: value,
+      }));
     }
   };
 
@@ -1752,7 +1753,7 @@ function UpdateDetails() {
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
-                    Tagging date:<span className="text-red-500">*</span>
+                    Tagging date:
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -1760,8 +1761,7 @@ function UpdateDetails() {
                     type="date"
                     name="tagDate"
                     value={form.tagDate || ""}
-                    required
-                    disabled={!form.tagDateEnabled}
+                    //required disabled={!form.tagDateEnabled}
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
                     min={today}
@@ -1770,7 +1770,6 @@ function UpdateDetails() {
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
                     Tech Selection Date:
-                    <span className="text-red-500">*</span>
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -1778,8 +1777,8 @@ function UpdateDetails() {
                     type="date"
                     name="techSelectDate"
                     value={form.techSelectDate || ""}
-                    required
-                    disabled={!form.techSelectDateEnabled}
+                    //required disabled={!form.techSelectDateEnabled}
+                    disabled={!form.tagDate}
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
                     min={today}
@@ -1789,7 +1788,7 @@ function UpdateDetails() {
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
-                    DOJ Received Date:<span className="text-red-500">*</span>
+                    DOJ Received Date:
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -1797,8 +1796,8 @@ function UpdateDetails() {
                     type="date"
                     name="dojRecDate"
                     value={form.dojRecDate || ""}
-                    required
-                    disabled={!form.dojRecDateEnabled}
+                    //required disabled={!form.dojRecDateEnabled}
+                    disabled={!form.techSelectDate}
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
                     min={today}
@@ -1806,7 +1805,7 @@ function UpdateDetails() {
                 </td>
                 <td className="p-2 w-full md:w-1/4">
                   <label className="font-bold">
-                    Onboarding Date:<span className="text-red-500">*</span>
+                    Onboarding Date:
                   </label>
                 </td>
                 <td className="p-2 w-full md:w-1/4">
@@ -1814,8 +1813,8 @@ function UpdateDetails() {
                     type="date"
                     name="onboardingDate"
                     value={form.onboardingDate || ""}
-                    required
-                    disabled={!form.onboardingDateEnabled}
+                    //required disabled={!form.onboardingDateEnabled}
+                    disabled={!form.dojRecDate}
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
                     min={today}
@@ -1837,7 +1836,7 @@ function UpdateDetails() {
                     required
                     onChange={handleChange}
                     className="p-2 mb-2 border rounded w-full"
-                    disabled={!form.onboardingDateEnabled}
+                    disabled={!form.onboardingDate}
                     min={form.onboardingDate}
                   />
                 </td>
