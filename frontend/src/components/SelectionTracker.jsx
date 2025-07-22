@@ -292,11 +292,11 @@ function SelectionTracker() {
       deliveryManager: selectedLob?.deliveryManager || "",
       salespoc: selectedLob?.salesPOC || "",
     }));
-    console.log(
-      form.lob.hsbchead,
-      form.lob.deliveryManager,
-      form.lob.salesPOC
-    );
+    if (selectedLob) {
+    console.log(selectedLob.hsbchead,selectedLob.deliveryManager,selectedLob.salesPOC);
+  } else {
+    console.log("No LOB selected or LOB not found.");
+  }
     setErrors((prevErrors) => ({
       ...prevErrors,
       lob: value ? "" : "This field is required.",
@@ -484,18 +484,18 @@ function SelectionTracker() {
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
-        head: selectionDetails.hsbchead || selectionDetails.lob.hsbchead,
+        head: selectionDetails.hsbchead || selectionDetails.lob?.hsbchead,
         deliveryManager:
           selectionDetails.deliveryManager ||
-          selectionDetails.lob.deliveryManager,
-        salespoc: selectionDetails.salesPOC || selectionDetails.lob.salesPOC,
+          selectionDetails.lob?.deliveryManager,
+        salespoc: selectionDetails.salesPOC || selectionDetails.lob?.salesPOC,
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
         ctoolId: selectionDetails.hsbctoolId,
         ctoolRecDate: formatDate(selectionDetails.ctoolReceivedDate),
         ctoolLocation: selectionDetails.ctoolLocation,
-        hsbcRoles: selectionDetails.hsbcRoles,
-        ctoolGrade: selectionDetails.hsbcRoles.grade,
+        hsbcRoles: selectionDetails.hsbcRoles || "",
+        ctoolGrade: selectionDetails.hsbcRoles?.grade || "",
         ctoolTaggingRate: selectionDetails.ctoolTaggingRate,
         proposedRate: selectionDetails.ctoolProposedRate,
         recruiterName: selectionDetails.recruiterName,
@@ -539,18 +539,18 @@ function SelectionTracker() {
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
-        head: selectionDetails.hsbchead || selectionDetails.lob.hsbchead,
+        head: selectionDetails.hsbchead || selectionDetails.lob?.hsbchead,
         deliveryManager:
           selectionDetails.deliveryManager ||
-          selectionDetails.lob.deliveryManager,
-        salespoc: selectionDetails.salesPOC || selectionDetails.lob.salesPOC,
+          selectionDetails.lob?.deliveryManager,
+        salespoc: selectionDetails.salesPOC || selectionDetails.lob?.salesPOC,
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
         ctoolId: selectionDetails.hsbctoolId,
         ctoolRecDate: formatDate(selectionDetails.ctoolReceivedDate),
         ctoolLocation: selectionDetails.ctoolLocation,
-        hsbcRoles: selectionDetails.hsbcRoles,
-        ctoolGrade: selectionDetails.hsbcRoles.grade,
+        hsbcRoles: selectionDetails.hsbcRoles || "",
+        ctoolGrade: selectionDetails.hsbcRoles?.grade || "",
         ctoolTaggingRate: selectionDetails.ctoolTaggingRate,
         proposedRate: selectionDetails.ctoolProposedRate,
         recruiterName: selectionDetails.recruiterName,
@@ -594,18 +594,18 @@ function SelectionTracker() {
         lob: selectionDetails.lob,
         subLob: selectionDetails.sublob,
         hiringManager: selectionDetails.hsbchiringManager,
-        head: selectionDetails.hsbchead || selectionDetails.lob.hsbchead,
+        head: selectionDetails.hsbchead || selectionDetails.lob?.hsbchead,
         deliveryManager:
           selectionDetails.deliveryManager ||
-          selectionDetails.lob.deliveryManager,
-        salespoc: selectionDetails.salesPOC || selectionDetails.lob.salesPOC,
+          selectionDetails.lob?.deliveryManager,
+        salespoc: selectionDetails.salesPOC || selectionDetails.lob?.salesPOC,
         pricingModel: selectionDetails.pricingModel,
         irm: selectionDetails.irm,
         ctoolId: selectionDetails.hsbctoolId,
         ctoolRecDate: formatDate(selectionDetails.ctoolReceivedDate),
         ctoolLocation: selectionDetails.ctoolLocation,
-        hsbcRoles: selectionDetails.hsbcRoles,
-        ctoolGrade: selectionDetails.hsbcRoles.grade,
+        hsbcRoles: selectionDetails.hsbcRoles || "",
+        ctoolGrade: selectionDetails.hsbcRoles?.grade || "",
         ctoolTaggingRate: selectionDetails.ctoolTaggingRate,
         proposedRate: selectionDetails.ctoolProposedRate,
         recruiterName: selectionDetails.recruiterName,

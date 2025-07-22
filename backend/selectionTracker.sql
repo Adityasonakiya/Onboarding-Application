@@ -330,7 +330,7 @@ INSERT INTO lob (lob_id, lob_name, remarks, created_by, updated_by, created_date
 (6, 'Group Data Technology', 'Group data Technology', 10713037, 10713037, NOW(), NOW(),'Chinni Krishna Nakka','Kinshuk Awasthi','abcd',true),
 (7, 'HDPI', 'Pixel density', 10713037, 10713037, NOW(), NOW(),NULL,NULL,NULL,false),
 (8, 'INM', 'INM', 10713037, 10713037, NOW(), NOW(),'Mayuresh Nirantar','Anand Devi','abcd',true),
-(9, 'Markets & Sec Services Tech', 'Services', 10713037, 10713037, NOW(), NOW(),'Abhijeet More','Ajay Pillai','abcd',true),
+(9, 'Markets & Sec Services Tech', 'Services', 10713037, 10713037, NOW(), NOW(),'Abhijeet Sureshchandra More','Ajay Pillai','abcd',true),
 (10, 'MDS & DAO ESG', 'Data& Analytics', 10713037, 10713037, NOW(), NOW(),NULL,NULL,NULL,false),
 (11, 'Regional CIO - Europe', 'Regional CIO for Europe', 10713037, 10713037, NOW(), NOW(),'Arvind Deogade','Anand Devi','abcd',true),
 (12, 'SAB Technology', 'SAB Tech', 10713037, 10713037, NOW(), NOW(),'Rupali Khedekar','Anand Devi','abcd',true),
