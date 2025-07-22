@@ -77,7 +77,7 @@ public class SelectionDetailsService {
             existingDetails.setCToolReceivedDate(updatedDetails.getCToolReceivedDate());
             existingDetails.setCToolLocation(updatedDetails.getCToolLocation());
             existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
-            existingDetails.setCToolGrade(updatedDetails.getHsbcRoles().getGrade());
+            existingDetails.setCToolGrade(updatedDetails.getCToolGrade());
             existingDetails.setCToolTaggingRate(updatedDetails.getCToolTaggingRate());
             existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
             existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
@@ -130,7 +130,7 @@ public class SelectionDetailsService {
             existingDetails.setCToolReceivedDate(updatedDetails.getCToolReceivedDate());
             existingDetails.setCToolLocation(updatedDetails.getCToolLocation());
             existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
-            existingDetails.setCToolGrade(updatedDetails.getHsbcRoles().getGrade());
+            existingDetails.setCToolGrade(updatedDetails.getCToolGrade());
             existingDetails.setCToolTaggingRate(updatedDetails.getCToolTaggingRate());
             existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
             existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
@@ -180,7 +180,7 @@ public class SelectionDetailsService {
             existingDetails.setCToolReceivedDate(updatedDetails.getCToolReceivedDate());
             existingDetails.setCToolLocation(updatedDetails.getCToolLocation());
             existingDetails.setHsbcRoles(updatedDetails.getHsbcRoles());
-            existingDetails.setCToolGrade(updatedDetails.getHsbcRoles().getGrade());
+            existingDetails.setCToolGrade(updatedDetails.getCToolGrade());
             existingDetails.setCToolTaggingRate(updatedDetails.getCToolTaggingRate());
             existingDetails.setCToolProposedRate(updatedDetails.getCToolProposedRate());
             existingDetails.setRecruiterName(updatedDetails.getRecruiterName());
