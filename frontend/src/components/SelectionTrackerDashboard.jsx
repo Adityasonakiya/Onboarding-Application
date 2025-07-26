@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import * as XLSX from "xlsx";
 import { FaFileExcel } from "react-icons/fa6";
 import { HiRefresh } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
 const SelectionTrackerDashboard = ({ user }) => {
   const [selections, setSelections] = useState([]);
@@ -33,6 +34,16 @@ const SelectionTrackerDashboard = ({ user }) => {
     }
   };
 
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("dashboard");
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (tab === "myselection") {
+      navigate("/landing-page"); 
+    }
+    
+  };
   const handleExportForMainExcel = (data, sheetName, fileName) => {
     if (!data || data.length === 0) {
       alert("No data to export!");
@@ -413,14 +424,39 @@ const SelectionTrackerDashboard = ({ user }) => {
   };
 
   return (
-    <div>
+    <div className="mt-24">
       <Navbar user={user} className="navbar" />
-      <div className="w-full px-8 py-16">
-        <div className="mt-8 px-4">
-          <h1 className="py-2 text-center bg-blue-300 font-bold text-lg md:text-xl">
+      {/*Heading*/}
+       {/* <h1 className="py-2 text-center bg-blue-300 font-bold text-lg md:text-xl mb-2">
             HSBC Selection Tracker Dashboard
-          </h1>
-          <div className="flex justify-end mt-4 mb-3">
+        </h1> */}
+      {/* Tabs */}
+      <div className="flex items-center mb-4 mt-2 px-4 border-b">
+        <button
+          className={`px-4 py-2 font-semibold focus:outline-none ${activeTab === "myselection" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-600"}`}
+          onClick={() => handleTabClick("myselection")}
+        >
+          My Selection
+        </button>
+        <button
+          className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${activeTab === "dashboard" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-600"}`}
+          onClick={() => handleTabClick("dashboard")}
+        >
+          Selection Tracker Dashboard
+        </button>
+            {/* <button
+              onClick={fetchToExport}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 ml-auto"
+            >
+              Export
+            </button> */}
+      </div>
+      <div className="w-full px-4 py-4">
+        <div className="px-2">
+          {/* <h1 className="py-2 text-center bg-blue-300 font-bold text-lg md:text-xl">
+            HSBC Selection Tracker Dashboard
+          </h1> */}
+          <div className="flex justify-end mt-2 mb-2">
             <button
               onClick={fetchToExport}
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"

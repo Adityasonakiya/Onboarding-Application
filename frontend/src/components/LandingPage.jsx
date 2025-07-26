@@ -35,6 +35,15 @@ const LandingPage = () => {
     setRowsPerPage(Number(e.target.value));
     setCurrentPage(0);
   };
+  const [activeTab, setActiveTab] = useState("myselection");
+
+  // Tab click handler
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (tab === "dashboard") {
+      navigate("/selection-tracker-dashboard");
+    }
+  };
   useEffect(() => {
     console.log("State object:", state); // Log the state object to debug
     console.log("ID:", id);
@@ -143,11 +152,26 @@ const LandingPage = () => {
   }, [totalPages, currentPage]);
 
   return (
-    <div className="w-full px-4 py-6">
-      <div className="mx-4 h-full flex flex-col">
-        <div className="flex justify-between flex-wrap">
-          <h2 className="py-2 font-bold text-lg">My Selections</h2>
-          <div className="flex">
+    <div className="w-full px-2 py-2">
+      {/* Tabs */}
+      <div className="flex mb-2 border-b"> {/* <-- Added bg-gray-100 */}
+        <button
+          className={`px-4 py-2 font-semibold focus:outline-none ${activeTab === "myselection" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-600"}`}
+          onClick={() => handleTabClick("myselection")}
+        >
+          My Selection
+        </button>
+        <button
+          className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${activeTab === "dashboard" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-600"}`}
+          onClick={() => handleTabClick("dashboard")}
+        >
+          Selection Tracker Dashboard
+        </button>
+      </div>
+    <div className="mx-4 h-full flex flex-col">
+        <div className="flex justify-between items-center flex-wrap mt-4">
+          {/* <h2 className="py-2 font-bold text-lg">My Selections</h2> */}
+          <div className="flex ml-auto">
             <button
               className="bg-blue-500 text-white py-2 px-4 rounded mt-2 md:mt-0 mr-2"
               onClick={addNewSelection}
@@ -163,11 +187,11 @@ const LandingPage = () => {
           </div>
         </div>
         <div
-          className=" overflow-x-auto mt-4 flex-grow"
+          className=" overflow-x-auto mt-1 flex-grow"
           style={{ maxHeight: "calc(100vh - 200px)", overflowY: "auto" }}
         >
           <table className="w-full border-collapse">
-            <thead className="bg-gray-200 top-0 sticky" style={{ zIndex: 1 }}>
+            <thead className="bg-blue-200 top-0 sticky" style={{ zIndex: 1 }}>
               <tr>
                 <th className="p-2 text-center">PSID/External</th>
                 <th className="p-2 text-center">Name</th>
@@ -181,7 +205,7 @@ const LandingPage = () => {
             <tbody>
               {filteredCandidates.map((emp, index) => (
                 <tr key={`${emp.id}-${index}`}>
-                  <td className="p-2 border text-center">
+                  <td className="p-2 border text-center ">
                     <button
                       className="text-blue-500 underline"
                       onClick={() => handleViewOnly(emp.id, emp.phoneNumber)}
@@ -265,7 +289,7 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
   );
 };
 export default LandingPage;
