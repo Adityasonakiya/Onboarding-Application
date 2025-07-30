@@ -22,7 +22,7 @@ const Login = () => {
 
   const validate = () => {
     const errors = {};
-    if (!form.username) errors.username = "Username is required";
+    if (!form.username) errors.username = "PSID is required";
     if (otpSent && !form.otp) errors.otp = "OTP is required";
     return errors;
   };
@@ -49,7 +49,7 @@ const Login = () => {
         setErrors({ submit: errorData.message });
       }
     } catch (error) {
-      setErrors({ submit: "Above PSID does not have access" });
+      setErrors({ submit: "PSID does not have access" });
     }
   };
 
