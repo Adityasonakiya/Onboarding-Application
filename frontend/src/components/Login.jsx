@@ -80,28 +80,38 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md" onSubmit={verifyOtp}>
-        <h2 className="text-2xl font-bold mb-5 text-center">Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-200">
+      <form
+        className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md transition-all duration-300"
+        onSubmit={verifyOtp}
+      >
+        <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">Login</h2>
+
+        <label className="block mb-2 text-sm font-medium text-gray-700">PSID</label>
         <input
           type="number"
           name="username"
-          placeholder="PSID"
+          placeholder="Enter your PSID"
           value={form.username}
           onChange={handleChange}
           onBlur={handleBlur}
-          className="block w-full p-2 mb-2 border rounded"
+          className="block w-full p-3 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         {touched.username && errors.username && (
           <p className="text-red-500 text-sm mb-4">{errors.username}</p>
         )}
 
         {!otpSent ? (
-          <button type="button" onClick={sendOtp} className="w-full bg-blue-500 text-white p-2 rounded">
+          <button
+            type="button"
+            onClick={sendOtp}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+          >
             Send OTP
           </button>
         ) : (
           <>
+            <label className="block mt-4 mb-2 text-sm font-medium text-gray-700">OTP</label>
             <input
               type="text"
               name="otp"
@@ -109,27 +119,26 @@ const Login = () => {
               value={form.otp}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="block w-full p-2 mb-2 border rounded"
+              className="block w-full p-3 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
             />
             {touched.otp && errors.otp && (
               <p className="text-red-500 text-sm mb-4">{errors.otp}</p>
             )}
-            <button type="submit" className="w-full bg-green-500 text-white p-2 rounded">
+            <button
+              type="submit"
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+            >
               Verify OTP
             </button>
           </>
         )}
 
-        {errors.submit && <p className="text-red-500 text-sm mb-4">{errors.submit}</p>}
-
-        {/* <p className="mt-4 text-center">
-          Don't have an account?{" "}
-          <Link to="/register" className="text-blue-500">
-            Register
-          </Link>
-        </p> */}
+        {errors.submit && (
+          <p className="text-red-500 text-sm mt-4 text-center">{errors.submit}</p>
+        )}
       </form>
     </div>
+
   );
 };
 
