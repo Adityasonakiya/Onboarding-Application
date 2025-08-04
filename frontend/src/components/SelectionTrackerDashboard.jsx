@@ -40,10 +40,12 @@ const SelectionTrackerDashboard = ({ user }) => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     if (tab === "myselection") {
-      navigate("/landing-page"); 
-    }
-    
+      navigate("/landing-page");
+    } else if (tab === "dashboard") {
+      navigate("/selection-tracker-dashboard");
+    } 
   };
+
   const handleExportForMainExcel = (data, sheetName, fileName) => {
     if (!data || data.length === 0) {
       alert("No data to export!");
@@ -427,24 +429,32 @@ const SelectionTrackerDashboard = ({ user }) => {
     <div className="mt-24">
       <Navbar user={user} className="navbar" />
       {/*Heading*/}
-       {/* <h1 className="py-2 text-center bg-blue-300 font-bold text-lg md:text-xl mb-2">
+      {/* <h1 className="py-2 text-center bg-blue-300 font-bold text-lg md:text-xl mb-2">
             HSBC Selection Tracker Dashboard
         </h1> */}
       {/* Tabs */}
       <div className="flex items-center mb-4 mt-2 px-4 border-b">
         <button
-          className={`px-4 py-2 font-semibold focus:outline-none ${activeTab === "myselection" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-600"}`}
+          className={`px-4 py-2 font-semibold focus:outline-none ${
+            activeTab === "myselection"
+              ? "border-b-2 border-blue-500 text-blue-600"
+              : "text-gray-600"
+          }`}
           onClick={() => handleTabClick("myselection")}
         >
           My Selection
         </button>
         <button
-          className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${activeTab === "dashboard" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-600"}`}
+          className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
+            activeTab === "dashboard"
+              ? "border-b-2 border-blue-800 text-blue-800"
+              : "text-gray-600"
+          }`}
           onClick={() => handleTabClick("dashboard")}
         >
           Selection Tracker Dashboard
         </button>
-            {/* <button
+        {/* <button
               onClick={fetchToExport}
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 ml-auto"
             >
@@ -508,7 +518,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                     className="flex items-center cursor-pointer text-black font-semibold"
                   >
                     <span
-                      className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${
+                      className={`w-3 h-3 inline-block border border-gray-200 rounded-full mr-2 ${
                         filter === "7days" ? "bg-blue-500" : ""
                       }`}
                     ></span>
@@ -610,7 +620,7 @@ const SelectionTrackerDashboard = ({ user }) => {
               <div className="overflow-x-auto mt-3 mb-4">
                 <table className="w-full border-collapse border-2 border-gray-400 text-center">
                   <thead>
-                    <tr className="bg-blue-100">
+                    <tr className="bg-blue-400">
                       <th className="p-1 border border-gray-500">LOB</th>
                       <th className="p-1 border border-gray-500">FP</th>
                       <th className="p-1 border border-gray-500">TnM</th>
@@ -625,7 +635,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                           <td className="p-1 border border-gray-500 text-left">
                             {selection.lobName}
                           </td>
-                          <td className="p-1 border border-gray-500">
+                          <td className="p-1 border border-gray-600">
                             {selection.fp}
                           </td>
                           <td className="p-1 border border-gray-500">
@@ -634,39 +644,39 @@ const SelectionTrackerDashboard = ({ user }) => {
                           <td className="p-1 border border-gray-500">
                             {selection.buffer}
                           </td>
-                          <td className="p-1 border border-gray-500">
+                          <td className="p-1 border border-gray-600">
                             {selection.total}
                           </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td className="p-1 border border-gray-500" colSpan="4">
+                        <td className="p-1 border border-gray-800" colSpan="4">
                           No data available
                         </td>
                       </tr>
                     )}
-                    <tr className="bg-blue-100">
-                      <td className="p-1 border font-semibold ">Total</td>
-                      <td className="p-1 border">
+                    <tr className="bg-blue-400">
+                      <td className="p-2 border border-gray-600 font-semibold text-left">Total</td>
+                      <td className="p-2 border border-gray-600">
                         {selections.reduce(
                           (acc, selection) => acc + selection.fp,
                           0
                         )}
                       </td>
-                      <td className="p-1 border">
+                      <td className="p-1 border border-gray-600">
                         {selections.reduce(
                           (acc, selection) => acc + selection.tnm,
                           0
                         )}
                       </td>
-                      <td className="p-1 border">
+                      <td className="p-1 border border-gray-600">
                         {selections.reduce(
                           (acc, selection) => acc + selection.buffer,
                           0
                         )}
                       </td>
-                      <td className="p-1 border">
+                      <td className="p-1 border border-gray-600">
                         {selections.reduce(
                           (acc, selection) => acc + selection.total,
                           0
@@ -717,7 +727,7 @@ const SelectionTrackerDashboard = ({ user }) => {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border-2 border-gray-400 text-center">
                 <thead>
-                  <tr className="bg-blue-100">
+                  <tr className="bg-blue-400">
                     <th className="p-1 border border-gray-500">LOB</th>
                     <th className="p-1 border border-gray-500">
                       Tagging Pending
@@ -770,37 +780,37 @@ const SelectionTrackerDashboard = ({ user }) => {
                     </tr>
                   )}
                   <tr>
-                    <td className="p-1 border border-gray-500 bg-blue-100 font-semibold text-left">
+                    <td className="p-1 border border-gray-500 bg-blue-400 font-semibold text-left">
                       Total
                     </td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">
+                    <td className="p-1 border border-gray-500 bg-blue-400">
                       {ctool.reduce(
                         (acc, item) => acc + item.taggingPending,
                         0
                       )}
                     </td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">
+                    <td className="p-1 border border-gray-500 bg-blue-400">
                       {ctool.reduce(
                         (acc, item) => acc + item.techSelectPending,
                         0
                       )}
                     </td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">
+                    <td className="p-1 border border-gray-500 bg-blue-400">
                       {ctool.reduce((acc, item) => acc + item.bgvPending, 0)}
                     </td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">
+                    <td className="p-1 border border-gray-500 bg-blue-400">
                       {ctool.reduce(
                         (acc, item) => acc + item.hsbcDojAwaited,
                         0
                       )}
                     </td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">
+                    <td className="p-1 border border-gray-500 bg-blue-400">
                       {ctool.reduce(
                         (acc, item) => acc + item.hsbcDojConfirmed,
                         0
                       )}
                     </td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">
+                    <td className="p-1 border border-gray-500 bg-blue-400">
                       {ctool.reduce((acc, item) => acc + item.total, 0)}
                     </td>
                   </tr>
@@ -848,7 +858,7 @@ const SelectionTrackerDashboard = ({ user }) => {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border-2 border-gray-400 text-center">
                 <thead>
-                  <tr className="bg-blue-100">
+                  <tr className="bg-blue-400">
                     <th className="p-1 border border-gray-500"></th>
                     <th className="p-1 border border-gray-500"></th>
                     <th colSpan="2" className="p-1 border border-gray-500">
@@ -859,7 +869,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                     </th>
                     <th className="p-1 border border-gray-500 ">Grand Total</th>
                   </tr>
-                  <tr className="bg-blue-100">
+                  <tr className="bg-blue-400">
                     <th className="p-1 border border-gray-500">LOB</th>
                     <th className="p-1 border border-gray-500">
                       Pricing Model
@@ -910,35 +920,35 @@ const SelectionTrackerDashboard = ({ user }) => {
                     </tr>
                   )}
                   <tr>
-                    <td className="p-1 border border-gray-500 bg-blue-100 font-semibold text-left">
+                    <td className="p-1 border border-gray-500 bg-blue-400 font-semibold text-left">
                       Grand Total
                     </td>
-                    <td className="p-1 border border-gray-500 bg-blue-100"></td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">
+                    <td className="p-1 border border-gray-500 bg-blue-400"></td>
+                    <td className="p-1 border border-gray-500 bg-blue-400">
                       {awaitedCases.reduce(
                         (acc, item) => acc + item.bgvCompleted,
                         0
                       )}
                     </td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">
+                    <td className="p-1 border border-gray-500 bg-blue-400">
                       {awaitedCases.reduce(
                         (acc, item) => acc + item.inProgressCompleted,
                         0
                       )}
                     </td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">
+                    <td className="p-1 border border-gray-500 bg-blue-400">
                       {awaitedCases.reduce(
                         (acc, item) => acc + item.inProgressNotCompleted,
                         0
                       )}
                     </td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">
+                    <td className="p-1 border border-gray-500 bg-blue-400">
                       {awaitedCases.reduce(
                         (acc, item) => acc + item.offerYetToBeReleased,
                         0
                       )}
                     </td>
-                    <td className="p-1 border border-gray-500 bg-blue-100">
+                    <td className="p-1 border border-gray-500 bg-blue-400">
                       {awaitedCases.reduce((acc, item) => acc + item.total, 0)}
                     </td>
                   </tr>

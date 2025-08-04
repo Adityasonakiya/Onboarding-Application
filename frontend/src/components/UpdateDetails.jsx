@@ -171,19 +171,31 @@ function UpdateDetails() {
         tagDate: value,
       }));
     }
-    if (name === "techSelectDate" && value && form.status != "Tech Selection Done"){
+    if (
+      name === "techSelectDate" &&
+      value &&
+      form.status != "Tech Selection Done"
+    ) {
       setForm((prevForm) => ({
         ...prevForm,
         status: "Tech Selection Done",
         techSelectDate: value,
       }));
-    } else if (name === "dojRecDate" && value && form.status != "DOJ Recieved") {
+    } else if (
+      name === "dojRecDate" &&
+      value &&
+      form.status != "DOJ Recieved"
+    ) {
       setForm((prevForm) => ({
         ...prevForm,
         status: "DOJ Recieved",
         dojRecDate: value,
       }));
-    } else if (name === "onboardingDate" && value && form.status != "Onboarding Completed") {
+    } else if (
+      name === "onboardingDate" &&
+      value &&
+      form.status != "Onboarding Completed"
+    ) {
       setForm((prevForm) => ({
         ...prevForm,
         status: "Onboarding Completed",
@@ -566,7 +578,8 @@ function UpdateDetails() {
             ctoolRecDate: formatDate(selectionData.ctoolReceivedDate) || "",
             ctoolLocation: selectionData.ctoolLocation || "",
             hsbcRoles: selectionData.hsbcRoles || "",
-            ctoolGrade:selectionData.hsbcRoles?.grade || selectionData.ctoolGrade,
+            ctoolGrade:
+              selectionData.hsbcRoles?.grade || selectionData.ctoolGrade,
             ctoolTaggingRate: selectionData.ctoolTaggingRate || "",
             proposedRate: selectionData.ctoolProposedRate || "",
             recruiterName: selectionData.recruiterName || "",
@@ -661,7 +674,7 @@ function UpdateDetails() {
             totalExp: "",
             skill: "",
             email: "",
-            selectionDate: formatDate(selectionData.hsbcselectionDate) ||"",
+            selectionDate: formatDate(selectionData.hsbcselectionDate) || "",
             bu: selectionData.baseBu || "BF",
             lob: selectionData.lob || "",
             subLob: selectionData.sublob || "",
@@ -674,10 +687,11 @@ function UpdateDetails() {
             pricingModel: selectionData.pricingModel || "",
             irm: selectionData.irm || "",
             ctoolId: selectionData.hsbctoolId || "",
-            ctoolRecDate: formatDate(selectionData.ctoolReceivedDate)||"",
+            ctoolRecDate: formatDate(selectionData.ctoolReceivedDate) || "",
             ctoolLocation: selectionData.ctoolLocation || "",
             hsbcRoles: selectionData.hsbcRoles || "",
-            ctoolGrade:selectionData.hsbcRoles?.grade || selectionData.ctoolGrade,
+            ctoolGrade:
+              selectionData.hsbcRoles?.grade || selectionData.ctoolGrade,
             ctoolTaggingRate: selectionData.ctoolTaggingRate || "",
             proposedRate: selectionData.ctoolProposedRate || "",
             recruiterName: selectionData.recruiterName || "",
@@ -774,7 +788,7 @@ function UpdateDetails() {
               totalExp: "", // Assuming totalExperience is not available for candidate
               skill: "", // Assuming skill is not available for candidate
               email: "", // Assuming email is not available for candidate
-              selectionDate: formatDate(selectionData.hsbcselectionDate) ||"",
+              selectionDate: formatDate(selectionData.hsbcselectionDate) || "",
               bu: selectionData.baseBu || "BF",
               lob: selectionData.lob || "",
               subLob: selectionData.sublob || "",
@@ -790,7 +804,8 @@ function UpdateDetails() {
               ctoolRecDate: formatDate(selectionData.ctoolReceivedDate) || "",
               ctoolLocation: selectionData.ctoolLocation || "",
               hsbcRoles: selectionData.hsbcRoles || "",
-              ctoolGrade:selectionData.hsbcRoles?.grade || selectionData.ctoolGrade,
+              ctoolGrade:
+                selectionData.hsbcRoles?.grade || selectionData.ctoolGrade,
               ctoolTaggingRate: selectionData.ctoolTaggingRate || "",
               proposedRate: selectionData.ctoolProposedRate || "",
               recruiterName: selectionData.recruiterName || "",
@@ -841,22 +856,24 @@ function UpdateDetails() {
     }
   }, [psId, phone, isInternal, isExternal, isVendor]);
   return (
-    <div className="w-full px-4 py-6">
-      <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">
+    <div className="w-full px-4 py-8 pt-8">
+      <h1 className="text-2xl font-bold text-left text-black mb-6">
         HSBC Updation Form
       </h1>
-
       <form onSubmit={handleSubmit}>
-        <div className="overflow-x-auto">
+        <h4 className="text-base font-bold text-black-700 border-b pb-2 mb-5 mt-6">
+          Employee Type
+        </h4>
+        <div className="overflow-x-auto -mt-2">
           <table className="w-full border-collapse">
             <tbody>
               <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label htmlFor="internal" className="font-bold">
+                <td className="p-2 w-full md:w-1/8" colSpan={2}>
+                  <label htmlFor="internal" className="font-semobold">
                     Internal
                   </label>
                 </td>
-                <td className="p-2 w-full md:w-1/4">
+                <td className="p-2 w-full md:w-1/8">
                   <input
                     id="internal"
                     type="radio"
@@ -866,12 +883,12 @@ function UpdateDetails() {
                     className="p-2"
                   />
                 </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label htmlFor="external" className="font-bold">
+                <td className="p-2 w-full md:w-1/8">
+                  <label htmlFor="external" className="font-semobold">
                     External
                   </label>
                 </td>
-                <td className="p-2 w-full md:w-1/4">
+                <td className="p-2 w-full md:w-1/8">
                   <input
                     id="external"
                     type="radio"
@@ -884,7 +901,7 @@ function UpdateDetails() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
+                  <label className="font-semobold">
                     PS ID:<span className="text-red-500">*</span>
                   </label>
                 </td>
@@ -900,7 +917,7 @@ function UpdateDetails() {
                   />
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Vendor:</label>
+                  <label className="font-semobold">Vendor:</label>
                 </td>
                 <td className="p-2 w-full md:w-1/4" colSpan="2">
                   <select
@@ -928,1059 +945,929 @@ function UpdateDetails() {
                 </td>
               </tr>
 
-              <tr>
-                <td colSpan="4">
-                  <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
-                    Basic Info
-                  </h4>
-                </td>
-              </tr>
-
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">First Name:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+              <h4 className="text-lg font-bold px-2 py-1 mt-4">Basic Info</h4>
+              <div className="flex flex-wrap md:flex-nowrap">
+                <div className="p-2 w-full md:w-1/4">
+                  <label>First Name:</label>
                   <input
                     type="text"
                     name="fname"
                     value={form.fname || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Last Name:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Last Name:</label>
                   <input
                     type="text"
                     name="lname"
                     value={form.lname || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Grade:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Grade:</label>
                   <input
                     type="text"
                     name="grade"
                     value={form.grade || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Location:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Location:</label>
                   <input
                     type="text"
                     name="location"
                     value={form.location || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">PU:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+              </div>
+
+              <div className="flex flex-wrap md:flex-nowrap">
+                <div className="p-2 w-full md:w-1/4">
+                  <label>PU:</label>
                   <input
                     type="text"
                     name="pu"
                     value={form.pu || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Total Exp:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Total Exp:</label>
                   <input
                     type="number"
                     name="totalExp"
                     value={form.totalExp || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Skill:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Skill:</label>
                   <input
                     type="text"
                     name="skill"
                     value={form.skill || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Mail ID:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Mail ID:</label>
                   <input
                     type="text"
                     name="email"
                     value={form.email || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
+                </div>
+              </div>
+
+              <div className="flex-wrap md:flex-nowrap">
+                <div className="p-2 w-full md:w-1/4">
+                  <label>
                     Phone Number:
                     <span className="text-red-500" hidden={isInternal}>
                       *
                     </span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4" colSpan="2">
                   <input
                     type="text"
                     name="phone"
                     value={form.phone || ""}
                     onChange={handlePhoneChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full "
                     disabled
                   />
-                </td>
-              </tr>
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm">{errors.phone}</p>
+                  )}
+                </div>
+              </div>
+            </tbody>
+          </table>
+        </div>
+        <h4 className="font-bold px-2 py-1 mt-8">Selection Details</h4>
+        <div className="overflow-x-auto max-h-[900px] pb-28  -mb-1">
+          <table className="w-full border-collapse">
+            <tbody>
+              <div className="flex flex-wrap md:flex-nowrap items-center">
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="selectionDate">Selection Date:</label>
+                  <input
+                    type="date"
+                    name="selectionDate"
+                    required
+                    value={form.selectionDate || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                  />
+                </div>
 
-              <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
-                Selection Details
-              </h4>
-              <div className="overflow-x-auto">
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">
-                      Selection Date:<span className="text-red-500">*</span>
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="date"
-                      name="selectionDate"
-                      required
-                      value={form.selectionDate || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">Base BU:</label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="text"
-                      name="bu"
-                      value={form.bu || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
-                  </td>
-                </tr>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">
-                      LOB:<span className="text-red-500">*</span>
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <select
-                      value={form.lob?.lobId || ""}
-                      onChange={handleLobChange}
-                      name="lob"
-                      className="p-2 border w-full"
-                    >
-                      <option value="">Choose...</option>
-                      {lobs.map((lob) => (
-                        <option key={lob.lobId} value={lob.lobId}>
-                          {lob.lobName}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">
-                      Sub LOB:<span className="text-red-500">*</span>
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <select
-                      name="subLob"
-                      value={form.subLob?.subLOBid || ""}
-                      className="p-2 border w-full"
-                      onChange={handleSubLobChange}
-                    >
-                      <option value="">Choose...</option>
-                      {subLobs.map((subLob) => (
-                        <option key={subLob.subLOBid} value={subLob.subLOBid}>
-                          {subLob.subLobName}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                </tr>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">
-                      HSBC Hiring Manager:
-                      <span className="text-red-500">*</span>
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="text"
-                      name="hiringManager"
-                      required
-                      value={form.hiringManager || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">
-                      HSBC Head:<span className="text-red-500">*</span>
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="text"
-                      name="head"
-                      required
-                      value={form.head || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
-                  </td>
-                </tr>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">
-                      Delivery Manager:<span className="text-red-500">*</span>
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <select
-                      name="deliveryManager"
-                      value={form.deliveryManager || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    >
-                      <option value="0">Choose..</option>
-                      <option value="Abhijeet Sureshchandra More">
-                        Abhijeet Sureshchandra More
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="bu">Base BU:</label>
+                  <input
+                    type="text"
+                    name="bu"
+                    value={form.bu || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                  />
+                </div>
+
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="lob-select">
+                    LOB:<span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={form.lob?.lobId || ""}
+                    onChange={handleLobChange}
+                    name="lob"
+                    id="lob-select"
+                    className="p-2 border rounded w-full"
+                    required
+                  >
+                    <option value="">Choose...</option>
+                    {lobs.map((lob) => (
+                      <option key={lob.lobId} value={lob.lobId}>
+                        {lob.lobName}
                       </option>
-                      <option value="Aniruddha Deshpande">
-                        Aniruddha Deshpande
+                    ))}
+                  </select>
+                </div>
+
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="sub-lob-select">
+                    Sub LOB:<span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    name="subLob"
+                    id="sub-lob-select"
+                    value={form.subLob?.subLOBid || ""}
+                    className="p-2 border rounded w-full"
+                    onChange={handleSubLobChange}
+                  >
+                    <option value="0">Choose...</option>
+                    {subLobs.map((subLob) => (
+                      <option key={subLob.subLOBid} value={subLob.subLOBid}>
+                        {subLob.subLobName}
                       </option>
-                      <option value="Arvind Deogade">Arvind Deogade</option>
-                      <option value="Chinni Krishna Nakka">
-                        Chinni Krishna Nakka
-                      </option>
-                      <option value="Mayuresh Nirantar">
-                        Mayuresh Nirantar
-                      </option>
-                      <option value="Saber Sarode">Saber Sarode</option>
-                      <option value="Rupali Khedekar">Rupali Khedekar</option>
-                      <option value="Sachin Shaha">Sachin Shaha</option>
-                    </select>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">Sales POC:</label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <select
-                      name="salespoc"
-                      value={form.salespoc || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    >
-                      <option value="">Choose..</option>
-                      <option value="Anand Devi">Anand Devi</option>
-                      <option value="Nishant sharma">Nishant sharma</option>
-                      <option value="Indranil Moolay">Indranil Moolay</option>
-                      <option value="Rajiv Lakhanpal">Rajiv Lakhanpal</option>
-                      <option value="Kinshuk Awasthi">Kinshuk Awasthi</option>
-                      <option value="Ajay Pillai">Ajay Pillai</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">Pricing Model:</label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <select
-                      name="pricingModel"
-                      value={form.pricingModel || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    >
-                      <option value="">Choose..</option>
-                      <option value="Time & Material">Time & Material</option>
-                      <option value="Fixed Price">Fixed Price</option>
-                      <option value="Buffer">Buffer</option>
-                    </select>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">
-                      IRM:<span className="text-red-500">*</span>
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <div className="relative w-full">
-                      <input
-                        type="text"
-                        name="irm"
-                        value={
-                          irmName && form.irm
-                            ? `${form.irm} (${irmName})`
-                            : form.irm || ""
-                        }
-                        onChange={handleIrmChange}
-                        className="p-2 border rounded w-full pr-10"
-                      />
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="flex flex-wrap md:flex-nowrap">
+                {/* HSBC Hiring Manager */}
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="hiringManager">
+                    HSBC Hiring Manager:<span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="hiringManager"
+                    required
+                    value={form.hiringManager || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                  />
+                </div>
 
-                      {/* Clear button */}
-                      {irmName && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setForm((prev) => ({ ...prev, irm: "" }));
-                            setIrmName("");
-                          }}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
-                        >
-                          ✕
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">HSBC CTOOL ID:</label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="number"
-                      name="ctoolId"
-                      value={form.ctoolId || ""}
-                      minLength={6}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                      required
-                      pattern="\d{6}"
-                      title="HSBC CTOOL ID must be 6 digits"
-                    />
-                    {errors.ctoolId && (
-                      <div className="text-red-500 text-sm mt-1">
-                        {errors.ctoolId}
-                      </div>
-                    )}
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">
-                      CTOOL Received Date:
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="date"
-                      name="ctoolRecDate"
-                      value={form.ctoolRecDate || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
-                  </td>
-                </tr>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">HSBC Roles:</label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <div ref={comboboxRef} style={{ position: "relative" }}>
-                      {/* Input field */}
-                      <input
-                        type="text"
-                        placeholder="Search or select a role..."
-                        value={searchTerm}
-                        className={`p-2 border w-full ${
-                          errors.hsbcRoles ? "border-red-500" : ""
-                        }`}
-                        onChange={handleSearch}
-                        onFocus={() => setShowDropdown(true)} // Open dropdown on focus
-                        style={{
-                          width: "100%",
-                          padding: "8px",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                        }}
-                      />
+                {/* HSBC Head */}
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="head">
+                    HSBC Head:<span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="head"
+                    required
+                    value={form.head || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                  />
+                </div>
 
-                      {/* Dropdown options (conditionally rendered) */}
-                      {showDropdown && filteredRoles.length > 0 && (
-                        <ul
-                          style={{
-                            position: "absolute",
-                            top: "100%",
-                            left: "0",
-                            width: "100%",
-                            maxHeight: "200px",
-                            overflowY: "auto",
-                            background: "#fff",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                            zIndex: "1000",
-                            padding: "0",
-                            margin: "0",
-                            listStyleType: "none",
-                          }}
-                        >
-                          {filteredRoles.map((role) => (
-                            <li
-                              key={role.ref}
-                              onClick={() =>
-                                handleSelect(
-                                  role.roleTitle,
-                                  role.ref,
-                                  role.grade
-                                )
-                              } // Properly update input value
-                              style={{
-                                padding: "8px",
-                                cursor: "pointer",
-                                borderBottom: "1px solid #f0f0f0",
-                              }}
-                            >
-                              {role.roleTitle}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
+                {/* Delivery Manager */}
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="deliveryManager">
+                    Delivery Manager:<span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    name="deliveryManager"
+                    value={form.deliveryManager || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                  >
+                    <option value="0">Choose..</option>
+                    <option value="Abhijeet Sureshchandra More">
+                      Abhijeet Sureshchandra More
+                    </option>
+                    <option value="Aniruddha Deshpande">
+                      Aniruddha Deshpande
+                    </option>
+                    <option value="Arvind Deogade">Arvind Deogade</option>
+                    <option value="Chinni Krishna Nakka">
+                      Chinni Krishna Nakka
+                    </option>
+                    <option value="Mayuresh Nirantar">Mayuresh Nirantar</option>
+                    <option value="Rupali Khedekar">Rupali Khedekar</option>
+                    <option value="Saber Sarode">Saber Sarode</option>
+                    <option value="Sachin Shaha">Sachin Shaha</option>
+                  </select>
+                </div>
 
-                      {/* Fallback for no matches */}
-                      {showDropdown && filteredRoles.length === 0 && (
-                        <div
-                          style={{
-                            padding: "8px",
-                            background: "#fff",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                            marginTop: "4px",
-                          }}
-                        >
-                          No matching roles found
-                        </div>
-                      )}
-                    </div>
-
-                    {errors.lob && (
-                      <p className="text-red-500 text-sm">{errors.hsbcRoles}</p>
-                    )}
-                  </td>
-                  <td></td>
-
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">CTOOL Location:</label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="text"
-                      name="ctoolLocation"
-                      value={form.ctoolLocation || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
-                  </td>
-                </tr>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">CTOOL Grade:</label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="number"
-                      name="ctoolGrade"
-                      value={form.ctoolGrade || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">CTOOL Tagging Rate:</label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="number"
-                      name="ctoolTaggingRate"
-                      value={form.ctoolTaggingRate || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
-                  </td>
-                </tr>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">Recruiter Name:</label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="text"
-                      name="recruiterName"
-                      value={form.recruiterName || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">Proposed Rate:</label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="number"
-                      name="proposedRate"
-                      value={form.proposedRate || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
-                  </td>
-                </tr>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">Interview Evidences</label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="file"
-                      name="evidence"
-                      data-testid="evidence-upload"
-                      accept=".png,.jpg,.jpeg,.doc,.docx"
-                      multiple
-                      onChange={handleFileChange}
-                      className="p-2 border rounded w-full"
-                    />
-                    <div className="mt-2">
-                      <p className="font-semibold">
-                        Uploaded Files ({uploadedFiles.length}):
-                      </p>
-                      <ul>
-                        {uploadedFiles.map((file, index) => {
-                          // If fileObject is a real File, use createObjectURL; else, use backend URL
-                          const isRealFile =
-                            file.fileObject instanceof File &&
-                            file.fileObject.size > 0;
-                          const backendUrl = `http://localhost:8080/uploads/${encodeURIComponent(
-                            file.fileName
-                          )}`;
-                          return (
-                            <li
-                              key={index}
-                              className="flex items-center space-x-4"
-                            >
-                              <span>{file.fileName || file.name}</span>
-                              {/* //download button */}
-                              <button
-                                type="button"
-                                className="text-green-500 border border-green-500 rounded-full flex justify-center items-center p-1"
-                                onClick={async () => {
-                                  if (isRealFile) {
-                                    // For newly uploaded files
-                                    const url = URL.createObjectURL(
-                                      file.fileObject
-                                    );
-                                    const a = document.createElement("a");
-                                    a.href = url;
-                                    a.download = file.fileName || file.name;
-                                    document.body.appendChild(a);
-                                    a.click();
-                                    document.body.removeChild(a);
-                                    URL.revokeObjectURL(url);
-                                  } else {
-                                    // For files from backend, fetch as blob and download
-                                    try {
-                                      const response = await fetch(backendUrl);
-                                      const blob = await response.blob();
-                                      const url =
-                                        window.URL.createObjectURL(blob);
-                                      const a = document.createElement("a");
-                                      a.href = url;
-                                      a.download = file.fileName || file.name;
-                                      document.body.appendChild(a);
-                                      a.click();
-                                      document.body.removeChild(a);
-                                      window.URL.revokeObjectURL(url);
-                                    } catch (err) {
-                                      toast.error("Failed to download file.", {
-                                        position: "top-right",
-                                      });
-                                    }
-                                  }
-                                }}
-                              >
-                                <FaDownload />
-                              </button>
-                              {/* View Button */}
-                              <button
-                                type="button"
-                                className="text-green-500 border border-green-500 rounded-full flex justify-center items-center p-1"
-                                onClick={() => {
-                                  if (isRealFile) {
-                                    const url = URL.createObjectURL(
-                                      file.fileObject
-                                    );
-                                    window.open(url, "_blank");
-                                    setTimeout(
-                                      () => URL.revokeObjectURL(url),
-                                      60 * 1000
-                                    ); // Clean up after 1 min
-                                  } else {
-                                    window.open(backendUrl, "_blank");
-                                  }
-                                }}
-                              >
-                                <FaEye />
-                              </button>
-
-                              {/* Cancle or remove button */}
-                              <button
-                                type="button"
-                                className="text-red-500 border border-red-500 rounded-full flex justify-center items-center p-1"
-                                onClick={async () => {
-                                  if (!isRealFile) {
-                                    // Backend file: call delete API
-                                    try {
-                                      const response = await fetch(
-                                        `http://localhost:8080/evidence/delete?fileName=${encodeURIComponent(
-                                          file.fileName
-                                        )}&selectionId=${selectionId}`,
-                                        { method: "DELETE" }
-                                      );
-                                      if (response.ok) {
-                                        handleFileRemove(index);
-                                        toast.success(
-                                          "File deleted successfully.",
-                                          { position: "top-right" }
-                                        );
-                                      } else {
-                                        toast.error("Failed to delete file.", {
-                                          position: "top-right",
-                                        });
-                                      }
-                                    } catch (err) {
-                                      toast.error("Error deleting file.", {
-                                        position: "top-right",
-                                      });
-                                    }
-                                  } else {
-                                    // Local file: just remove from UI
-                                    handleFileRemove(index);
-                                  }
-                                }}
-                              >
-                                <ImCross />
-                              </button>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
+                {/* Sales POC */}
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="salespoc">Sales POC:</label>
+                  <select
+                    name="salespoc"
+                    value={form.salespoc || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                  >
+                    <option value="0">Choose..</option>
+                    <option value="Anand Devi">Anand Devi</option>
+                    <option value="Nishant sharma">Nishant sharma</option>
+                    <option value="Indranil Moolay">Indranil Moolay</option>
+                    <option value="Rajiv Lakhanpal">Rajiv Lakhanpal</option>
+                    <option value="Kinshuk Awasthi">Kinshuk Awasthi</option>
+                    <option value="Ajay Pillai">Ajay Pillai</option>
+                  </select>
+                </div>
               </div>
 
-              <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
-                Tagging and Onboarding Details
-              </h4>
               <tr className="flex flex-wrap md:flex-nowrap">
+                {/* Pricing Model */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    Status:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="pricingModel">Pricing Model:</label>
                   <select
-                    name="status"
-                    value={form.status || ""}
+                    name="pricingModel"
+                    value={form.pricingModel || ""}
                     onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                    required
+                    className="p-2 border rounded w-full"
                   >
-                    <option value="">Choose..</option>
-                    <option value="CTool Pending">CTool Pending</option>
-                    <option value="CTool Recieved">CTool Recieved</option>
-                    <option value="Tagging Completed">Tagging Completed</option>
-                    <option value="Tech Selection Done">
-                      Tech Selection Done
-                    </option>
-                    <option value="DOJ Recieved">DOJ Recieved</option>
-                    <option value="Onboarding Completed">
-                      Onboarding Completed
-                    </option>
-                    <option value="Tagging Error">Tagging Error</option>
-                    <option value="Rate Approval Pending">
-                      Rate Approval Pending
-                    </option>
-                    <option value="Rate To Be Changed">
-                      Rate To Be Changed
-                    </option>
-                    <option value="Candidate not yet joined">
-                      Candidate not yet joined
-                    </option>
-                    <option value="Drop Out Case">Drop Out Case</option>
+                    <option value="0">Choose..</option>
+                    <option value="Time & Material">Time & Material</option>
+                    <option value="Fixed Price">Fixed Price</option>
+                    <option value="Buffer">Buffer</option>
                   </select>
                 </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    BGV Status:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <select
-                    name="bgvStatus"
-                    value={form.bgvStatus || ""}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                    required
-                  >
-                    <option value="">Choose..</option>
-                    <option value="BGV Initiated">BGV Initiated</option>
-                    <option value="In progress">In progress</option>
-                    <option value="Minor Discrepancy">Minor Discrepancy</option>
-                    <option value="Major Discrepancy">Major Discrepancy</option>
-                    <option value="Offer yet to be released">
-                      Offer Yet to be Released
-                    </option>
-                    <option value="Interim Cleared">Interim Cleared</option>
-                    <option value="BGV Completed">BGV Completed</option>
-                    <option value="Pending with Employee">
-                      Pending with Employee
-                    </option>
-                  </select>
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    Status Additional Remark:
-                    <span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <textarea
-                    name="addRemark"
-                    value={form.addRemark || ""}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full resize-none"
-                    required
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    BGV Additional Remark:
-                    <span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <textarea
-                    name="bgvRemark"
-                    value={form.bgvRemark || ""}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full resize-none"
-                    required
-                  />
-                </td>
-              </tr>
 
-              <tr className="flex flex-wrap md:flex-nowrap">
+                {/* IRM */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    CTool Start Date:<span className="text-red-500">*</span>
+                  <label htmlFor="irm">
+                    IRM:<span className="text-red-500">*</span>
                   </label>
+                  <div className="relative w-full">
+                    <input
+                      type="text"
+                      name="irm"
+                      value={
+                        irmName && form.irm
+                          ? `${form.irm} (${irmName})`
+                          : form.irm || ""
+                      }
+                      onChange={handleIrmChange}
+                      className={`p-2 border rounded w-full pr-10 ${
+                        errors.irm ? "border-red-500" : ""
+                      }`}
+                    />
+                    {/* Clear button */}
+                    {irmName && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setForm((prev) => ({ ...prev, irm: "" }));
+                          setIrmName("");
+                        }}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-500"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                  {errors.irm && (
+                    <p className="text-red-500 text-sm">{errors.irm}</p>
+                  )}
                 </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="date"
-                    name="ctoolStartDate"
-                    value={form.ctoolStartDate || ""}
-                    required
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                    min={form.dojRecDate}
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    BGV Initiated Date:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="date"
-                    name="bgvInitiatedDate"
-                    value={form.bgvInitiatedDate || ""}
-                    required
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                  />
-                </td>
-              </tr>
 
-              <tr className="flex flex-wrap md:flex-nowrap">
+                {/* HSBC CTOOL ID */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    Tagging date:
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="date"
-                    name="tagDate"
-                    value={form.tagDate || ""}
-                    //required disabled={!form.tagDateEnabled}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                    min={today}
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    Tech Selection Date:
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="date"
-                    name="techSelectDate"
-                    value={form.techSelectDate || ""}
-                    //required disabled={!form.techSelectDateEnabled}
-                    disabled={!form.tagDate}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                    min={today}
-                  />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    DOJ Received Date:
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="date"
-                    name="dojRecDate"
-                    value={form.dojRecDate || ""}
-                    //required disabled={!form.dojRecDateEnabled}
-                    disabled={!form.techSelectDate}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                    min={today}
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    Onboarding Date:
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="date"
-                    name="onboardingDate"
-                    value={form.onboardingDate || ""}
-                    //required disabled={!form.onboardingDateEnabled}
-                    disabled={!form.dojRecDate}
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                    min={today}
-                  />
-                </td>
-              </tr>
-
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">
-                    Billing Start Date:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="date"
-                    name="billingStartDate"
-                    value={form.billingStartDate || ""}
-                    required
-                    onChange={handleChange}
-                    className="p-2 mb-2 border rounded w-full"
-                    disabled={!form.onboardingDate}
-                    min={form.onboardingDate}
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">HSBC ID:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolId">HSBC CTOOL ID:</label>
                   <input
                     type="number"
-                    name="hsbcId"
-                    value={form.hsbcId || ""}
-                    // minLength={6}
+                    name="ctoolId"
+                    value={form.ctoolId || ""}
+                    minLength={6}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                    required
+                    pattern="\d{6}"
+                    title="HSBC CTOOL ID must be 6 digits"
+                  />
+                  {errors.ctoolId && (
+                    <div className="text-red-500 text-sm mt-1">
+                      {errors.ctoolId}
+                    </div>
+                  )}
+                </td>
+
+                {/* CTOOL Received Date */}
+                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolRecDate">CTOOL Received Date:</label>
+                  <input
+                    type="date"
+                    name="ctoolRecDate"
+                    required
+                    value={form.ctoolRecDate || ""}
+                    onChange={handleChange}
+                    className={`p-2 border rounded w-full ${
+                      errors.ctoolRecDate ? "border-red-500" : ""
+                    }`}
+                  />
+                  {errors.ctoolRecDate && (
+                    <p className="text-red-500 text-sm">
+                      {errors.ctoolRecDate}
+                    </p>
+                  )}
+                </td>
+              </tr>
+
+              <tr className="flex flex-wrap md:flex-nowrap">
+                {/* HSBC Roles */}
+                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="hsbcRoles">HSBC Roles:</label>
+                  <div ref={comboboxRef} className="relative w-full">
+                    <input
+                      type="text"
+                      name="hsbcRoles"
+                      placeholder="Search or select a role..."
+                      value={searchTerm}
+                      className={`p-2 border rounded w-full ${
+                        errors.hsbcRoles ? "border-red-500" : ""
+                      }`}
+                      onChange={handleSearch}
+                      onFocus={() => setShowDropdown(true)}
+                    />
+                    {/* Dropdown options */}
+                    {showDropdown && filteredRoles.length > 0 && (
+                      <ul className="absolute top-full left-0 w-full max-h-52 overflow-y-auto bg-white border border-gray-300 rounded z-10">
+                        {filteredRoles.map((role) => (
+                          <li
+                            key={role.ref}
+                            onClick={() =>
+                              handleSelect(role.roleTitle, role.ref, role.grade)
+                            }
+                            className="px-2 py-1 cursor-pointer hover:bg-gray-100 border-b border-gray-100"
+                          >
+                            {role.roleTitle}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {/* No matches fallback */}
+                    {showDropdown && filteredRoles.length === 0 && (
+                      <div className="mt-1 p-2 bg-white border border-gray-300 rounded">
+                        No matching roles found
+                      </div>
+                    )}
+                  </div>
+                  {errors.hsbcRoles && (
+                    <p className="text-red-500 text-sm">{errors.hsbcRoles}</p>
+                  )}
+                </td>
+
+                {/* CTOOL Location */}
+                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolLocation">CTOOL Location:</label>
+                  <input
+                    type="text"
+                    name="ctoolLocation"
+                    value={form.ctoolLocation || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                  />
+                </td>
+
+                {/* CTOOL Grade */}
+                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolGrade">CTOOL Grade:</label>
+                  <input
+                    type="number"
+                    name="ctoolGrade"
+                    value={form.ctoolGrade || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                  />
+                </td>
+
+                {/* CTOOL Tagging Rate */}
+                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolTaggingRate">CTOOL Tagging Rate:</label>
+                  <input
+                    type="number"
+                    name="ctoolTaggingRate"
+                    value={form.ctoolTaggingRate || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                   />
                 </td>
               </tr>
 
-              <div className="border border-gray-300 rounded-md shadow">
-                <h1 className="text-l font-bold text-center text-gray-700 bg-gray-200 p-1 rounded-md shadow-md">
-                  For External Only
-                </h1>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">
-                      Offer Release Status:
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <select
-                      name="offerReleaseStatus"
-                      onChange={handleChange}
-                      value={form.offerReleaseStatus || ""}
-                      className="p-2 border rounded w-full"
-                    >
-                      <option value="">Choose...</option>
-                      <option value="Pending">Pending</option>
-                      <option value="On Hold">On Hold</option>
-                      <option value="Released">Released</option>
-                      <option value="WIP">WIP</option>
-                    </select>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-semibold">
-                      LTI Onboarding Date:
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="date"
-                      name="ltiOnboardDate"
-                      value={form.ltiOnboardDate || ""}
-                      onChange={handleChange}
-                      className="p-2 border rounded w-full"
-                    />
-                  </td>
-                </tr>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-bold">
-                      Candidate Status:<span className="text-red-500">*</span>
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <select
-                      name="candidateStatus"
-                      value={form.candidateStatus || ""}
-                      onChange={handleChange}
-                      className="p-2 mb-2 border rounded w-full"
-                      disabled={isInternal}
-                      required
-                    >
-                      <option value="">Choose..</option>
-                      {candidateStatuses.map((status) => (
-                        <option
-                          key={status.candidateStatusId}
-                          value={status.candidateStatus}
-                        >
-                          {status.candidateStatus}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-bold">
-                      Candidate Additional Remark:
-                      <span className="text-red-500">*</span>
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <textarea
-                      name="candidateRemark"
-                      value={form.candidateRemark || ""}
-                      onChange={handleChange}
-                      className="p-2 mb-2 border rounded w-full resize-none"
-                      disabled={isInternal}
-                      required
-                    />
-                  </td>
-                </tr>
-                <tr className="flex flex-wrap md:flex-nowrap">
-                  <td className="p-2 w-full md:w-1/4">
-                    <label className="font-bold">
-                      Candidate Selection Date:
-                      <span className="text-red-500">*</span>
-                    </label>
-                  </td>
-                  <td className="p-2 w-full md:w-1/4">
-                    <input
-                      type="date"
-                      name="candidateStatusDate"
-                      value={form.candidateStatusDate || ""}
-                      required
-                      // disabled={!form.candSelectDateEnabled}
-                      onChange={handleChange}
-                      className="p-2 mb-2 border rounded w-full"
-                      disabled={isInternal}
-                      min={today}
-                    />
-                  </td>
-                </tr>
-              </div>
-
-              <tr>
-                <td colSpan="4" className="p-2">
-                  <div className="flex justify-center space-x-4">
-                    <button
-                      type="submit"
-                      className="bg-blue-500 text-white py-2 px-10 rounded"
-                    >
-                      Update
-                    </button>
-                    <button
-                      type="button"
-                      className="bg-gray-500 text-white py-2 px-10 rounded"
-                      onClick={handleCancel}
-                    >
-                      Cancel
-                    </button>
-                  </div>
+              <tr className="flex flex-wrap md:flex-nowrap">
+                {/* Recruiter Name */}
+                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="recruiterName">Recruiter Name:</label>
+                  <input
+                    type="text"
+                    name="recruiterName"
+                    value={form.recruiterName || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                  />
                 </td>
+
+                {/* Proposed Rate */}
+                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="proposedRate">Proposed Rate:</label>
+                  <input
+                    type="number"
+                    name="proposedRate"
+                    value={form.proposedRate || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                  />
+                </td>
+                <div className="p-2 w-full md:w-1/4">
+                  <label className="block mb-1">
+                    Interview Evidences
+                  </label>
+                  <input
+                    type="file"
+                    name="evidence"
+                    data-testid="evidence-upload"
+                    accept=".png,.jpg,.jpeg,.doc,.docx"
+                    multiple
+                    onChange={handleFileChange}
+                    className="p-2 border rounded w-full"
+                  />
+                  <div className="mt-2">
+                    <p className="font-bold">
+                      Uploaded Files ({uploadedFiles.length}):
+                    </p>
+                    <ul>
+                      {uploadedFiles.map((file, index) => {
+                        const isRealFile =
+                          file.fileObject instanceof File &&
+                          file.fileObject.size > 0;
+                        const backendUrl = `http://localhost:8080/uploads/${encodeURIComponent(
+                          file.fileName
+                        )}`;
+                        return (
+                          <li
+                            key={index}
+                            className="flex items-center space-x-4"
+                          >
+                            <span>{file.fileName || file.name}</span>
+                            {/* Download Button */}
+                            <button
+                              type="button"
+                              className="text-green-500 border border-green-500 rounded-full flex justify-center items-center p-1"
+                              onClick={async () => {
+                                if (isRealFile) {
+                                  const url = URL.createObjectURL(
+                                    file.fileObject
+                                  );
+                                  const a = document.createElement("a");
+                                  a.href = url;
+                                  a.download = file.fileName || file.name;
+                                  document.body.appendChild(a);
+                                  a.click();
+                                  document.body.removeChild(a);
+                                  URL.revokeObjectURL(url);
+                                } else {
+                                  try {
+                                    const response = await fetch(backendUrl);
+                                    const blob = await response.blob();
+                                    const url =
+                                      window.URL.createObjectURL(blob);
+                                    const a = document.createElement("a");
+                                    a.href = url;
+                                    a.download = file.fileName || file.name;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                    window.URL.revokeObjectURL(url);
+                                  } catch (err) {
+                                    toast.error("Failed to download file.", {
+                                      position: "top-right",
+                                    });
+                                  }
+                                }
+                              }}
+                            >
+                              <FaDownload />
+                            </button>
+
+                            {/* View Button */}
+                            <button
+                              type="button"
+                              className="text-green-500 border border-green-500 rounded-full flex justify-center items-center p-1"
+                              onClick={() => {
+                                if (isRealFile) {
+                                  const url = URL.createObjectURL(
+                                    file.fileObject
+                                  );
+                                  window.open(url, "_blank");
+                                  setTimeout(
+                                    () => URL.revokeObjectURL(url),
+                                    60 * 1000
+                                  );
+                                } else {
+                                  window.open(backendUrl, "_blank");
+                                }
+                              }}
+                            >
+                              <FaEye />
+                            </button>
+
+                            {/* Remove Button */}
+                            <button
+                              type="button"
+                              className="text-red-500 border border-red-500 rounded-full flex justify-center items-center p-1"
+                              onClick={async () => {
+                                if (!isRealFile) {
+                                  try {
+                                    const response = await fetch(
+                                      `http://localhost:8080/evidence/delete?fileName=${encodeURIComponent(
+                                        file.fileName
+                                      )}&selectionId=${selectionId}`,
+                                      { method: "DELETE" }
+                                    );
+                                    if (response.ok) {
+                                      handleFileRemove(index);
+                                      toast.success(
+                                        "File deleted successfully.",
+                                        { position: "top-right" }
+                                      );
+                                    } else {
+                                      toast.error("Failed to delete file.", {
+                                        position: "top-right",
+                                      });
+                                    }
+                                  } catch (err) {
+                                    toast.error("Error deleting file.", {
+                                      position: "top-right",
+                                    });
+                                  }
+                                } else {
+                                  handleFileRemove(index);
+                                }
+                              }}
+                            >
+                              <ImCross />
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </div>
               </tr>
             </tbody>
           </table>
+        </div>
+
+        <h4 className="font-bold px-2 py-1 -mt-12 text-lg">
+          Tagging and Onboarding Details
+        </h4>
+        <div>
+        <tr className="flex flex-wrap md:flex-nowrap">
+          <td className="p-2 w-full md:w-1/4">
+            <label className="font-semobold block mb-1">
+              Status:<span className="text-red-500">*</span>
+            </label>
+            <select
+              name="status"
+              value={form.status || ""}
+              onChange={handleChange}
+              className="p-2 mb-2 border rounded w-full"
+              required
+            >
+              <option value="">Choose..</option>
+              <option value="CTool Pending">CTool Pending</option>
+              <option value="CTool Recieved">CTool Recieved</option>
+              <option value="Tagging Completed">Tagging Completed</option>
+              <option value="Tech Selection Done">Tech Selection Done</option>
+              <option value="DOJ Recieved">DOJ Recieved</option>
+              <option value="Onboarding Completed">Onboarding Completed</option>
+              <option value="Tagging Error">Tagging Error</option>
+              <option value="Rate Approval Pending">
+                Rate Approval Pending
+              </option>
+              <option value="Rate To Be Changed">Rate To Be Changed</option>
+              <option value="Candidate not yet joined">
+                Candidate not yet joined
+              </option>
+              <option value="Drop Out Case">Drop Out Case</option>
+            </select>
+          </td>
+
+          <td className="p-2 w-full md:w-1/4">
+            <label className="font-semobold block mb-1">
+              BGV Status:<span className="text-red-500">*</span>
+            </label>
+            <select
+              name="bgvStatus"
+              value={form.bgvStatus || ""}
+              onChange={handleChange}
+              className="p-2 mb-2 border rounded w-full"
+              required
+            >
+              <option value="">Choose..</option>
+              <option value="BGV Initiated">BGV Initiated</option>
+              <option value="In progress">In progress</option>
+              <option value="Minor Discrepancy">Minor Discrepancy</option>
+              <option value="Major Discrepancy">Major Discrepancy</option>
+              <option value="Offer yet to be released">
+                Offer Yet to be Released
+              </option>
+              <option value="Interim Cleared">Interim Cleared</option>
+              <option value="BGV Completed">BGV Completed</option>
+              <option value="Pending with Employee">
+                Pending with Employee
+              </option>
+            </select>
+          </td>
+
+          <td className="p-2 w-full md:w-1/4">
+            <label className="font-semobold block mb-1">
+              Status Additional Remark:<span className="text-red-500">*</span>
+            </label>
+            <textarea
+              name="addRemark"
+              value={form.addRemark || ""}
+              onChange={handleChange}
+              className="p-2 mb-2 border rounded w-full resize-none h-[40px]"
+              required
+            />
+          </td>
+
+          <td className="p-2 w-full md:w-1/4">
+            <label className=" block mb-1">
+              BGV Additional Remark:<span className="text-red-500">*</span>
+            </label>
+            <textarea
+              name="bgvRemark"
+              value={form.bgvRemark || ""}
+              onChange={handleChange}
+              className="p-2 mb-2 border rounded w-full resize-none h-[40px]"
+              required
+            />
+          </td>
+        </tr>
+        <tr className="flex flex-wrap md:flex-nowrap">
+          <td className="p-2 w-full md:w-1/4">
+            <label className="block mb-1">
+              CTool Start Date:<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="date"
+              name="ctoolStartDate"
+              value={form.ctoolStartDate || ""}
+              required
+              onChange={handleChange}
+              className="p-2 mb-2 border rounded w-full"
+              min={form.dojRecDate}
+            />
+          </td>
+
+          <td className="p-2 w-full md:w-1/4">
+            <label className="block mb-1">
+              BGV Initiated Date:<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="date"
+              name="bgvInitiatedDate"
+              value={form.bgvInitiatedDate || ""}
+              required
+              onChange={handleChange}
+              className="p-2 mb-2 border rounded w-full"
+            />
+          </td>
+
+          <td className="p-2 w-full md:w-1/4">
+            <label className="block mb-1">Tagging date:</label>
+            <input
+              type="date"
+              name="tagDate"
+              value={form.tagDate || ""}
+              onChange={handleChange}
+              className="p-2 mb-2 border rounded w-full"
+              min={today}
+            />
+          </td>
+
+          <td className="p-2 w-full md:w-1/4">
+            <label className="block mb-1">Tech Selection Date:</label>
+            <input
+              type="date"
+              name="techSelectDate"
+              value={form.techSelectDate || ""}
+              disabled={!form.tagDate}
+              onChange={handleChange}
+              className="p-2 mb-2 border rounded w-full"
+              min={today}
+            />
+          </td>
+        </tr>
+
+        <tr className="flex flex-wrap md:flex-nowrap">
+          <td className="p-2 w-full md:w-1/4">
+            <label className="block mb-1">DOJ Received Date:</label>
+            <input
+              type="date"
+              name="dojRecDate"
+              value={form.dojRecDate || ""}
+              disabled={!form.techSelectDate}
+              onChange={handleChange}
+              className="p-2 mb-2 border rounded w-full"
+              min={today}
+            />
+          </td>
+
+          <td className="p-2 w-full md:w-1/4">
+            <label className=" block mb-1">Onboarding Date:</label>
+            <input
+              type="date"
+              name="onboardingDate"
+              value={form.onboardingDate || ""}
+              disabled={!form.dojRecDate}
+              onChange={handleChange}
+              className="p-2 mb-2 border rounded w-full"
+              min={today}
+            />
+          </td>
+
+          <td className="p-2 w-full md:w-1/4">
+            <label className="block mb-1">
+              Billing Start Date:<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="date"
+              name="billingStartDate"
+              value={form.billingStartDate || ""}
+              required
+              onChange={handleChange}
+              className="p-2 mb-2 border rounded w-full"
+              disabled={!form.onboardingDate}
+              min={form.onboardingDate}
+            />
+          </td>
+
+          <td className="p-2 w-full md:w-1/4">
+            <label className="block mb-1">HSBC ID:</label>
+            <input
+              type="number"
+              name="hsbcId"
+              value={form.hsbcId || ""}
+              onChange={handleChange}
+              className="p-2 border rounded w-full"
+            />
+          </td>
+        </tr>
+      </div>
+
+        <div className="border border-gray-300 rounded-md shadow mb-28  space-y-3">
+          <h1 className="font-bold px-2 py-1 mt-4">For External Only</h1>
+
+          <tr className="flex flex-wrap md:flex-nowrap">
+            <td className="p-2 w-full md:w-1/4">
+              <label className="block mb-1">
+                Offer Release Status:
+              </label>
+              <select
+                name="offerReleaseStatus"
+                onChange={handleChange}
+                value={form.offerReleaseStatus || ""}
+                className="p-2 border rounded w-full"
+              >
+                <option value="">Choose...</option>
+                <option value="Pending">Pending</option>
+                <option value="On Hold">On Hold</option>
+                <option value="Released">Released</option>
+                <option value="WIP">WIP</option>
+              </select>
+            </td>
+
+            <td className="p-2 w-full md:w-1/4">
+              <label className="block mb-1">
+                LTI Onboarding Date:
+              </label>
+              <input
+                type="date"
+                name="ltiOnboardDate"
+                value={form.ltiOnboardDate || ""}
+                onChange={handleChange}
+                className="p-2 border rounded w-full"
+              />
+            </td>
+
+            <td className="p-2 w-full md:w-1/4">
+              <label className=" block mb-1">
+                Candidate Status:<span className="text-red-500">*</span>
+              </label>
+              <select
+                name="candidateStatus"
+                value={form.candidateStatus || ""}
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full"
+                disabled={isInternal}
+                required
+              >
+                <option value="">Choose..</option>
+                {candidateStatuses.map((status) => (
+                  <option
+                    key={status.candidateStatusId}
+                    value={status.candidateStatus}
+                  >
+                    {status.candidateStatus}
+                  </option>
+                ))}
+              </select>
+            </td>
+
+            <td className="p-2 w-full md:w-1/4">
+              <label className="block mb-1">
+                Candidate Additional Remark:
+                <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                name="candidateRemark"
+                value={form.candidateRemark || ""}
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full resize-none h-[40px]"
+                disabled={isInternal}
+                required
+              />
+            </td>
+
+            <td className="p-2 w-full md:w-1/4">
+              <label className="block mb-1">
+                Candidate Selection Date:<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                name="candidateStatusDate"
+                value={form.candidateStatusDate || ""}
+                required
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full"
+                disabled={isInternal}
+                min={today}
+              />
+            </td>
+          </tr>
+        </div>
+
+        <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 z-50 p-4 pl-16 flex justify-start space-x-4 shadow-md">
+          <div className="flex justify-center space-x-4">
+            <button
+              type="submit"
+              className="bg-blue-900 text-white py-2 px-10 rounded hover:bg-gray-500"
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              className="text-blue-900 border border-blue-900 bg-transparent py-2 px-10 rounded hover:bg-gray-500"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </form>
       <ToastContainer
