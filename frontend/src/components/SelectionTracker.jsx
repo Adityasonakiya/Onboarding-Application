@@ -293,10 +293,14 @@ function SelectionTracker() {
       salespoc: selectedLob?.salesPOC || "",
     }));
     if (selectedLob) {
-    console.log(selectedLob.hsbchead,selectedLob.deliveryManager,selectedLob.salesPOC);
-  } else {
-    console.log("No LOB selected or LOB not found.");
-  }
+      console.log(
+        selectedLob.hsbchead,
+        selectedLob.deliveryManager,
+        selectedLob.salesPOC
+      );
+    } else {
+      console.log("No LOB selected or LOB not found.");
+    }
     setErrors((prevErrors) => ({
       ...prevErrors,
       lob: value ? "" : "This field is required.",
@@ -507,7 +511,7 @@ function SelectionTracker() {
       if (
         !readOnly &&
         taggingDetails.onboardingStatus.onboardingStatus !==
-          "Onboarding Completed"
+        "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -562,7 +566,7 @@ function SelectionTracker() {
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-          "Onboarding Completed"
+        "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -617,7 +621,7 @@ function SelectionTracker() {
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-          "Onboarding Completed"
+        "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -891,19 +895,22 @@ function SelectionTracker() {
     }
   };
   return (
-    <div className="w-full px-4 py-6">
-      <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">
+    <div className="max-w-10xl mx-auto bg-white shadow-lg rounded-lg p-4">
+      <h1 className="text-2xl font-bold text-left text-black mb-6">
         HSBC Selection Tracker Form
       </h1>
       <form onSubmit={handleSubmit}>
-        <div className="overflow-x-auto">
+        <h4 className="text-base font-bold text-black-700 border-b pb-2 mb-5 mt-6">
+          Employee Type
+        </h4>
+        <div className="overflow-x-auto -mt-2">
           <table className="w-full border-collapse">
             <tbody>
               <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">Internal</label>
+                <td className="p-2 w-full md:w-1/8" colSpan={2}>
+                  <label className="font-semobold">Internal</label>
                 </td>
-                <td className="p-2 w-full md:w-1/4">
+                <td className="p-2 w-full md:w-1/8">
                   <input
                     type="radio"
                     name="psidType"
@@ -914,10 +921,10 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   />
                 </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">External</label>
+                <td className="p-2 w-full md:w-1/8">
+                  <label className="font-semobold">External</label>
                 </td>
-                <td className="p-2 w-full md:w-1/4">
+                <td className="p-2 w-full md:w-1/8">
                   <input
                     type="radio"
                     name="psidType"
@@ -931,7 +938,7 @@ function SelectionTracker() {
               </tr>
               <tr className="flex flex-wrap md:flex-nowrap ">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
+                  <label className="font-semobold">
                     PS ID:<span className="text-red-500">*</span>
                   </label>
                 </td>
@@ -942,9 +949,8 @@ function SelectionTracker() {
                     value={form.psId || ""}
                     onChange={handleChange}
                     required
-                    className={`p-2 border rounded w-full ${
-                      errors.psId ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.psId ? "border-red-500" : ""
+                      }`}
                     disabled={!isInternal || readOnly}
                     pattern="\d*"
                   />
@@ -953,7 +959,7 @@ function SelectionTracker() {
                   )}
                 </td>
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold" htmlFor="vendor-select">
+                  <label className="font-semobold" htmlFor="vendor-select">
                     Vendor:
                   </label>
                 </td>
@@ -963,9 +969,8 @@ function SelectionTracker() {
                     id="vendor-select"
                     value={form.vendors?.vendorId || ""}
                     onChange={handleVendorChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.vendorId ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
+                      }`}
                     disabled={isInternal || readOnly}
                   >
                     <option value="">Select Vendor</option>
@@ -983,185 +988,152 @@ function SelectionTracker() {
                   )}
                 </td>
               </tr>
-              <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
-                Basic Info
-              </h4>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">First Name:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+              <h4 className="text-lg font-bold px-2 py-1 mt-4">Basic Info</h4>
+              <div className="flex flex-wrap md:flex-nowrap">
+                <div className="p-2 w-full md:w-1/4">
+                  <label>First Name:</label>
                   <input
                     type="text"
                     name="fname"
                     value={form.fname || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled={isInternal || readOnly}
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Last Name:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Last Name:</label>
                   <input
                     type="text"
                     name="lname"
                     value={form.lname || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled={isInternal || readOnly}
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Grade:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Grade:</label>
                   <input
                     type="text"
                     name="grade"
                     value={form.grade || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Location:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Location:</label>
                   <input
                     type="text"
                     name="location"
                     value={form.location || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">PU:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+              </div>
+
+              <div className="flex flex-wrap md:flex-nowrap">
+                <div className="p-2 w-full md:w-1/4">
+                  <label>PU:</label>
                   <input
                     type="text"
                     name="pu"
                     value={form.pu || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Total Exp:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Total Exp:</label>
                   <input
                     type="number"
                     name="totalExp"
-                    value={form.totalExp || ""}
+                    value={form.tot || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Skill:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Skill:</label>
                   <input
                     type="text"
                     name="skill"
                     value={form.skill || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Mail ID:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Mail ID:</label>
                   <input
                     type="text"
                     name="email"
                     value={form.email || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
+                </div>
+              </div>
+              <div className="flex-wrap md:flex-nowrap">
+                <div className="p-2 w-full md:w-1/4">
+                  <label>
                     Phone Number:
                     <span className="text-red-500" hidden={isInternal}>
                       *
                     </span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4" colSpan="2">
                   <input
                     type="text"
                     name="phone"
                     value={form.phone || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full bg-slate-100 ${
-                      errors.phone ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.phone ? "border-red-500" : ""
+                      }`}
                     disabled={isInternal || readOnly}
                     maxLength="10"
                   />
                   {errors.phone && (
                     <p className="text-red-500 text-sm">{errors.phone}</p>
                   )}
-                </td>
-              </tr>
+                </div>
+              </div>
             </tbody>
           </table>
         </div>
-        <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
+        <h4 className="font-bold px-2 py-1 mt-4">
           Selection Details
         </h4>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto max-h-[600px] pb-24">
           <table className="w-full border-collapse">
             <tbody>
-              <tr className="flex flex-wrap md:flex-nowrap items-center">
-                <td className="p-2 w-full md:w-1/4 flex items-center">
-                  <label className="font-semibold">
-                    Selection Date:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  {" "}
+              <div className="flex flex-wrap md:flex-nowrap items-center">
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="selectionDate">Selection Date:</label>
                   <input
                     type="date"
                     name="selectionDate"
                     required
                     value={form.selectionDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.selectionDate ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.selectionDate ? "border-red-500" : ""
+                      }`}
                     disabled={readOnly}
-                  />{" "}
+                  />
                   {errors.selectionDate && (
-                    <p className="text-red-500 text-sm">
-                      {errors.selectionDate}
-                    </p>
+                    <p className="text-red-500 text-sm">{errors.selectionDate}</p>
                   )}
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Base BU:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="bu">Base BU:</label>
                   <input
                     type="text"
                     name="bu"
@@ -1170,23 +1142,19 @@ function SelectionTracker() {
                     className="p-2 border rounded w-full"
                     disabled={isReadOnly}
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label htmlFor="lob-select" className="font-semibold">
+                </div>
+
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="lob-select">
                     LOB:<span className="text-red-500">*</span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
                   <select
                     value={form.lob?.lobId || ""}
                     onChange={handleLobChange}
                     name="lob"
                     id="lob-select"
-                    className={`p-2 bordered w-full ${
-                      errors.lob ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.lob ? "border-red-500" : ""
+                      }`}
                     disabled={isReadOnly}
                     required
                   >
@@ -1197,24 +1165,19 @@ function SelectionTracker() {
                       </option>
                     ))}
                   </select>
-                  {errors.lob && (
-                    <p className="text-red-500 text-sm">{errors.lob}</p>
-                  )}
-                </td>
+                  {errors.lob && <p className="text-red-500 text-sm">{errors.lob}</p>}
+                </div>
 
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold" htmlFor="sub-lob-select">
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="sub-lob-select">
                     Sub LOB:<span className="text-red-500">*</span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
                   <select
                     name="subLob"
                     id="sub-lob-select"
                     value={form.subLob?.subLOBid || ""}
-                    className={`p-2 border w-full ${
-                      errors.subLob ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.subLob ? "border-red-500" : ""
+                      }`}
                     onChange={handleSubLobChange}
                     disabled={isReadOnly}
                   >
@@ -1225,18 +1188,15 @@ function SelectionTracker() {
                       </option>
                     ))}
                   </select>
-                  {errors.subLob && (
-                    <p className="text-red-500 text-sm">{errors.subLob}</p>
-                  )}
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
+                  {errors.subLob && <p className="text-red-500 text-sm">{errors.subLob}</p>}
+                </div>
+              </div>
+              <div className="flex flex-wrap md:flex-nowrap">
+                {/* HSBC Hiring Manager */}
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="hiringManager">
                     HSBC Hiring Manager:<span className="text-red-500">*</span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
                   <input
                     type="text"
                     name="hiringManager"
@@ -1246,13 +1206,13 @@ function SelectionTracker() {
                     className="p-2 border rounded w-full"
                     disabled={isReadOnly}
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
+                </div>
+
+                {/* HSBC Head */}
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="head">
                     HSBC Head:<span className="text-red-500">*</span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
                   <input
                     type="text"
                     name="head"
@@ -1262,15 +1222,13 @@ function SelectionTracker() {
                     className="p-2 border rounded w-full"
                     disabled={isReadOnly}
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
+                </div>
+
+                {/* Delivery Manager */}
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="deliveryManager">
                     Delivery Manager:<span className="text-red-500">*</span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
                   <select
                     name="deliveryManager"
                     value={form.deliveryManager || ""}
@@ -1279,26 +1237,20 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   >
                     <option value="0">Choose..</option>
-                    <option value="Abhijeet Sureshchandra More">
-                      Abhijeet Sureshchandra More
-                    </option>
-                    <option value="Aniruddha Deshpande">
-                      Aniruddha Deshpande
-                    </option>
+                    <option value="Abhijeet Sureshchandra More">Abhijeet Sureshchandra More</option>
+                    <option value="Aniruddha Deshpande">Aniruddha Deshpande</option>
                     <option value="Arvind Deogade">Arvind Deogade</option>
-                    <option value="Chinni Krishna Nakka">
-                      Chinni Krishna Nakka
-                    </option>
+                    <option value="Chinni Krishna Nakka">Chinni Krishna Nakka</option>
                     <option value="Mayuresh Nirantar">Mayuresh Nirantar</option>
                     <option value="Rupali Khedekar">Rupali Khedekar</option>
                     <option value="Saber Sarode">Saber Sarode</option>
                     <option value="Sachin Shaha">Sachin Shaha</option>
                   </select>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Sales POC:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+
+                {/* Sales POC */}
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="salespoc">Sales POC:</label>
                   <select
                     name="salespoc"
                     value={form.salespoc || ""}
@@ -1314,13 +1266,13 @@ function SelectionTracker() {
                     <option value="Kinshuk Awasthi">Kinshuk Awasthi</option>
                     <option value="Ajay Pillai">Ajay Pillai</option>
                   </select>
-                </td>
-              </tr>
+                </div>
+              </div>
+
               <tr className="flex flex-wrap md:flex-nowrap">
+                {/* Pricing Model */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Pricing Model:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="pricingModel">Pricing Model:</label>
                   <select
                     name="pricingModel"
                     value={form.pricingModel || ""}
@@ -1334,28 +1286,24 @@ function SelectionTracker() {
                     <option value="Buffer">Buffer</option>
                   </select>
                 </td>
+
+                {/* IRM */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
+                  <label htmlFor="irm">
                     IRM:<span className="text-red-500">*</span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
                   <div className="relative w-full">
                     <input
                       type="text"
                       name="irm"
                       value={
-                        irmName && form.irm
-                          ? `${form.irm} (${irmName})`
-                          : form.irm || ""
+                        irmName && form.irm ? `${form.irm} (${irmName})` : form.irm || ""
                       }
                       onChange={handleIrmChange}
-                      className={`p-2 border rounded w-full pr-10 ${
-                        errors.irm ? "border-red-500" : ""
-                      }`}
+                      className={`p-2 border rounded w-full pr-10 ${errors.irm ? "border-red-500" : ""
+                        }`}
                       disabled={isReadOnly}
                     />
-
                     {/* Clear button */}
                     {irmName && (
                       <button
@@ -1374,12 +1322,10 @@ function SelectionTracker() {
                     <p className="text-red-500 text-sm">{errors.irm}</p>
                   )}
                 </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
+
+                {/* HSBC CTOOL ID */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">HSBC CTOOL ID:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolId">HSBC CTOOL ID:</label>
                   <input
                     type="number"
                     name="ctoolId"
@@ -1398,22 +1344,20 @@ function SelectionTracker() {
                     </div>
                   )}
                 </td>
-                <td className="p-2 w-full md:w-1/4 items-center">
-                  <label className="font-semibold">CTOOL Received Date:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4 flex items-center">
-                  {" "}
+
+                {/* CTOOL Received Date */}
+                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolRecDate">CTOOL Received Date:</label>
                   <input
                     type="date"
                     name="ctoolRecDate"
                     required
                     value={form.ctoolRecDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.ctoolRecDate ? "border-red-500" : ""
-                    }`}
+                    className={`p-2 border rounded w-full ${errors.ctoolRecDate ? "border-red-500" : ""
+                      }`}
                     disabled={readOnly}
-                  />{" "}
+                  />
                   {errors.ctoolRecDate && (
                     <p className="text-red-500 text-sm">
                       {errors.ctoolRecDate}
@@ -1421,95 +1365,51 @@ function SelectionTracker() {
                   )}
                 </td>
               </tr>
+
               <tr className="flex flex-wrap md:flex-nowrap">
+                {/* HSBC Roles */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">HSBC Roles:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <div ref={comboboxRef} style={{ position: "relative" }}>
-                    {/* Input field */}
+                  <label htmlFor="hsbcRoles">HSBC Roles:</label>
+                  <div ref={comboboxRef} className="relative w-full">
                     <input
                       type="text"
                       name="hsbcRoles"
                       placeholder="Search or select a role..."
                       value={searchTerm}
-                      className={`p-2 border w-full ${
-                        errors.hsbcRoles ? "border-red-500" : ""
-                      }`}
+                      className={`p-2 border rounded w-full ${errors.hsbcRoles ? "border-red-500" : ""}`}
                       disabled={isReadOnly}
                       onChange={handleSearch}
-                      onFocus={() => setShowDropdown(true)} // Open dropdown on focus
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        border: "1px solid #ccc",
-                        borderRadius: "4px",
-                      }}
+                      onFocus={() => setShowDropdown(true)}
                     />
-
-                    {/* Dropdown options (conditionally rendered) */}
+                    {/* Dropdown options */}
                     {showDropdown && filteredRoles.length > 0 && (
-                      <ul
-                        style={{
-                          position: "absolute",
-                          top: "100%",
-                          left: "0",
-                          width: "100%",
-                          maxHeight: "200px",
-                          overflowY: "auto",
-                          background: "#fff",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          zIndex: "1000",
-                          padding: "0",
-                          margin: "0",
-                          listStyleType: "none",
-                        }}
-                      >
+                      <ul className="absolute top-full left-0 w-full max-h-52 overflow-y-auto bg-white border border-gray-300 rounded z-10">
                         {filteredRoles.map((role) => (
                           <li
                             key={role.ref}
-                            onClick={() =>
-                              handleSelect(role.roleTitle, role.ref, role.grade)
-                            } // Properly update input value
-                            style={{
-                              padding: "8px",
-                              cursor: "pointer",
-                              borderBottom: "1px solid #f0f0f0",
-                            }}
+                            onClick={() => handleSelect(role.roleTitle, role.ref, role.grade)}
+                            className="px-2 py-1 cursor-pointer hover:bg-gray-100 border-b border-gray-100"
                           >
                             {role.roleTitle}
                           </li>
                         ))}
                       </ul>
                     )}
-
-                    {/* Fallback for no matches */}
+                    {/* No matches fallback */}
                     {showDropdown && filteredRoles.length === 0 && (
-                      <div
-                        style={{
-                          padding: "8px",
-                          background: "#fff",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          marginTop: "4px",
-                        }}
-                      >
+                      <div className="mt-1 p-2 bg-white border border-gray-300 rounded">
                         No matching roles found
                       </div>
                     )}
                   </div>
-
-                  {errors.lob && (
+                  {errors.hsbcRoles && (
                     <p className="text-red-500 text-sm">{errors.hsbcRoles}</p>
                   )}
                 </td>
-                <td></td>
 
+                {/* CTOOL Location */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">CTOOL Location:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolLocation">CTOOL Location:</label>
                   <input
                     type="text"
                     name="ctoolLocation"
@@ -1519,12 +1419,10 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   />
                 </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
+
+                {/* CTOOL Grade */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">CTOOL Grade:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolGrade">CTOOL Grade:</label>
                   <input
                     type="number"
                     name="ctoolGrade"
@@ -1534,10 +1432,10 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   />
                 </td>
+
+                {/* CTOOL Tagging Rate */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">CTOOL Tagging Rate:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolTaggingRate">CTOOL Tagging Rate:</label>
                   <input
                     type="number"
                     name="ctoolTaggingRate"
@@ -1548,11 +1446,11 @@ function SelectionTracker() {
                   />
                 </td>
               </tr>
+
               <tr className="flex flex-wrap md:flex-nowrap">
+                {/* Recruiter Name */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Recruiter Name:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="recruiterName">Recruiter Name:</label>
                   <input
                     type="text"
                     name="recruiterName"
@@ -1562,10 +1460,10 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   />
                 </td>
+
+                {/* Proposed Rate */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Proposed Rate:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="proposedRate">Proposed Rate:</label>
                   <input
                     type="number"
                     name="proposedRate"
@@ -1575,64 +1473,23 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   />
                 </td>
-                {/* <td className="p-2 w-full md:w-1/4 items-center">
-                  <label className="font-semibold">LTI Onboarding Date:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4 flex items-center">
-                  {" "}
-                  <input
-                    type="date"
-                    name="ltiOnboardDate"
-                    required
-                    value={form.ltiOnboardDate || ""}
-                    onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.ltiOnboardDate ? "border-red-500" : ""
-                      }`}
-                    disabled={readOnly}
-                  />{" "}
-                  {errors.ltiOnboardDate && (
-                    <p className="text-red-500 text-sm">
-                      {errors.ltiOnboardDate}
-                    </p>
-                  )}
-                </td> */}
               </tr>
-              {/* <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Offer Release Status:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <select
-                    name="offerReleaseStatus"
-                    value={form.offerReleaseStatus || ""}
-                    onChange={handleChange}
-                    className="p-2 border rounded w-full"
-                    disabled={isReadOnly}
-                  >
-                    <option value="">Choose...</option>
-                    <option value="Pending">Pending</option>
-                    <option value="On Hold">On Hold</option>
-                    <option value="Release">Released</option>
-                    <option value="WIP">WIP</option>
-                  </select>
-                </td>
-              </tr> */}
               {!isReadOnly && (
                 <tr>
                   <td colSpan="4" className="p-2">
-                    <div className="flex justify-center space-x-4">
+                    <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 z-50 p-4 pl-16 flex justify-start space-x-4 shadow-md">
                       <button
                         type="submit"
                         onClick={handleSubmit}
-                        className="bg-blue-500 text-white py-2 px-10 rounded"
+                        className="bg-blue-900 text-white py-2 px-10 rounded hover:bg-gray-500"
                         disabled={form.invalid}
-                        // disabled={isSubmitting}
+                      // disabled={isSubmitting}
                       >
                         Submit
                       </button>
                       <button
                         type="button"
-                        className="bg-gray-500 text-white py-2 px-10 rounded"
+                        className="text-blue-900 border border-blue-900 bg-transparent py-2 px-10 rounded hover:bg-gray-500"
                         onClick={handleCancel}
                       >
                         Cancel
