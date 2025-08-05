@@ -868,80 +868,89 @@ function UpdateDetails() {
           <table className="w-full border-collapse">
             <tbody>
               <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/8" colSpan={2}>
-                  <label htmlFor="internal" className="font-semobold">
+                <td
+                  className="p-2 w-full md:w-1/4 flex items-center gap-4"
+                  colSpan={2}
+                >
+                  <label htmlFor="internal" className="font-semibold">
                     Internal
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/8">
                   <input
                     id="internal"
                     type="radio"
-                    name="internal"
+                    name="psidType"
                     checked={isInternal}
                     onChange={handleChange}
                     className="p-2"
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/8">
-                  <label htmlFor="external" className="font-semobold">
+                  <div className="mx-8" />
+                  <label htmlFor="external" className="font-semibold">
                     External
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/8">
                   <input
                     id="external"
                     type="radio"
-                    name="external"
+                    name="psidType"
                     checked={!isInternal}
                     onChange={handleChange}
                     className="p-2"
                   />
                 </td>
               </tr>
+
               <tr className="flex flex-wrap md:flex-nowrap">
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semobold">
-                    PS ID:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="text"
-                    name="psId"
-                    value={psId}
-                    onChange={handlePsIdChange}
-                    required
-                    className="p-2 border rounded w-full"
-                    disabled={!isInternal}
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semobold">Vendor:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4" colSpan="2">
-                  <select
-                    name="vendors"
-                    value={form.vendors?.vendorId || ""}
-                    onChange={handleVendorChange}
-                    required
-                    className={`p-2 border rounded w-full ${
-                      errors.vendorId ? "border-red-500" : ""
-                    }`}
-                    disabled={isInternal}
-                  >
-                    <option value="">Select Vendor</option>
-                    {vendors.map((vendor) => (
-                      <option key={vendor.vendorId} value={vendor.vendorId}>
-                        {vendor.vendorName}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.vendorId && (
-                    <p className="text-red-500 text-sm mb-4">
-                      {errors.vendorId}
-                    </p>
-                  )}
+                  <div className="flex flex-col md:flex-row gap-4">
+                    {/* PS ID Field */}
+                    <div className="flex-1">
+                      <label className="font-semibold">
+                        PS ID:<span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="psId"
+                        value={psId}
+                        onChange={handlePsIdChange}
+                        required
+                        className={`p-2 h-10 border rounded w-full md:w-[300px] ${
+                          errors.psId ? "border-red-500" : ""
+                        }`}
+                        disabled={!isInternal}
+                      />
+                      {errors.psId && (
+                        <p className="text-red-500 text-sm mb-4">
+                          {errors.psId}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Vendor Dropdown */}
+                    <div className="flex-1">
+                      <label className="font-semibold">Vendor:</label>
+                      <select
+                        name="vendors"
+                        value={form.vendors?.vendorId || ""}
+                        onChange={handleVendorChange}
+                        required
+                        className={`p-2 h-10 border rounded w-full md:w-[300px] ${
+                          errors.vendorId ? "border-red-500" : ""
+                        }`}
+                        disabled={isInternal}
+                      >
+                        <option value="">Select Vendor</option>
+                        {vendors.map((vendor) => (
+                          <option key={vendor.vendorId} value={vendor.vendorId}>
+                            {vendor.vendorName}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.vendorId && (
+                        <p className="text-red-500 text-sm mb-4">
+                          {errors.vendorId}
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </td>
               </tr>
 
@@ -1421,9 +1430,7 @@ function UpdateDetails() {
                   />
                 </td>
                 <div className="p-2 w-full md:w-1/4">
-                  <label className="block mb-1">
-                    Interview Evidences
-                  </label>
+                  <label className="block mb-1">Interview Evidences</label>
                   <input
                     type="file"
                     name="evidence"
@@ -1564,210 +1571,210 @@ function UpdateDetails() {
           Tagging and Onboarding Details
         </h4>
         <div>
-        <tr className="flex flex-wrap md:flex-nowrap">
-          <td className="p-2 w-full md:w-1/4">
-            <label className="font-semobold block mb-1">
-              Status:<span className="text-red-500">*</span>
-            </label>
-            <select
-              name="status"
-              value={form.status || ""}
-              onChange={handleChange}
-              className="p-2 mb-2 border rounded w-full"
-              required
-            >
-              <option value="">Choose..</option>
-              <option value="CTool Pending">CTool Pending</option>
-              <option value="CTool Recieved">CTool Recieved</option>
-              <option value="Tagging Completed">Tagging Completed</option>
-              <option value="Tech Selection Done">Tech Selection Done</option>
-              <option value="DOJ Recieved">DOJ Recieved</option>
-              <option value="Onboarding Completed">Onboarding Completed</option>
-              <option value="Tagging Error">Tagging Error</option>
-              <option value="Rate Approval Pending">
-                Rate Approval Pending
-              </option>
-              <option value="Rate To Be Changed">Rate To Be Changed</option>
-              <option value="Candidate not yet joined">
-                Candidate not yet joined
-              </option>
-              <option value="Drop Out Case">Drop Out Case</option>
-            </select>
-          </td>
+          <tr className="flex flex-wrap md:flex-nowrap">
+            <td className="p-2 w-full md:w-1/4">
+              <label className="font-semobold block mb-1">
+                Status:<span className="text-red-500">*</span>
+              </label>
+              <select
+                name="status"
+                value={form.status || ""}
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full"
+                required
+              >
+                <option value="">Choose..</option>
+                <option value="CTool Pending">CTool Pending</option>
+                <option value="CTool Recieved">CTool Recieved</option>
+                <option value="Tagging Completed">Tagging Completed</option>
+                <option value="Tech Selection Done">Tech Selection Done</option>
+                <option value="DOJ Recieved">DOJ Recieved</option>
+                <option value="Onboarding Completed">
+                  Onboarding Completed
+                </option>
+                <option value="Tagging Error">Tagging Error</option>
+                <option value="Rate Approval Pending">
+                  Rate Approval Pending
+                </option>
+                <option value="Rate To Be Changed">Rate To Be Changed</option>
+                <option value="Candidate not yet joined">
+                  Candidate not yet joined
+                </option>
+                <option value="Drop Out Case">Drop Out Case</option>
+              </select>
+            </td>
 
-          <td className="p-2 w-full md:w-1/4">
-            <label className="font-semobold block mb-1">
-              BGV Status:<span className="text-red-500">*</span>
-            </label>
-            <select
-              name="bgvStatus"
-              value={form.bgvStatus || ""}
-              onChange={handleChange}
-              className="p-2 mb-2 border rounded w-full"
-              required
-            >
-              <option value="">Choose..</option>
-              <option value="BGV Initiated">BGV Initiated</option>
-              <option value="In progress">In progress</option>
-              <option value="Minor Discrepancy">Minor Discrepancy</option>
-              <option value="Major Discrepancy">Major Discrepancy</option>
-              <option value="Offer yet to be released">
-                Offer Yet to be Released
-              </option>
-              <option value="Interim Cleared">Interim Cleared</option>
-              <option value="BGV Completed">BGV Completed</option>
-              <option value="Pending with Employee">
-                Pending with Employee
-              </option>
-            </select>
-          </td>
+            <td className="p-2 w-full md:w-1/4">
+              <label className="font-semobold block mb-1">
+                BGV Status:<span className="text-red-500">*</span>
+              </label>
+              <select
+                name="bgvStatus"
+                value={form.bgvStatus || ""}
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full"
+                required
+              >
+                <option value="">Choose..</option>
+                <option value="BGV Initiated">BGV Initiated</option>
+                <option value="In progress">In progress</option>
+                <option value="Minor Discrepancy">Minor Discrepancy</option>
+                <option value="Major Discrepancy">Major Discrepancy</option>
+                <option value="Offer yet to be released">
+                  Offer Yet to be Released
+                </option>
+                <option value="Interim Cleared">Interim Cleared</option>
+                <option value="BGV Completed">BGV Completed</option>
+                <option value="Pending with Employee">
+                  Pending with Employee
+                </option>
+              </select>
+            </td>
 
-          <td className="p-2 w-full md:w-1/4">
-            <label className="font-semobold block mb-1">
-              Status Additional Remark:<span className="text-red-500">*</span>
-            </label>
-            <textarea
-              name="addRemark"
-              value={form.addRemark || ""}
-              onChange={handleChange}
-              className="p-2 mb-2 border rounded w-full resize-none h-[40px]"
-              required
-            />
-          </td>
+            <td className="p-2 w-full md:w-1/4">
+              <label className="font-semobold block mb-1">
+                Status Additional Remark:<span className="text-red-500">*</span>
+              </label>
+              <textarea
+                name="addRemark"
+                value={form.addRemark || ""}
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full resize-none h-[40px]"
+                required
+              />
+            </td>
 
-          <td className="p-2 w-full md:w-1/4">
-            <label className=" block mb-1">
-              BGV Additional Remark:<span className="text-red-500">*</span>
-            </label>
-            <textarea
-              name="bgvRemark"
-              value={form.bgvRemark || ""}
-              onChange={handleChange}
-              className="p-2 mb-2 border rounded w-full resize-none h-[40px]"
-              required
-            />
-          </td>
-        </tr>
-        <tr className="flex flex-wrap md:flex-nowrap">
-          <td className="p-2 w-full md:w-1/4">
-            <label className="block mb-1">
-              CTool Start Date:<span className="text-red-500">*</span>
-            </label>
-            <input
-              type="date"
-              name="ctoolStartDate"
-              value={form.ctoolStartDate || ""}
-              required
-              onChange={handleChange}
-              className="p-2 mb-2 border rounded w-full"
-              min={form.dojRecDate}
-            />
-          </td>
+            <td className="p-2 w-full md:w-1/4">
+              <label className=" block mb-1">
+                BGV Additional Remark:<span className="text-red-500">*</span>
+              </label>
+              <textarea
+                name="bgvRemark"
+                value={form.bgvRemark || ""}
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full resize-none h-[40px]"
+                required
+              />
+            </td>
+          </tr>
+          <tr className="flex flex-wrap md:flex-nowrap">
+            <td className="p-2 w-full md:w-1/4">
+              <label className="block mb-1">
+                CTool Start Date:<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                name="ctoolStartDate"
+                value={form.ctoolStartDate || ""}
+                required
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full"
+                min={form.dojRecDate}
+              />
+            </td>
 
-          <td className="p-2 w-full md:w-1/4">
-            <label className="block mb-1">
-              BGV Initiated Date:<span className="text-red-500">*</span>
-            </label>
-            <input
-              type="date"
-              name="bgvInitiatedDate"
-              value={form.bgvInitiatedDate || ""}
-              required
-              onChange={handleChange}
-              className="p-2 mb-2 border rounded w-full"
-            />
-          </td>
+            <td className="p-2 w-full md:w-1/4">
+              <label className="block mb-1">
+                BGV Initiated Date:<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                name="bgvInitiatedDate"
+                value={form.bgvInitiatedDate || ""}
+                required
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full"
+              />
+            </td>
 
-          <td className="p-2 w-full md:w-1/4">
-            <label className="block mb-1">Tagging date:</label>
-            <input
-              type="date"
-              name="tagDate"
-              value={form.tagDate || ""}
-              onChange={handleChange}
-              className="p-2 mb-2 border rounded w-full"
-              min={today}
-            />
-          </td>
+            <td className="p-2 w-full md:w-1/4">
+              <label className="block mb-1">Tagging date:</label>
+              <input
+                type="date"
+                name="tagDate"
+                value={form.tagDate || ""}
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full"
+                min={today}
+              />
+            </td>
 
-          <td className="p-2 w-full md:w-1/4">
-            <label className="block mb-1">Tech Selection Date:</label>
-            <input
-              type="date"
-              name="techSelectDate"
-              value={form.techSelectDate || ""}
-              disabled={!form.tagDate}
-              onChange={handleChange}
-              className="p-2 mb-2 border rounded w-full"
-              min={today}
-            />
-          </td>
-        </tr>
+            <td className="p-2 w-full md:w-1/4">
+              <label className="block mb-1">Tech Selection Date:</label>
+              <input
+                type="date"
+                name="techSelectDate"
+                value={form.techSelectDate || ""}
+                disabled={!form.tagDate}
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full"
+                min={today}
+              />
+            </td>
+          </tr>
 
-        <tr className="flex flex-wrap md:flex-nowrap">
-          <td className="p-2 w-full md:w-1/4">
-            <label className="block mb-1">DOJ Received Date:</label>
-            <input
-              type="date"
-              name="dojRecDate"
-              value={form.dojRecDate || ""}
-              disabled={!form.techSelectDate}
-              onChange={handleChange}
-              className="p-2 mb-2 border rounded w-full"
-              min={today}
-            />
-          </td>
+          <tr className="flex flex-wrap md:flex-nowrap">
+            <td className="p-2 w-full md:w-1/4">
+              <label className="block mb-1">DOJ Received Date:</label>
+              <input
+                type="date"
+                name="dojRecDate"
+                value={form.dojRecDate || ""}
+                disabled={!form.techSelectDate}
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full"
+                min={today}
+              />
+            </td>
 
-          <td className="p-2 w-full md:w-1/4">
-            <label className=" block mb-1">Onboarding Date:</label>
-            <input
-              type="date"
-              name="onboardingDate"
-              value={form.onboardingDate || ""}
-              disabled={!form.dojRecDate}
-              onChange={handleChange}
-              className="p-2 mb-2 border rounded w-full"
-              min={today}
-            />
-          </td>
+            <td className="p-2 w-full md:w-1/4">
+              <label className=" block mb-1">Onboarding Date:</label>
+              <input
+                type="date"
+                name="onboardingDate"
+                value={form.onboardingDate || ""}
+                disabled={!form.dojRecDate}
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full"
+                min={today}
+              />
+            </td>
 
-          <td className="p-2 w-full md:w-1/4">
-            <label className="block mb-1">
-              Billing Start Date:<span className="text-red-500">*</span>
-            </label>
-            <input
-              type="date"
-              name="billingStartDate"
-              value={form.billingStartDate || ""}
-              required
-              onChange={handleChange}
-              className="p-2 mb-2 border rounded w-full"
-              disabled={!form.onboardingDate}
-              min={form.onboardingDate}
-            />
-          </td>
+            <td className="p-2 w-full md:w-1/4">
+              <label className="block mb-1">
+                Billing Start Date:<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                name="billingStartDate"
+                value={form.billingStartDate || ""}
+                required
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full"
+                disabled={!form.onboardingDate}
+                min={form.onboardingDate}
+              />
+            </td>
 
-          <td className="p-2 w-full md:w-1/4">
-            <label className="block mb-1">HSBC ID:</label>
-            <input
-              type="number"
-              name="hsbcId"
-              value={form.hsbcId || ""}
-              onChange={handleChange}
-              className="p-2 border rounded w-full"
-            />
-          </td>
-        </tr>
-      </div>
+            <td className="p-2 w-full md:w-1/4">
+              <label className="block mb-1">HSBC ID:</label>
+              <input
+                type="number"
+                name="hsbcId"
+                value={form.hsbcId || ""}
+                onChange={handleChange}
+                className="p-2 border rounded w-full"
+              />
+            </td>
+          </tr>
+        </div>
 
         <div className="border border-gray-300 rounded-md shadow mb-28  space-y-3">
           <h1 className="font-bold px-2 py-1 mt-4">For External Only</h1>
 
           <tr className="flex flex-wrap md:flex-nowrap">
             <td className="p-2 w-full md:w-1/4">
-              <label className="block mb-1">
-                Offer Release Status:
-              </label>
+              <label className="block mb-1">Offer Release Status:</label>
               <select
                 name="offerReleaseStatus"
                 onChange={handleChange}
@@ -1783,9 +1790,7 @@ function UpdateDetails() {
             </td>
 
             <td className="p-2 w-full md:w-1/4">
-              <label className="block mb-1">
-                LTI Onboarding Date:
-              </label>
+              <label className="block mb-1">LTI Onboarding Date:</label>
               <input
                 type="date"
                 name="ltiOnboardDate"

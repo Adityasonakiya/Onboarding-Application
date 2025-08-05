@@ -511,7 +511,7 @@ function SelectionTracker() {
       if (
         !readOnly &&
         taggingDetails.onboardingStatus.onboardingStatus !==
-        "Onboarding Completed"
+          "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -566,7 +566,7 @@ function SelectionTracker() {
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-        "Onboarding Completed"
+          "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -621,7 +621,7 @@ function SelectionTracker() {
       if (
         !readOnly ||
         taggingDetails.onboardingStatus.onboardingStatus !==
-        "Onboarding Completed"
+          "Onboarding Completed"
       ) {
         toast.error("Selection already exists for this ID.", {
           position: "top-right",
@@ -906,88 +906,103 @@ function SelectionTracker() {
         <div className="overflow-x-auto -mt-2">
           <table className="w-full border-collapse">
             <tbody>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/8" colSpan={2}>
-                  <label className="font-semobold">Internal</label>
-                </td>
-                <td className="p-2 w-full md:w-1/8">
-                  <input
-                    type="radio"
-                    name="psidType"
-                    value="internal"
-                    checked={isInternal}
-                    onChange={() => refetchForm("internal")}
-                    className="p-2"
-                    disabled={isReadOnly}
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/8">
-                  <label className="font-semobold">External</label>
-                </td>
-                <td className="p-2 w-full md:w-1/8">
-                  <input
-                    type="radio"
-                    name="psidType"
-                    value="external"
-                    checked={!isInternal}
-                    onChange={() => refetchForm("external")}
-                    className="p-2"
-                    disabled={isReadOnly}
-                  />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap ">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semobold">
-                    PS ID:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="number"
-                    name="psId"
-                    value={form.psId || ""}
-                    onChange={handleChange}
-                    required
-                    className={`p-2 border rounded w-full ${errors.psId ? "border-red-500" : ""
-                      }`}
-                    disabled={!isInternal || readOnly}
-                    pattern="\d*"
-                  />
-                  {errors.psId && (
-                    <p className="text-red-500 text-sm mb-4">{errors.psId}</p>
-                  )}
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semobold" htmlFor="vendor-select">
-                    Vendor:
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4" colSpan="2">
-                  <select
-                    name="vendors"
-                    id="vendor-select"
-                    value={form.vendors?.vendorId || ""}
-                    onChange={handleVendorChange}
-                    className={`p-2 border rounded w-full ${errors.vendorId ? "border-red-500" : ""
-                      }`}
-                    disabled={isInternal || readOnly}
+              <div className="relative group text-left">
+                <tr className="flex flex-wrap md:flex-nowrap">
+                  <td
+                    className="p-2 w-full md:w-1/4 flex items-center gap-4"
+                    colSpan={2}
                   >
-                    <option value="">Select Vendor</option>
-                    {vendors.map((vendor) => (
-                      <option key={vendor.vendorId} value={vendor.vendorId}>
-                        {vendor.vendorName}
-                      </option>
-                    ))}
-                  </select>
-                  {/* )} */}
-                  {errors.vendorId && (
-                    <p className="text-red-500 text-sm mb-4">
-                      {errors.vendorId}
-                    </p>
-                  )}
-                </td>
-              </tr>
+                    <label>Internal</label>
+                    <input
+                      type="radio"
+                      name="psidType"
+                      value="internal"
+                      checked={isInternal}
+                      onChange={() => refetchForm("internal")}
+                      className="p-2"
+                      disabled={isReadOnly}
+                    />
+
+                    <div className="mx-8" />
+
+                    <label className="font-semobold">External</label>
+                    <input
+                      type="radio"
+                      name="psidType"
+                      value="external"
+                      checked={!isInternal}
+                      onChange={() => refetchForm("external")}
+                      className="p-2"
+                      disabled={isReadOnly}
+                    />
+                  </td>
+                </tr>
+              </div>
+              <div>
+                <tr className="flex flex-wrap md:flex-nowrap">
+                  <td className="p-2 w-full md:w-1/4">
+                    <div className="flex flex-col md:flex-row gap-4">
+                      {/* PS ID Field */}
+                      <div className="flex-1">
+                        <label className="font-semibold">
+                          PS ID:<span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          name="psId"
+                          value={form.psId || ""}
+                          onChange={handleChange}
+                          required
+                          className={`p-2 h-10 border rounded w-full md:w-[300px]  ${
+                            errors.psId ? "border-red-500" : ""
+                          }`}
+                          disabled={!isInternal || readOnly}
+                          pattern="\d*"
+                        />
+                        {errors.psId && (
+                          <p className="text-red-500 text-sm mb-4">
+                            {errors.psId}
+                          </p>
+                        )}
+                      </div>
+                      {/* Vendor Dropdown */}
+                      <div className="flex-1">
+                        <label
+                          className="font-semibold"
+                          htmlFor="vendor-select"
+                        >
+                          Vendor:
+                        </label>
+                        <select
+                          name="vendors"
+                          id="vendor-select"
+                          value={form.vendors?.vendorId || ""}
+                          onChange={handleVendorChange}
+                          className={`p-2 h-10 border rounded w-full md:w-[300px] ${
+                            errors.vendorId ? "border-red-500" : ""
+                          }`}
+                          disabled={isInternal || readOnly}
+                        >
+                          <option value="">Select Vendor</option>
+                          {vendors.map((vendor) => (
+                            <option
+                              key={vendor.vendorId}
+                              value={vendor.vendorId}
+                            >
+                              {vendor.vendorName}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.vendorId && (
+                          <p className="text-red-500 text-sm mb-4">
+                            {errors.vendorId}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </div>
               <h4 className="text-lg font-bold px-2 py-1 mt-4">Basic Info</h4>
               <div className="flex flex-wrap md:flex-nowrap">
                 <div className="p-2 w-full md:w-1/4">
@@ -1095,8 +1110,9 @@ function SelectionTracker() {
                     name="phone"
                     value={form.phone || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.phone ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.phone ? "border-red-500" : ""
+                    }`}
                     disabled={isInternal || readOnly}
                     maxLength="10"
                   />
@@ -1108,9 +1124,7 @@ function SelectionTracker() {
             </tbody>
           </table>
         </div>
-        <h4 className="font-bold px-2 py-1 mt-4">
-          Selection Details
-        </h4>
+        <h4 className="font-bold px-2 py-1 mt-4">Selection Details</h4>
         <div className="overflow-x-auto max-h-[600px] pb-24">
           <table className="w-full border-collapse">
             <tbody>
@@ -1123,12 +1137,15 @@ function SelectionTracker() {
                     required
                     value={form.selectionDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.selectionDate ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.selectionDate ? "border-red-500" : ""
+                    }`}
                     disabled={readOnly}
                   />
                   {errors.selectionDate && (
-                    <p className="text-red-500 text-sm">{errors.selectionDate}</p>
+                    <p className="text-red-500 text-sm">
+                      {errors.selectionDate}
+                    </p>
                   )}
                 </div>
 
@@ -1153,8 +1170,9 @@ function SelectionTracker() {
                     onChange={handleLobChange}
                     name="lob"
                     id="lob-select"
-                    className={`p-2 border rounded w-full ${errors.lob ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.lob ? "border-red-500" : ""
+                    }`}
                     disabled={isReadOnly}
                     required
                   >
@@ -1165,7 +1183,9 @@ function SelectionTracker() {
                       </option>
                     ))}
                   </select>
-                  {errors.lob && <p className="text-red-500 text-sm">{errors.lob}</p>}
+                  {errors.lob && (
+                    <p className="text-red-500 text-sm">{errors.lob}</p>
+                  )}
                 </div>
 
                 <div className="p-2 w-full md:w-1/4">
@@ -1176,8 +1196,9 @@ function SelectionTracker() {
                     name="subLob"
                     id="sub-lob-select"
                     value={form.subLob?.subLOBid || ""}
-                    className={`p-2 border rounded w-full ${errors.subLob ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.subLob ? "border-red-500" : ""
+                    }`}
                     onChange={handleSubLobChange}
                     disabled={isReadOnly}
                   >
@@ -1188,7 +1209,9 @@ function SelectionTracker() {
                       </option>
                     ))}
                   </select>
-                  {errors.subLob && <p className="text-red-500 text-sm">{errors.subLob}</p>}
+                  {errors.subLob && (
+                    <p className="text-red-500 text-sm">{errors.subLob}</p>
+                  )}
                 </div>
               </div>
               <div className="flex flex-wrap md:flex-nowrap">
@@ -1237,10 +1260,16 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   >
                     <option value="0">Choose..</option>
-                    <option value="Abhijeet Sureshchandra More">Abhijeet Sureshchandra More</option>
-                    <option value="Aniruddha Deshpande">Aniruddha Deshpande</option>
+                    <option value="Abhijeet Sureshchandra More">
+                      Abhijeet Sureshchandra More
+                    </option>
+                    <option value="Aniruddha Deshpande">
+                      Aniruddha Deshpande
+                    </option>
                     <option value="Arvind Deogade">Arvind Deogade</option>
-                    <option value="Chinni Krishna Nakka">Chinni Krishna Nakka</option>
+                    <option value="Chinni Krishna Nakka">
+                      Chinni Krishna Nakka
+                    </option>
                     <option value="Mayuresh Nirantar">Mayuresh Nirantar</option>
                     <option value="Rupali Khedekar">Rupali Khedekar</option>
                     <option value="Saber Sarode">Saber Sarode</option>
@@ -1297,11 +1326,14 @@ function SelectionTracker() {
                       type="text"
                       name="irm"
                       value={
-                        irmName && form.irm ? `${form.irm} (${irmName})` : form.irm || ""
+                        irmName && form.irm
+                          ? `${form.irm} (${irmName})`
+                          : form.irm || ""
                       }
                       onChange={handleIrmChange}
-                      className={`p-2 border rounded w-full pr-10 ${errors.irm ? "border-red-500" : ""
-                        }`}
+                      className={`p-2 border rounded w-full pr-10 ${
+                        errors.irm ? "border-red-500" : ""
+                      }`}
                       disabled={isReadOnly}
                     />
                     {/* Clear button */}
@@ -1354,8 +1386,9 @@ function SelectionTracker() {
                     required
                     value={form.ctoolRecDate || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.ctoolRecDate ? "border-red-500" : ""
-                      }`}
+                    className={`p-2 border rounded w-full ${
+                      errors.ctoolRecDate ? "border-red-500" : ""
+                    }`}
                     disabled={readOnly}
                   />
                   {errors.ctoolRecDate && (
@@ -1376,7 +1409,9 @@ function SelectionTracker() {
                       name="hsbcRoles"
                       placeholder="Search or select a role..."
                       value={searchTerm}
-                      className={`p-2 border rounded w-full ${errors.hsbcRoles ? "border-red-500" : ""}`}
+                      className={`p-2 border rounded w-full ${
+                        errors.hsbcRoles ? "border-red-500" : ""
+                      }`}
                       disabled={isReadOnly}
                       onChange={handleSearch}
                       onFocus={() => setShowDropdown(true)}
@@ -1387,7 +1422,9 @@ function SelectionTracker() {
                         {filteredRoles.map((role) => (
                           <li
                             key={role.ref}
-                            onClick={() => handleSelect(role.roleTitle, role.ref, role.grade)}
+                            onClick={() =>
+                              handleSelect(role.roleTitle, role.ref, role.grade)
+                            }
                             className="px-2 py-1 cursor-pointer hover:bg-gray-100 border-b border-gray-100"
                           >
                             {role.roleTitle}
@@ -1483,7 +1520,7 @@ function SelectionTracker() {
                         onClick={handleSubmit}
                         className="bg-blue-900 text-white py-2 px-10 rounded hover:bg-gray-500"
                         disabled={form.invalid}
-                      // disabled={isSubmitting}
+                        // disabled={isSubmitting}
                       >
                         Submit
                       </button>
