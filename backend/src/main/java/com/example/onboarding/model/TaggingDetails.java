@@ -35,7 +35,7 @@ public class TaggingDetails {
     private OnboardingStatus onboardingStatus;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "BGVStatusId")
+    @JoinColumn(name = "bgvStatusId")
     private BGVStatus bgvStatus;
 
     @ManyToOne(cascade = CascadeType.ALL)

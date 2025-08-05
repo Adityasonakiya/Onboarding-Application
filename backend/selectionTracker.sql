@@ -303,7 +303,7 @@ VALUES
 (10, 'Candidate not yet joined', 'Candidate has not yet joined'),
 (11, 'Drop Out Case', 'Candidate dropped out');
 
-INSERT INTO BGVStatus
+INSERT INTO bgvstatus
 (bgv_status_id,bgv_status,remarks) 
 VALUES
 (1,"Pending","BGV process is pending"),
@@ -482,7 +482,7 @@ VALUES
  NULL, NULL, '2025-01-20', NULL, NOW(), NOW(), NULL, NULL, NULL);
 
 INSERT INTO tagging_details 
-(ps_id, candidate_id, onboarding_status_id, bgvstatus_id, created_by_psid, updated_by_psid, status_remarks, create_date, update_date) 
+(ps_id, candidate_id, onboarding_status_id, bgv_status_id, created_by_psid, updated_by_psid, status_remarks, create_date, update_date) 
 VALUES
 (10820984, NULL, 4, 2, 10713037, 10713037, 'BGV Initiated', NOW(), NOW()),
 (NULL, 2, 4, 3, 10713037, 10713037, 'BGV in progress', NOW(), NOW()),
@@ -510,7 +510,7 @@ where selection.created_by = 10713037
 	  and selection.lob_id=lob.lob_id	  
 	  and emp.psid=td.ps_id
 	  and td.onboarding_status_id=obs.status_id
-	  and td.bgvstatus_id=bgvs.bgv_status_id
+	  and td.bgv_status_id=bgvs.bgv_status_id
 Union	  
 Select cnd.vendor_id as id,cnd.first_name,cnd.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status from candidate cnd,lob lob,
 selection_details selection,onboarding_status obs,BGVStatus bgvs , tagging_details td
@@ -519,7 +519,7 @@ where selection.created_by = 10713037
       and selection.lob_id=lob.lob_id
 	  and cnd.candidate_id=td.candidate_id
 	  and td.onboarding_status_id=obs.status_id
-	  and td.bgvstatus_id=bgvs.bgv_status_id
+	  and td.bgv_status_id=bgvs.bgv_status_id
 Union
 Select vc.vendor_id as id,vc.first_name,vc.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status from vendor_candidate vc,lob lob,
 selection_details selection,onboarding_status obs,BGVStatus bgvs , tagging_details td
@@ -528,7 +528,7 @@ where selection.created_by = 10713037
       and selection.lob_id=lob.lob_id
 	  and vc.vendor_candidate_id=td.vendor_candidate_id
 	  and td.onboarding_status_id=obs.status_id
-	  and td.bgvstatus_id=bgvs.bgv_status_id;
+	  and td.bgv_status_id=bgvs.bgv_status_id;
 
 -- Select emp.psid as id ,emp.first_name,emp.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status 
 -- from employee emp
