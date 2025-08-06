@@ -536,7 +536,7 @@ where selection.created_by = 10713037
 -- left join lob lob on selection.lob_id=lob.lob_id
 -- left join tagging_details td on emp.psid=td.ps_id
 -- left join onboarding_status obs on td.onboarding_status_id=obs.status_id
--- left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
+-- left join BGVStatus bgvs on td.bgv_status_id=bgvs.bgv_status_id
 -- where selection.created_by = 10713037
 -- Union	  
 -- Select cnd.phone_number as id,cnd.first_name,cnd.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status 
@@ -545,7 +545,7 @@ where selection.created_by = 10713037
 -- left join lob lob on selection.lob_id=lob.lob_id
 -- left join tagging_details td on cnd.phone_number=td.vendor_phone_number
 -- left join onboarding_status obs on td.onboarding_status_id=obs.status_id
--- left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
+-- left join BGVStatus bgvs on td.bgv_status_id=bgvs.bgv_status_id
 -- where selection.created_by = 10713037
 -- Union
 -- Select vc.vendor_id as id,vc.first_name,vc.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status   
@@ -554,7 +554,7 @@ where selection.created_by = 10713037
 -- left join lob lob on selection.lob_id=lob.lob_id
 -- left join tagging_details td on vc.phone_number=td.vendor_phone_number
 -- left join onboarding_status obs on td.onboarding_status_id=obs.status_id
--- left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
+-- left join BGVStatus bgvs on td.bgv_status_id=bgvs.bgv_status_id
 -- where selection.created_by = 10713037;
 
 
@@ -567,14 +567,14 @@ from selection_details sd , lob lb, tagging_details td, onboarding_status os, BG
 where sd.ps_id = td.ps_id
 and sd.lob_id=lb.lob_id
 and td.onboarding_status_id = os.status_id
-and td.bgvstatus_id = bs.bgv_status_id
+and td.bgv_status_id = bs.bgv_status_id
 group by lb.lob_id,os.status_id,bs.bgv_status_id;
 
 SELECT count(*) as awaited_count,lb.delivery_manager,sd.pricing_model,bs.bgv_status,os.onboarding_status 
 from selection_details sd,tagging_details td,BGVStatus bs,onboarding_status os,lob lb 
 where sd.ps_id = td.ps_id 
 and sd.lob_id=lb.lob_id
-and td.bgvstatus_id = bs.bgv_status_id 
+and td.bgv_status_id = bs.bgv_status_id 
 and td.onboarding_status_id = os.status_id 
 group by bs.bgv_status_id,sd.pricing_model,lb.delivery_manager,os.status_id;
 
@@ -595,7 +595,7 @@ group by bs.bgv_status_id,sd.pricing_model,lb.delivery_manager,os.status_id;
 -- left join hsbc_roles roles on selection.hsbc_role_id = roles.ref
 -- left join tagging_details td on emp.psid=td.ps_id
 -- left join onboarding_status obs on td.onboarding_status_id=obs.status_id
--- left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
+-- left join bgvstatus bgvs on td.bgv_status_id=bgvs.bgv_status_id
 -- where selection.created_by = 10713037
 -- UNION
 -- Select obs.onboarding_status as onboardingStatus, "External" as lti_ps_id,cnd.first_name as firstName,cnd.last_name as lastName,'' as grade,'' as location,'' as totalExperience,'' as skill,
@@ -615,7 +615,7 @@ group by bs.bgv_status_id,sd.pricing_model,lb.delivery_manager,os.status_id;
 -- left join hsbc_roles roles on selection.hsbc_role_id = roles.ref
 -- left join tagging_details td on cnd.candidate_id=td.candidate_id
 -- left join onboarding_status obs on td.onboarding_status_id=obs.status_id
--- left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
+-- left join bgvstatus bgvs on td.bgv_status_id=bgvs.bgv_status_id
 -- where selection.created_by = 10713037
 -- UNION
 -- Select obs.onboarding_status as onboardingStatus, v.vendor_name as lti_ps_id,vd.first_name as firstName,vd.last_name as lastName,'' as grade,'' as location,'' as totalExperience,'' as skill,
@@ -636,5 +636,5 @@ group by bs.bgv_status_id,sd.pricing_model,lb.delivery_manager,os.status_id;
 -- left join hsbc_roles roles on selection.hsbc_role_id = roles.ref
 -- left join tagging_details td on vd.vendor_candidate_id=td.vendor_candidate_id
 -- left join onboarding_status obs on td.onboarding_status_id=obs.status_id
--- left join BGVStatus bgvs on td.bgvstatus_id=bgvs.bgv_status_id
+-- left join bgvstatus bgvs on td.bgv_status_id=bgvs.bgv_status_id
 -- where selection.created_by = 10713037;

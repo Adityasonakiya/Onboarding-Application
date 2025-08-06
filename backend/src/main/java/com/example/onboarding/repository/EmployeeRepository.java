@@ -25,7 +25,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
                         "JOIN lob lob ON selection.lob_id = lob.lob_id " +
                         "LEFT JOIN tagging_details td ON emp.psid = td.ps_id " +
                         "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id " +
-                        "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
+                        "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id " +
                         "WHERE emp.psid = :psid", nativeQuery = true)
         Optional<EmployeeCandidateDTO> findEmployeeCandidateByPsid(@Param("psid") int psid);
 
@@ -42,7 +42,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
         // "LEFT JOIN tagging_details td ON emp.psid = td.ps_id " +
         // "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
         // +
-        // "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
+        // "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id " +
         // "WHERE emp.first_name = :firstName AND emp.last_name = :lastName",
         // nativeQuery = true)
         // Optional<EmployeeCandidateDTO> findCandidateByName(@Param("firstName") String
@@ -61,7 +61,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
                         "JOIN lob lob ON selection.lob_id = lob.lob_id " +
                         "LEFT JOIN tagging_details td ON emp.psid = td.ps_id " +
                         "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id " +
-                        "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
+                        "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id " +
                         "WHERE emp.psid LIKE CONCAT('%', :query, '%') \n" + //
                         " OR selection.candidate_id LIKE CONCAT('%', :query, '%')", nativeQuery = true)
         List<EmployeeCandidateDTO> searchByPsidOrCandidateId(@Param("query") int query);
@@ -74,7 +74,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
                         + "JOIN lob lob ON selection.lob_id = lob.lob_id "
                         + "LEFT JOIN tagging_details td ON emp.psid = td.ps_id "
                         + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
-                        + "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id "
+                        + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id "
                         + "WHERE obs.onboarding_status = :onboardingStatus", nativeQuery = true)
         List<EmployeeCandidateDTO> findByOnboardingStatus(@Param("onboardingStatus") String onboardingStatus);
 
@@ -86,7 +86,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
                         + "JOIN lob lob ON selection.lob_id = lob.lob_id "
                         + "LEFT JOIN tagging_details td ON emp.psid = td.ps_id "
                         + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
-                        + "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id "
+                        + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id "
                         + "WHERE bgvs.bgv_status = :bgvStatus", nativeQuery = true)
         List<EmployeeCandidateDTO> findByBgvStatus(@Param("bgvStatus") String bgvStatus);
 
