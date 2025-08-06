@@ -140,7 +140,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "LEFT JOIN tagging_details td ON emp.psid=td.ps_id "
             + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id=obs.status_id "
             + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id=bgvs.bgv_status_id "
-            + "LEFT JOIN EvidenceDTO evd ON evd.selection_id = selection.selection_id "
+            + "LEFT JOIN evidencedto evd ON evd.selection_id = selection.selection_id "
             + "WHERE selection.created_by = :createdBy ) "
             + "UNION "
             + "( SELECT obs.onboarding_status AS onboardingStatus,selection.hsbc_id as hsbcId, 'External' AS ltiPsId, cnd.first_name AS firstName, cnd.last_name AS lastName, '' AS grade, '' AS location, NULL AS totalExperience, '' AS skill, "
@@ -165,7 +165,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "LEFT JOIN tagging_details td ON cnd.candidate_id=td.candidate_id "
             + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id=obs.status_id "
             + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id=bgvs.bgv_status_id "
-             + "LEFT JOIN EvidenceDTO evd ON evd.selection_id = selection.selection_id "
+             + "LEFT JOIN evidencedto evd ON evd.selection_id = selection.selection_id "
             + "WHERE selection.created_by = :createdBy ) "
             + "UNION "
             + "( SELECT obs.onboarding_status AS onboardingStatus,selection.hsbc_id as hsbcId, v.vendor_name AS ltiPsId, vd.first_name AS firstName, vd.last_name AS lastName, '' AS grade, '' AS location, NULL AS totalExperience, '' AS skill, "
@@ -191,7 +191,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "LEFT JOIN tagging_details td ON vd.vendor_candidate_id=td.vendor_candidate_id "
             + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id=obs.status_id "
             + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id=bgvs.bgv_status_id "
-             + "LEFT JOIN EvidenceDTO evd ON evd.selection_id = selection.selection_id "
+             + "LEFT JOIN evidencedto evd ON evd.selection_id = selection.selection_id "
             + "WHERE selection.created_by = :createdBy )",
             nativeQuery = true)
     List<ExcelDataDTO> findCustomQueryResults(@Param("createdBy") Integer createdBy);
