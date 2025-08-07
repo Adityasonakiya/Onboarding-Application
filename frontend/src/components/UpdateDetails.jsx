@@ -1368,18 +1368,6 @@ function UpdateDetails() {
                   )}
                 </td>
 
-                {/* CTOOL Location */}
-                <td className="p-2 w-full md:w-1/4">
-                  <label htmlFor="ctoolLocation">CTOOL Location:</label>
-                  <input
-                    type="text"
-                    name="ctoolLocation"
-                    value={form.ctoolLocation || ""}
-                    onChange={handleChange}
-                    className="p-2 border rounded w-full"
-                  />
-                </td>
-
                 {/* CTOOL Grade */}
                 <td className="p-2 w-full md:w-1/4">
                   <label htmlFor="ctoolGrade">CTOOL Grade:</label>
@@ -1391,21 +1379,17 @@ function UpdateDetails() {
                     className="p-2 border rounded w-full"
                   />
                 </td>
-
-                {/* CTOOL Tagging Rate */}
+                 {/* CTOOL Location */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label htmlFor="ctoolTaggingRate">CTOOL Tagging Rate:</label>
+                  <label htmlFor="ctoolLocation">CTOOL Location:</label>
                   <input
-                    type="number"
-                    name="ctoolTaggingRate"
-                    value={form.ctoolTaggingRate || ""}
+                    type="text"
+                    name="ctoolLocation"
+                    value={form.ctoolLocation || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                   />
                 </td>
-              </tr>
-
-              <tr className="flex flex-wrap md:flex-nowrap">
                 {/* Recruiter Name */}
                 <td className="p-2 w-full md:w-1/4">
                   <label htmlFor="recruiterName">Recruiter Name:</label>
@@ -1413,6 +1397,22 @@ function UpdateDetails() {
                     type="text"
                     name="recruiterName"
                     value={form.recruiterName || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                  />
+                </td>
+
+                
+              </tr>
+
+              <tr className="flex flex-wrap md:flex-nowrap">
+                {/* CTOOL Tagging Rate */}
+                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolTaggingRate">CTOOL Tagging Rate:</label>
+                  <input
+                    type="number"
+                    name="ctoolTaggingRate"
+                    value={form.ctoolTaggingRate || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                   />
@@ -1606,6 +1606,18 @@ function UpdateDetails() {
 
             <td className="p-2 w-full md:w-1/4">
               <label className="font-semobold block mb-1">
+                Status Additional Remark:<span className="text-red-500">*</span>
+              </label>
+              <textarea
+                name="addRemark"
+                value={form.addRemark || ""}
+                onChange={handleChange}
+                className="p-2 mb-2 border rounded w-full resize-none h-[40px]"
+                required
+              />
+            </td>
+            <td className="p-2 w-full md:w-1/4">
+              <label className="font-semobold block mb-1">
                 BGV Status:<span className="text-red-500">*</span>
               </label>
               <select
@@ -1629,19 +1641,6 @@ function UpdateDetails() {
                   Pending with Employee
                 </option>
               </select>
-            </td>
-
-            <td className="p-2 w-full md:w-1/4">
-              <label className="font-semobold block mb-1">
-                Status Additional Remark:<span className="text-red-500">*</span>
-              </label>
-              <textarea
-                name="addRemark"
-                value={form.addRemark || ""}
-                onChange={handleChange}
-                className="p-2 mb-2 border rounded w-full resize-none h-[40px]"
-                required
-              />
             </td>
 
             <td className="p-2 w-full md:w-1/4">
@@ -1857,17 +1856,17 @@ function UpdateDetails() {
           </tr>
         </div>
 
-        <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 z-50 p-4 pl-16 flex justify-start space-x-4 shadow-md">
+        <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 z-50 p-4 pl-14 flex justify-start space-x-4 shadow-md">
           <div className="flex justify-center space-x-4">
             <button
               type="submit"
-              className="bg-blue-900 text-white py-2 px-10 rounded hover:bg-gray-500"
+              className="bg-blue-900 text-white py-1.5 px-6 rounded hover:bg-gray-500"
             >
               Update
             </button>
             <button
               type="button"
-              className="text-blue-900 border border-blue-900 bg-transparent py-2 px-10 rounded hover:bg-gray-500"
+              className="text-blue-900 border border-blue-900 bg-transparent py-1.5 px-6 rounded hover:bg-gray-500"
               onClick={handleCancel}
             >
               Cancel

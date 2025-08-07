@@ -34,7 +34,7 @@ const Login = () => {
 
       const data = await response.json();
       // const email=data.mailID;
-      const email = "adityasonakiya29@gmail.com";
+      const email = "komalmore7015@gmail.com";
 
       const otpResponse = await fetch("http://localhost:8080/api/send-otp", {
         method: "POST",
@@ -126,7 +126,7 @@ const Login = () => {
             )}
             <button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+              className="w-full bg-blue-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
             >
               Verify OTP
             </button>

@@ -14,7 +14,7 @@ import com.example.onboarding.model.EmployeeCandidateDTO;
 @Repository
 public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
 
-        @Query(value = "SELECT cnd.candidate_id as id, cnd.first_name as firstName, cnd.last_name as lastName, lob.lob_name as lobName, "
+        @Query(value = "SELECT cnd.vendor_id as id, cnd.first_name as firstName, cnd.last_name as lastName, lob.lob_name as lobName, "
                         +
                         "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
                         +
