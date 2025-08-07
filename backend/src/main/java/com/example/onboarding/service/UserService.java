@@ -44,7 +44,7 @@ public class UserService {
     public User loginUser(LoginDTO loginDTO) {
         Optional<User> optionalUser = userRepository.findByPsid(loginDTO.getPsid());
 
-        if (!optionalUser.isPresent()) {
+        if (optionalUser.isEmpty()) {
             logger.error("Invalid username");
         }
 

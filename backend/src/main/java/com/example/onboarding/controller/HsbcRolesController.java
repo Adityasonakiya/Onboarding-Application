@@ -39,7 +39,7 @@ public class HsbcRolesController {
     // }
 
     @GetMapping
-    public ResponseEntity<List<HsbcRoles>> searchRoles(@RequestParam(name = "query", required = false) String query) {
+    public ResponseEntity<List<HsbcRoles>> searchRoles(@RequestParam(required = false) String query) {
         List<HsbcRoles> roles = hsbcRolesService.searchRoles(query);
         return ResponseEntity.ok(roles);
     }

@@ -139,10 +139,10 @@ public class SelectionDetailsController {
 
     @GetMapping("/api/employee-candidates")
     public Page<EmployeeCandidateDTO> getEmployeeCandidates(
-            @RequestParam Integer createdBy,
+            @RequestParam Integer loggedInPsid,
             @RequestParam int page,
             @RequestParam int size) {
-        return selectionDetailsService.getEmployeeCandidates(createdBy, page, size);
+        return selectionDetailsService.getEmployeeCandidates(loggedInPsid, page, size);
     }
 
     @GetMapping("/selections")

@@ -78,10 +78,10 @@ function SelectionTracker() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!form.lob.lobId) newErrors.lob = "This field is required.";
-    if (!form.subLob.subLOBid || form.subLob.subLOBid === "0")
-      newErrors.subLob = "This field is required.";
-    if (!form.irm) newErrors.irm = "This field is required.";
+    // if (!form.lob.lobId) newErrors.lob = "This field is required.";
+    // if (!form.subLob.subLOBid || form.subLob.subLOBid === "0")
+    //   newErrors.subLob = "This field is required.";
+    // if (!form.irm) newErrors.irm = "This field is required.";
     if (isExternal) {
       if (!form.phone) {
         newErrors.phone = "Phone number is required.";
@@ -713,6 +713,8 @@ function SelectionTracker() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+     const user = JSON.parse(localStorage.getItem("user")).psid;
+
     if (validateForm()) {
       const errors = validate(); // Validate the form inputs
       // Additional required field validations
@@ -765,6 +767,8 @@ function SelectionTracker() {
             recruiterName: form.recruiterName,
             offerReleaseStatus: form.offerReleaseStatus,
             ltionboardingDate: form.ltiOnboardDate,
+            createdBy:user,
+            updatedBy:user,
           };
 
           if (form.psId) {
@@ -789,6 +793,8 @@ function SelectionTracker() {
               vendorId: form.vendors.vendorId,
               firstName: form.fname,
               lastName: form.lname,
+              createdBy:user,
+              updatedBy:user,
             };
 
             console.log("Candidate Payload:", candidate); // Step 1: Create vendor candidate
@@ -836,6 +842,8 @@ function SelectionTracker() {
               vendor: form.vendors,
               firstName: form.fname,
               lastName: form.lname,
+              createdBy:user,
+              updatedBy:user,
             };
 
             console.log("VendorCandidate Payload:", vendorCandidate); // Step 1: Create vendor candidate
@@ -1112,7 +1120,7 @@ function SelectionTracker() {
                     </span>
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     name="phone"
                     value={form.phone || ""}
                     onChange={handleChange}

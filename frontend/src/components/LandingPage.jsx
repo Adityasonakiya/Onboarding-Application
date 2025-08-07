@@ -5,6 +5,8 @@ import { HiPlus, HiRefresh } from "react-icons/hi"; // ✅ Added HiPlus icon
 // import { PencilIcon } from '@heroicons/react/solid';
 import usePagination from "@mui/material/usePagination";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext"; // adjust path as needed
+
 import {
   fetchEmployeeCandidatesBySelections,
   getCandidateById,
@@ -21,6 +23,7 @@ import {
 //import zIndex from "@mui/material/styles/zIndex";
 
 const LandingPage = () => {
+  const { permissions } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
@@ -34,6 +37,8 @@ const LandingPage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [vendorNames, setVendorNames] = useState({});
+
+  console.log("Permissions", permissions);
 
   //search bar
 
@@ -158,6 +163,8 @@ const LandingPage = () => {
     setActiveTab(tab);
     if (tab === "dashboard") {
       navigate("/selection-tracker-dashboard");
+    } else if (tab === "admin") {
+      navigate("/admin");
     }
   };
   const handleRowPerChange = (e) => {
@@ -280,10 +287,12 @@ const LandingPage = () => {
     console.log("TotalPages", totalPages);
   }, [totalPages, currentPage]);
 
+
   return (
+    <>
+      {permissions?.canViewDashboard && (
     <div className="w-full px-4 py-6 mt-0">
       {/* Tabs code*/}
-
       <div className="flex mb-2 border-b">
         <button
           className={`px-4 py-2 font-semibold focus:outline-none ${
@@ -305,6 +314,18 @@ const LandingPage = () => {
         >
           Selection Tracker Dashboard
         </button>
+        {permissions?.canAccessAdminDashboard && (
+              <button
+                className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
+                  activeTab === "admin"
+                    ? "border-b-2 border-blue-500 text-blue-600"
+                    : "text-gray-600"
+                }`}
+                onClick={() => handleTabClick("admin")}
+              >
+                Admin Dashboard
+              </button>
+            )}
       </div>
 
       {/* Search Bar with Buttons */}
@@ -408,6 +429,7 @@ const LandingPage = () => {
         </div>
          {/* Buttons on the left */}
         <div className="flex items-center gap-2">
+         {permissions?.canAddSelection &&(
           <div className="relative group">
             <button
               className="bg-blue-400 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-blue-600 transition duration-200"
@@ -419,6 +441,7 @@ const LandingPage = () => {
               Add New Selection
             </div>
           </div>
+          )}
           <div>
             <div className="relative group">
             <button
@@ -499,12 +522,14 @@ const LandingPage = () => {
                 </td>
                 <td className="p-2 border text-center">
                   <div className="flex justify-center">
+                    {permissions?. canUpdateSelection && (
                     <button
                       className="bg-gray-400 text-white p-[4px] rounded mr-2 hover:bg-gray-800 transition duration-200"
                       onClick={() => handleEdit(emp.id, emp.phoneNumber)}
                     >
                       <FaEdit size={12} />
                     </button>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -562,6 +587,8 @@ const LandingPage = () => {
         </div>
       </div>
     </div>
+      )}
+    </>
   );
 };
 export default LandingPage;

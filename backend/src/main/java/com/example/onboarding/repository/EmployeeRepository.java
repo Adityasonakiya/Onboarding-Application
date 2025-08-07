@@ -8,86 +8,97 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.example.onboarding.model.AccessControlDTO;
 import com.example.onboarding.model.Employee;
 import com.example.onboarding.model.EmployeeCandidateDTO;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
-        List<Employee> findByLocation(String location);
 
-        @Query(value = "SELECT emp.psid as id, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, "
-                        +
-                        "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
-                        +
-                        "bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber " +
-                        "FROM employee emp " +
-                        "JOIN selection_details selection ON selection.ps_id = emp.psid " +
-                        "JOIN lob lob ON selection.lob_id = lob.lob_id " +
-                        "LEFT JOIN tagging_details td ON emp.psid = td.ps_id " +
-                        "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id " +
-                        "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
-                        "WHERE emp.psid = :psid", nativeQuery = true)
-        Optional<EmployeeCandidateDTO> findEmployeeCandidateByPsid(@Param("psid") int psid);
+    List<Employee> findByLocation(String location);
 
-        // @Query(value = "SELECT emp.psid as id, emp.first_name as firstName,
-        // emp.last_name as lastName, lob.lob_name as lobName, "
-        // +
-        // "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as
-        // onboardingStatus, "
-        // +
-        // "bgvs.bgv_status as bgvStatus " +
-        // "FROM employee emp " +
-        // "JOIN selection_details selection ON selection.ps_id = emp.psid " +
-        // "JOIN lob lob ON selection.lob_id = lob.lob_id " +
-        // "LEFT JOIN tagging_details td ON emp.psid = td.ps_id " +
-        // "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
-        // +
-        // "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
-        // "WHERE emp.first_name = :firstName AND emp.last_name = :lastName",
-        // nativeQuery = true)
-        // Optional<EmployeeCandidateDTO> findCandidateByName(@Param("firstName") String
-        // firstName,
-        // @Param("lastName") String lastName);
+    Integer countByRoles_RoleId(int roleId);
 
-        
+    @Query(value = "SELECT emp.psid as id, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, "
+            + "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
+            + "bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber "
+            + "FROM employee emp "
+            + "JOIN selection_details selection ON selection.ps_id = emp.psid "
+            + "JOIN lob lob ON selection.lob_id = lob.lob_id "
+            + "LEFT JOIN tagging_details td ON emp.psid = td.ps_id "
+            + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
+            + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id "
+            + "WHERE emp.psid = :psid", nativeQuery = true)
+    Optional<EmployeeCandidateDTO> findEmployeeCandidateByPsid(@Param("psid") int psid);
 
-        @Query(value = "SELECT emp.psid as id, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, "
-                        +
-                        "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
-                        +
-                        "bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber " +
-                        "FROM employee emp " +
-                        "JOIN selection_details selection ON selection.ps_id = emp.psid " +
-                        "JOIN lob lob ON selection.lob_id = lob.lob_id " +
-                        "LEFT JOIN tagging_details td ON emp.psid = td.ps_id " +
-                        "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id " +
-                        "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
-                        "WHERE emp.psid LIKE CONCAT('%', :query, '%') \n" + //
-                        " OR selection.candidate_id LIKE CONCAT('%', :query, '%')", nativeQuery = true)
-        List<EmployeeCandidateDTO> searchByPsidOrCandidateId(@Param("query") int query);
+    // @Query(value = "SELECT emp.psid as id, emp.first_name as firstName,
+    // emp.last_name as lastName, lob.lob_name as lobName, "
+    // +
+    // "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as
+    // onboardingStatus, "
+    // +
+    // "bgvs.bgv_status as bgvStatus " +
+    // "FROM employee emp " +
+    // "JOIN selection_details selection ON selection.ps_id = emp.psid " +
+    // "JOIN lob lob ON selection.lob_id = lob.lob_id " +
+    // "LEFT JOIN tagging_details td ON emp.psid = td.ps_id " +
+    // "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
+    // +
+    // "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id " +
+    // "WHERE emp.first_name = :firstName AND emp.last_name = :lastName",
+    // nativeQuery = true)
+    // Optional<EmployeeCandidateDTO> findCandidateByName(@Param("firstName") String
+    // firstName,
+    // @Param("lastName") String lastName);
+    @Query(value = """
+            SELECT emp.psid as id, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, \
+            selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, \
+            bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber \
+            FROM employee emp \
+            JOIN selection_details selection ON selection.ps_id = emp.psid \
+            JOIN lob lob ON selection.lob_id = lob.lob_id \
+            LEFT JOIN tagging_details td ON emp.psid = td.ps_id \
+            LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id \
+            LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id \
+            WHERE emp.psid LIKE CONCAT('%', :query, '%')\s
+             OR selection.candidate_id LIKE CONCAT('%', :query, '%')""", nativeQuery = true)
+    List<EmployeeCandidateDTO> searchByPsidOrCandidateId(@Param("query") int query);
 
-        @Query(value = "SELECT emp.psid as id, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, "
-                        + "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
-                        + "bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber "
-                        + "FROM employee emp "
-                        + "JOIN selection_details selection ON selection.ps_id = emp.psid "
-                        + "JOIN lob lob ON selection.lob_id = lob.lob_id "
-                        + "LEFT JOIN tagging_details td ON emp.psid = td.ps_id "
-                        + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
-                        + "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id "
-                        + "WHERE obs.onboarding_status = :onboardingStatus", nativeQuery = true)
-        List<EmployeeCandidateDTO> findByOnboardingStatus(@Param("onboardingStatus") String onboardingStatus);
+    @Query(value = "SELECT emp.psid as id, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, "
+            + "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
+            + "bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber "
+            + "FROM employee emp "
+            + "JOIN selection_details selection ON selection.ps_id = emp.psid "
+            + "JOIN lob lob ON selection.lob_id = lob.lob_id "
+            + "LEFT JOIN tagging_details td ON emp.psid = td.ps_id "
+            + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
+            + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id "
+            + "WHERE obs.onboarding_status = :onboardingStatus", nativeQuery = true)
+    List<EmployeeCandidateDTO> findByOnboardingStatus(@Param("onboardingStatus") String onboardingStatus);
 
-        @Query(value = "SELECT emp.psid as id, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, "
-                        + "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
-                        + "bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber "
-                        + "FROM employee emp "
-                        + "JOIN selection_details selection ON selection.ps_id = emp.psid "
-                        + "JOIN lob lob ON selection.lob_id = lob.lob_id "
-                        + "LEFT JOIN tagging_details td ON emp.psid = td.ps_id "
-                        + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
-                        + "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id "
-                        + "WHERE bgvs.bgv_status = :bgvStatus", nativeQuery = true)
-        List<EmployeeCandidateDTO> findByBgvStatus(@Param("bgvStatus") String bgvStatus);
+    @Query(value = "SELECT emp.psid as id, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, "
+            + "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
+            + "bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber "
+            + "FROM employee emp "
+            + "JOIN selection_details selection ON selection.ps_id = emp.psid "
+            + "JOIN lob lob ON selection.lob_id = lob.lob_id "
+            + "LEFT JOIN tagging_details td ON emp.psid = td.ps_id "
+            + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
+            + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id "
+            + "WHERE bgvs.bgv_status = :bgvStatus", nativeQuery = true)
+    List<EmployeeCandidateDTO> findByBgvStatus(@Param("bgvStatus") String bgvStatus);
+
+    @Query(value = "SELECT e.psid AS psid, r.role_name AS roleName, lob.lob_name AS lobName, "
+            + "CASE WHEN r.role_name IN ('Admin', 'LOB-PMO', 'Onboarding Team', 'Sales SPOC', 'Leadership', 'DM') THEN 1 ELSE 0 END AS canViewDashboard, "
+            + "CASE WHEN r.role_name IN ('Admin', 'Onboarding Team') THEN 1 ELSE 0 END AS canAccessAdminDashboard, "
+            + "CASE WHEN r.role_name IN ('Admin', 'Onboarding Team','DM', 'LOB-PMO') THEN 1 ELSE 0 END AS canAddSelection, "
+            + "CASE WHEN r.role_name IN ('Admin', 'Onboarding Team','DM', 'LOB-PMO') THEN 1 ELSE 0 END AS canUpdateSelection, "
+            + "CASE WHEN r.role_name = 'Admin' THEN 1 ELSE 0 END AS canAccessMasters "
+            + "FROM employee e "
+            + "JOIN roles r ON e.role_id = r.role_id "
+            + "JOIN selection_details selection ON e.psid = selection.ps_id "
+            + "JOIN lob lob ON selection.lob_id = lob.lob_id "
+            + "WHERE e.psid = :psid", nativeQuery = true)
+    AccessControlDTO getAccessByPsid(@Param("psid") Integer psid);
 
 }

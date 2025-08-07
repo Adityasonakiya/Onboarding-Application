@@ -174,7 +174,7 @@ function UpdateDetails() {
     if (
       name === "techSelectDate" &&
       value &&
-      form.status != "Tech Selection Done"
+      form.status !== "Tech Selection Done"
     ) {
       setForm((prevForm) => ({
         ...prevForm,
@@ -184,7 +184,7 @@ function UpdateDetails() {
     } else if (
       name === "dojRecDate" &&
       value &&
-      form.status != "DOJ Recieved"
+      form.status !== "DOJ Recieved"
     ) {
       setForm((prevForm) => ({
         ...prevForm,
@@ -194,7 +194,7 @@ function UpdateDetails() {
     } else if (
       name === "onboardingDate" &&
       value &&
-      form.status != "Onboarding Completed"
+      form.status !== "Onboarding Completed"
     ) {
       setForm((prevForm) => ({
         ...prevForm,
@@ -367,6 +367,8 @@ function UpdateDetails() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+     const user = JSON.parse(localStorage.getItem("user")).psid;
+
     const formattedTagDate = moment(form.tagDate, "YYYY-MM-DD").toISOString();
     console.log("Formatted tagDate value:", formattedTagDate);
 
@@ -426,7 +428,10 @@ function UpdateDetails() {
         candidateStatus: form.candidateStatus,
         remarks: form.candidateRemark,
       },
+      createDate:formattedTagDate,
       updateDate: updateDate,
+      createdBy:user,
+      updatedBy:user,
     };
 
     const selectionDetails = {
@@ -459,6 +464,7 @@ function UpdateDetails() {
       hsbconboardingDate: form.onboardingDate,
       ctoolStartDate: form.ctoolStartDate,
       hsbcRoles: form.hsbcRoles,
+      updatedBy:user,
     };
 
     console.log("tagging details: ", taggingDetails);

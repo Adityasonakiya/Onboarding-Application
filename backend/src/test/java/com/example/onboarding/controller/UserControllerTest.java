@@ -46,8 +46,6 @@ public class UserControllerTest {
         User user = new User();
         user.setPsid(userId);
         user.setPassword("password123");
-        user.setRoleId(2);
-        user.setUserManagerId(100);
 
         Mockito.when(userService.getUserById(userId)).thenReturn(Optional.of(user));
 

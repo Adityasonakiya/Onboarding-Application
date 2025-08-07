@@ -216,27 +216,22 @@ export default function Navbar() {
     };
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const response = await fetch("http://localhost:8080/api/users/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ psid: user.psid }),
-      });
+  const handleLogout = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
 
-      if (response.ok) {
-        localStorage.removeItem("user"); // Remove user info from local storage
-        navigate("/login"); // Navigate back to the login page
-      } else {
-        const errorData = await response.json();
-        setErrors({ submit: errorData.message });
-      }
-    } catch (error) {
-      setErrors({ submit: "An error occurred while logging out" });
+    if (user?.psid) {
+      // Optional: If you want to notify backend (not required for stateless OTP flow)
+      fetch("http://localhost:8080/api/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ psid: user.psid }),
+      }).catch((err) => console.error("Logout API failed:", err));
     }
+
+    localStorage.removeItem("user"); // Clear user info
+    setTimeout(() => {
+      navigate("/login"); // Redirect to login page
+      }, 2000);
   };
 
   return (
@@ -357,67 +352,69 @@ export default function Navbar() {
             />
           </div> */}
 
-          <div
-            className="relative popup-trigger"
-            onMouseEnter={() => setHoverPopup("user")}
-            onMouseLeave={() => setHoverPopup(null)}
-            onClick={() => togglePopup("user")}
-          >
-            <div className="p-1 md:p-2 rounded-full bg-gray-200 hover:bg-gray-300 duration-300 cursor-pointer">
-              <FaUser className="text-gray-800" />
-            </div>
-            {(activePopup === "user" || hoverPopup === "user") && (
-              <div className="absolute right-[-1vw] mt-[0.15vw] w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300 popup">
-                {/* Close Icon */}
-                <div className="flex justify-end">
-                  <FaTimes
-                    className="text-gray-800 hover:text-gray-400 duration-300 cursor-pointer"
-                    onClick={() => setActivePopup(null)}
-                  />
-                </div>
-
-                {/* User Info */}
-                <div className="flex flex-col items-center mb-4">
-                  <FaUser className="text-gray-800 text-4xl mb-2" />
-                  <h1 className="text-lg md:text-l font-bold">{form.fname}</h1>
-                  <p className="mb-2 text-gray-700 text-left">PS ID: {form.psid}</p>
-                </div>
-
-                {/* Details */}
-                <div className="flex flex-col space-y-1 mb-4">
-                  <p className="text-gray-700">
-                    <strong>Email:</strong> {form.email}
-                  </p>
-                  <p className="text-gray-700">
-                    <strong>Grade:</strong> {form.grade}
-                  </p>
-                  <p className="text-gray-700">
-                    <strong>Work Location:</strong> {form.location}
-                  </p>
-                  <p className="text-gray-700">
-                    <strong>Work Mode:</strong> Hybrid
-                  </p>
-                </div>
-
-                {/* Logout Button - Styled and Positioned at Bottom */}
-                <div className="mt-auto pt-2 flex justify-left">
-                  <button
-                    onClick={handleLogout}
-                    className="text-center text-gray-500 hover:text-white hover:bg-red-500 border border-gray-400 rounded-md py-2 px-6 transition duration-300"
-                  >
-                    Logout
-                  </button>
-                </div>
-              </div>
-            )}
+        <div
+          className="relative popup-trigger"
+          onMouseEnter={() => setHoverPopup("user")}
+          onMouseLeave={() => setHoverPopup(null)}
+          onClick={() => togglePopup("user")}
+        >
+          <div className="p-1 md:p-2 rounded-full bg-gray-200 hover:bg-gray-300 duration-300 cursor-pointer">
+            <FaUser className="text-gray-800" />
           </div>
-          {/* <div
+          {(activePopup === "user" || hoverPopup === "user") && (
+            <div className="absolute right-[-1vw] mt-[0.15vw] w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300 popup">
+              {/* Close Icon */}
+              <div className="flex justify-end">
+                <FaTimes
+                  className="text-gray-800 hover:text-gray-400 duration-300 cursor-pointer"
+                  onClick={() => setActivePopup(null)}
+                />
+              </div>
+
+              {/* User Info */}
+              <div className="flex flex-col items-center mb-4">
+                <FaUser className="text-gray-800 text-4xl mb-2" />
+                <h1 className="text-lg md:text-l font-bold">{form.fname}</h1>
+                <p className="mb-2 text-gray-700 text-left">
+                  PS ID: {form.psid}
+                </p>
+              </div>
+
+              {/* Details */}
+              <div className="flex flex-col space-y-1 mb-4">
+                <p className="text-gray-700">
+                  <strong>Email:</strong> {form.email}
+                </p>
+                <p className="text-gray-700">
+                  <strong>Grade:</strong> {form.grade}
+                </p>
+                <p className="text-gray-700">
+                  <strong>Work Location:</strong> {form.location}
+                </p>
+                <p className="text-gray-700">
+                  <strong>Work Mode:</strong> Hybrid
+                </p>
+              </div>
+
+              {/* Logout Button - Styled and Positioned at Bottom */}
+              <div className="mt-auto pt-2 flex justify-left">
+                <button
+                  onClick={handleLogout}
+                  className="text-center text-gray-500 hover:text-white hover:bg-red-500 border border-gray-400 rounded-md py-2 px-6 transition duration-300"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+        {/* <div
             className='relative popup-trigger'
             onMouseEnter={() => setHoverPopup('menu')}
             onMouseLeave={() => setHoverPopup(null)}
             onClick={() => togglePopup('menu')}
           > */}
-          {/* <div
+        {/* <div
               className='p-1 md:p-2 rounded-full bg-gray-200 hover:bg-gray-300 duration-300 cursor-pointer'
             >
               <FiAlignJustify className='text-gray-800' />
@@ -430,7 +427,7 @@ export default function Navbar() {
                     onClick={() => setActivePopup(null)}
                   />
                 </div> */}
-          {/* <Link
+        {/* <Link
                   to='/landing-page'
                   className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
                 >
@@ -448,18 +445,18 @@ export default function Navbar() {
                 >
                   Selection Tracker Dashboard
                 </Link> */}
-          {/* <Link
+        {/* <Link
                   to='/login'
                   className='text-gray-700 hover:text-gray-900 duration-300 cursor-pointer mb-2 block'
                   onClick={handleLogout}
                 >
                   Logout
                 </Link> */}
-          {/* </div> */}
-          {/* )} */}
-          {/* </div> */}
-        </div>
+        {/* </div> */}
+        {/* )} */}
+        {/* </div> */}
       </div>
+    </div>
     // </div>
   );
 }

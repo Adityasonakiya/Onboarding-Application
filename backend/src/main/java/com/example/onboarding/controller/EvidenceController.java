@@ -55,8 +55,8 @@ public class EvidenceController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteEvidence(
-            @RequestParam("fileName") String fileName,
-            @RequestParam("selectionId") int selectionId) {
+            @RequestParam String fileName,
+            @RequestParam int selectionId) {
         boolean deleted = evidenceService.deleteEvidence(fileName, selectionId);
         if (deleted) {
             return ResponseEntity.ok().build();

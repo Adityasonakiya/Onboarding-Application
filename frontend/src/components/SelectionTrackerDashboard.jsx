@@ -5,8 +5,12 @@ import * as XLSX from "xlsx";
 import { FaFileExcel } from "react-icons/fa6";
 import { HiRefresh } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
 const SelectionTrackerDashboard = ({ user }) => {
+  const navigate = useNavigate();
+  const { permissions } = useAuth();
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [selections, setSelections] = useState([]);
   const [ctool, setCtool] = useState([]);
   const [awaitedCases, setAwaitedCases] = useState([]);
@@ -34,16 +38,13 @@ const SelectionTrackerDashboard = ({ user }) => {
     }
   };
 
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("dashboard");
-
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     if (tab === "myselection") {
       navigate("/landing-page");
-    } else if (tab === "dashboard") {
-      navigate("/selection-tracker-dashboard");
-    } 
+    } else if (tab === "admin") {
+      navigate("/admin");
+    }
   };
 
   const handleExportForMainExcel = (data, sheetName, fileName) => {
@@ -426,6 +427,8 @@ const SelectionTrackerDashboard = ({ user }) => {
   };
 
   return (
+      <>
+      {permissions?.canViewDashboard && (
     <div className="mt-24">
       <Navbar user={user} className="navbar" />
       {/*Heading*/}
@@ -433,34 +436,40 @@ const SelectionTrackerDashboard = ({ user }) => {
             HSBC Selection Tracker Dashboard
         </h1> */}
       {/* Tabs */}
-      <div className="flex items-center mb-4 mt-2 px-4 border-b">
-        <button
-          className={`px-4 py-2 font-semibold focus:outline-none ${
-            activeTab === "myselection"
-              ? "border-b-2 border-blue-500 text-blue-600"
-              : "text-gray-600"
-          }`}
-          onClick={() => handleTabClick("myselection")}
-        >
-          My Selection
-        </button>
-        <button
-          className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
-            activeTab === "dashboard"
-              ? "border-b-2 border-blue-800 text-blue-800"
-              : "text-gray-600"
-          }`}
-          onClick={() => handleTabClick("dashboard")}
-        >
-          Selection Tracker Dashboard
-        </button>
-        {/* <button
-              onClick={fetchToExport}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 ml-auto"
+          <div className="flex items-center mb-4 mt-2 px-4 border-b">
+            <button
+              className={`px-4 py-2 font-semibold focus:outline-none ${
+                activeTab === "myselection"
+                  ? "border-b-2 border-blue-500 text-blue-600"
+                  : "text-gray-600"
+              }`}
+              onClick={() => handleTabClick("myselection")}
             >
-              Export
-            </button> */}
-      </div>
+              My Selection
+            </button>
+            <button
+              className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
+                activeTab === "dashboard"
+                  ? "border-b-2 border-blue-800 text-blue-800"
+                  : "text-gray-600"
+              }`}
+              onClick={() => handleTabClick("dashboard")}
+            >
+              Selection Tracker Dashboard
+            </button>
+            {permissions?.canAccessAdminDashboard && (
+            <button
+              className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
+                activeTab === "admin"
+                  ? "border-b-2 border-blue-500 text-blue-600"
+                  : "text-gray-600"
+              }`}
+              onClick={() => handleTabClick("admin")}
+            >
+              Admin Dashboard
+            </button>
+            )}
+          </div>
       <div className="w-full px-4 py-4">
         <div className="px-2">
           {/* <h1 className="py-2 text-center bg-blue-300 font-bold text-lg md:text-xl">
@@ -499,9 +508,6 @@ const SelectionTrackerDashboard = ({ user }) => {
               >
                 <HiRefresh />
               </button>
-              {/* <button onClick={fetchToExport} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-                Export
-              </button> */}
               <div className="flex items-center font-medium text-sm">
                 <div className="flex items-center mr-4">
                   <input
@@ -959,6 +965,8 @@ const SelectionTrackerDashboard = ({ user }) => {
         </div>
       </div>
     </div>
+       )}
+       </>
   );
 };
 
