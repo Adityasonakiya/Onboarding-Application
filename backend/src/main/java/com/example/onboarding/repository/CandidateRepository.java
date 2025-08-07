@@ -24,7 +24,7 @@ public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
                         "JOIN lob lob ON selection.lob_id = lob.lob_id " +
                         "LEFT JOIN tagging_details td ON cnd.candidate_id = td.candidate_id " +
                         "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id " +
-                        "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
+                        "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id " +
                         "WHERE cnd.phone_number = :phoneNumber", nativeQuery = true)
         Optional<EmployeeCandidateDTO> findEmployeeCandidateByPhoneNumber(@Param("phoneNumber") Long phoneNumber);
 
@@ -36,7 +36,7 @@ public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
                         "JOIN lob lob ON selection.lob_id = lob.lob_id " +
                         "LEFT JOIN tagging_details td ON emp.phone_number = td.candidate_id " +
                         "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id " +
-                        "LEFT JOIN bgvstatus bgvs ON td.bgvstatus_id = bgvs.bgv_status_id " +
+                        "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id " +
                         "WHERE LOWER(CONCAT(emp.first_name, ' ', emp.last_name)) LIKE LOWER(CONCAT('%', :query, '%')) "
                         +
                         " OR LOWER(emp.first_name) LIKE LOWER(CONCAT('%', :query, '%')) " +

@@ -1,3 +1,11 @@
+export const rolePermissions = async(psid) => {
+  const response = await fetch(`http://localhost:8080/employees/access/${psid}`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch role permissions");
+};
+
 export const getEmployeeByPsid = async (psid) => {
   const response = await fetch(`http://localhost:8080/employees/${psid}`);
   if (response.ok) {
@@ -44,6 +52,20 @@ export const getAllEmployees = async (psid) => {
   throw new Error("Failed to fetch employees data");
 };
 
+export const updateEmployee = async (psid, data) => {
+  const response = await fetch(`http://localhost:8080/employees/update/${psid}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
+
 export const getCToolStatuses = async () => {
   const response = await fetch(`http://localhost:8080/OnboardingStatuses`);
   if (response.ok) {
@@ -77,14 +99,6 @@ export const getCandidateById = async (phoneNumber) => {
   }
   throw new Error("Failed to fetch candidate data");
 };
-
-// export const getVendorById = async(vendorId) =>{
-//   const response = await fetch(`http://localhost:8080/vendors/${vendorId}`);
-//   if(response.ok){
-//     return response.json();
-//   }
-//   throw new Error('Failed to fetch data');
-// }
 
 export const getVendorById = async (vendorId) => {
   const response = await fetch(`http://localhost:8080/vendors/${vendorId}`);
@@ -313,15 +327,23 @@ export const updateSelectionDetailsByVendorCandidateId = async (
 };
 
 export const fetchLobs = async () => {
-  const response = await fetch("http://localhost:8080/users/lobs");
+  const response = await fetch("http://localhost:8080/users/lobs/active");
   if (!response.ok) {
     throw new Error("Failed to fetch LOBs");
   }
   return response.json();
 };
 
+export const fetchAllLobs = async () => {
+  const response = await fetch("http://localhost:8080/users/lobs");
+  if (!response.ok) {
+    throw new Error("Failed to fetch all LOBs");
+  }
+  return response.json();
+};
+
 export const fetchLob = async (lobId) => {
-  const response = await fetch("https://localhost:8080/users/lob/" + lobId);
+  const response = await fetch("http://localhost:8080/users/lob/" + lobId);
   if (!response.ok) {
     throw new Error("Failed to fetch lob");
   }
@@ -346,14 +368,46 @@ export const fetchSubLob = async (subLobId) => {
   return response.json();
 };
 
+export const changeLobStatus = async (lobId) => {
+  const response = await fetch(`http://localhost:8080/users/lobs/${lobId}/status`, {
+    method: "PUT",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to change LOB status");
+  }
+  return response.json();
+};
+
+export const updateLob = async(lobId,data) =>{
+  const response = await fetch(`http://localhost:8080/users/lobs/${lobId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update LOB");
+  }
+  return response.json();
+}
+
+export const countByLob = async(lobId) =>{
+  const response = await fetch(`http://localhost:8080/users/lob/count/${lobId}`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch LOB count");
+}
+
 export const fetchEmployeeCandidatesBySelections = async (
-  createdBy,
+  loggedInPsid,
   page = 0,
   size = 5
 ) => {
   const validPage = Math.max(0, page);
   const response = await fetch(
-    `http://localhost:8080/selection-details/api/employee-candidates?createdBy=${createdBy}&page=${validPage}&size=${size}`
+    `http://localhost:8080/selection-details/api/employee-candidates?loggedInPsid=${loggedInPsid}&page=${validPage}&size=${size}`
   );
   if (!response.ok) {
     throw new Error("Failed to fetch employee candidates");
@@ -410,3 +464,104 @@ export const getEvidenceBySelectionId = async (selectionId) => {
   }
   throw new Error("Failed to fetch Evidence");
 };
+
+export const createVendor = async (data) => {
+  const response = await fetch(`http://localhost:8080/vendors/create-vendor`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+}
+
+export const changeVendorStatus = async (vendorId) => {
+  const response = await fetch(`http://localhost:8080/vendors/status/${vendorId}`, {
+    method: "PUT",
+  });
+  
+if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json(); // parse JSON instead of text
+  return data;
+};
+
+export const editVendor = async (vendorId, data) => {
+  const response = await fetch(`http://localhost:8080/vendors/update-vendor/${vendorId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+}
+
+export const countVendorCandidates = async(vendorId) =>{
+  const response = await fetch(`http://localhost:8080/vendors/vendor-candidates/count/${vendorId}`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch vendor candidates count");
+}
+
+export const createRole = async(data) =>{
+  const response = await fetch(`http://localhost:8080/roles/create`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+}
+
+export const getRoleById = async(id)=>{
+  const response = await fetch(`http://localhost:8080/roles/${id}`)
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch role");
+}
+
+export const getAllRoles = async() =>{
+  const response = await fetch(`http://localhost:8080/roles/all`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch roles");
+}
+
+export const updateRole = async(roleId,data) =>{
+   const response = await fetch(`http://localhost:8080/roles/update/${roleId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+}
+
+export const countByRoles = async(roleId) =>{
+  const response = await fetch(`http://localhost:8080/roles/count/${roleId}`);
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch role count");
+}

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.onboarding.model.Vendor;
 import com.example.onboarding.model.VendorCandidate;
-import com.example.onboarding.repository.EmployeeRepository;
+//import com.example.onboarding.repository.EmployeeRepository;
 import com.example.onboarding.repository.VendorCandidateRepository;
 import com.example.onboarding.repository.VendorRepository;
 
@@ -21,18 +21,20 @@ public class VendorCandidateService {
     @Autowired
     private VendorCandidateRepository vendorCandidateRepository;
 
-    @Autowired
-    private UserService userService;
+    // @Autowired
+    // private UserService userService;
 
-    @Autowired
-    private EmployeeRepository employeeRepository;
+    // @Autowired
+    // private EmployeeRepository employeeRepository;
 
     public VendorCandidate getVendorCandidateById(Long phoneNumber) {
         Optional<VendorCandidate> vendorCandidate = vendorCandidateRepository.findByPhoneNumber(phoneNumber);
         return vendorCandidate.orElse(null);
     }
 
-    
+    public Integer getVendorCandidateCountByVendorId(int vendorId) {
+        return vendorCandidateRepository.getCombinedCandidateCountByVendorId(vendorId);
+    }
 
     public List<VendorCandidate> getAllVendorCandidates() {
         return vendorCandidateRepository.findAll();
@@ -47,12 +49,40 @@ public class VendorCandidateService {
         return vendorRepository.findAll();
     }
 
+    public Vendor createVendor(Vendor vendor){
+        System.out.println("VendorServicePoint "+ vendor);
+        vendor.setCreateDate(new Date());
+        vendor.setUpdateDate(new Date());
+        //vendor.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        //vendor.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        return vendorRepository.save(vendor);
+    }
+
+    public Vendor changeStatus(int vendorId) {
+        Vendor vendor = vendorRepository.findById(vendorId).orElse(null);
+        if (vendor != null) {
+            vendor.setStatus(!vendor.getStatus());
+            return vendorRepository.save(vendor);
+        }
+        return null;
+    }
+
+    public Vendor updateVendor(Vendor vendor,int vendorId){
+        if (vendorRepository.existsById(vendorId)) {
+            vendor.setVendorName(vendor.getVendorName());
+            vendor.setUpdateDate(new Date());
+            //vendor.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            return vendorRepository.save(vendor);
+        }
+        return null;
+    }
+
     public VendorCandidate createVendorCandidate(VendorCandidate vendorCandidate) {
         System.out.println("VendorServicePoint "+ vendorCandidate);
         vendorCandidate.setCreateDate(new Date());
         vendorCandidate.setUpdateDate(new Date());
-        vendorCandidate.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
-        vendorCandidate.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        //vendorCandidate.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        //vendorCandidate.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
         return vendorCandidateRepository.save(vendorCandidate);
     }
 

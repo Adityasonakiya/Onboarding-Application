@@ -32,8 +32,8 @@ public class SelectionDetailsService {
     @Autowired
     private SelectionDetailsRepository selectionDetailsRepository;
 
-    @Autowired
-    private UserService userService;
+    // @Autowired
+    // private UserService userService;
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -108,7 +108,7 @@ public class SelectionDetailsService {
             existingDetails.setCtoolStartDate(updatedDetails.getCtoolStartDate());
             existingDetails.setUpdateDate(new Date());
             existingDetails.setCreatedBy(existingDetails.getCreatedBy());
-            existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            existingDetails.setUpdatedBy(existingDetails.getUpdatedBy());
             return selectionDetailsRepository.save(existingDetails);
         }
         return selectionDetailsRepository.save(updatedDetails);
@@ -158,7 +158,7 @@ public class SelectionDetailsService {
             existingDetails.setUpdateDate(new Date());
             existingDetails.setIrm(updatedDetails.getIrm());
             existingDetails.setCreatedBy(existingDetails.getCreatedBy());
-            existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            existingDetails.setUpdatedBy(existingDetails.getUpdatedBy());
             return selectionDetailsRepository.save(existingDetails);
         }
         return selectionDetailsRepository.save(updatedDetails);
@@ -208,7 +208,7 @@ public class SelectionDetailsService {
             existingDetails.setUpdateDate(new Date());
             existingDetails.setIrm(updatedDetails.getIrm());
             existingDetails.setCreatedBy(existingDetails.getCreatedBy());
-            existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            existingDetails.setUpdatedBy(existingDetails.getUpdatedBy());
             return selectionDetailsRepository.save(existingDetails);
         }
         return selectionDetailsRepository.save(updatedDetails);
@@ -222,8 +222,8 @@ public class SelectionDetailsService {
         } else {
             details.setCreateDate(new Date());
             details.setUpdateDate(new Date());
-            details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
-            details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            // details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            // details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             System.out.println("Dates" + details.getCreateDate() + details.getUpdateDate());
             return selectionDetailsRepository.save(details);
         }
@@ -238,8 +238,8 @@ public class SelectionDetailsService {
         } else {
             details.setCreateDate(new Date());
             details.setUpdateDate(new Date());
-            details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
-            details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            //details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            //details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             System.out.println("Dates" + details.getCreateDate() + details.getUpdateDate());
             return selectionDetailsRepository.save(details);
         }
@@ -257,18 +257,18 @@ public class SelectionDetailsService {
 
         details.setCreateDate(new Date());
         details.setUpdateDate(new Date());
-        details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
-        details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        //details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        //.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
 
         System.out.println("Dates: " + details.getCreateDate() + " " + details.getUpdateDate());
 
         return selectionDetailsRepository.save(details);
     }
 
-    public Page<EmployeeCandidateDTO> getEmployeeCandidates(Integer createdBy, int page, int size) {
+    public Page<EmployeeCandidateDTO> getEmployeeCandidates(Integer loggedInPsid, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<EmployeeCandidateDTO> employeeCandidateDTOPage = selectionDetailsRepository.findEmployeeCandidates(
-                createdBy,
+                loggedInPsid,
                 pageable);
 
         logger.info("Employee Candidates Handler data : Page {} of {}", page, employeeCandidateDTOPage.getTotalPages());

@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.springframework.http.HttpHeaders;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +42,8 @@ public class FileUploadController {
     private EvidenceRepository evidenceRepository;
 
     @PostMapping("/upload")
-    public ResponseEntity<List<EvidenceDTO>> uploadFiles(@RequestParam("files") MultipartFile[] files,
-            @RequestParam("selectionId") int selectionId) {
+    public ResponseEntity<List<EvidenceDTO>> uploadFiles(@RequestParam MultipartFile[] files,
+            @RequestParam int selectionId) {
         System.out.println("Received selectionId: " + selectionId);
         List<EvidenceDTO> evidenceList = new ArrayList<>();
         selectionDetailsRepository.findById(selectionId)
@@ -69,7 +68,7 @@ public class FileUploadController {
 
             try {
                 // Ensure the upload directory exists
-                Path uploadDir = Paths.get(UPLOAD_DIR);
+                Path uploadDir = Path.of(UPLOAD_DIR);
                 if (!Files.exists(uploadDir)) {
                     Files.createDirectories(uploadDir);
                 }
@@ -93,7 +92,7 @@ public class FileUploadController {
 
     @GetMapping("/uploads/{filename:.+}")
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws IOException {
-        Path file = Paths.get(UPLOAD_DIR).resolve(filename);
+        Path file = Path.of(UPLOAD_DIR).resolve(filename);
         Resource resource = new UrlResource(file.toUri());
         if (!resource.exists()) {
             return ResponseEntity.notFound().build();
