@@ -978,12 +978,18 @@ function SelectionTracker() {
                           id="vendor-select"
                           value={form.vendors?.vendorId || ""}
                           onChange={handleVendorChange}
-                          className={`p-2 h-10 border rounded w-full md:w-[300px] ${
-                            errors.vendorId ? "border-red-500" : ""
-                          }`}
+                          className={`p-2 h-10 border rounded w-full md:w-[300px] 
+                            ${errors.vendorId ? "border-red-500" : ""}
+                            ${isInternal ? "bg-gray-100 text-gray-500" : ""}`}
                           disabled={isInternal || readOnly}
                         >
-                          <option value="">Select Vendor</option>
+                          {/* <option value="">Select Vendor</option> */}
+                          <option value="" disabled={isInternal}>
+                            {isInternal
+                              ? ""
+                              : "Select Vendor"}
+                          </option>
+
                           {vendors.map((vendor) => (
                             <option
                               key={vendor.vendorId}
@@ -1068,7 +1074,7 @@ function SelectionTracker() {
                   <input
                     type="number"
                     name="totalExp"
-                    value={form.tot || ""}
+                    value={form.totalExp || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                     disabled
@@ -1444,19 +1450,6 @@ function SelectionTracker() {
                   )}
                 </td>
 
-                {/* CTOOL Location */}
-                <td className="p-2 w-full md:w-1/4">
-                  <label htmlFor="ctoolLocation">CTOOL Location:</label>
-                  <input
-                    type="text"
-                    name="ctoolLocation"
-                    value={form.ctoolLocation || ""}
-                    onChange={handleChange}
-                    className="p-2 border rounded w-full"
-                    disabled={isReadOnly}
-                  />
-                </td>
-
                 {/* CTOOL Grade */}
                 <td className="p-2 w-full md:w-1/4">
                   <label htmlFor="ctoolGrade">CTOOL Grade:</label>
@@ -1470,21 +1463,18 @@ function SelectionTracker() {
                   />
                 </td>
 
-                {/* CTOOL Tagging Rate */}
+                {/* CTOOL Location */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label htmlFor="ctoolTaggingRate">CTOOL Tagging Rate:</label>
+                  <label htmlFor="ctoolLocation">CTOOL Location:</label>
                   <input
-                    type="number"
-                    name="ctoolTaggingRate"
-                    value={form.ctoolTaggingRate || ""}
+                    type="text"
+                    name="ctoolLocation"
+                    value={form.ctoolLocation || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                     disabled={isReadOnly}
                   />
                 </td>
-              </tr>
-
-              <tr className="flex flex-wrap md:flex-nowrap">
                 {/* Recruiter Name */}
                 <td className="p-2 w-full md:w-1/4">
                   <label htmlFor="recruiterName">Recruiter Name:</label>
@@ -1497,7 +1487,21 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   />
                 </td>
+              </tr>
 
+              <tr className="flex flex-wrap md:flex-nowrap">
+                {/* CTOOL Tagging Rate */}
+                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolTaggingRate">CTOOL Tagging Rate:</label>
+                  <input
+                    type="number"
+                    name="ctoolTaggingRate"
+                    value={form.ctoolTaggingRate || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
+                  />
+                </td>
                 {/* Proposed Rate */}
                 <td className="p-2 w-full md:w-1/4">
                   <label htmlFor="proposedRate">Proposed Rate:</label>
@@ -1514,11 +1518,11 @@ function SelectionTracker() {
               {!isReadOnly && (
                 <tr>
                   <td colSpan="4" className="p-2">
-                    <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 z-50 p-4 pl-16 flex justify-start space-x-4 shadow-md">
+                    <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 z-50 p-4 pl-14 flex justify-start space-x-4 shadow-md">
                       <button
                         type="submit"
                         onClick={handleSubmit}
-                        className="bg-blue-900 text-white py-2 px-10 rounded hover:bg-gray-500"
+                        className="bg-blue-900 text-white py-1.5 px-6  rounded hover:bg-gray-500"
                         disabled={form.invalid}
                         // disabled={isSubmitting}
                       >
@@ -1526,7 +1530,7 @@ function SelectionTracker() {
                       </button>
                       <button
                         type="button"
-                        className="text-blue-900 border border-blue-900 bg-transparent py-2 px-10 rounded hover:bg-gray-500"
+                        className="text-blue-900 border border-blue-900 bg-transparent py-1.5 px-6 rounded hover:bg-gray-500"
                         onClick={handleCancel}
                       >
                         Cancel
