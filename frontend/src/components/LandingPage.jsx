@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Pagination from "@mui/material/Pagination";
+import { FaSearch, FaEdit } from "react-icons/fa";
+import { HiPlus, HiRefresh } from "react-icons/hi"; // ✅ Added HiPlus icon
+// import { PencilIcon } from '@heroicons/react/solid';
 import usePagination from "@mui/material/usePagination";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext"; // adjust path as needed
+
 import {
   fetchEmployeeCandidatesBySelections,
   getCandidateById,
@@ -10,13 +15,15 @@ import {
   getEmployeeCandidateByCtool,
   getEmployeeCandidateByPsid,
   getEmployeeCandidateByCandidateId,
+  getBgvStatuses,
+  getCToolStatuses,
   getVendorById,
-  getCandidateByPhoneNumber
-
+  getCandidateByPhoneNumber,
 } from "../services/api";
 //import zIndex from "@mui/material/styles/zIndex";
 
 const LandingPage = () => {
+  const { permissions } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
@@ -31,18 +38,138 @@ const LandingPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [vendorNames, setVendorNames] = useState({});
 
-  const handleRowPerChange = (e) => {
-    setRowsPerPage(Number(e.target.value));
-    setCurrentPage(0);
+  console.log("Permissions", permissions);
+
+  //search bar
+
+  const [selectedOption, setSelectedOption] = useState("PSID");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [statusOptions, setStatusOptions] = useState([]);
+  const suggestionsRef = useRef(null);
+
+  // Debounce function
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
   };
+
+  const handleSearchChange = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    handleSearchChangeDebounced(query);
+  };
+
+  const handleSearchChangeDebounced = debounce(async (query) => {
+    if (query.length > 3) {
+      try {
+        let response;
+        if (selectedOption === "PSID") {
+          response = await fetch(
+            `http://localhost:8080/employees/search?query=${query}`
+          );
+        } else if (selectedOption === "CandidateName") {
+          response = await fetch(
+            `http://localhost:8080/candidates/api/candidates/search?query=${query}`
+          );
+        }
+
+        if (response.ok) {
+          const data = await response.json();
+          setSuggestions(data);
+        } else {
+          setSuggestions([]);
+        }
+      } catch (error) {
+        setSuggestions([]);
+      }
+    } else {
+      setSuggestions([]);
+    }
+  }, 300);
+
+  const handleOptionChange = (e) => {
+    setSelectedOption(e.target.value);
+    setSearchQuery("");
+    setSuggestions([]);
+    setSelectedStatus("");
+  };
+
+  const handleStatusChange = (e) => {
+    setSelectedStatus(e.target.value);
+  };
+
+  const handleSearch = () => {
+    const searchType = selectedOption === "CTool Status" ? "ctool" : "bgv";
+    navigate("/landing-page", {
+      state: { searchType, status: selectedStatus },
+    });
+  };
+
+  const handleSuggestionClick = (value) => {
+    if (selectedOption === "PSID") {
+      setSearchQuery(value);
+      navigate("/landing-page", { state: { id: value } });
+      setSuggestions([]);
+    } else if (selectedOption === "CandidateName") {
+      navigate("/landing-page", { state: { phoneNumber: value } });
+      setSuggestions([]);
+    } else {
+      setSelectedStatus(value);
+      handleSearch();
+    }
+  };
+
+  useEffect(() => {
+    const fetchStatusOptions = async () => {
+      if (selectedOption === "CTool Status") {
+        const statuses = await getCToolStatuses();
+        const uniqueStatuses = [
+          ...new Set(statuses.map((status) => status.onboardingStatus)),
+        ];
+        setStatusOptions(uniqueStatuses);
+      } else if (selectedOption === "BgvStatus") {
+        const statuses = await getBgvStatuses();
+        const uniqueStatuses = [
+          ...new Set(statuses.map((status) => status.bgvStatus)),
+        ];
+        setStatusOptions(uniqueStatuses);
+      } else {
+        setStatusOptions([]);
+      }
+    };
+    fetchStatusOptions();
+  }, [selectedOption]);
+
+  useEffect(() => {
+    if (
+      selectedOption !== "PSID" &&
+      selectedOption !== "CandidateName" &&
+      selectedStatus
+    ) {
+      handleSearch(); // Ensure handleSearch triggers only after selectedStatus updates
+    }
+  }, [selectedStatus, selectedOption]);
+
   const [activeTab, setActiveTab] = useState("myselection");
 
-  // Tab click handler
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     if (tab === "dashboard") {
       navigate("/selection-tracker-dashboard");
+    } else if (tab === "admin") {
+      navigate("/admin");
     }
+  };
+  const handleRowPerChange = (e) => {
+    setRowsPerPage(Number(e.target.value));
+    setCurrentPage(0);
   };
   useEffect(() => {
     console.log("State object:", state); // Log the state object to debug
@@ -60,20 +187,23 @@ const LandingPage = () => {
   };
 
   const handleRefresh = () => {
+    setCurrentPage(0); 
     navigate("/landing-page");
   };
 
   const handleViewOnly = (id, phoneNumber) => {
-    navigate("/selection-tracker", { state: { id, phoneNumber, readOnly: true } }); // Pass the readOnly flag
+    navigate("/selection-tracker", {
+      state: { id, phoneNumber, readOnly: true },
+    }); // Pass the readOnly flag
     console.log("ID:", id);
     console.log("Phone Number:", phoneNumber);
   };
 
   const handlePageClick = (page) => {
-      console.log("Page clicked:", page);
-      setCurrentPage(page - 1);
-    };
-    
+    console.log("Page clicked:", page);
+    setCurrentPage(page - 1);
+  };
+
   useEffect(() => {
     const getEmployeeCandidates = async () => {
       const user = JSON.parse(localStorage.getItem("user")).psid;
@@ -89,7 +219,11 @@ const LandingPage = () => {
           content = response;
           totalPages = response.totalPages;
         } else {
-          const response = await fetchEmployeeCandidatesBySelections(user, currentPage, rowsPerPage);
+          const response = await fetchEmployeeCandidatesBySelections(
+            user,
+            currentPage,
+            rowsPerPage
+          );
           content = response.content;
           totalPages = response.totalPages;
         }
@@ -129,13 +263,15 @@ const LandingPage = () => {
             setTotalPages(1);
             console.log("searched Candidate using phone:", candidate);
           }
-        }
-        else {
+        } else {
           setFilteredCandidates(content);
           console.log("displaying All");
         }
       } catch (error) {
-        console.error("There was an error fetching the employee candidates!", error);
+        console.error(
+          "There was an error fetching the employee candidates!",
+          error
+        );
       }
     };
     getEmployeeCandidates();
@@ -151,145 +287,308 @@ const LandingPage = () => {
     console.log("TotalPages", totalPages);
   }, [totalPages, currentPage]);
 
+
   return (
-    <div className="w-full px-2 py-2">
-      {/* Tabs */}
-      <div className="flex mb-2 border-b"> {/* <-- Added bg-gray-100 */}
+    <>
+      {permissions?.canViewDashboard && (
+    <div className="w-full px-4 py-6 mt-0">
+      {/* Tabs code*/}
+      <div className="flex mb-2 border-b">
         <button
-          className={`px-4 py-2 font-semibold focus:outline-none ${activeTab === "myselection" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-600"}`}
+          className={`px-4 py-2 font-semibold focus:outline-none ${
+            activeTab === "myselection"
+              ? "border-b-2 border-blue-800 text-blue-800"
+              : "text-gray-600"
+          }`}
           onClick={() => handleTabClick("myselection")}
         >
           My Selection
         </button>
         <button
-          className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${activeTab === "dashboard" ? "border-b-2 border-blue-500 text-blue-600" : "text-gray-600"}`}
+          className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
+            activeTab === "dashboard"
+              ? "border-b-2 border-blue-500 text-blue-600"
+              : "text-gray-600"
+          }`}
           onClick={() => handleTabClick("dashboard")}
         >
           Selection Tracker Dashboard
         </button>
+        {permissions?.canAccessAdminDashboard && (
+              <button
+                className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
+                  activeTab === "admin"
+                    ? "border-b-2 border-blue-500 text-blue-600"
+                    : "text-gray-600"
+                }`}
+                onClick={() => handleTabClick("admin")}
+              >
+                Admin Dashboard
+              </button>
+            )}
       </div>
-    <div className="mx-4 h-full flex flex-col">
-        <div className="flex justify-between items-center flex-wrap mt-4">
-          {/* <h2 className="py-2 font-bold text-lg">My Selections</h2> */}
-          <div className="flex ml-auto">
+
+      {/* Search Bar with Buttons */}
+      <div className="w-full flex items-center gap-2 -mb-4 mt-10 pl-8">
+
+        {/* Search Bar */}
+        <div className="flex items-center bg-gray-200 rounded-full px-2 py-1 md:px-3 relative w-full md:w-auto">
+          <select
+            value={selectedOption}
+            onChange={handleOptionChange}
+            className="bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2 w-full sm:w-1/2 md:w-1/3 lg:w-auto"
+          >
+            <option value="PSID">PSID</option>
+            <option value="CandidateName">Candidate Name</option>
+            <option value="CTool Status">CTool Status</option>
+            <option value="BgvStatus">BgvStatus</option>
+          </select>
+
+          <div className="w-full relative w-2/3 md:w-auto">
+            {(selectedOption === "PSID" ||
+              selectedOption === "CandidateName") && (
+              <input
+                type="text"
+                className="bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2 w-full"
+                placeholder={selectedOption}
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+            )}
+            {selectedOption !== "PSID" &&
+              selectedOption !== "CandidateName" && (
+                <select
+                  value={selectedStatus}
+                  onChange={handleStatusChange}
+                  className="bg-transparent outline-none text-gray-800 text-sm md:text-base px-1 md:px-2 w-full"
+                >
+                  <option value="">Select Status</option>
+                  {statusOptions.map((status, index) => (
+                    <option key={index} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </select>
+              )}
+            {suggestions.length > 0 && (
+              <div
+                ref={suggestionsRef}
+                className="absolute top-9 left-1 bg-white p-1 w-full md:w-56 border border-gray-300 rounded-md"
+              >
+                {suggestions.map((suggestion) => (
+                  <div
+                    key={suggestion.id}
+                    className="cursor-pointer border-b-2 border-gray-400 p-1"
+                    onClick={() => {
+                      if (selectedOption === "PSID") {
+                        handleSuggestionClick(suggestion.id);
+                      } else if (selectedOption === "CandidateName") {
+                        handleSuggestionClick(`${suggestion.phoneNumber}`);
+                      } else {
+                        handleSuggestionClick(
+                          suggestion.onboardingStatus || suggestion.bgvStatus
+                        );
+                        handleSearch();
+                      }
+                    }}
+                  >
+                    <p className="text-sm">
+                      Name: {suggestion.firstName} {suggestion.lastName}
+                    </p>
+                    {selectedOption === "PSID" && (
+                      <p className="text-sm">PSID: {suggestion.id}</p>
+                    )}
+                    {selectedOption === "CandidateName" && (
+                      <p className="text-sm">
+                        Phone number: {suggestion.phoneNumber}
+                      </p>
+                    )}
+                    {(selectedOption === "CTool Status" ||
+                      selectedOption === "BgvStatus") && (
+                      <p className="text-sm">
+                        Status: {suggestion.onboardingStatus}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <FaSearch
+            className={`text-gray-800 hover:text-gray-400 duration-300 cursor-pointer ${
+              (selectedOption === "PSID" ||
+                selectedOption === "CandidateName") &&
+              "cursor-not-allowed"
+            }`}
+            onClick={
+              selectedOption === "PSID" || selectedOption === "CandidateName"
+                ? null
+                : handleSearch
+            }
+          />
+        </div>
+         {/* Buttons on the left */}
+        <div className="flex items-center gap-2">
+         {permissions?.canAddSelection &&(
+          <div className="relative group">
             <button
-              className="bg-blue-500 text-white py-2 px-4 rounded mt-2 md:mt-0 mr-2"
+              className="bg-blue-400 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-blue-600 transition duration-200"
+              onClick={addNewSelection}
+            >
+              <HiPlus size={20} />
+            </button>
+            <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-400 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+              Add New Selection
+            </div>
+          </div>
+          )}
+          <div>
+            <div className="relative group">
+            <button
+              className="bg-blue-400 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-blue-600 transition duration-200"
+              onClick={handleRefresh}
+            >
+              <HiRefresh size={16} />
+            </button>
+            <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-400 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+              Refresh
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="flex justify-between flex-wrap">
+          <div className="w-full flex justify-end mt-2 mb-0">
+            <button
+              className="bg-blue-400 text-white py-2 px-4 hover:bg-blue-600 rounded mt-2 md:mt-0 mr-2"
               onClick={addNewSelection}
             >
               Add New Selection
             </button>
+            <div className="mt-2 mb-0 flex justify-end">
             <button
-              className="bg-gray-500 text-white py-2 px-4 rounded mt-2 md:mt-0"
+              className="bg-gray-500 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-blue-600 transition duration-200"
               onClick={handleRefresh}
             >
-              Refresh
+              <HiRefresh size={14}/>
             </button>
+            </div>
           </div>
-        </div>
-        <div
-          className=" overflow-x-auto mt-1 flex-grow"
-          style={{ maxHeight: "calc(100vh - 200px)", overflowY: "auto" }}
-        >
-          <table className="w-full border-collapse">
-            <thead className="bg-blue-200 top-0 sticky" style={{ zIndex: 1 }}>
-              <tr>
-                <th className="p-2 text-center">PSID/External</th>
-                <th className="p-2 text-center">Name</th>
-                <th className="p-2 text-center">LOB</th>
-                <th className="p-2 text-center">Client Name</th>
-                <th className="p-2 text-center">CTool Status</th>
-                <th className="p-2 text-center">BGV Status</th>
-                <th className="p-2 text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredCandidates.map((emp, index) => (
-                <tr key={`${emp.id}-${index}`}>
-                  <td className="p-2 border text-center ">
+        </div> */}
+      <div
+        className=" overflow-x-auto mt-10 flex-grow max-w-[95%] mx-auto"
+        style={{ maxHeight: "calc(100vh - 300px)", overflowY: "auto" }}
+      >
+        <table className="w-full border-collapse">
+          <thead className="bg-blue-400 top-0 sticky" style={{ zIndex: -1 }}>
+            <tr>
+              <th className="p-2 text-center">PSID/External</th>
+              <th className="p-2 text-center">Name</th>
+              <th className="p-2 text-center">LOB</th>
+              <th className="p-2 text-center">Client Name</th>
+              <th className="p-2 text-center">CTool Status</th>
+              <th className="p-2 text-center">BGV Status</th>
+              <th className="p-2 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredCandidates.map((emp, index) => (
+              <tr key={`${emp.id}-${index}`}>
+                <td className="p-2 border text-center">
+                  <button
+                    className="text-blue-400 underline"
+                    onClick={() => handleViewOnly(emp.id, emp.phoneNumber)}
+                  >
+                    {emp.id === 1
+                      ? "EXTERNAL"
+                      : emp.id < 100
+                      ? vendorNames[emp.id]
+                      : emp.id}
+                  </button>
+                </td>
+                <td className="p-2 border text-left">
+                  {emp.firstName} {emp.lastName}
+                </td>
+                <td className="p-2 border text-left">{emp.lobName}</td>
+                <td className="p-2 border text-left">
+                  {emp.hsbchiringManager}
+                </td>
+                <td className="p-2 border text-left">
+                  {emp.onboardingStatus || "-"}
+                </td>
+                <td className="p-2 border text-left">
+                  {emp.bgvStatus || "-"}
+                </td>
+                <td className="p-2 border text-center">
+                  <div className="flex justify-center">
+                    {permissions?. canUpdateSelection && (
                     <button
-                      className="text-blue-500 underline"
-                      onClick={() => handleViewOnly(emp.id, emp.phoneNumber)}
+                      className="bg-gray-400 text-white p-[4px] rounded mr-2 hover:bg-gray-800 transition duration-200"
+                      onClick={() => handleEdit(emp.id, emp.phoneNumber)}
                     >
-                      {emp.id === 1 ? 'EXTERNAL' : (emp.id < 100 ? vendorNames[emp.id] : emp.id)}
+                      <FaEdit size={12} />
                     </button>
-                  </td>
-                  <td className="p-2 border text-center">
-                    {emp.firstName} {emp.lastName}
-                  </td>
-                  <td className="p-2 border text-center">{emp.lobName}</td>
-                  <td className="p-2 border text-center">
-                    {emp.hsbchiringManager}
-                  </td>
-                  <td className="p-2 border text-center">
-                    {emp.onboardingStatus || "-"}
-                  </td>
-                  <td className="p-2 border text-center">
-                    {emp.bgvStatus || "-"}
-                  </td>
-                  <td className="p-2 border text-center">
-                    <div className="flex justify-center">
-                      <button
-                        className="bg-blue-500 text-white py-1 px-2 rounded mr-2"
-                        onClick={() => handleEdit(emp.id, emp.phoneNumber)}
-                      >
-                        Edit
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {/* Pagination and Select Rows Controls */}
-        <div className="fixed bottom-0 left-0 w-full bg-white py-2 z-0 flex justify-between items-center px-4">
-          <div className="flex justify-center flex-grow">
-            <button
-              className={`px-3 py-1 mx-1 ${currentPage === 0 ? "text-black font-bold" : "text-gray-900"
-                }`}
-              onClick={() => handlePageClick(1)}
-              disabled={currentPage === 0}
-            >
-              {"<<"}
-            </button>
-            <Pagination
-              count={totalPages}
-              page={currentPage + 1}
-              onChange={(e, value) => handlePageClick(value)}
-              siblingCount={1}
-              boundaryCount={1}
-            />
-            <button
-              className={`px-3 py-1 mx-1 ${currentPage === totalPages - 1
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {/* Pagination and Select Rows Controls */}
+      <div className="fixed bottom-0 left-0 w-full bg-white py-2 z-0 flex justify-between items-center px-4">
+        <div className="flex justify-center flex-grow">
+          <button
+            className={`px-3 py-1 mx-1 ${
+              currentPage === 0 ? "text-black font-bold" : "text-gray-900"
+            }`}
+            onClick={() => handlePageClick(1)}
+            disabled={currentPage === 0}
+          >
+            {"<<"}
+          </button>
+          <Pagination
+            count={totalPages}
+            page={currentPage + 1}
+            onChange={(e, value) => handlePageClick(value)}
+            siblingCount={1}
+            boundaryCount={1}
+          />
+          <button
+            className={`px-3 py-1 mx-1 ${
+              currentPage === totalPages - 1
                 ? " text-black font-bold"
                 : "text-gray-900"
-                }`}
-              onClick={() => handlePageClick(totalPages)}
-              disabled={currentPage === totalPages - 1}
-            >
-              {">>"}
-            </button>
-          </div>
-          <div className="flex items-center ml-auto mr-8">
-            <label htmlFor="rowsPerPage" className="mr-5 font-bold">
-              Select rows:
-            </label>
-            <select
-              id="rowsPerPage"
-              value={rowsPerPage}
-              onChange={handleRowPerChange}
-              className="select-button p-1 border border-gray-300 rounded shadow"
-            >
-              {[5, 10, 20, 50, 100].map((num) => (
-                <option key={num} value={num}>
-                  {num}
-                </option>
-              ))}
-            </select>
-          </div>
+            }`}
+            onClick={() => handlePageClick(totalPages)}
+            disabled={currentPage === totalPages - 1}
+          >
+            {">>"}
+          </button>
+        </div>
+        <div className="flex items-center ml-auto mr-8">
+          <label htmlFor="rowsPerPage" className="mr-5 font-bold">
+            Select rows:
+          </label>
+          <select
+            id="rowsPerPage"
+            value={rowsPerPage}
+            onChange={handleRowPerChange}
+            className="select-button p-1 border border-gray-300 rounded shadow"
+          >
+            {[5, 10, 20, 50, 100].map((num) => (
+              <option key={num} value={num}>
+                {num}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
-      </div>
+    </div>
+      )}
+    </>
   );
 };
 export default LandingPage;

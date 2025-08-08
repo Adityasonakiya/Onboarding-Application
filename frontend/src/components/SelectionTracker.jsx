@@ -78,10 +78,10 @@ function SelectionTracker() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!form.lob.lobId) newErrors.lob = "This field is required.";
-    if (!form.subLob.subLOBid || form.subLob.subLOBid === "0")
-      newErrors.subLob = "This field is required.";
-    if (!form.irm) newErrors.irm = "This field is required.";
+    // if (!form.lob.lobId) newErrors.lob = "This field is required.";
+    // if (!form.subLob.subLOBid || form.subLob.subLOBid === "0")
+    //   newErrors.subLob = "This field is required.";
+    // if (!form.irm) newErrors.irm = "This field is required.";
     if (isExternal) {
       if (!form.phone) {
         newErrors.phone = "Phone number is required.";
@@ -293,10 +293,14 @@ function SelectionTracker() {
       salespoc: selectedLob?.salesPOC || "",
     }));
     if (selectedLob) {
-    console.log(selectedLob.hsbchead,selectedLob.deliveryManager,selectedLob.salesPOC);
-  } else {
-    console.log("No LOB selected or LOB not found.");
-  }
+      console.log(
+        selectedLob.hsbchead,
+        selectedLob.deliveryManager,
+        selectedLob.salesPOC
+      );
+    } else {
+      console.log("No LOB selected or LOB not found.");
+    }
     setErrors((prevErrors) => ({
       ...prevErrors,
       lob: value ? "" : "This field is required.",
@@ -709,6 +713,8 @@ function SelectionTracker() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+     const user = JSON.parse(localStorage.getItem("user")).psid;
+
     if (validateForm()) {
       const errors = validate(); // Validate the form inputs
       // Additional required field validations
@@ -761,6 +767,8 @@ function SelectionTracker() {
             recruiterName: form.recruiterName,
             offerReleaseStatus: form.offerReleaseStatus,
             ltionboardingDate: form.ltiOnboardDate,
+            createdBy:user,
+            updatedBy:user,
           };
 
           if (form.psId) {
@@ -785,6 +793,8 @@ function SelectionTracker() {
               vendorId: form.vendors.vendorId,
               firstName: form.fname,
               lastName: form.lname,
+              createdBy:user,
+              updatedBy:user,
             };
 
             console.log("Candidate Payload:", candidate); // Step 1: Create vendor candidate
@@ -832,6 +842,8 @@ function SelectionTracker() {
               vendor: form.vendors,
               firstName: form.fname,
               lastName: form.lname,
+              createdBy:user,
+              updatedBy:user,
             };
 
             console.log("VendorCandidate Payload:", vendorCandidate); // Step 1: Create vendor candidate
@@ -891,229 +903,228 @@ function SelectionTracker() {
     }
   };
   return (
-    <div className="w-full px-4 py-6">
-      <h1 className="py-2 flex items-center justify-center bg-blue-300 font-bold text-lg md:text-xl">
+    <div className="max-w-10xl mx-auto bg-white shadow-lg rounded-lg p-4">
+      <h1 className="text-2xl font-bold text-left text-black mb-6">
         HSBC Selection Tracker Form
       </h1>
       <form onSubmit={handleSubmit}>
-        <div className="overflow-x-auto">
+        <h4 className="text-base font-bold text-black-700 border-b pb-2 mb-5 mt-6">
+          Employee Type
+        </h4>
+        <div className="overflow-x-auto -mt-2">
           <table className="w-full border-collapse">
             <tbody>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">Internal</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="radio"
-                    name="psidType"
-                    value="internal"
-                    checked={isInternal}
-                    onChange={() => refetchForm("internal")}
-                    className="p-2"
-                    disabled={isReadOnly}
-                  />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-bold">External</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="radio"
-                    name="psidType"
-                    value="external"
-                    checked={!isInternal}
-                    onChange={() => refetchForm("external")}
-                    className="p-2"
-                    disabled={isReadOnly}
-                  />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap ">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
-                    PS ID:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="number"
-                    name="psId"
-                    value={form.psId || ""}
-                    onChange={handleChange}
-                    required
-                    className={`p-2 border rounded w-full ${
-                      errors.psId ? "border-red-500" : ""
-                    }`}
-                    disabled={!isInternal || readOnly}
-                    pattern="\d*"
-                  />
-                  {errors.psId && (
-                    <p className="text-red-500 text-sm mb-4">{errors.psId}</p>
-                  )}
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold" htmlFor="vendor-select">
-                    Vendor:
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4" colSpan="2">
-                  <select
-                    name="vendors"
-                    id="vendor-select"
-                    value={form.vendors?.vendorId || ""}
-                    onChange={handleVendorChange}
-                    className={`p-2 border rounded w-full ${
-                      errors.vendorId ? "border-red-500" : ""
-                    }`}
-                    disabled={isInternal || readOnly}
+              <div className="relative group text-left">
+                <tr className="flex flex-wrap md:flex-nowrap">
+                  <td
+                    className="p-2 w-full md:w-1/4 flex items-center gap-4"
+                    colSpan={2}
                   >
-                    <option value="">Select Vendor</option>
-                    {vendors.map((vendor) => (
-                      <option key={vendor.vendorId} value={vendor.vendorId}>
-                        {vendor.vendorName}
-                      </option>
-                    ))}
-                  </select>
-                  {/* )} */}
-                  {errors.vendorId && (
-                    <p className="text-red-500 text-sm mb-4">
-                      {errors.vendorId}
-                    </p>
-                  )}
-                </td>
-              </tr>
-              <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
-                Basic Info
-              </h4>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">First Name:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                    <label>Internal</label>
+                    <input
+                      type="radio"
+                      name="psidType"
+                      value="internal"
+                      checked={isInternal}
+                      onChange={() => refetchForm("internal")}
+                      className="p-2"
+                      disabled={isReadOnly}
+                    />
+
+                    <div className="mx-8" />
+
+                    <label className="font-semobold">External</label>
+                    <input
+                      type="radio"
+                      name="psidType"
+                      value="external"
+                      checked={!isInternal}
+                      onChange={() => refetchForm("external")}
+                      className="p-2"
+                      disabled={isReadOnly}
+                    />
+                  </td>
+                </tr>
+              </div>
+              <div>
+                <tr className="flex flex-wrap md:flex-nowrap">
+                  <td className="p-2 w-full md:w-1/4">
+                    <div className="flex flex-col md:flex-row gap-4">
+                      {/* PS ID Field */}
+                      <div className="flex-1">
+                        <label className="font-semibold">
+                          PS ID:<span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          name="psId"
+                          value={form.psId || ""}
+                          onChange={handleChange}
+                          required
+                          className={`p-2 h-10 border rounded w-full md:w-[300px]  ${
+                            errors.psId ? "border-red-500" : ""
+                          }`}
+                          disabled={!isInternal || readOnly}
+                          pattern="\d*"
+                        />
+                        {errors.psId && (
+                          <p className="text-red-500 text-sm mb-4">
+                            {errors.psId}
+                          </p>
+                        )}
+                      </div>
+                      {/* Vendor Dropdown */}
+                      <div className="flex-1">
+                        <label
+                          className="font-semibold"
+                          htmlFor="vendor-select"
+                        >
+                          Vendor:
+                        </label>
+                        <select
+                          name="vendors"
+                          id="vendor-select"
+                          value={form.vendors?.vendorId || ""}
+                          onChange={handleVendorChange}
+                          className={`p-2 h-10 border rounded w-full md:w-[300px] 
+                            ${errors.vendorId ? "border-red-500" : ""}
+                            ${isInternal ? "bg-gray-100 text-gray-500" : ""}`}
+                          disabled={isInternal || readOnly}
+                        >
+                          {/* <option value="">Select Vendor</option> */}
+                          <option value="" disabled={isInternal}>
+                            {isInternal
+                              ? ""
+                              : "Select Vendor"}
+                          </option>
+
+                          {vendors.map((vendor) => (
+                            <option
+                              key={vendor.vendorId}
+                              value={vendor.vendorId}
+                            >
+                              {vendor.vendorName}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.vendorId && (
+                          <p className="text-red-500 text-sm mb-4">
+                            {errors.vendorId}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </div>
+              <h4 className="text-lg font-bold px-2 py-1 mt-4">Basic Info</h4>
+              <div className="flex flex-wrap md:flex-nowrap">
+                <div className="p-2 w-full md:w-1/4">
+                  <label>First Name:</label>
                   <input
                     type="text"
                     name="fname"
                     value={form.fname || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled={isInternal || readOnly}
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Last Name:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Last Name:</label>
                   <input
                     type="text"
                     name="lname"
                     value={form.lname || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled={isInternal || readOnly}
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Grade:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Grade:</label>
                   <input
                     type="text"
                     name="grade"
                     value={form.grade || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Location:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Location:</label>
                   <input
                     type="text"
                     name="location"
                     value={form.location || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">PU:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+              </div>
+
+              <div className="flex flex-wrap md:flex-nowrap">
+                <div className="p-2 w-full md:w-1/4">
+                  <label>PU:</label>
                   <input
                     type="text"
                     name="pu"
                     value={form.pu || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Total Exp:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Total Exp:</label>
                   <input
                     type="number"
                     name="totalExp"
                     value={form.totalExp || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Skill:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Skill:</label>
                   <input
                     type="text"
                     name="skill"
                     value={form.skill || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Mail ID:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+                <div className="p-2 w-full md:w-1/4">
+                  <label>Mail ID:</label>
                   <input
                     type="text"
                     name="email"
                     value={form.email || ""}
                     onChange={handleChange}
-                    className="p-2 border rounded w-full bg-slate-100"
+                    className="p-2 border rounded w-full"
                     disabled
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
+                </div>
+              </div>
+              <div className="flex-wrap md:flex-nowrap">
+                <div className="p-2 w-full md:w-1/4">
+                  <label>
                     Phone Number:
                     <span className="text-red-500" hidden={isInternal}>
                       *
                     </span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4" colSpan="2">
                   <input
-                    type="text"
+                    type="number"
                     name="phone"
                     value={form.phone || ""}
                     onChange={handleChange}
-                    className={`p-2 border rounded w-full bg-slate-100 ${
+                    className={`p-2 border rounded w-full ${
                       errors.phone ? "border-red-500" : ""
                     }`}
                     disabled={isInternal || readOnly}
@@ -1122,25 +1133,18 @@ function SelectionTracker() {
                   {errors.phone && (
                     <p className="text-red-500 text-sm">{errors.phone}</p>
                   )}
-                </td>
-              </tr>
+                </div>
+              </div>
             </tbody>
           </table>
         </div>
-        <h4 className="bg-gray-200 font-bold px-2 py-1 mt-4">
-          Selection Details
-        </h4>
-        <div className="overflow-x-auto">
+        <h4 className="font-bold px-2 py-1 mt-4">Selection Details</h4>
+        <div className="overflow-x-auto max-h-[600px] pb-24">
           <table className="w-full border-collapse">
             <tbody>
-              <tr className="flex flex-wrap md:flex-nowrap items-center">
-                <td className="p-2 w-full md:w-1/4 flex items-center">
-                  <label className="font-semibold">
-                    Selection Date:<span className="text-red-500">*</span>
-                  </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  {" "}
+              <div className="flex flex-wrap md:flex-nowrap items-center">
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="selectionDate">Selection Date:</label>
                   <input
                     type="date"
                     name="selectionDate"
@@ -1151,17 +1155,16 @@ function SelectionTracker() {
                       errors.selectionDate ? "border-red-500" : ""
                     }`}
                     disabled={readOnly}
-                  />{" "}
+                  />
                   {errors.selectionDate && (
                     <p className="text-red-500 text-sm">
                       {errors.selectionDate}
                     </p>
                   )}
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Base BU:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="bu">Base BU:</label>
                   <input
                     type="text"
                     name="bu"
@@ -1170,21 +1173,18 @@ function SelectionTracker() {
                     className="p-2 border rounded w-full"
                     disabled={isReadOnly}
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label htmlFor="lob-select" className="font-semibold">
+                </div>
+
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="lob-select">
                     LOB:<span className="text-red-500">*</span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
                   <select
                     value={form.lob?.lobId || ""}
                     onChange={handleLobChange}
                     name="lob"
                     id="lob-select"
-                    className={`p-2 bordered w-full ${
+                    className={`p-2 border rounded w-full ${
                       errors.lob ? "border-red-500" : ""
                     }`}
                     disabled={isReadOnly}
@@ -1200,19 +1200,17 @@ function SelectionTracker() {
                   {errors.lob && (
                     <p className="text-red-500 text-sm">{errors.lob}</p>
                   )}
-                </td>
+                </div>
 
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold" htmlFor="sub-lob-select">
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="sub-lob-select">
                     Sub LOB:<span className="text-red-500">*</span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
                   <select
                     name="subLob"
                     id="sub-lob-select"
                     value={form.subLob?.subLOBid || ""}
-                    className={`p-2 border w-full ${
+                    className={`p-2 border rounded w-full ${
                       errors.subLob ? "border-red-500" : ""
                     }`}
                     onChange={handleSubLobChange}
@@ -1228,15 +1226,14 @@ function SelectionTracker() {
                   {errors.subLob && (
                     <p className="text-red-500 text-sm">{errors.subLob}</p>
                   )}
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
+                </div>
+              </div>
+              <div className="flex flex-wrap md:flex-nowrap">
+                {/* HSBC Hiring Manager */}
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="hiringManager">
                     HSBC Hiring Manager:<span className="text-red-500">*</span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
                   <input
                     type="text"
                     name="hiringManager"
@@ -1246,13 +1243,13 @@ function SelectionTracker() {
                     className="p-2 border rounded w-full"
                     disabled={isReadOnly}
                   />
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
+                </div>
+
+                {/* HSBC Head */}
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="head">
                     HSBC Head:<span className="text-red-500">*</span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
                   <input
                     type="text"
                     name="head"
@@ -1262,15 +1259,13 @@ function SelectionTracker() {
                     className="p-2 border rounded w-full"
                     disabled={isReadOnly}
                   />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
+                </div>
+
+                {/* Delivery Manager */}
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="deliveryManager">
                     Delivery Manager:<span className="text-red-500">*</span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
                   <select
                     name="deliveryManager"
                     value={form.deliveryManager || ""}
@@ -1294,11 +1289,11 @@ function SelectionTracker() {
                     <option value="Saber Sarode">Saber Sarode</option>
                     <option value="Sachin Shaha">Sachin Shaha</option>
                   </select>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Sales POC:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                </div>
+
+                {/* Sales POC */}
+                <div className="p-2 w-full md:w-1/4">
+                  <label htmlFor="salespoc">Sales POC:</label>
                   <select
                     name="salespoc"
                     value={form.salespoc || ""}
@@ -1314,13 +1309,13 @@ function SelectionTracker() {
                     <option value="Kinshuk Awasthi">Kinshuk Awasthi</option>
                     <option value="Ajay Pillai">Ajay Pillai</option>
                   </select>
-                </td>
-              </tr>
+                </div>
+              </div>
+
               <tr className="flex flex-wrap md:flex-nowrap">
+                {/* Pricing Model */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Pricing Model:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="pricingModel">Pricing Model:</label>
                   <select
                     name="pricingModel"
                     value={form.pricingModel || ""}
@@ -1334,12 +1329,12 @@ function SelectionTracker() {
                     <option value="Buffer">Buffer</option>
                   </select>
                 </td>
+
+                {/* IRM */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">
+                  <label htmlFor="irm">
                     IRM:<span className="text-red-500">*</span>
                   </label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
                   <div className="relative w-full">
                     <input
                       type="text"
@@ -1355,7 +1350,6 @@ function SelectionTracker() {
                       }`}
                       disabled={isReadOnly}
                     />
-
                     {/* Clear button */}
                     {irmName && (
                       <button
@@ -1374,12 +1368,10 @@ function SelectionTracker() {
                     <p className="text-red-500 text-sm">{errors.irm}</p>
                   )}
                 </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
+
+                {/* HSBC CTOOL ID */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">HSBC CTOOL ID:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolId">HSBC CTOOL ID:</label>
                   <input
                     type="number"
                     name="ctoolId"
@@ -1398,11 +1390,10 @@ function SelectionTracker() {
                     </div>
                   )}
                 </td>
-                <td className="p-2 w-full md:w-1/4 items-center">
-                  <label className="font-semibold">CTOOL Received Date:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4 flex items-center">
-                  {" "}
+
+                {/* CTOOL Received Date */}
+                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolRecDate">CTOOL Received Date:</label>
                   <input
                     type="date"
                     name="ctoolRecDate"
@@ -1413,7 +1404,7 @@ function SelectionTracker() {
                       errors.ctoolRecDate ? "border-red-500" : ""
                     }`}
                     disabled={readOnly}
-                  />{" "}
+                  />
                   {errors.ctoolRecDate && (
                     <p className="text-red-500 text-sm">
                       {errors.ctoolRecDate}
@@ -1421,110 +1412,55 @@ function SelectionTracker() {
                   )}
                 </td>
               </tr>
+
               <tr className="flex flex-wrap md:flex-nowrap">
+                {/* HSBC Roles */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">HSBC Roles:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <div ref={comboboxRef} style={{ position: "relative" }}>
-                    {/* Input field */}
+                  <label htmlFor="hsbcRoles">HSBC Roles:</label>
+                  <div ref={comboboxRef} className="relative w-full">
                     <input
                       type="text"
                       name="hsbcRoles"
                       placeholder="Search or select a role..."
                       value={searchTerm}
-                      className={`p-2 border w-full ${
+                      className={`p-2 border rounded w-full ${
                         errors.hsbcRoles ? "border-red-500" : ""
                       }`}
                       disabled={isReadOnly}
                       onChange={handleSearch}
-                      onFocus={() => setShowDropdown(true)} // Open dropdown on focus
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        border: "1px solid #ccc",
-                        borderRadius: "4px",
-                      }}
+                      onFocus={() => setShowDropdown(true)}
                     />
-
-                    {/* Dropdown options (conditionally rendered) */}
+                    {/* Dropdown options */}
                     {showDropdown && filteredRoles.length > 0 && (
-                      <ul
-                        style={{
-                          position: "absolute",
-                          top: "100%",
-                          left: "0",
-                          width: "100%",
-                          maxHeight: "200px",
-                          overflowY: "auto",
-                          background: "#fff",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          zIndex: "1000",
-                          padding: "0",
-                          margin: "0",
-                          listStyleType: "none",
-                        }}
-                      >
+                      <ul className="absolute top-full left-0 w-full max-h-52 overflow-y-auto bg-white border border-gray-300 rounded z-10">
                         {filteredRoles.map((role) => (
                           <li
                             key={role.ref}
                             onClick={() =>
                               handleSelect(role.roleTitle, role.ref, role.grade)
-                            } // Properly update input value
-                            style={{
-                              padding: "8px",
-                              cursor: "pointer",
-                              borderBottom: "1px solid #f0f0f0",
-                            }}
+                            }
+                            className="px-2 py-1 cursor-pointer hover:bg-gray-100 border-b border-gray-100"
                           >
                             {role.roleTitle}
                           </li>
                         ))}
                       </ul>
                     )}
-
-                    {/* Fallback for no matches */}
+                    {/* No matches fallback */}
                     {showDropdown && filteredRoles.length === 0 && (
-                      <div
-                        style={{
-                          padding: "8px",
-                          background: "#fff",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          marginTop: "4px",
-                        }}
-                      >
+                      <div className="mt-1 p-2 bg-white border border-gray-300 rounded">
                         No matching roles found
                       </div>
                     )}
                   </div>
-
-                  {errors.lob && (
+                  {errors.hsbcRoles && (
                     <p className="text-red-500 text-sm">{errors.hsbcRoles}</p>
                   )}
                 </td>
-                <td></td>
 
+                {/* CTOOL Grade */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">CTOOL Location:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <input
-                    type="text"
-                    name="ctoolLocation"
-                    value={form.ctoolLocation || ""}
-                    onChange={handleChange}
-                    className="p-2 border rounded w-full"
-                    disabled={isReadOnly}
-                  />
-                </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">CTOOL Grade:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolGrade">CTOOL Grade:</label>
                   <input
                     type="number"
                     name="ctoolGrade"
@@ -1534,25 +1470,22 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   />
                 </td>
+
+                {/* CTOOL Location */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">CTOOL Tagging Rate:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="ctoolLocation">CTOOL Location:</label>
                   <input
-                    type="number"
-                    name="ctoolTaggingRate"
-                    value={form.ctoolTaggingRate || ""}
+                    type="text"
+                    name="ctoolLocation"
+                    value={form.ctoolLocation || ""}
                     onChange={handleChange}
                     className="p-2 border rounded w-full"
                     disabled={isReadOnly}
                   />
                 </td>
-              </tr>
-              <tr className="flex flex-wrap md:flex-nowrap">
+                {/* Recruiter Name */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Recruiter Name:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="recruiterName">Recruiter Name:</label>
                   <input
                     type="text"
                     name="recruiterName"
@@ -1562,10 +1495,24 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   />
                 </td>
+              </tr>
+
+              <tr className="flex flex-wrap md:flex-nowrap">
+                {/* CTOOL Tagging Rate */}
                 <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Proposed Rate:</label>
+                  <label htmlFor="ctoolTaggingRate">CTOOL Tagging Rate:</label>
+                  <input
+                    type="number"
+                    name="ctoolTaggingRate"
+                    value={form.ctoolTaggingRate || ""}
+                    onChange={handleChange}
+                    className="p-2 border rounded w-full"
+                    disabled={isReadOnly}
+                  />
                 </td>
+                {/* Proposed Rate */}
                 <td className="p-2 w-full md:w-1/4">
+                  <label htmlFor="proposedRate">Proposed Rate:</label>
                   <input
                     type="number"
                     name="proposedRate"
@@ -1575,56 +1522,15 @@ function SelectionTracker() {
                     disabled={isReadOnly}
                   />
                 </td>
-                {/* <td className="p-2 w-full md:w-1/4 items-center">
-                  <label className="font-semibold">LTI Onboarding Date:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4 flex items-center">
-                  {" "}
-                  <input
-                    type="date"
-                    name="ltiOnboardDate"
-                    required
-                    value={form.ltiOnboardDate || ""}
-                    onChange={handleChange}
-                    className={`p-2 border rounded w-full ${errors.ltiOnboardDate ? "border-red-500" : ""
-                      }`}
-                    disabled={readOnly}
-                  />{" "}
-                  {errors.ltiOnboardDate && (
-                    <p className="text-red-500 text-sm">
-                      {errors.ltiOnboardDate}
-                    </p>
-                  )}
-                </td> */}
               </tr>
-              {/* <tr className="flex flex-wrap md:flex-nowrap">
-                <td className="p-2 w-full md:w-1/4">
-                  <label className="font-semibold">Offer Release Status:</label>
-                </td>
-                <td className="p-2 w-full md:w-1/4">
-                  <select
-                    name="offerReleaseStatus"
-                    value={form.offerReleaseStatus || ""}
-                    onChange={handleChange}
-                    className="p-2 border rounded w-full"
-                    disabled={isReadOnly}
-                  >
-                    <option value="">Choose...</option>
-                    <option value="Pending">Pending</option>
-                    <option value="On Hold">On Hold</option>
-                    <option value="Release">Released</option>
-                    <option value="WIP">WIP</option>
-                  </select>
-                </td>
-              </tr> */}
               {!isReadOnly && (
                 <tr>
                   <td colSpan="4" className="p-2">
-                    <div className="flex justify-center space-x-4">
+                    <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 z-50 p-4 pl-14 flex justify-start space-x-4 shadow-md">
                       <button
                         type="submit"
                         onClick={handleSubmit}
-                        className="bg-blue-500 text-white py-2 px-10 rounded"
+                        className="bg-blue-900 text-white py-1.5 px-6  rounded hover:bg-gray-500"
                         disabled={form.invalid}
                         // disabled={isSubmitting}
                       >
@@ -1632,7 +1538,7 @@ function SelectionTracker() {
                       </button>
                       <button
                         type="button"
-                        className="bg-gray-500 text-white py-2 px-10 rounded"
+                        className="text-blue-900 border border-blue-900 bg-transparent py-1.5 px-6 rounded hover:bg-gray-500"
                         onClick={handleCancel}
                       >
                         Cancel

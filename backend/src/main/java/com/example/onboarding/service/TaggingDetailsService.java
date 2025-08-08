@@ -81,7 +81,8 @@ public class TaggingDetailsService {
                     existingDetails.setUpdateDate(updatedDetails.getUpdateDate());
                     logger.info("Set update date: {}", updatedDetails.getUpdateDate());
                 }
-
+                existingDetails.setCreatedBy(updatedDetails.getCreatedBy());
+                existingDetails.setUpdatedBy(updatedDetails.getUpdatedBy());
                 logger.info("Details after updating: {}", existingDetails);
                 return taggingDetailsRepository.save(existingDetails);
             } else {
@@ -138,6 +139,8 @@ public class TaggingDetailsService {
                 }
                 existingDetails.setCreateDate(updatedDetails.getCreateDate());
                 existingDetails.setUpdateDate(updatedDetails.getUpdateDate());
+                existingDetails.setCreatedBy(updatedDetails.getCreatedBy());
+                existingDetails.setUpdatedBy(updatedDetails.getUpdatedBy());
                 return taggingDetailsRepository.save(existingDetails);
             } else {
                 logger.info("No existing details found for PhoneNumber: {}, creating new entry", phoneNumber);
@@ -189,6 +192,8 @@ public class TaggingDetailsService {
                 }
                 existingDetails.setCreateDate(updatedDetails.getCreateDate());
                 existingDetails.setUpdateDate(updatedDetails.getUpdateDate());
+                existingDetails.setCreatedBy(updatedDetails.getCreatedBy());
+                existingDetails.setUpdatedBy(updatedDetails.getUpdatedBy());
                 return taggingDetailsRepository.save(existingDetails);
             } else {
                 logger.info("No existing details found for PhoneNumber: {}, creating new entry", phoneNumber);
