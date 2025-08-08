@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logo from '../assets/ltim.png';
+
 
 const Login = () => {
   const [form, setForm] = useState({ username: "", otp: "" });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [otpSent, setOtpSent] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -28,13 +32,13 @@ const Login = () => {
   };
 
   const sendOtp = async () => {
+    setIsSendingOtp(true);
     try {
       const response = await fetch(`http://localhost:8080/employees/${form.username}`);
       if (!response.ok) throw new Error("Invalid PSID");
 
       const data = await response.json();
-      // const email=data.mailID;
-      const email = "adityasonakiya29@gmail.com";
+      const email = "adityasonakiya29@gmail.com"; // Replace with: const email = data.mailID;
 
       const otpResponse = await fetch("http://localhost:8080/api/send-otp", {
         method: "POST",
@@ -50,8 +54,11 @@ const Login = () => {
       }
     } catch (error) {
       setErrors({ submit: "PSID does not have access" });
+    } finally {
+      setIsSendingOtp(false);
     }
   };
+
 
   const verifyOtp = async (e) => {
     e.preventDefault();
@@ -80,14 +87,36 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-200">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-blue-100 to-purple-200">
+      <div className="md:w-1/2 h-screen flex  bg-blue-600">
+        <div className="group text-white p-10 rounded-xl w-full max-w-xl flex flex-col items-center text-center">
+          <img
+            src={logo}
+            alt="Company Logo"
+            className="w-63 h-24"
+          />
+          <h1 className="text-3xl font-bold mb-2 tracking-wide">
+            Selection Tracker
+          </h1>
+          <p className="text-lg font-medium opacity-90 mb-4 ">
+            Everything your team needs, in one workspace
+          </p>
+          <p className="text-sm font-light leading-relaxed px-4">
+            The HSBC Onboarding Application (Selection Tracker) is a streamlined solution designed to automate the client onboarding process at HSBC. It reduces manual effort, minimizes errors, and enhances efficiency by providing a centralized platform to manage onboarding activities.
+          </p>
+        </div>
+      </div>
+
       <form
-        className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md transition-all duration-300"
+        className="bg-white p-8 rounded-xl shadow-2xl w-full md:w-1/2 max-w-md mx-auto my-auto transition-all duration-300"
         onSubmit={verifyOtp}
       >
         <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">Login</h2>
 
-        <label className="block mb-2 text-sm font-medium text-gray-700">PSID</label>
+        <label className="block mb-2 text-base font-semibold text-gray-800 tracking-wide">
+          PSID
+        </label>
+
         <input
           type="number"
           name="username"
@@ -105,10 +134,13 @@ const Login = () => {
           <button
             type="button"
             onClick={sendOtp}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+            disabled={isSendingOtp}
+            className={`w-full ${isSendingOtp ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+              } text-white font-semibold py-2 px-4 rounded-lg transition duration-200`}
           >
-            Send OTP
+            {isSendingOtp ? "Sending OTP..." : "Send OTP"}
           </button>
+
         ) : (
           <>
             <label className="block mt-4 mb-2 text-sm font-medium text-gray-700">OTP</label>
@@ -138,7 +170,6 @@ const Login = () => {
         )}
       </form>
     </div>
-
   );
 };
 
