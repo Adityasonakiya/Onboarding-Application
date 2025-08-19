@@ -42,6 +42,16 @@ public class EmployeeController {
         }
     }
 
+    @GetMapping("/api/employees/search")
+    public ResponseEntity<List<EmployeeCandidateDTO>> searchEmployeeByClientName(
+            @RequestParam("hsbchiringManager") String hsbchiringManager) {
+        List<EmployeeCandidateDTO> candidates = employeeService.searchEmployeeByClientName(hsbchiringManager);
+        if (candidates.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(candidates);
+    }
+
     @GetMapping
     public ResponseEntity<List<Employee>> getAllEmployees() {
         List<Employee> employees = employeeService.getAllEmployees();

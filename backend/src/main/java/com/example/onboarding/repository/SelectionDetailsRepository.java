@@ -248,4 +248,6 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             nativeQuery = true)
     List<ExcelDataDTO> findCustomQueryResults(@Param("createdBy") Integer createdBy);
 
+    @Query(value = "SELECT DISTINCT hsbchiring_manager FROM selection_details", nativeQuery = true)
+    List<String> findAllDistinctHsbchiringManager();
 }

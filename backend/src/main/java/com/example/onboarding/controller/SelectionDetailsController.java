@@ -171,4 +171,10 @@ public class SelectionDetailsController {
         return ResponseEntity.ok(data);
     }
 
+    @GetMapping("/hiringManager")
+    public ResponseEntity<List<String>> findManager(){
+        List<String> results = selectionDetailsService.getAllDistinctHSBCHiringManagers();
+        return ResponseEntity.ok(results);
+    }
+
 }

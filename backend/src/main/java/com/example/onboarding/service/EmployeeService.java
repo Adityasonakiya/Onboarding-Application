@@ -17,10 +17,9 @@ import com.example.onboarding.repository.RolesRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
-
 @Service
 public class EmployeeService {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
@@ -73,11 +72,11 @@ public class EmployeeService {
         Roles role = rolesRepository.findById(employee.getRoles().getRoleId()).get();
         role.setRoleName(employee.getRoles().getRoleName());
         role.setRoleFunctions(employee.getRoles().getRoleFunctions());
-        rolesRepository.save(role);        
+        rolesRepository.save(role);
         emp.setRoles(role);
         emp.setUpdatedBy(employee.getUpdatedBy());
 
-        return employeeRepository.save(employee);     
+        return employeeRepository.save(employee);
     }
 
     public AccessControlDTO getAccessControlByPsid(Integer psid) {
@@ -85,6 +84,11 @@ public class EmployeeService {
             throw new IllegalArgumentException("PSID cannot be null");
         }
         return employeeRepository.getAccessByPsid(psid);
+    }
+
+    // In EmployeeService
+    public List<EmployeeCandidateDTO> searchEmployeeByClientName(String hsbchiringManager) {
+        return employeeRepository.searchEmployeeByClientName(hsbchiringManager);
     }
 
 }

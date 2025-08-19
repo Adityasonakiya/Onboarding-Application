@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaSearch, FaBell, FaUser, FaTimes } from "react-icons/fa";
 import { FiAlignJustify } from "react-icons/fi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/Logof.png";
+import logo1 from "../assets/images/logo.png";
 import smallLogo from "../assets/images/logo2.png";
 import {
   getAllCandidates,
@@ -231,7 +232,7 @@ export default function Navbar() {
     localStorage.removeItem("user"); // Clear user info
     setTimeout(() => {
       navigate("/login"); // Redirect to login page
-      }, 2000);
+    }, 2000);
   };
 
   return (
@@ -240,16 +241,15 @@ export default function Navbar() {
       style={{ zIndex: 2 }}
     >
       <div className="flex items-center justify-between py-2 px-4 md:py-4 md:px-7">
-        <div className="flex items-center">
-          <Link to="/landing-page">
-            <img src={logo} alt="Logo" className="hidden md:block h-8 mr-2" />
-            <img
-              src={smallLogo}
-              alt="Logo"
-              className="block md:hidden h-6 mr-2"
-            />
+        <div className="flex items-center space-x-2">
+          <Link to="/landing-page" className="flex items-center space-x-10">
+            {/* First logo */}
+            <img src={logo1} alt="New Logo" className="h-10" />
+            <img src={logo} alt="Logo" className="hidden md:block h-12" />
+            <img src={smallLogo} alt="Logo" className="block md:hidden h-10" />
           </Link>
         </div>
+
         {/* <div className="flex items-center space-x-2 md:space-x-4">
           <div className="flex items-center bg-gray-200 rounded-full px-2 py-1 md:px-3 relative w-full md:w-auto">
             <select
@@ -362,7 +362,15 @@ export default function Navbar() {
             <FaUser className="text-gray-800" />
           </div>
           {(activePopup === "user" || hoverPopup === "user") && (
-            <div className="absolute right-[-1vw] mt-[0.15vw] w-48 md:w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-300 popup">
+            <div
+              className="bg-white rounded-lg shadow-lg p-4 border border-gray-300"
+              style={{
+                position: "fixed",
+                top: "50px",
+                right: "30px",
+                zIndex: 9999,
+              }}
+            >
               {/* Close Icon */}
               <div className="flex justify-end">
                 <FaTimes

@@ -12,7 +12,7 @@ const Login = () => {
   const [isSendingOtp, setIsSendingOtp] = useState(false);
 
   const navigate = useNavigate();
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
@@ -39,7 +39,7 @@ const Login = () => {
       if (!response.ok) throw new Error("Invalid PSID");
 
       const data = await response.json();
-      const email = "adityasonakiya29@gmail.com"; // Replace with: const email = data.mailID;
+      const email = "komalmore7015@gmail.com"; // Replace with: const email = data.mailID;
 
       const otpResponse = await fetch("http://localhost:8080/api/send-otp", {
         method: "POST",
@@ -88,13 +88,17 @@ const Login = () => {
   };
 
   return (
+
     <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-blue-100 to-purple-200 relative">
       <div className="md:w-1/2 h-screen flex  bg-blue-600">
+
         <div className="group text-white p-10 rounded-xl w-full max-w-xl flex flex-col items-center text-center">
           <img
             src={logo}
             alt="Company Logo"
+
             className="w-63 h-24 mb-4"
+
           />
           {/* <h1 className="text-3xl font-bold mb-2 tracking-wide">
             Selection Tracker
