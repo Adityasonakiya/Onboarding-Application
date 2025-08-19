@@ -21,12 +21,6 @@ public class CandidateServiceTest {
     @Mock
     private CandidateRepository candidateRepository;
 
-    @Mock
-    private UserService userService;
-
-    @Mock
-    private EmployeeRepository employeeRepository;
-
     @InjectMocks
     private CandidateService candidateService;
 

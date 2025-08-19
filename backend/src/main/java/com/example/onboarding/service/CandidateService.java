@@ -51,8 +51,8 @@ public class CandidateService {
         candidate.setCandidateId(1);
         candidate.setCreateDate(new Date());
         candidate.setUpdateDate(new Date());
-        candidate.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
-        candidate.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        //candidate.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        //candidate.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
         return candidateRepository.save(candidate);
     }
 

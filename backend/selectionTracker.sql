@@ -276,10 +276,10 @@ VALUES
 (12,'Finsol','10713037','10713037',true);
 
 
-INSERT INTO vendor_candidate (vendor_candidate_id,phone_number,vendor_id , first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date)
-VALUES
-(1,2321322222, 1, 'John', 'A.', 'Doe', '2025-01-15', 10713037, 10713037, '2025-01-01', '2025-01-10'),
-(2,8887877788, 2, 'Jane', 'B.', 'Smith', '2025-01-20', 10713037, 10713037, '2025-01-02', '2025-01-11');
+-- INSERT INTO vendor_candidate (vendor_candidate_id,phone_number,vendor_id , first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date)
+-- VALUES
+-- (1,2321322222, 1, 'John', 'A.', 'Doe', '2025-01-15', 10713037, 10713037, '2025-01-01', '2025-01-10'),
+-- (2,8887877788, 2, 'Jane', 'B.', 'Smith', '2025-01-20', 10713037, 10713037, '2025-01-02', '2025-01-11');
 -- (3,8787788898, 3, 'Michael', 'C.', 'Johnson', '2025-01-25', 10713037, 10713037, '2025-01-03', '2025-01-12'),
 -- (4,8979888778, 4, 'Emily', 'D.', 'Williams', '2025-02-01', 10713037, 10713037, '2025-01-04', '2025-01-13'),
 -- (5,8799989887, 5, 'David', 'E.', 'Brown', '2025-02-05', 10713037, 10713037, '2025-01-05', '2025-01-14'),

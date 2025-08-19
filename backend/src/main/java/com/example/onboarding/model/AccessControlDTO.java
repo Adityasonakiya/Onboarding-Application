@@ -12,19 +12,22 @@ public class AccessControlDTO {
     private String lobName;
 
     private Long canViewDashboard;
+    private Long canViewLandingPage;
     private Long canAccessAdminDashboard;
     private Long canAddSelection;
     private Long canUpdateSelection;
     private Long canAccessMasters;
 
-    public AccessControlDTO(Integer psid, String roleName, String lobName,
-                            Long canViewDashboard, Long canAccessAdminDashboard,
-                            Long canAddSelection, Long canUpdateSelection,
-                            Long canAccessMasters) {
+    
+
+    public AccessControlDTO(Integer psid, String roleName, String lobName, Long canViewDashboard,
+            Long canViewLandingPage, Long canAccessAdminDashboard, Long canAddSelection,
+            Long canUpdateSelection, Long canAccessMasters) {
         this.psid = psid;
         this.roleName = roleName;
         this.lobName = lobName;
         this.canViewDashboard = canViewDashboard;
+        this.canViewLandingPage = canViewLandingPage;
         this.canAccessAdminDashboard = canAccessAdminDashboard;
         this.canAddSelection = canAddSelection;
         this.canUpdateSelection = canUpdateSelection;
@@ -50,5 +53,9 @@ public class AccessControlDTO {
 
     public boolean isCanAccessMasters() {
         return canAccessMasters != null && canAccessMasters == 1;
+    }
+
+    public boolean isCanViewLandingPage() {
+        return canViewLandingPage != null && canViewLandingPage == 1;
     }
 }

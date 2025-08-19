@@ -38,6 +38,18 @@ public class LOBControllerTest {
     }
 
     @Test
+    public void testFindAllActiveLob() throws Exception{
+        List<LOB> list = new ArrayList<>();
+        LOB lob = new LOB();
+        list.add(lob);
+        Mockito.when(lobService.findAllActive()).thenReturn(list);
+
+        mockMvc.perform(get("/users/lobs/active"))
+                .andExpect(status().isOk())
+                .andExpectAll(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
     public void testFindAllLob() throws Exception{
         List<LOB> list = new ArrayList<>();
         LOB lob = new LOB();

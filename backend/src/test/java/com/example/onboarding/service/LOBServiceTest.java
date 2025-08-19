@@ -57,18 +57,33 @@ public void testFindById_NotFound() {
 }
 
 @Test
-public void testFindAll() {
+public void testFindAllActive() {
 
     List<LOB> list = new ArrayList<>();
     list.add(lob);
     when(lobRepo.findByActiveTrue()).thenReturn(list);
+
+    List<LOB> result = lobService.findAllActive();
+
+    assertNotNull(result, "Result list should not be null");
+    assertEquals(1, result.size(), "Result list size should match");
+    assertEquals(lob, result.get(0), "First element in the result list should match the mock LOB object");
+    verify(lobRepo, times(1)).findByActiveTrue();
+}
+
+@Test
+public void testFindAll() {
+
+    List<LOB> list = new ArrayList<>();
+    list.add(lob);
+    when(lobRepo.findAll()).thenReturn(list);
 
     List<LOB> result = lobService.findAll();
 
     assertNotNull(result, "Result list should not be null");
     assertEquals(1, result.size(), "Result list size should match");
     assertEquals(lob, result.get(0), "First element in the result list should match the mock LOB object");
-    verify(lobRepo, times(1)).findByActiveTrue();
+    verify(lobRepo, times(1)).findAll();
 }
 
 }

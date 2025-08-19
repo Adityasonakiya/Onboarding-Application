@@ -221,7 +221,8 @@ public class SelectionDetailsService {
     public SelectionDetails createSelectionDetails_Employee(SelectionDetails details) {
         int psid = details.getEmployee().getPsid();
         if (selectionDetailsRepository.existsByEmployee_Psid(psid)
-                && taggingDetailsService.getTaggingDetailsByPsId(psid).getOnboardingStatus().getStatusId() != 6) {
+              //  || taggingDetailsService.getTaggingDetailsByPsId(psid).getOnboardingStatus().getStatusId() != 6
+                ) {
             throw new RuntimeException("Selection already exists");
         } else {
             details.setCreateDate(new Date());
@@ -235,8 +236,9 @@ public class SelectionDetailsService {
 
     public SelectionDetails createSelectionDetails_Candidate(SelectionDetails details) {
         Long phoneNumber = details.getCandidate().getPhoneNumber();
-        if (selectionDetailsRepository.existsByCandidate_PhoneNumber(phoneNumber) && taggingDetailsService
-                .getTaggingDetailsByCandidatePhoneNumber(phoneNumber).getOnboardingStatus().getStatusId() != 6) {
+        if (selectionDetailsRepository.existsByCandidate_PhoneNumber(phoneNumber) 
+        //&& taggingDetailsService.getTaggingDetailsByCandidatePhoneNumber(phoneNumber).getOnboardingStatus().getStatusId() != 6
+                ) {
             throw new RuntimeException(
                     "Selection already exists for Candidate: " + details.getCandidate().getPhoneNumber());
         } else {
@@ -282,16 +284,16 @@ public class SelectionDetailsService {
     }
 
     // In SelectionDetailsService.java
-    public List<SelectionDTO> findSelections(String filter) {
-        return selectionDetailsRepository.findSelections(filter);
+    public List<SelectionDTO> findSelections(String filter,Integer loggedInPsid) {
+        return selectionDetailsRepository.findSelections(filter, loggedInPsid);
     }
 
-    public List<AwaitedCasesDTO> findAwaitedCases(String filter) {
-        return selectionDetailsRepository.findAwaitedCases(filter);
+    public List<AwaitedCasesDTO> findAwaitedCases(String filter,Integer loggedInPsid) {
+        return selectionDetailsRepository.findAwaitedCases(filter,loggedInPsid);
     }
 
-    public List<CtoolDto> findCtool(String filter) {
-        return selectionDetailsRepository.findCtool(filter);
+    public List<CtoolDto> findCtool(String filter,Integer loggedInPsid) {
+        return selectionDetailsRepository.findCtool(filter,loggedInPsid);
     }
 
     public List<ExcelDataDTO> findExcelData(Integer createdBy) {

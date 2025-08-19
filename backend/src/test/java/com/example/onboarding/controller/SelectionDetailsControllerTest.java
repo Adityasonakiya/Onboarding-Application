@@ -215,7 +215,7 @@ public class SelectionDetailsControllerTest {
                 .thenReturn(new PageImpl<>(Collections.singletonList(dto), PageRequest.of(0, 1), 1));
 
         mockMvc.perform(get("/selection-details/api/employee-candidates")
-                .param("createdBy", "1")
+                .param("loggedInPsid", "1")
                 .param("page", "0")
                 .param("size", "1"))
                 .andExpect(status().isOk())
@@ -225,11 +225,12 @@ public class SelectionDetailsControllerTest {
     @Test
     public void testFindSelections() throws Exception {
         SelectionDTO dto = new SelectionDTO();
-        Mockito.when(selectionDetailsService.findSelections(anyString()))
+        Mockito.when(selectionDetailsService.findSelections(anyString(),anyInt()))
                 .thenReturn(Arrays.asList(dto));
 
         mockMvc.perform(get("/selection-details/selections")
-                .param("filter", "test"))
+                .param("filter", "test")
+                .param("loggedInPsid", "1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
@@ -237,11 +238,12 @@ public class SelectionDetailsControllerTest {
     @Test
     public void testFindAwaitedCases() throws Exception {
         AwaitedCasesDTO dto = new AwaitedCasesDTO();
-        Mockito.when(selectionDetailsService.findAwaitedCases(anyString()))
+        Mockito.when(selectionDetailsService.findAwaitedCases(anyString(),anyInt()))
                 .thenReturn(Arrays.asList(dto));
 
         mockMvc.perform(get("/selection-details/awaited-cases")
-                .param("filter", "test"))
+                .param("filter", "test")
+                .param("loggedInPsid", "1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
@@ -249,11 +251,12 @@ public class SelectionDetailsControllerTest {
     @Test
     public void testFindCtool() throws Exception {
         CtoolDto dto = new CtoolDto();
-        Mockito.when(selectionDetailsService.findCtool(anyString()))
+        Mockito.when(selectionDetailsService.findCtool(anyString(),anyInt()))
                 .thenReturn(Arrays.asList(dto));
 
         mockMvc.perform(get("/selection-details/ctool")
-                .param("filter", "test"))
+                .param("filter", "test")
+                .param("loggedInPsid", "1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }

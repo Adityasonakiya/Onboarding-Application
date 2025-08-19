@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/images/Logof.png";
 import logo1 from "../assets/images/logo.png";
 import smallLogo from "../assets/images/logo2.png";
+import { useAuth } from "./AuthContext";
 import {
   getAllCandidates,
   getAllEmployees,
@@ -14,6 +15,7 @@ import {
 } from "../services/api";
 
 export default function Navbar() {
+  const {setPermissions} = useAuth();
   const [activePopup, setActivePopup] = useState(null);
   const [hoverPopup, setHoverPopup] = useState(null);
   const [errors, setErrors] = useState("");
@@ -168,32 +170,32 @@ export default function Navbar() {
     setActivePopup(activePopup === popup ? null : popup);
   };
 
-  const fetchEmployeeData = async (psid) => {
-    try {
-      const employee = await getEmployeeByPsid(psid);
-      setForm((prevForm) => ({
-        ...prevForm,
-        psid: psid,
-        fname: employee.firstName,
-        lname: employee.lastName,
-        grade: employee.grade,
-        location: employee.location,
-        pu: employee.pu,
-        totalExp: employee.totalExperience,
-        skill: employee.skill,
-        email: employee.mailID,
-      }));
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const fetchEmployeeData = async (psid) => {
+  //   try {
+  //     const employee = await getEmployeeByPsid(psid);
+  //     setForm((prevForm) => ({
+  //       ...prevForm,
+  //       psid: psid,
+  //       fname: employee.firstName,
+  //       lname: employee.lastName,
+  //       grade: employee.grade,
+  //       location: employee.location,
+  //       pu: employee.pu,
+  //       totalExp: employee.totalExperience,
+  //       skill: employee.skill,
+  //       email: employee.mailID,
+  //     }));
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user")).psid;
-    if (user) {
-      fetchEmployeeData(user);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem("user"))?.psid;
+  //   if (user) {
+  //     fetchEmployeeData(user);
+  //   }
+  // }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -225,14 +227,13 @@ export default function Navbar() {
       fetch("http://localhost:8080/api/logout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ psid: user.psid }),
+        body: JSON.stringify({ psid: user?.psid }),
       }).catch((err) => console.error("Logout API failed:", err));
     }
 
     localStorage.removeItem("user"); // Clear user info
-    setTimeout(() => {
-      navigate("/login"); // Redirect to login page
-    }, 2000);
+    setPermissions({});
+    navigate("/login"); // Redirect to login page
   };
 
   return (

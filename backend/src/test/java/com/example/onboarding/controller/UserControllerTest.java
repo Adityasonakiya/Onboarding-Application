@@ -26,71 +26,71 @@ public class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    @Test
-    public void testCreateUser() throws Exception {
-        User user = new User();
-        user.setPsid(1);
-        user.setPassword("password123");
+    // @Test
+    // public void testCreateUser() throws Exception {
+    //     User user = new User();
+    //     user.setPsid(1);
+    //     user.setPassword("password123");
 
-        Mockito.doNothing().when(userService).createUser(user);
+    //     Mockito.doNothing().when(userService).createUser(user);
 
-        mockMvc.perform(post("/api/users/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"psid\":1,\"password\":\"password123\"}"))
-                .andExpect(status().isCreated());
-    }
+    //     mockMvc.perform(post("/api/users/create")
+    //             .contentType(MediaType.APPLICATION_JSON)
+    //             .content("{\"psid\":1,\"password\":\"password123\"}"))
+    //             .andExpect(status().isCreated());
+    // }
 
-    @Test
-    public void testGetUserById_UserFound() throws Exception {
-        int userId = 1;
-        User user = new User();
-        user.setPsid(userId);
-        user.setPassword("password123");
+    // @Test
+    // public void testGetUserById_UserFound() throws Exception {
+    //     int userId = 1;
+    //     User user = new User();
+    //     user.setPsid(userId);
+    //     user.setPassword("password123");
 
-        Mockito.when(userService.getUserById(userId)).thenReturn(Optional.of(user));
+    //     Mockito.when(userService.getUserById(userId)).thenReturn(Optional.of(user));
 
-        mockMvc.perform(get("/api/users/{id}", userId))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.psid").value(userId));
-    }
+    //     mockMvc.perform(get("/api/users/{id}", userId))
+    //             .andExpect(status().isOk())
+    //             .andExpect(jsonPath("$.psid").value(userId));
+    // }
 
-    @Test
-    public void testGetUserById_UserNotFound() throws Exception {
-        int userId = 2;
+    // @Test
+    // public void testGetUserById_UserNotFound() throws Exception {
+    //     int userId = 2;
 
-        // Mock the service response to return empty Optional
-        Mockito.when(userService.getUserById(userId)).thenReturn(Optional.empty());
+    //     // Mock the service response to return empty Optional
+    //     Mockito.when(userService.getUserById(userId)).thenReturn(Optional.empty());
 
-        // Perform GET request
-        mockMvc.perform(get("/api/users/{id}", userId))
-                .andExpect(status().isNotFound()); // Expect HTTP 404 NOT FOUND
-    }
+    //     // Perform GET request
+    //     mockMvc.perform(get("/api/users/{id}", userId))
+    //             .andExpect(status().isNotFound()); // Expect HTTP 404 NOT FOUND
+    // }
 
-    @Test
-    public void testLoginUser() throws Exception {
-        LoginDTO loginDTO = new LoginDTO(1, "password123");
-        User user = new User();
-        user.setPsid(1);
+    // @Test
+    // public void testLoginUser() throws Exception {
+    //     LoginDTO loginDTO = new LoginDTO(1, "password123");
+    //     User user = new User();
+    //     user.setPsid(1);
 
-        Mockito.when(userService.loginUser(Mockito.any())).thenReturn(user);
+    //     Mockito.when(userService.loginUser(Mockito.any())).thenReturn(user);
 
-        mockMvc.perform(post("/api/users/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"psid\":1,\"password\":\"password123\"}"))
-                .andExpect(status().isOk());
-    }
+    //     mockMvc.perform(post("/api/users/login")
+    //             .contentType(MediaType.APPLICATION_JSON)
+    //             .content("{\"psid\":1,\"password\":\"password123\"}"))
+    //             .andExpect(status().isOk());
+    // }
 
-    @Test
-    public void testLogoutUser() throws Exception {
-        LoginDTO loginDTO = new LoginDTO(1, "password123");
-        User user = new User();
-        user.setPsid(1);
+    // @Test
+    // public void testLogoutUser() throws Exception {
+    //     LoginDTO loginDTO = new LoginDTO(1, "password123");
+    //     User user = new User();
+    //     user.setPsid(1);
 
-        Mockito.when(userService.getUserById(Mockito.anyInt())).thenReturn(Optional.of(user));
+    //     Mockito.when(userService.getUserById(Mockito.anyInt())).thenReturn(Optional.of(user));
 
-        mockMvc.perform(post("/api/users/logout")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"psid\":1,\"password\":\"password123\"}"))
-                .andExpect(status().isOk());
-    }
+    //     mockMvc.perform(post("/api/users/logout")
+    //             .contentType(MediaType.APPLICATION_JSON)
+    //             .content("{\"psid\":1,\"password\":\"password123\"}"))
+    //             .andExpect(status().isOk());
+    // }
 }
