@@ -565,3 +565,47 @@ export const countByRoles = async(roleId) =>{
   }
   throw new Error("Failed to fetch role count");
 }
+
+// ✅ NEW: Search candidates by Client Name (hsbchiringmanager)
+export const searchCandidatesByClientName = async (hsbchiringManager) => {
+  const response = await fetch(
+    `http://localhost:8080/candidates/api/candidates/searchClient?hsbchiringManager=${hsbchiringManager}`
+  );
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch candidates by client name");
+};
+
+// ✅ NEW: Search employees by Client Name (hsbchiringmanager)
+export const searchEmployeesByClientName = async (hsbchiringManager) => {
+  const response = await fetch(
+    `http://localhost:8080/employees/api/employees/search?hsbchiringManager=${hsbchiringManager}`
+  );
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch employees by client name");
+};
+
+// ✅ NEW: Search candidates and employees by Client Name (hsbchiringmanager)
+export const searchAllByClientName = async (hsbchiringManager) => {
+  const response = await fetch(
+    `http://localhost:8080/candidates/api/candidates/searchAllByClient?hsbchiringManager=${hsbchiringManager}`
+  );
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch candidates and employees by client name");
+};
+
+// ✅ NEW: Search candidates and employees by Hiring Manager (hsbchiringmanager)
+export const searchAllByHiringManager = async (hsbchiringManager) => {
+  const response = await fetch(
+    `http://localhost:8080/candidates/api/candidates/searchAllByHiringManager?hsbchiringManager=${hsbchiringManager}`
+  );
+  if (response.ok) {
+    return response.json();
+  }
+  throw new Error("Failed to fetch candidates and employees by hiring manager");
+};

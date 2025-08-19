@@ -20,6 +20,7 @@ import com.example.onboarding.model.ExcelDataDTO;
 import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
 import com.example.onboarding.model.VendorCandidate;
+import com.example.onboarding.repository.CandidateRepository;
 import com.example.onboarding.repository.EmployeeRepository;
 import com.example.onboarding.repository.SelectionDetailsRepository;
 import com.example.onboarding.repository.VendorCandidateRepository;
@@ -37,6 +38,9 @@ public class SelectionDetailsService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private CandidateRepository candidateRepository;
 
     @Autowired
     private TaggingDetailsService taggingDetailsService;
@@ -295,5 +299,16 @@ public class SelectionDetailsService {
         System.out.println(selectionDetailsRepository.findCustomQueryResults(createdBy));
         return selectionDetailsRepository.findCustomQueryResults(createdBy);
     }
+   public List<EmployeeCandidateDTO> searchAllByHiringManager(String hsbchiringManager) {
+    List<EmployeeCandidateDTO> candidates = candidateRepository.searchCandidateByClientName(hsbchiringManager);
+    List<EmployeeCandidateDTO> employees = employeeRepository.searchEmployeeByClientName(hsbchiringManager);
+    List<EmployeeCandidateDTO> combined = new ArrayList<>();
+    combined.addAll(candidates);
+    combined.addAll(employees);
+    return combined;
+}
 
+public List<String> getAllDistinctHSBCHiringManagers() {
+    return selectionDetailsRepository.findAllDistinctHsbchiringManager();
+}
 }

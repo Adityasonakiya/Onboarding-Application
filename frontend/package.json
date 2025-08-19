@@ -7,6 +7,8 @@
     "@amcharts/amcharts5": "^5.11.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@fortawesome/free-solid-svg-icons": "^7.0.0",
+    "@fortawesome/react-fontawesome": "^0.2.3",
     "@mui/material": "^6.4.8",
     "anychart": "^8.13.0",
     "axios": "^1.7.9",

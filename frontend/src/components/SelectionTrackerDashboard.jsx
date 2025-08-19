@@ -445,7 +445,7 @@ const SelectionTrackerDashboard = ({ user }) => {
               }`}
               onClick={() => handleTabClick("myselection")}
             >
-              My Selection
+              LOB Selection
             </button>
             <button
               className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
@@ -455,7 +455,7 @@ const SelectionTrackerDashboard = ({ user }) => {
               }`}
               onClick={() => handleTabClick("dashboard")}
             >
-              Selection Tracker Dashboard
+              Dashboard
             </button>
             {permissions?.canAccessAdminDashboard && (
             <button
@@ -466,7 +466,7 @@ const SelectionTrackerDashboard = ({ user }) => {
               }`}
               onClick={() => handleTabClick("admin")}
             >
-              Admin Dashboard
+              Admin
             </button>
             )}
           </div>
