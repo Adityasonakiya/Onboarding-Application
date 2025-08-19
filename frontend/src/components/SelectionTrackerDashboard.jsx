@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import PieChart from "./PieChart";
 import Navbar from "./Navbar";
 import * as XLSX from "xlsx";
@@ -11,6 +11,7 @@ const SelectionTrackerDashboard = ({ user }) => {
   const navigate = useNavigate();
   const { permissions } = useAuth();
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeChart, setActiveChart] = useState("CurrentSelections");
   const [selections, setSelections] = useState([]);
   const [ctool, setCtool] = useState([]);
   const [awaitedCases, setAwaitedCases] = useState([]);
@@ -279,14 +280,14 @@ const SelectionTrackerDashboard = ({ user }) => {
           updateDate: counts[dm].updateDate,
         }));
 
-        const filteredAwaitedCases = applyFilter(
-          processedData,
-          filter,
-          fromDate,
-          toDate,
-          "updateDate"
-        );
-        setAwaitedCases(filteredAwaitedCases);
+        // const filteredAwaitedCases = applyFilter(
+        //   processedData,
+        //   filter,
+        //   fromDate,
+        //   toDate,
+        //   "updateDate"
+        // );
+        setAwaitedCases(processedData);
       })
       .catch((error) => {
         console.error("Error fetching awaited cases data:", error);
@@ -344,14 +345,14 @@ const SelectionTrackerDashboard = ({ user }) => {
           ...counts[lobName],
         }));
 
-        const filteredCtool = applyFilter(
-          processedData,
-          filter,
-          fromDate,
-          toDate,
-          "updateDate"
-        );
-        setCtool(filteredCtool);
+        // const filteredCtool = applyFilter(
+        //   processedData,
+        //   filter,
+        //   fromDate,
+        //   toDate,
+        //   "updateDate"
+        // );
+        setCtool(processedData);
       })
       .catch((error) => {
         console.error("Error fetching ctool data:", error);
@@ -426,547 +427,619 @@ const SelectionTrackerDashboard = ({ user }) => {
     fetchData();
   };
 
+  const sectionRefs = {
+    CurrentSelections: useRef(null),
+    CToolClearCases: useRef(null),
+    CToolAwaitedCases: useRef(null),
+  };
+
+  const scrollToSection = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       entries.forEach((entry) => {
+  //         if (entry.isIntersecting) {
+  //           setActiveChart(entry.target.id);
+  //         }
+  //       });
+  //     },
+  //     { threshold: 0.5 }
+  //   );
+
+  //   Object.values(sectionRefs).forEach((ref) => {
+  //     if (ref.current) observer.observe(ref.current);
+  //   });
+
+  //   return () => observer.disconnect();
+  // }, []);
+
+  const triggerRef = useRef(null);
+  const tabsRef = useRef(null);
+  const placeholderRef = useRef(null);
+  const [isSticky, setIsSticky] = useState(false);
+
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!triggerRef.current || !tabsRef.current || !placeholderRef.current) return;
+
+      const triggerBottom = triggerRef.current.getBoundingClientRect().bottom;
+      const navbarHeight = 56;
+
+      if (triggerBottom <= navbarHeight) {
+        setIsSticky(true);
+        placeholderRef.current.style.height = `${tabsRef.current.offsetHeight}px`;
+      } else {
+        setIsSticky(false);
+        placeholderRef.current.style.height = "0px";
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+
+
+
+
   return (
-      <>
+    <>
       {permissions?.canViewDashboard && (
-    <div className="mt-24">
-      <Navbar user={user} className="navbar" />
-      {/*Heading*/}
-      {/* <h1 className="py-2 text-center bg-blue-300 font-bold text-lg md:text-xl mb-2">
+        <div className="mt-24">
+
+          <div
+            className="shadow-md w-full p-2 fixed top-0 left-0 bg-white"
+            style={{ zIndex: 50 }}
+          >
+            <Navbar user={user} className="navbar" />
+          </div>
+
+          {/*Heading*/}
+          {/* <h1 className="py-2 text-center bg-blue-300 font-bold text-lg md:text-xl mb-2">
             HSBC Selection Tracker Dashboard
         </h1> */}
-      {/* Tabs */}
-          <div className="flex items-center mb-4 mt-2 px-4 border-b">
-            <button
-              className={`px-4 py-2 font-semibold focus:outline-none ${
-                activeTab === "myselection"
+          {/* Tabs */}
+
+          <div className="mt-24" ref={triggerRef}>
+
+            <div className="flex items-center mt-2 px-4 border-b">
+              <button
+                className={`px-4 py-2 font-semibold focus:outline-none ${activeTab === "myselection"
                   ? "border-b-2 border-blue-500 text-blue-600"
                   : "text-gray-600"
-              }`}
-              onClick={() => handleTabClick("myselection")}
-            >
-              My Selection
-            </button>
-            <button
-              className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
-                activeTab === "dashboard"
+                  }`}
+                onClick={() => handleTabClick("myselection")}
+              >
+                My Selection
+              </button>
+              <button
+                className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${activeTab === "dashboard"
                   ? "border-b-2 border-blue-800 text-blue-800"
                   : "text-gray-600"
-              }`}
-              onClick={() => handleTabClick("dashboard")}
-            >
-              Selection Tracker Dashboard
-            </button>
-            {permissions?.canAccessAdminDashboard && (
-            <button
-              className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
-                activeTab === "admin"
-                  ? "border-b-2 border-blue-500 text-blue-600"
-                  : "text-gray-600"
-              }`}
-              onClick={() => handleTabClick("admin")}
-            >
-              Admin Dashboard
-            </button>
-            )}
+                  }`}
+                onClick={() => handleTabClick("dashboard")}
+              >
+                Selection Tracker Dashboard
+              </button>
+              {permissions?.canAccessAdminDashboard && (
+                <button
+                  className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${activeTab === "admin"
+                    ? "border-b-2 border-blue-500 text-blue-600"
+                    : "text-gray-600"
+                    }`}
+                  onClick={() => handleTabClick("admin")}
+                >
+                  Admin Dashboard
+                </button>
+              )}
+            </div>
           </div>
-      <div className="w-full px-4 py-4">
-        <div className="px-2">
-          {/* <h1 className="py-2 text-center bg-blue-300 font-bold text-lg md:text-xl">
+          <div className="w-full px-4">
+            <div className="px-2">
+              {/* <h1 className="py-2 text-center bg-blue-300 font-bold text-lg md:text-xl">
             HSBC Selection Tracker Dashboard
           </h1> */}
-          <div className="flex justify-end mt-2 mb-2">
-            <button
-              onClick={fetchToExport}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-            >
-              Export
-            </button>
-          </div>
-        </div>
-        <div className="mx-4">
-          <div className="flex items-center mt-1 mb-0 text-sm font-medium">
-            <div className="flex items-center gap-[1vw]">
-              <h2 className="font-semibold text-lg">Current Selections</h2>
-              <button
-                onClick={() =>
-                  handleExportToExcel(
-                    selections,
-                    "FilteredSelections",
-                    "FilteredSelections.xlsx"
-                  )
-                }
-                className=" px-2 py-2 bg-green-700 text-white rounded-full flex justify-center items-center"
-                title="Export Selections"
-              >
-                <FaFileExcel />
-              </button>
-              <button
-                onClick={handleRefresh}
-                className=" px-2 py-2 bg-blue-500 text-white rounded-full"
-                title="Refresh"
-              >
-                <HiRefresh />
-              </button>
-              <div className="flex items-center font-medium text-sm">
-                <div className="flex items-center mr-4">
-                  <input
-                    type="radio"
-                    id="7days"
-                    className="hidden"
-                    value="7days"
-                    name="filter"
-                    onChange={handleRadioChange}
-                    checked={filter === "7days"}
-                  />
-                  <label
-                    htmlFor="7days"
-                    className="flex items-center cursor-pointer text-black font-semibold"
-                  >
-                    <span
-                      className={`w-3 h-3 inline-block border border-gray-200 rounded-full mr-2 ${
-                        filter === "7days" ? "bg-blue-500" : ""
-                      }`}
-                    ></span>
-                    7 Days
-                  </label>
-                </div>
-                <div className="flex items-center mr-4">
-                  <input
-                    type="radio"
-                    id="currentMonth"
-                    className="hidden"
-                    value="currentMonth"
-                    name="filter"
-                    onChange={handleRadioChange}
-                    checked={filter === "currentMonth"}
-                  />
-                  <label
-                    htmlFor="currentMonth"
-                    className="flex items-center cursor-pointer text-black font-semibold"
-                  >
-                    <span
-                      className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${
-                        filter === "currentMonth" ? "bg-blue-500" : ""
-                      }`}
-                    ></span>
-                    Current Month
-                  </label>
-                </div>
-                <div className="flex items-center mr-4">
-                  <input
-                    type="radio"
-                    id="custom"
-                    className="hidden"
-                    value="custom"
-                    name="filter"
-                    onChange={handleRadioChange}
-                    checked={filter === "custom"}
-                  />
-                  <label
-                    htmlFor="custom"
-                    className="flex items-center cursor-pointer text-black font-semibold"
-                  >
-                    <span
-                      className={`w-3 h-3 inline-block border border-gray-400 rounded-full mr-2 ${
-                        filter === "custom" ? "bg-blue-500" : ""
-                      }`}
-                    ></span>
-                    Custom
-                  </label>
-                </div>
-                {filter === "custom" && (
-                  <div className="flex items-center ml-4">
-                    <label className="flex items-center cursor-pointer text-black font-semibold mr-4">
-                      <span className="mr-2">From:</span>
-                      <input
-                        type="date"
-                        name="fromDate"
-                        value={fromDate}
-                        onChange={handleDateChange}
-                        className="p-2 border h-[2.2vw] border-gray-400 rounded-full"
-                      />
-                    </label>
-                    <label className="flex items-center cursor-pointer text-black font-semibold">
-                      <span className="mr-2">To:</span>
-                      <input
-                        type="date"
-                        name="toDate"
-                        value={toDate}
-                        onChange={handleDateChange}
-                        className="p-2 border h-[2.2vw] border-gray-400 rounded-full"
-                        disabled={!fromDate}
-                      />
-                    </label>
-                  </div>
-                )}
-              </div>
-              <div className="flex items-center ml-auto">
-                <label htmlFor="selectionFilter" className="mr-2 font-semibold">
-                  Filter:
-                </label>
-                <select
-                  id="selectionFilter"
-                  data-testid="selection-filter"
-                  value={selectionFilter}
-                  onChange={(e) => setSelectionFilter(e.target.value)}
-                  className="p-2 border border-gray-400 rounded-full"
+              <>
+                {/* Placeholder to prevent layout shift */}
+                <div ref={placeholderRef}></div>
+
+                {/* Tabs Bar */}
+                <div
+                  ref={tabsRef}
+                  className={`tabs w-full bg-white border-b px-2 py-2 transition-all duration-300 ${isSticky ? "fixed top-[75px] z-[49] shadow-md" : ""
+                    }`}
                 >
-                  <option value="all">All</option>
-                  <option value="internal">Internal</option>
-                  <option value="external">External</option>
-                </select>
+                  <div className="flex items-center justify-between flex-wrap">
+                    {/* Tabs + Refresh + Filters */}
+                    <div className="flex items-center gap-1 flex-wrap">
+                      {/* Tabs */}
+                      {["CurrentSelections", "CToolClearCases", "CToolAwaitedCases"].map((chart) => (
+                        <button
+                          key={chart}
+                          className={`px-3 py-1.5 text-sm font-semibold focus:outline-none ${activeChart === chart
+                            ? "border-b-2 border-blue-500 text-blue-600"
+                            : "text-gray-600"
+                            }`}
+                          onClick={() => {
+                            setActiveChart(chart);
+                            scrollToSection(chart);
+                          }}
+                        >
+                          {chart.replace("CTool", "CTool ")}
+                        </button>
+                      ))}
+
+                    </div>
+
+                    {/* Export Button */}
+                    <div>
+                      <button
+                        onClick={fetchToExport}
+                        className="px-4 py-2 mr-4 bg-green-500 text-white rounded hover:bg-green-600"
+                      >
+                        Export Master Data
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </>
+            </div>
+
+            <div className="mx-4">
+              <div className="flex items-center mt-4 mb-0 text-sm font-medium">
+                <div id='CurrentSelections' ref={sectionRefs.CurrentSelections} className="flex items-center gap-[1vw]">
+                  <h2 className="font-semibold text-lg">Current Selections</h2>
+                  <button
+                    onClick={() =>
+                      handleExportToExcel(
+                        selections,
+                        "FilteredSelections",
+                        "FilteredSelections.xlsx"
+                      )
+                    }
+                    className=" px-2 py-2 bg-green-700 text-white rounded-full flex justify-center items-center"
+                    title="Export Selections"
+                  >
+                    <FaFileExcel />
+                  </button>
+
+                  <div className="flex items-center ml-auto">
+                    <label htmlFor="selectionFilter" className="mr-2 font-semibold">
+                      Filter:
+                    </label>
+                    <select
+                      id="selectionFilter"
+                      data-testid="selection-filter"
+                      value={selectionFilter}
+                      onChange={(e) => setSelectionFilter(e.target.value)}
+                      className="p-2 border border-gray-400 rounded-full"
+                    >
+                      <option value="all">All</option>
+                      <option value="internal">Internal</option>
+                      <option value="external">External</option>
+                    </select>
+                  </div>
+                  {/* Refresh Button */}
+                      <button
+                        onClick={handleRefresh}
+                        className="w-8 h-8 flex items-center justify-center bg-blue-500 text-white rounded-full"
+                        title="Refresh"
+                      >
+                        <HiRefresh />
+                      </button>
+                  {/* Filters */}
+                      {["7days", "currentMonth", "custom"].map((option) => (
+                        <div key={option} className="flex items-center">
+                          <input
+                            type="radio"
+                            id={option}
+                            className="hidden"
+                            value={option}
+                            name="filter"
+                            onChange={handleRadioChange}
+                            checked={filter === option}
+                          />
+                          <label
+                            htmlFor={option}
+                            className="flex items-center cursor-pointer text-black font-semibold text-sm"
+                          >
+                            <span
+                              className={`w-3 h-3 inline-block border rounded-full mr-2 ${filter === option ? "bg-blue-500" : ""
+                                }`}
+                            ></span>
+                            {option === "7days"
+                              ? "7 Days"
+                              : option === "currentMonth"
+                                ? "Current Month"
+                                : "Custom"}
+                          </label>
+                        </div>
+                      ))}
+
+                      {/* Custom Date Range */}
+                      {filter === "custom" && (
+                        <div className="flex items-center gap-4 ml-2">
+                          <label className="flex items-center text-black font-semibold text-sm">
+                            <span className="mr-2">From:</span>
+                            <input
+                              type="date"
+                              name="fromDate"
+                              value={fromDate}
+                              onChange={handleDateChange}
+                              className="p-1.5 border border-gray-400 rounded-full"
+                            />
+                          </label>
+                          <label className="flex items-center text-black font-semibold text-sm">
+                            <span className="mr-2">To:</span>
+                            <input
+                              type="date"
+                              name="toDate"
+                              value={toDate}
+                              onChange={handleDateChange}
+                              className="p-1.5 border border-gray-400 rounded-full"
+                              disabled={!fromDate}
+                            />
+                          </label>
+                        </div>
+                      )}
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="mx-2">
-          <div className="flex">
-            <section className="mb-4 w-1/2">
-              <div className="overflow-x-auto mt-3 mb-4">
-                <table className="w-full border-collapse border-2 border-gray-400 text-center">
-                  <thead>
-                    <tr className="bg-blue-400">
-                      <th className="p-1 border border-gray-500">LOB</th>
-                      <th className="p-1 border border-gray-500">FP</th>
-                      <th className="p-1 border border-gray-500">TnM</th>
-                      <th className="p-1 border border-gray-500">Buffer</th>
-                      <th className="p-1 border border-gray-500">Total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selections.length > 0 ? (
-                      selections.map((selection, index) => (
-                        <tr key={index}>
-                          <td className="p-1 border border-gray-500 text-left">
-                            {selection.lobName}
+            <div className="mx-2">
+              <div className="flex">
+                <section className="mb-4 w-1/2">
+                  <div className="overflow-x-auto mt-3 mb-4">
+                    <table className="w-full border-collapse border-2 border-gray-400 text-center">
+                      <thead>
+                        <tr className="bg-blue-400">
+                          <th className="p-1 border border-gray-500">LOB</th>
+                          <th className="p-1 border border-gray-500">FP</th>
+                          <th className="p-1 border border-gray-500">TnM</th>
+                          <th className="p-1 border border-gray-500">Buffer</th>
+                          <th className="p-1 border border-gray-500">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selections.length > 0 ? (
+                          selections.map((selection, index) => (
+                            <tr key={index}>
+                              <td className="p-1 border border-gray-500 text-left">
+                                {selection.lobName}
+                              </td>
+                              <td className="p-1 border border-gray-600">
+                                {selection.fp}
+                              </td>
+                              <td className="p-1 border border-gray-500">
+                                {selection.tnm}
+                              </td>
+                              <td className="p-1 border border-gray-500">
+                                {selection.buffer}
+                              </td>
+                              <td className="p-1 border border-gray-600">
+                                {selection.total}
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td className="p-1 border border-gray-800" colSpan="4">
+                              No data available
+                            </td>
+                          </tr>
+                        )}
+                        <tr className="bg-blue-400">
+                          <td className="p-2 border border-gray-600 font-semibold text-left">Total</td>
+                          <td className="p-2 border border-gray-600">
+                            {selections.reduce(
+                              (acc, selection) => acc + selection.fp,
+                              0
+                            )}
                           </td>
                           <td className="p-1 border border-gray-600">
-                            {selection.fp}
-                          </td>
-                          <td className="p-1 border border-gray-500">
-                            {selection.tnm}
-                          </td>
-                          <td className="p-1 border border-gray-500">
-                            {selection.buffer}
+                            {selections.reduce(
+                              (acc, selection) => acc + selection.tnm,
+                              0
+                            )}
                           </td>
                           <td className="p-1 border border-gray-600">
-                            {selection.total}
+                            {selections.reduce(
+                              (acc, selection) => acc + selection.buffer,
+                              0
+                            )}
+                          </td>
+                          <td className="p-1 border border-gray-600">
+                            {selections.reduce(
+                              (acc, selection) => acc + selection.total,
+                              0
+                            )}
                           </td>
                         </tr>
-                      ))
-                    ) : (
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+                <div className="flex-grow"></div> {/* Spacer */}
+                <section
+                  className="w-1/3"
+                  style={{ zIndex: 1, position: "relative" }}
+                >
+                  <PieChart data={chartData} />
+                </section>
+              </div>
+              <section className="mb-8">
+                <div id='CToolClearCases' ref={sectionRefs.CToolClearCases} className="flex items-center py-2 gap-[1vw]">
+                  <h2 className="font-semibold text-lg">CTool Clear Cases</h2>
+                  <button
+                    onClick={() =>
+                      handleExportToExcel(ctool, "CTool", "CTool.xlsx")
+                    }
+                    className="px-2 py-2 bg-green-700 text-white rounded-full flex justify-center items-center"
+                    title="Export Ctool Clear Cases"
+                  >
+                    <FaFileExcel />
+                  </button>
+                  <div className="flex items-center ml-auto">
+                    <label htmlFor="ctoolFilter" className="mr-2 font-semibold">
+                      Filter:
+                    </label>
+                    <select
+                      id="ctoolFilter"
+                      data-testid="ctool-filter"
+                      value={ctoolFilter}
+                      onChange={(e) => setCtoolFilter(e.target.value)}
+                      className="p-2 border border-gray-400 rounded-full"
+                    >
+                      <option value="all">All</option>
+                      <option value="internal">Internal</option>
+                      <option value="external">External</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse border-2 border-gray-400 text-center">
+                    <thead>
+                      <tr className="bg-blue-400">
+                        <th className="p-1 border border-gray-500">LOB</th>
+                        <th className="p-1 border border-gray-500">
+                          Tagging Pending
+                        </th>
+                        <th className="p-1 border border-gray-500">
+                          Tech Select Pending
+                        </th>
+                        <th className="p-1 border border-gray-500">BGV Pending</th>
+                        <th className="p-1 border border-gray-500">
+                          HSBC DOJ Awaited
+                        </th>
+                        <th className="p-1 border border-gray-500">
+                          HSBC DOJ Confirmed
+                        </th>
+                        <th className="p-1 border border-gray-500">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ctool.length > 0 ? (
+                        ctool.map((item, index) => (
+                          <tr key={index}>
+                            <td className="p-3 border border-gray-500 text-left">
+                              {item.lobName}
+                            </td>
+                            <td className="p-3 border border-gray-500">
+                              {item.taggingPending}
+                            </td>
+                            <td className="p-3 border border-gray-500">
+                              {item.techSelectPending}
+                            </td>
+                            <td className="p-3 border border-gray-500">
+                              {item.bgvPending}
+                            </td>
+                            <td className="p-3 border border-gray-500">
+                              {item.hsbcDojAwaited}
+                            </td>
+                            <td className="p-3 border border-gray-500">
+                              {item.hsbcDojConfirmed}
+                            </td>
+                            <td className="p-3 border border-gray-500">
+                              {item.total}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td className="p-1 border border-gray-500" colSpan="7">
+                            No data available
+                          </td>
+                        </tr>
+                      )}
                       <tr>
-                        <td className="p-1 border border-gray-800" colSpan="4">
-                          No data available
+                        <td className="p-1 border border-gray-500 bg-blue-400 font-semibold text-left">
+                          Total
+                        </td>
+                        <td className="p-1 border border-gray-500 bg-blue-400">
+                          {ctool.reduce(
+                            (acc, item) => acc + item.taggingPending,
+                            0
+                          )}
+                        </td>
+                        <td className="p-1 border border-gray-500 bg-blue-400">
+                          {ctool.reduce(
+                            (acc, item) => acc + item.techSelectPending,
+                            0
+                          )}
+                        </td>
+                        <td className="p-1 border border-gray-500 bg-blue-400">
+                          {ctool.reduce((acc, item) => acc + item.bgvPending, 0)}
+                        </td>
+                        <td className="p-1 border border-gray-500 bg-blue-400">
+                          {ctool.reduce(
+                            (acc, item) => acc + item.hsbcDojAwaited,
+                            0
+                          )}
+                        </td>
+                        <td className="p-1 border border-gray-500 bg-blue-400">
+                          {ctool.reduce(
+                            (acc, item) => acc + item.hsbcDojConfirmed,
+                            0
+                          )}
+                        </td>
+                        <td className="p-1 border border-gray-500 bg-blue-400">
+                          {ctool.reduce((acc, item) => acc + item.total, 0)}
                         </td>
                       </tr>
-                    )}
-                    <tr className="bg-blue-400">
-                      <td className="p-2 border border-gray-600 font-semibold text-left">Total</td>
-                      <td className="p-2 border border-gray-600">
-                        {selections.reduce(
-                          (acc, selection) => acc + selection.fp,
-                          0
-                        )}
-                      </td>
-                      <td className="p-1 border border-gray-600">
-                        {selections.reduce(
-                          (acc, selection) => acc + selection.tnm,
-                          0
-                        )}
-                      </td>
-                      <td className="p-1 border border-gray-600">
-                        {selections.reduce(
-                          (acc, selection) => acc + selection.buffer,
-                          0
-                        )}
-                      </td>
-                      <td className="p-1 border border-gray-600">
-                        {selections.reduce(
-                          (acc, selection) => acc + selection.total,
-                          0
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
-            <div className="flex-grow"></div> {/* Spacer */}
-            <section
-              className="w-1/3"
-              style={{ zIndex: 1, position: "relative" }}
-            >
-              <PieChart data={chartData} />
-            </section>
-          </div>
-          <section className="mb-8">
-            <div className="flex items-center py-2 gap-[1vw]">
-              <h2 className="font-semibold text-lg">CTool Clear Cases</h2>
-              <button
-                onClick={() =>
-                  handleExportToExcel(ctool, "CTool", "CTool.xlsx")
-                }
-                className="px-2 py-2 bg-green-700 text-white rounded-full flex justify-center items-center"
-                title="Export Ctool Clear Cases"
-              >
-                <FaFileExcel />
-              </button>
-              <div className="flex items-center ml-auto">
-                <label htmlFor="ctoolFilter" className="mr-2 font-semibold">
-                  Filter:
-                </label>
-                <select
-                  id="ctoolFilter"
-                  data-testid="ctool-filter"
-                  value={ctoolFilter}
-                  onChange={(e) => setCtoolFilter(e.target.value)}
-                  className="p-2 border border-gray-400 rounded-full"
-                >
-                  <option value="all">All</option>
-                  <option value="internal">Internal</option>
-                  <option value="external">External</option>
-                </select>
-              </div>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse border-2 border-gray-400 text-center">
-                <thead>
-                  <tr className="bg-blue-400">
-                    <th className="p-1 border border-gray-500">LOB</th>
-                    <th className="p-1 border border-gray-500">
-                      Tagging Pending
-                    </th>
-                    <th className="p-1 border border-gray-500">
-                      Tech Select Pending
-                    </th>
-                    <th className="p-1 border border-gray-500">BGV Pending</th>
-                    <th className="p-1 border border-gray-500">
-                      HSBC DOJ Awaited
-                    </th>
-                    <th className="p-1 border border-gray-500">
-                      HSBC DOJ Confirmed
-                    </th>
-                    <th className="p-1 border border-gray-500">Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ctool.length > 0 ? (
-                    ctool.map((item, index) => (
-                      <tr key={index}>
-                        <td className="p-3 border border-gray-500 text-left">
-                          {item.lobName}
-                        </td>
-                        <td className="p-3 border border-gray-500">
-                          {item.taggingPending}
-                        </td>
-                        <td className="p-3 border border-gray-500">
-                          {item.techSelectPending}
-                        </td>
-                        <td className="p-3 border border-gray-500">
-                          {item.bgvPending}
-                        </td>
-                        <td className="p-3 border border-gray-500">
-                          {item.hsbcDojAwaited}
-                        </td>
-                        <td className="p-3 border border-gray-500">
-                          {item.hsbcDojConfirmed}
-                        </td>
-                        <td className="p-3 border border-gray-500">
-                          {item.total}
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td className="p-1 border border-gray-500" colSpan="7">
-                        No data available
-                      </td>
-                    </tr>
-                  )}
-                  <tr>
-                    <td className="p-1 border border-gray-500 bg-blue-400 font-semibold text-left">
-                      Total
-                    </td>
-                    <td className="p-1 border border-gray-500 bg-blue-400">
-                      {ctool.reduce(
-                        (acc, item) => acc + item.taggingPending,
-                        0
-                      )}
-                    </td>
-                    <td className="p-1 border border-gray-500 bg-blue-400">
-                      {ctool.reduce(
-                        (acc, item) => acc + item.techSelectPending,
-                        0
-                      )}
-                    </td>
-                    <td className="p-1 border border-gray-500 bg-blue-400">
-                      {ctool.reduce((acc, item) => acc + item.bgvPending, 0)}
-                    </td>
-                    <td className="p-1 border border-gray-500 bg-blue-400">
-                      {ctool.reduce(
-                        (acc, item) => acc + item.hsbcDojAwaited,
-                        0
-                      )}
-                    </td>
-                    <td className="p-1 border border-gray-500 bg-blue-400">
-                      {ctool.reduce(
-                        (acc, item) => acc + item.hsbcDojConfirmed,
-                        0
-                      )}
-                    </td>
-                    <td className="p-1 border border-gray-500 bg-blue-400">
-                      {ctool.reduce((acc, item) => acc + item.total, 0)}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
 
-          <section>
-            <div className="flex items-center py-2 gap-[1vw]">
-              <h2 className="font-semibold text-lg">CTool Awaited Cases</h2>
-              <button
-                onClick={() =>
-                  handleExportToExcel(
-                    awaitedCases,
-                    "AwaitedCases",
-                    "AwaitedCases.xlsx"
-                  )
-                }
-                className="px-2 py-2 bg-green-700 text-white rounded-full flex justify-center items-center"
-                title="Export Ctool Awaited Cases"
-              >
-                <FaFileExcel />
-              </button>
-              <div className="flex items-center ml-auto">
-                <label
-                  htmlFor="awaitedCasesFilter"
-                  className="mr-2 font-semibold"
-                >
-                  Filter:
-                </label>
-                <select
-                  id="awaitedCasesFilter"
-                  data-testid="awaited-cases-filter"
-                  value={awaitedCasesFilter}
-                  onChange={(e) => setAwaitedCasesFilter(e.target.value)}
-                  className="p-2 border border-gray-400 rounded-full"
-                >
-                  <option value="all">All</option>
-                  <option value="internal">Internal</option>
-                  <option value="external">External</option>
-                </select>
-              </div>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse border-2 border-gray-400 text-center">
-                <thead>
-                  <tr className="bg-blue-400">
-                    <th className="p-1 border border-gray-500"></th>
-                    <th className="p-1 border border-gray-500"></th>
-                    <th colSpan="2" className="p-1 border border-gray-500">
-                      Joined
-                    </th>
-                    <th colSpan="2" className="p-1 border border-gray-500">
-                      YTJ
-                    </th>
-                    <th className="p-1 border border-gray-500 ">Grand Total</th>
-                  </tr>
-                  <tr className="bg-blue-400">
-                    <th className="p-1 border border-gray-500">LOB</th>
-                    <th className="p-1 border border-gray-500">
-                      Pricing Model
-                    </th>
-                    <th className="p-1 border border-gray-500">
-                      BGV Completed
-                    </th>
-                    <th className="p-1 border border-gray-500">In progress</th>
-                    <th className="p-1 border border-gray-500">In progress</th>
-                    <th className="p-1 border border-gray-500">
-                      Offer Yet to be Released
-                    </th>
-                    <th className="p-1 border border-gray-500 ">Grand Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {awaitedCases.length > 0 ? (
-                    awaitedCases.map((item, index) => (
-                      <tr key={index}>
-                        <td className="p-3 border border-gray-500 text-left">
-                          {item.lobName}
+              <section>
+                <div id='CToolAwaitedCases' ref={sectionRefs.CToolAwaitedCases} className="flex items-center py-2 gap-[1vw]">
+                  <h2 className="font-semibold text-lg">CTool Awaited Cases</h2>
+                  <button
+                    onClick={() =>
+                      handleExportToExcel(
+                        awaitedCases,
+                        "AwaitedCases",
+                        "AwaitedCases.xlsx"
+                      )
+                    }
+                    className="px-2 py-2 bg-green-700 text-white rounded-full flex justify-center items-center"
+                    title="Export Ctool Awaited Cases"
+                  >
+                    <FaFileExcel />
+                  </button>
+                  <div className="flex items-center ml-auto">
+                    <label
+                      htmlFor="awaitedCasesFilter"
+                      className="mr-2 font-semibold"
+                    >
+                      Filter:
+                    </label>
+                    <select
+                      id="awaitedCasesFilter"
+                      data-testid="awaited-cases-filter"
+                      value={awaitedCasesFilter}
+                      onChange={(e) => setAwaitedCasesFilter(e.target.value)}
+                      className="p-2 border border-gray-400 rounded-full"
+                    >
+                      <option value="all">All</option>
+                      <option value="internal">Internal</option>
+                      <option value="external">External</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse border-2 border-gray-400 text-center">
+                    <thead>
+                      <tr className="bg-blue-400">
+                        <th className="p-1 border border-gray-500"></th>
+                        <th className="p-1 border border-gray-500"></th>
+                        <th colSpan="2" className="p-1 border border-gray-500">
+                          Joined
+                        </th>
+                        <th colSpan="2" className="p-1 border border-gray-500">
+                          YTJ
+                        </th>
+                        <th className="p-1 border border-gray-500 ">Grand Total</th>
+                      </tr>
+                      <tr className="bg-blue-400">
+                        <th className="p-1 border border-gray-500">LOB</th>
+                        <th className="p-1 border border-gray-500">
+                          Pricing Model
+                        </th>
+                        <th className="p-1 border border-gray-500">
+                          BGV Completed
+                        </th>
+                        <th className="p-1 border border-gray-500">In progress</th>
+                        <th className="p-1 border border-gray-500">In progress</th>
+                        <th className="p-1 border border-gray-500">
+                          Offer Yet to be Released
+                        </th>
+                        <th className="p-1 border border-gray-500 ">Grand Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {awaitedCases.length > 0 ? (
+                        awaitedCases.map((item, index) => (
+                          <tr key={index}>
+                            <td className="p-3 border border-gray-500 text-left">
+                              {item.lobName}
+                            </td>
+                            <td className="p-3 border border-gray-500">
+                              {item.pricing_model}
+                            </td>
+                            <td className="p-3 border border-gray-500">
+                              {item.bgvCompleted}
+                            </td>
+                            <td className="p-3 border border-gray-500">
+                              {item.inProgressCompleted}
+                            </td>
+                            <td className="p-3 border border-gray-500">
+                              {item.inProgressNotCompleted}
+                            </td>
+                            <td className="p-3 border border-gray-500">
+                              {item.offerYetToBeReleased}
+                            </td>
+                            <td className="p-3 border border-gray-500">
+                              {item.total}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td className="p-1 border border-gray-500" colSpan="7">
+                            No data available
+                          </td>
+                        </tr>
+                      )}
+                      <tr>
+                        <td className="p-1 border border-gray-500 bg-blue-400 font-semibold text-left">
+                          Grand Total
                         </td>
-                        <td className="p-3 border border-gray-500">
-                          {item.pricing_model}
+                        <td className="p-1 border border-gray-500 bg-blue-400"></td>
+                        <td className="p-1 border border-gray-500 bg-blue-400">
+                          {awaitedCases.reduce(
+                            (acc, item) => acc + item.bgvCompleted,
+                            0
+                          )}
                         </td>
-                        <td className="p-3 border border-gray-500">
-                          {item.bgvCompleted}
+                        <td className="p-1 border border-gray-500 bg-blue-400">
+                          {awaitedCases.reduce(
+                            (acc, item) => acc + item.inProgressCompleted,
+                            0
+                          )}
                         </td>
-                        <td className="p-3 border border-gray-500">
-                          {item.inProgressCompleted}
+                        <td className="p-1 border border-gray-500 bg-blue-400">
+                          {awaitedCases.reduce(
+                            (acc, item) => acc + item.inProgressNotCompleted,
+                            0
+                          )}
                         </td>
-                        <td className="p-3 border border-gray-500">
-                          {item.inProgressNotCompleted}
+                        <td className="p-1 border border-gray-500 bg-blue-400">
+                          {awaitedCases.reduce(
+                            (acc, item) => acc + item.offerYetToBeReleased,
+                            0
+                          )}
                         </td>
-                        <td className="p-3 border border-gray-500">
-                          {item.offerYetToBeReleased}
-                        </td>
-                        <td className="p-3 border border-gray-500">
-                          {item.total}
+                        <td className="p-1 border border-gray-500 bg-blue-400">
+                          {awaitedCases.reduce((acc, item) => acc + item.total, 0)}
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td className="p-1 border border-gray-500" colSpan="7">
-                        No data available
-                      </td>
-                    </tr>
-                  )}
-                  <tr>
-                    <td className="p-1 border border-gray-500 bg-blue-400 font-semibold text-left">
-                      Grand Total
-                    </td>
-                    <td className="p-1 border border-gray-500 bg-blue-400"></td>
-                    <td className="p-1 border border-gray-500 bg-blue-400">
-                      {awaitedCases.reduce(
-                        (acc, item) => acc + item.bgvCompleted,
-                        0
-                      )}
-                    </td>
-                    <td className="p-1 border border-gray-500 bg-blue-400">
-                      {awaitedCases.reduce(
-                        (acc, item) => acc + item.inProgressCompleted,
-                        0
-                      )}
-                    </td>
-                    <td className="p-1 border border-gray-500 bg-blue-400">
-                      {awaitedCases.reduce(
-                        (acc, item) => acc + item.inProgressNotCompleted,
-                        0
-                      )}
-                    </td>
-                    <td className="p-1 border border-gray-500 bg-blue-400">
-                      {awaitedCases.reduce(
-                        (acc, item) => acc + item.offerYetToBeReleased,
-                        0
-                      )}
-                    </td>
-                    <td className="p-1 border border-gray-500 bg-blue-400">
-                      {awaitedCases.reduce((acc, item) => acc + item.total, 0)}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
             </div>
-          </section>
+          </div>
         </div>
-      </div>
-    </div>
-       )}
-       </>
+      )}
+    </>
   );
 };
 
