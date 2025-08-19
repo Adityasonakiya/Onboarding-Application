@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from '../assets/ltim.png';
+import lti from '../assets/images/logo.png';
+import logo from '../assets/ltim2.png';
 
 
 const Login = () => {
@@ -87,24 +88,35 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-blue-100 to-purple-200">
-      <div className="md:w-1/2 h-screen flex  bg-blue-600 justify-center">
+
+    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-blue-100 to-purple-200 relative">
+      <div className="md:w-1/2 h-screen flex  bg-blue-600">
+
         <div className="group text-white p-10 rounded-xl w-full max-w-xl flex flex-col items-center text-center">
           <img
             src={logo}
             alt="Company Logo"
-            className="w-63 h-24 transform transition-transform duration-200 hover:scale-105"
+
+            className="w-63 h-24 mb-4"
+
           />
-          <h1 className="text-3xl font-bold mb-2 tracking-wide">
+          {/* <h1 className="text-3xl font-bold mb-2 tracking-wide">
             Selection Tracker
-          </h1>
+          </h1> */}
           <p className="text-lg font-medium opacity-90 mb-4 ">
             Everything your team needs, in one workspace
           </p>
           <p className="text-sm font-light leading-relaxed px-4">
             The HSBC Onboarding Application (Selection Tracker) is a streamlined solution designed to automate the client onboarding process at HSBC. It reduces manual effort, minimizes errors, and enhances efficiency by providing a centralized platform to manage onboarding activities.
           </p>
+          <img
+  src={lti}
+  alt="Company Logo"
+  className="absolute bottom-4 right-4 w-20 h-auto opacity-80"
+/>
+
         </div>
+        
       </div>
 
       <form
