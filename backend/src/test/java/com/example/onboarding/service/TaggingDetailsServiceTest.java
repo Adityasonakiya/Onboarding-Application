@@ -12,8 +12,8 @@ import org.mockito.MockitoAnnotations;
 
 import com.example.onboarding.model.Employee;
 import com.example.onboarding.model.TaggingDetails;
-import com.example.onboarding.repository.BGVStatusRepository;
-import com.example.onboarding.repository.OnboardingStatusRepository;
+// import com.example.onboarding.repository.BGVStatusRepository;
+// import com.example.onboarding.repository.OnboardingStatusRepository;
 import com.example.onboarding.repository.TaggingDetailsRepository;
 
 public class TaggingDetailsServiceTest {
@@ -21,11 +21,11 @@ public class TaggingDetailsServiceTest {
     @Mock
     private TaggingDetailsRepository taggingDetailsRepository;
 
-    @Mock
-    private OnboardingStatusRepository onboardingStatusRepository;
+    // @Mock
+    // private OnboardingStatusRepository onboardingStatusRepository;
 
-    @Mock
-    private BGVStatusRepository bgvStatusRepository;
+    // @Mock
+    // private BGVStatusRepository bgvStatusRepository;
 
     @InjectMocks
     private TaggingDetailsService taggingDetailsService;

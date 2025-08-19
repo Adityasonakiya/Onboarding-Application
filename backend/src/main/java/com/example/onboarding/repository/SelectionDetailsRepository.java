@@ -39,10 +39,10 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "obs.onboarding_status AS onboardingStatus , bgvs.bgv_status AS bgvStatus , emp.phone_number AS phoneNumber "
             + "FROM employee emp "
             + "JOIN selection_details selection ON selection.ps_id  = emp.psid "
-            + "JOIN lob lob ON selection.lob_id  = lob.lob_id "
-            + "JOIN tagging_details td ON emp.psid  = td.ps_id "
-            + "JOIN onboarding_status obs ON td.onboarding_status_id  = obs.status_id "
-            + "JOIN bgvstatus bgvs ON td.bgv_status_id  = bgvs.bgv_status_id "
+            + "LEFT JOIN lob lob ON selection.lob_id  = lob.lob_id "
+            + "LEFT JOIN tagging_details td ON emp.psid  = td.ps_id "
+            + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id  = obs.status_id "
+            + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id  = bgvs.bgv_status_id "
             + "WHERE EXISTS ( "
             + "SELECT 1 "
             + "FROM employee e "
@@ -50,7 +50,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "JOIN selection_details sd ON sd.ps_id = e.psid "
             + "WHERE e.psid = :loggedInPsid "
             + " AND ( "
-            + "r.role_name IN ('Admin', 'Leadership', 'Sales SPOC', 'Onboarding Team') "
+            + "r.role_name IN ('Admin', 'Sales SPOC', 'Onboarding Team') "
             + "OR (r.role_name IN ('DM', 'LOB-PMO') AND selection.lob_id = sd.lob_id) "
             + " ) "
             + ") UNION ALL "
@@ -59,10 +59,10 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "obs.onboarding_status AS onboardingStatus, bgvs.bgv_status AS bgvStatus, cnd.phone_number AS phoneNumber "
             + "FROM candidate cnd "
             + "JOIN selection_details selection ON selection.candidate_id = cnd.candidate_id "
-            + "JOIN lob lob ON selection.lob_id = lob.lob_id "
-            + "JOIN tagging_details td ON cnd.candidate_id = td.candidate_id "
-            + "JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
-            + "JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id "
+            + "LEFT JOIN lob lob ON selection.lob_id = lob.lob_id "
+            + "LEFT JOIN tagging_details td ON cnd.candidate_id = td.candidate_id "
+            + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
+            + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id "
             + "WHERE EXISTS ( "
             + "SELECT 1 "
             + "FROM employee e "
@@ -70,7 +70,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "JOIN selection_details sd ON sd.ps_id = e.psid "
             + "WHERE e.psid = :loggedInPsid "
             + " AND ( "
-            + "r.role_name IN ('Admin', 'Leadership', 'Sales SPOC', 'Onboarding Team') "
+            + "r.role_name IN ('Admin', 'Sales SPOC', 'Onboarding Team') "
             + "OR (r.role_name IN ('DM', 'LOB-PMO') AND selection.lob_id = sd.lob_id) "
             + " ) "
             + ") UNION ALL "
@@ -79,10 +79,10 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "obs.onboarding_status AS onboardingStatus, bgvs.bgv_status AS bgvStatus, vc.phone_number AS phoneNumber "
             + "FROM vendor_candidate vc "
             + "JOIN selection_details selection ON selection.vendor_candidate_id = vc.vendor_candidate_id "
-            + "JOIN lob lob ON selection.lob_id = lob.lob_id "
-            + "JOIN tagging_details td ON vc.vendor_candidate_id = td.vendor_candidate_id "
-            + "JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
-            + "JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id "
+            + "LEFT JOIN lob lob ON selection.lob_id = lob.lob_id "
+            + "LEFT JOIN tagging_details td ON vc.vendor_candidate_id = td.vendor_candidate_id "
+            + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id "
+            + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id "
             + "WHERE EXISTS ( "
             + "SELECT 1 "
             + "FROM employee e "
@@ -90,7 +90,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "JOIN selection_details sd ON sd.ps_id = e.psid "
             + "WHERE e.psid = :loggedInPsid "
             + " AND ( "
-            + "r.role_name IN ('Admin', 'Leadership', 'Sales SPOC', 'Onboarding Team') "
+            + "r.role_name IN ('Admin', 'Sales SPOC', 'Onboarding Team') "
             + "OR (r.role_name IN ('DM', 'LOB-PMO') AND selection.lob_id = sd.lob_id) "
             + " ) "
             + ") " + ") AS result",
@@ -105,7 +105,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "JOIN selection_details sd ON sd.ps_id = e.psid "
             + "WHERE e.psid = :loggedInPsid "
             + " AND ( "
-            + "r.role_name IN ('Admin', 'Leadership', 'Sales SPOC', 'Onboarding Team') "
+            + "r.role_name IN ('Admin', 'Sales SPOC', 'Onboarding Team') "
             + "OR (r.role_name IN ('DM', 'LOB-PMO') AND selection.lob_id = sd.lob_id) "
             + " ) "
             + ") UNION ALL "
@@ -119,7 +119,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "JOIN selection_details sd ON sd.ps_id = e.psid "
             + "WHERE e.psid = :loggedInPsid "
             + " AND ( "
-            + "r.role_name IN ('Admin', 'Leadership', 'Sales SPOC', 'Onboarding Team') "
+            + "r.role_name IN ('Admin', 'Sales SPOC', 'Onboarding Team') "
             + "OR (r.role_name IN ('DM', 'LOB-PMO') AND selection.lob_id = sd.lob_id) "
             + " ) "
             + ") UNION ALL "
@@ -133,7 +133,7 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "JOIN selection_details sd ON sd.ps_id = e.psid "
             + "WHERE e.psid = :loggedInPsid "
             + " AND ( "
-            + "r.role_name IN ('Admin', 'Leadership', 'Sales SPOC', 'Onboarding Team') "
+            + "r.role_name IN ('Admin', 'Sales SPOC', 'Onboarding Team') "
             + "OR (r.role_name IN ('DM', 'LOB-PMO') AND selection.lob_id = sd.lob_id) "
             + " ) ) "
             + ") AS totalCount ", nativeQuery = true)
@@ -143,8 +143,16 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "FROM selectiontracker.selection_details sd, selectiontracker.lob lb "
             + "WHERE sd.lob_id = lb.lob_id "
             + "AND (:filter = 'all' OR (:filter = 'internal' AND sd.ps_id IS NOT NULL) OR (:filter = 'external' AND sd.ps_id IS NULL)) "
+            + "AND EXISTS ( "
+            + "SELECT 1 "
+            + "FROM employee e "
+            + "JOIN roles r ON e.role_id = r.role_id "
+            + "JOIN selection_details selection ON selection.ps_id = e.psid "
+            + "WHERE e.psid = :loggedInPsid "
+            + " AND ( r.role_name = 'LOB-PMO' AND selection.lob_id = sd.lob_id OR r.role_name <> 'LOB-PMO') "
+            + " ) "
             + "GROUP BY lb.lob_id, sd.pricing_model, sd.hsbcselection_date", nativeQuery = true)
-    List<SelectionDTO> findSelections(@Param("filter") String filter);
+    List<SelectionDTO> findSelections(@Param("filter") String filter,@Param("loggedInPsid") Integer loggedInPsid);
 
     @Query(value = "SELECT COUNT(*) as ctool_count, lb.lob_name, os.onboarding_status, bs.bgv_status, td.update_date "
             + "FROM selection_details sd, lob lb, tagging_details td, onboarding_status os, bgvstatus bs "
@@ -153,8 +161,16 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "AND td.onboarding_status_id = os.status_id "
             + "AND td.bgv_status_id = bs.bgv_status_id "
             + "AND (:filter = 'all' OR (:filter = 'internal' AND sd.ps_id IS NOT NULL) OR (:filter = 'external' AND sd.ps_id IS NULL)) "
+            + "AND EXISTS ( "
+            + "SELECT 1 "
+            + "FROM employee e "
+            + "JOIN roles r ON r.role_id = e.role_id "
+            + "JOIN selection_details selection ON selection.ps_id = e.psid "
+            + "WHERE e.psid = :loggedInPsid "
+            + "AND (r.role_name = 'LOB-PMO' AND selection.lob_id=sd.lob_id OR r.role_name <> 'LOB-PMO') "
+            + ") "
             + "GROUP BY lb.lob_id, os.status_id, bs.bgv_status_id, td.update_date", nativeQuery = true)
-    List<CtoolDto> findCtool(@Param("filter") String filter);
+    List<CtoolDto> findCtool(@Param("filter") String filter, @Param("loggedInPsid")Integer loggedInPsid);
 
     @Query(value = "SELECT count(*) as awaited_count, lb.lob_name, sd.pricing_model, bs.bgv_status, os.onboarding_status, td.update_date "
             + "FROM selection_details sd, tagging_details td, bgvstatus bs, onboarding_status os,lob lb "
@@ -163,8 +179,16 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "AND sd.lob_id = lb.lob_id "
             + "AND td.onboarding_status_id = os.status_id "
             + "AND (:filter = 'all' OR (:filter = 'internal' AND sd.ps_id IS NOT NULL) OR (:filter = 'external' AND sd.ps_id IS NULL)) "
+            + "AND EXISTS ( "
+            + "SELECT 1 "
+            + "FROM employee e "
+            + "JOIN roles r ON r.role_id = e.role_id "
+            + "JOIN selection_details selection ON selection.ps_id = e.psid "
+            + "WHERE e.psid = :loggedInPsid "
+            + "AND (r.role_name = 'LOB-PMO' AND selection.lob_id = sd.lob_id OR r.role_name <> 'LOB-PMO') "
+            + ") "
             + "GROUP BY bs.bgv_status_id, sd.pricing_model, lb.lob_name, os.status_id, td.update_date", nativeQuery = true)
-    List<AwaitedCasesDTO> findAwaitedCases(@Param("filter") String filter);
+    List<AwaitedCasesDTO> findAwaitedCases(@Param("filter") String filter, @Param("loggedInPsid") Integer loggedInPsid);
 
     @Query(value = "SELECT * FROM selection_details sd WHERE (:filter = 'all' OR (:filter = 'internal' AND sd.ps_id IS NOT NULL) OR (:filter = 'external' AND sd.ps_id IS NULL))", nativeQuery = true)
     List<SelectionDetails> findSelectionDetailsByFilter(@Param("filter") String filter);
@@ -193,7 +217,8 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id=obs.status_id "
             + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id=bgvs.bgv_status_id "
             + "LEFT JOIN evidencedto evd ON evd.selection_id = selection.selection_id "
-            + "WHERE selection.created_by = :createdBy ) "
+            //+ "WHERE selection.created_by = :createdBy +
+            +" ) "
             + "UNION "
             + "( SELECT obs.onboarding_status AS onboardingStatus,selection.hsbc_id as hsbcId, 'External' AS ltiPsId, cnd.first_name AS firstName, cnd.last_name AS lastName, '' AS grade, '' AS location, NULL AS totalExperience, '' AS skill, "
             + "Date(selection.hsbcselection_date) AS hsbcSelectionDate, CASE WHEN selection.ltionboarding_date IS NOT NULL THEN Date(selection.ltionboarding_date) ELSE NULL END AS ltiJoiningDate, Date(selection.create_date) AS createdDate, "
@@ -218,7 +243,8 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id=obs.status_id "
             + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id=bgvs.bgv_status_id "
             + "LEFT JOIN evidencedto evd ON evd.selection_id = selection.selection_id "
-            + "WHERE selection.created_by = :createdBy ) "
+            //+ "WHERE selection.created_by = :createdBy
+            +") "
             + "UNION "
             + "( SELECT obs.onboarding_status AS onboardingStatus,selection.hsbc_id as hsbcId, v.vendor_name AS ltiPsId, vd.first_name AS firstName, vd.last_name AS lastName, '' AS grade, '' AS location, NULL AS totalExperience, '' AS skill, "
             + "Date(selection.hsbcselection_date) AS hsbcSelectionDate, CASE WHEN selection.ltionboarding_date IS NOT NULL THEN Date(selection.ltionboarding_date) ELSE NULL END AS ltiJoiningDate, Date(selection.create_date) AS createdDate, "
@@ -244,7 +270,8 @@ public interface SelectionDetailsRepository extends JpaRepository<SelectionDetai
             + "LEFT JOIN onboarding_status obs ON td.onboarding_status_id=obs.status_id "
             + "LEFT JOIN bgvstatus bgvs ON td.bgv_status_id=bgvs.bgv_status_id "
             + "LEFT JOIN evidencedto evd ON evd.selection_id = selection.selection_id "
-            + "WHERE selection.created_by = :createdBy )",
+            //+ "WHERE selection.created_by = :createdBy 
+            +")",
             nativeQuery = true)
     List<ExcelDataDTO> findCustomQueryResults(@Param("createdBy") Integer createdBy);
 

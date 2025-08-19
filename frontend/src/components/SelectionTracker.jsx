@@ -173,14 +173,14 @@ function SelectionTracker() {
   }, [form.psId]);
 
   useEffect(() => {
-    if (form.phoneNumber && form.vendors === 1) {
+    if (form.phoneNumber && form.vendors.vendorId === 1) {
       fetchCandidateData(form.phoneNumber);
       fetchSelectionDetailsByCandidateId(form.phoneNumber);
     }
   }, [form.phoneNumber]);
 
   useEffect(() => {
-    if (form.vendors !== 1) {
+    if (form.phoneNumber && form.vendors.vendorId > 1) {
       setVendor(true);
       fetchVendorData(form.phoneNumber);
       fetchSelectionDetailsByVendorCandidateId(form.phoneNumber);
@@ -339,16 +339,19 @@ function SelectionTracker() {
 
   const handleVendorChange = async (event) => {
     const vendorId = event.target.value;
-    console.log(vendorId);
+    console.log("handleVendorChange :", vendorId);
 
     setForm((prevState) => ({
       ...prevState,
       vendors: { vendorId: vendorId },
     }));
-    console.log(form.vendors);
-    if (form.vendors === "1") {
+    if (vendorId === "1") {
       setVendor(false);
       setIsExternal(true);
+      console.log("Candidate is external");
+    } else {
+      setVendor(true);
+      console.log("Its a vendor");
     }
   };
 
@@ -433,7 +436,6 @@ function SelectionTracker() {
 
   const validateDates = (selectionDate, ctoolRecDate, ltiOnboardDate) => {
     const errors = {};
-
     if (
       ltiOnboardDate &&
       selectionDate &&
@@ -442,7 +444,6 @@ function SelectionTracker() {
       errors.ltiOnboardDate =
         "LTI Onboarding Date must be before Selection Date";
     }
-
     if (
       selectionDate &&
       ctoolRecDate &&
@@ -473,13 +474,13 @@ function SelectionTracker() {
       console.log("CTool Received Date:", ctoolRecDate);
       console.log("LTI Onboarding Date:", ltiOnboardDate);
 
-      const errors = validateDates(selectionDate, ctoolRecDate, ltiOnboardDate);
+      //const errors = validateDates(selectionDate, ctoolRecDate, ltiOnboardDate);
 
-      if (Object.keys(errors).length > 0) {
-        console.error("Validation errors:", errors);
-        alert(Object.values(errors).join("\n"));
-        return; // Exit function if validation fails
-      }
+      // if (Object.keys(errors).length > 0) {
+      //   console.error("Validation errors:", errors);
+      //   alert(Object.values(errors).join("\n"));
+      //   return; // Exit function if validation fails
+      // }
 
       setForm((prevForm) => ({
         ...prevForm,
@@ -785,16 +786,16 @@ function SelectionTracker() {
             );
 
             await handleResponse(response, requestBody);
-          } else if (isExternal && form.vendors.vendorId === 1) {
+          } else if (isExternal && !isVendor) {
             console.log(isExternal, isVendor, form.vendors.vendorId);
             // Candidate logic
             const candidate = {
               phoneNumber: form.phone,
-              vendorId: form.vendors.vendorId,
+              vendor: { vendorId: '1' },
               firstName: form.fname,
               lastName: form.lname,
-              createdBy:user,
-              updatedBy:user,
+              createdBy: user,
+              updatedBy: user,
             };
 
             console.log("Candidate Payload:", candidate); // Step 1: Create vendor candidate
@@ -810,11 +811,11 @@ function SelectionTracker() {
 
             if (!candidateResponse.ok) {
               const errorData = await candidateResponse.json();
-              console.error("Vendor creation failed:", errorData.message);
+              console.error("Candidate creation failed:", errorData.message);
               toast.error("Failed to create Candidate!", {
                 position: "top-right",
               });
-              return; // Stop execution if vendor creation fails
+              return; // Stop execution if candidate creation fails
             } // Step 3
             const candidateData = await candidateResponse.json(); // Ensure JSON parsing
             console.log("Saved Candidate:", candidateData);
@@ -834,7 +835,7 @@ function SelectionTracker() {
             );
 
             await handleResponse(response, requestBody);
-          } else if (isVendor && form.vendors.vendorId !== 1) {
+          } else if (isVendor) {
             console.log(isExternal, isVendor, form.vendors.vendorId);
             // Vendor logic
             const vendorCandidate = {
@@ -866,7 +867,7 @@ function SelectionTracker() {
               return; // Stop execution if vendor creation fails
             } // Step 2: Attach vendorCandidate reference to requestBody for selection details
             const vendorData = await vendorResponse.json(); // Ensure JSON parsing
-            console.log("Saved VendorCandidate:", vendorData);
+            console.log("Saved Vendor Candidate:", vendorData);
 
             requestBody.vendorCandidate = {
               phoneNumber: form.phone,

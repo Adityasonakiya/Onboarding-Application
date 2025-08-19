@@ -20,80 +20,102 @@ import { AuthProvider } from "./components/AuthContext";
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/Loader" element={<Loader />} />
-        <Route path="/unauthorized" element={<UnauthorizedPage />} />
-        <Route path="/" element={<Navigate replace to="/login" />} />
+    // <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/login"
+            element={
+              <AuthProvider>
+              <Login />
+              </AuthProvider>
+            }
+          />
+          <Route path="/Loader" element={<Loader />} />
+          <Route path="/unauthorized" element={<UnauthorizedPage />} />
+          <Route path="/" element={<Navigate replace to="/login" />} />
 
-        {/* Protected Routes with Layout */}
-        <Route
-          path="/landing-page"
-          element={
-            <AuthProvider>
-              <ProtectedRoute permission="canViewDashboard">
+          {/* Protected Routes with Layout */}
+          <Route
+            path="/landing-page"
+            element={
+              <AuthProvider>
+              <ProtectedRoute permission="canViewLandingPage">
                 <Layout>
                   <LandingPage />
                 </Layout>
               </ProtectedRoute>
-            </AuthProvider>
-          }
-        />
+              </AuthProvider>
+            }
+          />
 
-        <Route
-          path="/selection-tracker-dashboard"
-          element={
-            <AuthProvider>
+          <Route
+            path="/selection-tracker-dashboard"
+            element={
+              <AuthProvider>
               <ProtectedRoute permission="canViewDashboard">
                 <SelectionTrackerDashboard />
-              </ProtectedRoute>
-            </AuthProvider>
-          }
-        />
+                </ProtectedRoute>
+               </AuthProvider>
+            }
+          />
 
-        <Route
-          path="/admin"
-          element={
-            <AuthProvider>
+          <Route
+            path="/admin"
+            element={
+              <AuthProvider>
               <ProtectedRoute permission="canAccessAdminDashboard">
                 <Layout>
                   <Admin />
                 </Layout>
               </ProtectedRoute>
-            </AuthProvider>
-          }
-        />
+               </AuthProvider>
+            }
+          />
 
-        <Route
-          path="/selection-tracker"
-          element={
-            <AuthProvider>
+          <Route
+            path="/selection-tracker"
+            element={
+              <AuthProvider>
               <ProtectedRoute permission="canAddSelection">
                 <Layout>
                   <SelectionTracker />
                 </Layout>
               </ProtectedRoute>
-            </AuthProvider>
-          }
-        />
+               </AuthProvider>
+            }
+          />
 
-        <Route
-          path="/update-details"
-          element={
-            <AuthProvider>
+          <Route
+            path="/selection-tracker"
+            element={
+              <AuthProvider>
+              <ProtectedRoute permission="canAddSelection">
+                <Layout>
+                  <SelectionTracker />
+                </Layout>
+              </ProtectedRoute>
+              </AuthProvider>
+            }
+          />
+
+          <Route
+            path="/update-details"
+            element={
+              <AuthProvider>
               <ProtectedRoute permission="canUpdateSelection">
                 <Layout>
                   <UpdateDetails />
                 </Layout>
               </ProtectedRoute>
-            </AuthProvider>
-          }
-        />
-      </Routes>
-    </Router>
+              </AuthProvider>
+            }
+          />
+        </Routes>
+      </Router>
+    //</AuthProvider>
   );
 };
 

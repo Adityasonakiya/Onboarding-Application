@@ -17,9 +17,7 @@ const Unauthorized = () => {
     }
 
     localStorage.removeItem("user"); // Clear user info
-    setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+    navigate("/login");
   };
 
   return (

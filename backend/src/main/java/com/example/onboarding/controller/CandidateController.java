@@ -99,7 +99,7 @@ public ResponseEntity<List<EmployeeCandidateDTO>> searchAllByHiringManager(
 
     
     @PostMapping("/create")
-    public ResponseEntity<Candidate> createVendorCandidate(@RequestBody Candidate candidate) {
+    public ResponseEntity<Candidate> createCandidate(@RequestBody Candidate candidate) {
         System.out.println("Object sent" + candidate);
         if (candidate == null) {
             return ResponseEntity.badRequest().build();

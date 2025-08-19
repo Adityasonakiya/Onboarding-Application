@@ -133,9 +133,10 @@ const SelectionTrackerDashboard = ({ user }) => {
   };
 
   const fetchData = () => {
+    const user = JSON.parse(localStorage.getItem("user"))?.psid;
     // Fetch selections data
     fetch(
-      `http://localhost:8080/selection-details/selections?filter=${selectionFilter}`
+      `http://localhost:8080/selection-details/selections?filter=${selectionFilter}&loggedInPsid=${user}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -154,6 +155,7 @@ const SelectionTrackerDashboard = ({ user }) => {
               hsbcselectionDate,
             };
           }
+          
           if (pricingModel === "Fixed Price") {
             acc[lobName].FP += selectionCount;
           } else if (pricingModel === "Time & Material") {
@@ -215,7 +217,7 @@ const SelectionTrackerDashboard = ({ user }) => {
 
     // Fetch awaited cases data
     fetch(
-      `http://localhost:8080/selection-details/awaited-cases?filter=${awaitedCasesFilter}`
+      `http://localhost:8080/selection-details/awaited-cases?filter=${awaitedCasesFilter}&loggedInPsid=${user}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -294,7 +296,9 @@ const SelectionTrackerDashboard = ({ user }) => {
       });
 
     // Fetch ctool data
-    fetch(`http://localhost:8080/selection-details/ctool?filter=${ctoolFilter}`)
+    fetch(
+      `http://localhost:8080/selection-details/ctool?filter=${ctoolFilter}&loggedInPsid=${user}`
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("CTool data:", data); // Check if data is fetched correctly
@@ -508,17 +512,21 @@ const SelectionTrackerDashboard = ({ user }) => {
         </h1> */}
 
       {/* Tabs */}
-          <div className="flex items-center mb-4 mt-2 px-4 border-b">
-            <button
-              className={`px-4 py-2 font-semibold focus:outline-none ${
-                activeTab === "myselection"
-                  ? "border-b-2 border-blue-500 text-blue-600"
-                  : "text-gray-600"
-              }`}
-              onClick={() => handleTabClick("myselection")}
-            >
-              LOB Selection
-            </button>
+       <div className="mt-24" ref={triggerRef}>
+
+          <div className="flex items-center mt-2 px-4 border-b">
+            {permissions?.canViewLandingPage && (
+              <button
+                className={`px-4 py-2 font-semibold focus:outline-none ${
+                  activeTab === "myselection"
+                    ? "border-b-2 border-blue-500 text-blue-600"
+                    : "text-gray-600"
+                }`}
+                onClick={() => handleTabClick("myselection")}
+              >
+                LOB Selection
+              </button>
+            )}
             <button
               className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
                 activeTab === "dashboard"
@@ -542,60 +550,8 @@ const SelectionTrackerDashboard = ({ user }) => {
             </button>
             )}
           </div>
-      <div className="w-full px-4 py-4">
-        <div className="px-2">
-          {/* <h1 className="py-2 text-center bg-blue-300 font-bold text-lg md:text-xl">
-            HSBC Selection Tracker Dashboard
-          </h1> */}
-          <div className="flex justify-end mt-2 mb-2">
-            <button
-              onClick={fetchToExport}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-            >
-              Export
-            </button>
           </div>
-        </div>
-        <div className="mx-4">
-          <div className="flex items-center mt-1 mb-0 text-sm font-medium">
-            <div className="flex items-center gap-[1vw]">
-              <h2 className="font-semibold text-lg">Current Selections</h2>
-              <button
-                onClick={() =>
-                  handleExportToExcel(
-                    selections,
-                    "FilteredSelections",
-                    "FilteredSelections.xlsx"
-                  )
-                }
-                className=" px-2 py-2 bg-green-700 text-white rounded-full flex justify-center items-center"
-                title="Export Selections"
-
-              >
-                My Selection
-              </button>
-              <button
-                className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${activeTab === "dashboard"
-                  ? "border-b-2 border-blue-800 text-blue-800"
-                  : "text-gray-600"
-                  }`}
-                onClick={() => handleTabClick("dashboard")}
-              >
-                Selection Tracker Dashboard
-              </button>
-              {permissions?.canAccessAdminDashboard && (
-                <button
-                  className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${activeTab === "admin"
-                    ? "border-b-2 border-blue-500 text-blue-600"
-                    : "text-gray-600"
-                    }`}
-                  onClick={() => handleTabClick("admin")}
-                >
-                  Admin Dashboard
-                </button>
-              )}
-            </div>
-          </div>
+          
           <div className="w-full px-4">
             <div className="px-2">
               {/* <h1 className="py-2 text-center bg-blue-300 font-bold text-lg md:text-xl">

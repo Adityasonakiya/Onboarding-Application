@@ -146,20 +146,20 @@ public class SelectionDetailsController {
     }
 
     @GetMapping("/selections")
-    public ResponseEntity<List<SelectionDTO>> findSelections(@RequestParam String filter) {
-        List<SelectionDTO> selections = selectionDetailsService.findSelections(filter);
+    public ResponseEntity<List<SelectionDTO>> findSelections(@RequestParam String filter, @RequestParam Integer loggedInPsid) {
+        List<SelectionDTO> selections = selectionDetailsService.findSelections(filter,loggedInPsid);
         return ResponseEntity.ok(selections);
     }
 
     @GetMapping("/awaited-cases")
-    public ResponseEntity<List<AwaitedCasesDTO>> findAwaitedCases(@RequestParam String filter) {
-        List<AwaitedCasesDTO> awaitedCases = selectionDetailsService.findAwaitedCases(filter);
+    public ResponseEntity<List<AwaitedCasesDTO>> findAwaitedCases(@RequestParam String filter,@RequestParam Integer loggedInPsid) {
+        List<AwaitedCasesDTO> awaitedCases = selectionDetailsService.findAwaitedCases(filter,loggedInPsid);
         return ResponseEntity.ok(awaitedCases);
     }
 
     @GetMapping("/ctool")
-    public ResponseEntity<List<CtoolDto>> findCtool(@RequestParam String filter) {
-        List<CtoolDto> ctool = selectionDetailsService.findCtool(filter);
+    public ResponseEntity<List<CtoolDto>> findCtool(@RequestParam String filter,@RequestParam Integer loggedInPsid) {
+        List<CtoolDto> ctool = selectionDetailsService.findCtool(filter,loggedInPsid);
         return ResponseEntity.ok(ctool);
     }
 
