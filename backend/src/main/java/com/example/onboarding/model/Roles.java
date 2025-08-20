@@ -1,24 +1,29 @@
 package com.example.onboarding.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Roles {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int roleid;
+    private int roleId;
     private String roleName;
     private String roleFunctions;
     private String remarks;
-    
-    public int getRoleid() {
-        return roleid;
+
+    public int getRoleId() {
+        return roleId;
     }
-    public void setRoleid(int roleid) {
-        this.roleid = roleid;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
     public String getRoleName() {
         return roleName;
@@ -38,6 +43,5 @@ public class Roles {
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
-
     
 }

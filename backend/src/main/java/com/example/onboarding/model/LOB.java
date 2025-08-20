@@ -137,4 +137,14 @@ public class LOB {
         this.active = active;
     }
 
+    @Override
+    public String toString() {
+        return "LOB [lobId=" + lobId + ", lobName=" + lobName + ", remarks=" + remarks + ", createdBy=" + createdBy
+                + ", updatedBy=" + updatedBy + ", createdDate=" + createdDate + ", updateDate=" + updateDate
+                + ", deliveryManager=" + deliveryManager + ", salesPOC=" + salesPOC + ", HSBCHead=" + HSBCHead
+                + ", active=" + active + "]";
+    }
+
+    
+
 }

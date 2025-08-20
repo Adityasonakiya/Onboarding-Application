@@ -8,10 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.onboarding.model.AccessControlDTO;
 import com.example.onboarding.model.Employee;
 import com.example.onboarding.model.EmployeeCandidateDTO;
 import com.example.onboarding.service.EmployeeService;
@@ -37,6 +40,16 @@ public class EmployeeController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/api/employees/search")
+    public ResponseEntity<List<EmployeeCandidateDTO>> searchEmployeeByClientName(
+            @RequestParam("hsbchiringManager") String hsbchiringManager) {
+        List<EmployeeCandidateDTO> candidates = employeeService.searchEmployeeByClientName(hsbchiringManager);
+        if (candidates.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(candidates);
     }
 
     @GetMapping
@@ -88,7 +101,7 @@ public class EmployeeController {
     // }
 
     @GetMapping("/search")
-    public ResponseEntity<List<EmployeeCandidateDTO>> searchById(@RequestParam("query") int query) {
+    public ResponseEntity<List<EmployeeCandidateDTO>> searchById(@RequestParam int query) {
         List<EmployeeCandidateDTO> results = employeeService.searchById(query);
         return ResponseEntity.ok(results);
     }
@@ -105,5 +118,27 @@ public class EmployeeController {
             @RequestParam("status") String bgvStatus) {
         List<EmployeeCandidateDTO> candidates = employeeService.getCandidatesByBgvStatus(bgvStatus);
         return ResponseEntity.ok(candidates);
+    }
+
+    @PutMapping("/update/{psid}")
+    public ResponseEntity<Employee> updateEmployeeRole(@PathVariable int psid, @RequestBody Employee employee) {
+        try {
+            Employee updatedEmployee = employeeService.updateEmployee(psid, employee);
+            return ResponseEntity.ok(updatedEmployee);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    @GetMapping("/access/{psid}")
+    public ResponseEntity<AccessControlDTO> getAccessControlByPsid(@PathVariable Integer psid) {
+        AccessControlDTO accessControl = employeeService.getAccessControlByPsid(psid);
+        if (accessControl != null) {
+            return ResponseEntity.ok(accessControl);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.onboarding.model;
 
 import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -44,10 +43,12 @@ public class TaggingDetails {
     private CandidateStatus candidateStatus;
 
     @ManyToOne
-    private User createdBy;
+    @JoinColumn(name = "createdBy")
+    private Employee createdBy;
 
     @ManyToOne
-    private User updatedBy;
+    @JoinColumn(name = "updatedBy")
+    private Employee updatedBy;
 
     private String statusRemarks;
     private Date createDate;
@@ -141,19 +142,19 @@ public class TaggingDetails {
         this.bgvStatus = bgvStatus;
     }
 
-    public User getCreatedBy() {
+    public Employee getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(User createdBy) {
+    public void setCreatedBy(Employee createdBy) {
         this.createdBy = createdBy;
     }
 
-    public User getUpdatedBy() {
+    public Employee getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(User updatedBy) {
+    public void setUpdatedBy(Employee updatedBy) {
         this.updatedBy = updatedBy;
     }
 

@@ -12,7 +12,7 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Candidate {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int candidateId;
     
     private Long phoneNumber;

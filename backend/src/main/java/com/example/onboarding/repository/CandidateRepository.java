@@ -14,7 +14,7 @@ import com.example.onboarding.model.EmployeeCandidateDTO;
 @Repository
 public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
 
-        @Query(value = "SELECT cnd.candidate_id as id, cnd.first_name as firstName, cnd.last_name as lastName, lob.lob_name as lobName, "
+        @Query(value = "SELECT cnd.vendor_id as id, cnd.first_name as firstName, cnd.last_name as lastName, lob.lob_name as lobName, "
                         +
                         "selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, "
                         +
@@ -44,6 +44,18 @@ public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
                         " OR LOWER(emp.last_name) LIKE LOWER(CONCAT('%', :query, '%'))", nativeQuery = true)
         List<EmployeeCandidateDTO> searchByCandidateName(@Param("query") String query);
 
-        Optional<Candidate> findByPhoneNumber(Long phoneNumber);
+@Query(value = "SELECT emp.vendor_id as id, emp.first_name as firstName, emp.last_name as lastName, lob.lob_name as lobName, " +
+"selection.hsbchiring_manager as hsbchiringManager, obs.onboarding_status as onboardingStatus, " +
+"bgvs.bgv_status as bgvStatus, emp.phone_number as phoneNumber " +
+"FROM candidate emp " +
+"JOIN selection_details selection ON selection.candidate_id = emp.candidate_id " +
+"JOIN lob lob ON selection.lob_id = lob.lob_id " +
+"LEFT JOIN tagging_details td ON emp.candidate_id = td.candidate_id " +
+"LEFT JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id " +
+"LEFT JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id " +
+"WHERE LOWER(selection.hsbchiring_manager) LIKE LOWER(CONCAT('%', :hsbchiringManager, '%'))", nativeQuery = true)
+List<EmployeeCandidateDTO> searchCandidateByClientName(@Param("hsbchiringManager") String hsbchiringManager);
+
+Optional<Candidate> findByPhoneNumber(Long phoneNumber);
 
 }

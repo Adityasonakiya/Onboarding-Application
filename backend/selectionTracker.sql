@@ -1,17 +1,20 @@
 use selectiontracker;
 
 INSERT INTO roles 
-(roleid, role_name, role_functions, remarks) 
+(role_id, role_name, role_functions) 
 VALUES
-(1, 'Admin', 'Admin rights for the application', NULL),
-(2, 'Staff-PMO', 'PMO', 'PMO'),
-(3, 'Staff-HR', 'HR', 'HR'),
-(4, 'Staff-Other', 'Any other employee', 'Do specify');
+(1, 'Admin', 'Admin rights for the application'),
+(2, 'LOB-PMO', 'PMO based on LOB'),
+(3, 'Onboarding Team', 'Handles onboarding'),
+(4, 'DM','DM based on LOB'),
+(5, 'Employee', 'Any other employee'),
+(6, 'Sales SPOC','spokesperson'),
+(7, 'Leadership','Higher management team');
 
-INSERT INTO user (psid, role_id, user_manager_id, password, last_login, last_logout) VALUES
-(10713037,1,10713037,'Sachin@12',NOW(),NOW()),
-(10820934, 1, 10820934, 'Harshi@12', NOW(), NOW()),
-(10820984, 1, 10713037, 'Adity@12', NOW(), NOW());
+INSERT INTO user (psid, role_id, password, last_login, last_logout) VALUES
+(10713037,1,'Sachin@12',NOW(),NOW()),
+(10820984, 2, 'Adity@12', NOW(), NOW()),
+(10715126,4,'Monali@12',NOW(),NOW());
 
 INSERT INTO hsbc_roles 
 (ref, name, role_title, grade) 
@@ -220,28 +223,28 @@ VALUES
 (202, 'India', 'User Design (GCB7 Equivalent)', 7);
 
 INSERT INTO employee 
-(psid, first_name, middle_name, last_name, grade, location, skill, total_experience, pu, mailid, phone_number,created_by_ps_id, updated_by_ps_id, created_date, updated_date) 
+(psid, first_name, middle_name, last_name, grade, location, skill, total_experience, pu, mailid, phone_number,created_by_ps_id, updated_by_ps_id, created_date, updated_date,role_id) 
 VALUES
-(10713037, 'Sachin', NULL, 'Shaha', 'P6', 'Pune', 'Delivery Manager', 20, 'BB', 'sachin.shaha@ltimindtree.com',NULL, NULL, NULL, NOW(), NOW()),
-(10820984, 'Aditya', NULL, 'Sonakiya', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'aditya.sonakiya@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10821014, 'Abhijeet', NULL, 'Verma', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'abhijeet.verma@ltimindtree.com',NULL, NULL, NULL, NOW(), NOW()),
-(10715126, 'Monali', NULL, 'Jangam', 'P4', 'Pune', 'Java Fullstack', 16, 'BB', 'monali.jangam@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10825932, 'Bhakti', 'Anand', 'Kulkarni', 'M4', 'Pune', 'Scrum Management', 1, 'BB', 'bhakti.kulkarni@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10830001, 'Rohit', NULL, 'Sharma', 'P2', 'Mumbai', 'Data Analyst', 2, 'BB', 'rohit.sharma@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10830002, 'Priya', NULL, 'Singh', 'P3', 'Bangalore', 'Project Manager', 5, 'BB', 'priya.singh@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10830003, 'Amit', NULL, 'Patel', 'P2', 'Hyderabad', 'QA Engineer', 3, 'BB', 'amit.patel@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10830004, 'Neha', NULL, 'Gupta', 'P1', 'Chennai', 'Software Developer', 1, 'BB', 'neha.gupta@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10830005, 'Vikas', NULL, 'Kumar', 'P4', 'Delhi', 'System Analyst', 8, 'BB', 'vikas.kumar@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10830006, 'Ankit', NULL, 'Jain', 'P2', 'Pune', 'Business Analyst', 2, 'BB', 'ankit.jain@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10830007, 'Sneha', NULL, 'Reddy', 'P3', 'Hyderabad', 'DevOps Engineer', 4, 'BB', 'sneha.reddy@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10830008, 'Rahul', NULL, 'Mehta', 'P1', 'Mumbai', 'Frontend Developer', 1, 'BB', 'rahul.mehta@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10830009, 'Kiran', NULL, 'Patil', 'P2', 'Bangalore', 'Backend Developer', 2, 'BB', 'kiran.patil@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10830010, 'Megha', NULL, 'Sharma', 'P3', 'Chennai', 'Fullstack Developer', 3, 'BB', 'megha.sharma@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10830011, 'Suresh', NULL, 'Kumar', 'P4', 'Delhi', 'Network Engineer', 5, 'BB', 'suresh.kumar@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
+(10713037, 'Sachin', NULL, 'Shaha', 'P6', 'Pune', 'Delivery Manager', 20, 'BB', 'sachin.shaha@ltimindtree.com',NULL, NULL, NULL, NOW(), NOW(),1),
+(10820984, 'Aditya', NULL, 'Sonakiya', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'aditya.sonakiya@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),2),
+(10821014, 'Abhijeet', NULL, 'Verma', 'P1', 'Pune', 'Software Engineer', 0.4, 'BB', 'abhijeet.verma@ltimindtree.com',NULL, NULL, NULL, NOW(), NOW(),3),
+(10715126, 'Monali', NULL, 'Jangam', 'P4', 'Pune', 'Java Fullstack', 16, 'BB', 'monali.jangam@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),4),
+(10825932, 'Bhakti', 'Anand', 'Kulkarni', 'M4', 'Pune', 'Scrum Management', 1, 'BB', 'bhakti.kulkarni@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),6),
+(10830001, 'Rohit', NULL, 'Sharma', 'P2', 'Mumbai', 'Data Analyst', 2, 'BB', 'rohit.sharma@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5),
+(10830002, 'Priya', NULL, 'Singh', 'P3', 'Bangalore', 'Project Manager', 5, 'BB', 'priya.singh@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5),
+(10830003, 'Amit', NULL, 'Patel', 'P2', 'Hyderabad', 'QA Engineer', 3, 'BB', 'amit.patel@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5),
+(10830004, 'Neha', NULL, 'Gupta', 'P1', 'Chennai', 'Software Developer', 1, 'BB', 'neha.gupta@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5),
+(10830005, 'Vikas', NULL, 'Kumar', 'P4', 'Delhi', 'System Analyst', 8, 'BB', 'vikas.kumar@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5),
+(10830006, 'Ankit', NULL, 'Jain', 'P2', 'Pune', 'Business Analyst', 2, 'BB', 'ankit.jain@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5),
+(10830007, 'Sneha', NULL, 'Reddy', 'P3', 'Hyderabad', 'DevOps Engineer', 4, 'BB', 'sneha.reddy@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5),
+(10830008, 'Rahul', NULL, 'Mehta', 'P1', 'Mumbai', 'Frontend Developer', 1, 'BB', 'rahul.mehta@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5),
+(10830009, 'Kiran', NULL, 'Patil', 'P2', 'Bangalore', 'Backend Developer', 2, 'BB', 'kiran.patil@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5),
+(10830010, 'Megha', NULL, 'Sharma', 'P3', 'Chennai', 'Fullstack Developer', 3, 'BB', 'megha.sharma@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5),
+(10830011, 'Suresh', NULL, 'Kumar', 'P4', 'Delhi', 'Network Engineer', 5, 'BB', 'suresh.kumar@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5),
 -- (10830012, 'Anjali', NULL, 'Verma', 'P1', 'Pune', 'QA Tester', 1, 'BB', 'anjali.verma@ltimindtree.com', 10713037, 10713037, NOW(), NOW()),
-(10830013, 'Vivek', NULL, 'Singh', 'P2', 'Hyderabad', 'Database Administrator', 2, 'BB', 'vivek.singh@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10830014, 'Pooja', NULL, 'Rao', 'P3', 'Mumbai', 'UI/UX Designer', 3, 'BB', 'pooja.rao@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW()),
-(10830015, 'Aakash', NULL, 'Mishra', 'P4', 'Bangalore', 'Cloud Engineer', 4, 'BB', 'aakash.mishra@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW());
+(10830013, 'Vivek', NULL, 'Singh', 'P2', 'Hyderabad', 'Database Administrator', 2, 'BB', 'vivek.singh@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5),
+(10830014, 'Pooja', NULL, 'Rao', 'P3', 'Mumbai', 'UI/UX Designer', 3, 'BB', 'pooja.rao@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5),
+(10830015, 'Aakash', NULL, 'Mishra', 'P4', 'Bangalore', 'Cloud Engineer', 4, 'BB', 'aakash.mishra@ltimindtree.com',NULL, 10713037, 10713037, NOW(), NOW(),5);
 
 INSERT INTO candidate
 (candidate_id,phone_number,vendor_id, first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date) 
@@ -257,26 +260,26 @@ VALUES
 (9,1083001223,1, 'Anjali', NULL, 'Verma', '2025-10-30', 10713037, 10713037, '2025-10-30', NOW()),
 (10,1083001322,1, 'Vivek', NULL, 'Singh', '2025-11-05', 10713037, 10713037, '2025-11-05', NOW());
 
-INSERT INTO vendor (vendor_id, vendor_name)
+INSERT INTO vendor (vendor_id, vendor_name,created_by,updated_by,status)
 VALUES
-(1,'Not Applicable'),
-(2, 'Ria'),
-(3, 'CSI Global'),
-(4, 'Bil Vantis'),
-(5, 'Copia'),
-(6, 'Bowmen India'),
-(7, 'Bowmen UK'),
-(8, 'EY'),
-(9, 'Aligne'),
-(10, 'Saki Soft'),
-(11, 'Incube'),
-(12, 'Finsol');
+(1,'Not Applicable','10713037','10713037',true),
+(2,'Ria','10713037','10713037',true),
+(3,'CSI Global','10713037','10713037',true),
+(4,'Bil Vantis','10713037','10713037',true),
+(5,'Copia','10713037','10713037',true),
+(6,'Bowmen India','10713037','10713037',true),
+(7,'Bowmen UK','10713037','10713037',true),
+(8,'EY','10713037','10713037',true),
+(9,'Aligne','10713037','10713037',true),
+(10,'Saki Soft','10713037','10713037',true),
+(11,'Incube','10713037','10713037',true),
+(12,'Finsol','10713037','10713037',true);
 
 
-INSERT INTO vendor_candidate (vendor_candidate_id,phone_number,vendor_id , first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date)
-VALUES
-(1,2321322222, 1, 'John', 'A.', 'Doe', '2025-01-15', 10713037, 10713037, '2025-01-01', '2025-01-10'),
-(2,8887877788, 2, 'Jane', 'B.', 'Smith', '2025-01-20', 10713037, 10713037, '2025-01-02', '2025-01-11');
+-- INSERT INTO vendor_candidate (vendor_candidate_id,phone_number,vendor_id , first_name, middle_name, last_name, ltionboarding_date, created_by_ps_id, updated_by_ps_id, create_date, update_date)
+-- VALUES
+-- (1,2321322222, 1, 'John', 'A.', 'Doe', '2025-01-15', 10713037, 10713037, '2025-01-01', '2025-01-10'),
+-- (2,8887877788, 2, 'Jane', 'B.', 'Smith', '2025-01-20', 10713037, 10713037, '2025-01-02', '2025-01-11');
 -- (3,8787788898, 3, 'Michael', 'C.', 'Johnson', '2025-01-25', 10713037, 10713037, '2025-01-03', '2025-01-12'),
 -- (4,8979888778, 4, 'Emily', 'D.', 'Williams', '2025-02-01', 10713037, 10713037, '2025-01-04', '2025-01-13'),
 -- (5,8799989887, 5, 'David', 'E.', 'Brown', '2025-02-05', 10713037, 10713037, '2025-01-05', '2025-01-14'),
@@ -408,40 +411,40 @@ INSERT INTO selection_details (
   hsbconboarding_date,tech_selection_date,dojreceived_date,ltionboarding_date,create_date,update_date,candidate_status_date,ctool_start_date,bgv_initiated_date)
 VALUES
 -- 1. CTO (lob_id 2, active), sublob 12 (active)
-(10820984, NULL, NULL, 'BFS', 2, 12, '10825932', 1, 10713037, 10713037, '2023-03-05',
- 'Sachin Shaha', 'Time & Material', 108933, '2023-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'Pending',
- '2025-04-23', '2025-04-23', '2025-04-23', '2023-02-28', NOW(), NOW(), NULL, NULL, NULL),
+(10820984, NULL, NULL, 'BFS', 2, 12, '10825932', 1, 10713037, 10713037, '2023-07-05',
+ 'Nishant', 'Time & Material', 108933, '2023-07-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'Pending',
+ '2025-07-23', '2025-07-23', '2025-07-23', '2023-07-28', NOW(), NOW(), NULL, NULL, NULL),
 -- 2. CTO (lob_id 2, active), sublob 22 (active)
-(10715126, NULL, NULL, 'BFS', 2, 22, '10825932', 2, 10713037, 10713037, '2025-03-12',
- 'Sachin Shaha', 'Fixed Price', 108933, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'On Hold',
- NULL, NULL, NULL, '2025-04-23', NOW(), NOW(), NULL, NULL, NULL),
+(10715126, NULL, NULL, 'BFS', 2, 22, '10825932', 2, 10713037, 10713037, '2025-07-12',
+ 'Sachin Shaha', 'Fixed Price', 108933, '2025-07-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'On Hold',
+ NULL, NULL, NULL, '2025-07-23', NOW(), NOW(), NULL, NULL, NULL),
 -- 3. Group Data Technology (lob_id 6, active), sublob 36 (active)
-(10825932, NULL, NULL, 'BFS', 6, 36, '10825932', 3, 10713037, 10713037, '2025-03-18',
- 'Sachin Shaha', 'Time & Material', 108933, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'Release',
- '2025-04-23', '2025-04-23', '2025-04-23', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
+(10825932, NULL, NULL, 'BFS', 6, 36, '10825932', 3, 10713037, 10713037, '2025-07-18',
+ 'Sachin Shaha', 'Time & Material', 108933, '2025-07-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'Release',
+ '2025-07-23', '2025-07-23', '2025-07-23', '2025-07-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 4. CTO (lob_id 2, active), sublob 12 (active)
-(NULL, 2, NULL, 'BFS', 2, 12, '10825932', 4, 10713037, 10713037, '2025-03-17',
- 'Sachin Shaha', 'Fixed Price', 108933, '2025-04-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'WIP',
+(NULL, 2, NULL, 'BFS', 2, 12, '10825932', 4, 10713037, 10713037, '2025-07-17',
+ 'Nikhil', 'Fixed Price', 108933, '2025-07-02', 'Pune', NULL, NULL, 'Nishant Sharma', 'WIP',
  NULL, NULL, NULL, NULL, NOW(), NOW(), NULL, NULL, NULL),
 -- 5. Enterprise Technology (lob_id 4, active), sublob 44 (active)
-(10830001, NULL, NULL, 'BFS', 4, 44, '10825932', 5, 10713037, 10713037, '2025-03-08',
- 'Sachin Shaha', 'Fixed Price', 108934, '2025-04-02', 'Mumbai', NULL, NULL, 'Nishant Sharma', 'Pending',
+(10830001, NULL, NULL, 'BFS', 4, 44, '10825932', 5, 10713037, 10713037, '2025-07-08',
+ 'Monali Jangam', 'Fixed Price', 108934, '2025-07-02', 'Mumbai', NULL, NULL, 'Nishant Sharma', 'Pending',
  '2025-09-23', '2025-09-18', '2025-09-21', '2025-02-28', NOW(), NOW(), NULL, NULL, NULL),
 -- 6. Enterprise Technology (lob_id 4, active), sublob 54 (active)
 (10830002, NULL, NULL, 'BFS', 4, 54, '10825932', 6, 10713037, 10713037, '2025-03-15',
- 'Sachin Shaha', 'Time & Material', 108935, '2025-04-02', 'Bangalore', NULL, NULL, 'Nishant Sharma', 'On Hold',
+ 'Mahendra', 'Time & Material', 108935, '2025-04-02', 'Bangalore', NULL, NULL, 'Nishant Sharma', 'On Hold',
  '2025-03-20', '2025-03-20', '2025-03-20', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 7. Group Data Technology (lob_id 6, active), sublob 66 (active)
 (10830003, NULL, NULL, 'BFS', 6, 66, '10825932', 7, 10713037, 10713037, '2025-03-10',
- 'Sachin Shaha', 'Fixed Price', 108936, '2025-04-02', 'Hyderabad', NULL, NULL, 'Nishant Sharma', 'Release',
+ 'Suresh', 'Fixed Price', 108936, '2025-04-02', 'Hyderabad', NULL, NULL, 'Nishant Sharma', 'Release',
  '2025-03-23', '2025-02-23', '2025-03-23', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 8. Group Data Technology (lob_id 6, active), sublob 76 (active)
-(10830004, NULL, NULL, 'BFS', 6, 76, '10825932', 8, 10713037, 10713037, '2025-03-14',
+(10713037, NULL, NULL, 'BFS', 6, 76, '10825932', 8, 10713037, 10713037, '2025-03-14',
  'Sachin Shaha', 'Fixed Price', 108937, '2025-04-02', 'Chennai', NULL, NULL, 'Nishant Sharma', 'Pending',
  '2025-02-23', '2025-01-23', '2025-02-23', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 9. Group Data Technology (lob_id 6, active), sublob 86 (active)
 (10830005, NULL, NULL, 'BFS', 6, 86, '10825932', 9, 10713037, 10713037, '2025-03-19',
- 'Sachin Shaha', 'Fixed Price', 108938, '2025-04-02', 'Delhi', NULL, NULL, 'Nishant Sharma', 'On Hold',
+ 'Ritesh', 'Fixed Price', 108938, '2025-04-02', 'Delhi', NULL, NULL, 'Nishant Sharma', 'On Hold',
  '2025-03-22', '2025-03-22', '2025-03-22', '2025-03-01', NOW(), NOW(), NULL, NULL, NULL),
 -- 10. Markets & Sec Services Tech (lob_id 9, active), sublob 19 (active)
 (10830007, NULL, NULL, 'BFS', 9, 19, '10825932', 10, 10713037, 10713037, '2025-03-11',
@@ -482,7 +485,7 @@ VALUES
  NULL, NULL, '2025-01-20', NULL, NOW(), NOW(), NULL, NULL, NULL);
 
 INSERT INTO tagging_details 
-(ps_id, candidate_id, onboarding_status_id, bgv_status_id, created_by_psid, updated_by_psid, status_remarks, create_date, update_date) 
+(ps_id, candidate_id, onboarding_status_id, bgv_status_id,created_by, updated_by, status_remarks, create_date, update_date) 
 VALUES
 (10820984, NULL, 4, 2, 10713037, 10713037, 'BGV Initiated', NOW(), NOW()),
 (NULL, 2, 4, 3, 10713037, 10713037, 'BGV in progress', NOW(), NOW()),
@@ -503,67 +506,82 @@ VALUES
 
 
 
-Select emp.psid as id ,emp.first_name,emp.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status from employee emp,lob lob,
-selection_details selection,onboarding_status obs,BGVStatus bgvs , tagging_details td
-where selection.created_by = 10713037
-      and selection.ps_id=emp.psid
-	  and selection.lob_id=lob.lob_id	  
-	  and emp.psid=td.ps_id
-	  and td.onboarding_status_id=obs.status_id
-	  and td.bgv_status_id=bgvs.bgv_status_id
-Union	  
-Select cnd.vendor_id as id,cnd.first_name,cnd.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status from candidate cnd,lob lob,
-selection_details selection,onboarding_status obs,BGVStatus bgvs , tagging_details td
-where selection.created_by = 10713037
-      and selection.candidate_id=cnd.candidate_id
-      and selection.lob_id=lob.lob_id
-	  and cnd.candidate_id=td.candidate_id
-	  and td.onboarding_status_id=obs.status_id
-	  and td.bgv_status_id=bgvs.bgv_status_id
+SELECT 
+    emp.psid AS id,emp.first_name, emp.last_name, lob.lob_name, selection.hsbchiring_manager, obs.onboarding_status,bgvs.bgv_status,emp.phone_number
+FROM employee emp
+JOIN selection_details selection ON selection.ps_id = emp.psid
+JOIN lob lob ON selection.lob_id = lob.lob_id
+JOIN tagging_details td ON emp.psid = td.ps_id
+JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id
+JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id
+-- Logged-in user context
+JOIN (
+    SELECT e.psid AS loggedInPsid,r.role_name,sd.lob_id
+    FROM employee e
+    JOIN roles r ON e.role_id = r.role_id
+    JOIN selection_details sd ON sd.ps_id = e.psid
+    WHERE e.psid = 10713037
+) AS context ON (
+    -- Access rules based on role
+    (
+        context.role_name IN ('Admin', 'Leadership', 'Sales SPOC', 'Onboarding Team')
+    )OR (
+        context.role_name IN ('DM', 'LOB-PMO') AND selection.lob_id = context.lob_id
+    )
+)
 Union
-Select vc.vendor_id as id,vc.first_name,vc.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status from vendor_candidate vc,lob lob,
-selection_details selection,onboarding_status obs,BGVStatus bgvs , tagging_details td
-where selection.created_by = 10713037
-      and selection.vendor_candidate_id=vc.vendor_candidate_id
-      and selection.lob_id=lob.lob_id
-	  and vc.vendor_candidate_id=td.vendor_candidate_id
-	  and td.onboarding_status_id=obs.status_id
-	  and td.bgv_status_id=bgvs.bgv_status_id;
-
--- Select emp.psid as id ,emp.first_name,emp.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status 
--- from employee emp
--- left join selection_details selection on selection.ps_id=emp.psid
--- left join lob lob on selection.lob_id=lob.lob_id
--- left join tagging_details td on emp.psid=td.ps_id
--- left join onboarding_status obs on td.onboarding_status_id=obs.status_id
--- left join BGVStatus bgvs on td.bgv_status_id=bgvs.bgv_status_id
--- where selection.created_by = 10713037
--- Union	  
--- Select cnd.phone_number as id,cnd.first_name,cnd.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status 
--- from candidate cnd
--- left join selection_details selection on selection.vendor_phone_number=cnd.phone_number
--- left join lob lob on selection.lob_id=lob.lob_id
--- left join tagging_details td on cnd.phone_number=td.vendor_phone_number
--- left join onboarding_status obs on td.onboarding_status_id=obs.status_id
--- left join BGVStatus bgvs on td.bgv_status_id=bgvs.bgv_status_id
--- where selection.created_by = 10713037
--- Union
--- Select vc.vendor_id as id,vc.first_name,vc.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status   
--- from vendor_candidate vc
--- left join selection_details selection on selection.vendor_phone_number=vc.phone_number
--- left join lob lob on selection.lob_id=lob.lob_id
--- left join tagging_details td on vc.phone_number=td.vendor_phone_number
--- left join onboarding_status obs on td.onboarding_status_id=obs.status_id
--- left join BGVStatus bgvs on td.bgv_status_id=bgvs.bgv_status_id
--- where selection.created_by = 10713037;
-
+Select cnd.vendor_id as id,cnd.first_name,cnd.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status,cnd.phone_number
+FROM candidate cnd
+JOIN selection_details selection ON selection.ps_id = cnd.candidate_id
+JOIN lob lob ON selection.lob_id = lob.lob_id
+JOIN tagging_details td ON cnd.candidate_id = td.candidate_id
+JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id
+JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id
+-- Logged-in user context
+JOIN (
+    SELECT e.psid AS loggedInPsid,r.role_name,sd.lob_id
+    FROM employee e
+    JOIN roles r ON e.role_id = r.role_id
+    JOIN selection_details sd ON sd.ps_id = e.psid
+    WHERE e.psid = 10713037
+) AS context ON (
+    -- Access rules based on role
+    (
+        context.role_name IN ('Admin', 'Leadership', 'Sales SPOC', 'Onboarding Team')
+    )OR (
+        context.role_name IN ('DM', 'LOB-PMO') AND selection.lob_id = context.lob_id
+    )
+)
+Union
+Select vc.vendor_id as id,vc.first_name,vc.last_name,lob.lob_name,selection.hsbchiring_manager,obs.onboarding_status,bgvs.bgv_status,vc.phone_number
+FROM vendor_candidate vc
+JOIN selection_details selection ON selection.ps_id = vc.vendor_candidate_id
+JOIN lob lob ON selection.lob_id = lob.lob_id
+JOIN tagging_details td ON vc.vendor_candidate_id = td.vendor_candidate_id
+JOIN onboarding_status obs ON td.onboarding_status_id = obs.status_id
+JOIN bgvstatus bgvs ON td.bgv_status_id = bgvs.bgv_status_id
+-- Logged-in user context
+JOIN (
+    SELECT e.psid AS loggedInPsid,r.role_name,sd.lob_id
+    FROM employee e
+    JOIN roles r ON e.role_id = r.role_id
+    JOIN selection_details sd ON sd.ps_id = e.psid
+    WHERE e.psid = 10713037
+) AS context ON (
+    -- Access rules based on role
+    (
+        context.role_name IN ('Admin', 'Leadership', 'Sales SPOC', 'Onboarding Team')
+    )OR (
+        context.role_name IN ('DM', 'LOB-PMO') AND selection.lob_id = context.lob_id
+    )
+);
 
 select count(*),lb.lob_name,sd.pricing_model from selectiontracker.selection_details sd,selectiontracker.lob lb 
 where sd.lob_id=lb.lob_id  
 group by lb.lob_id,sd.pricing_model;
 
 select count(*),lb.lob_name,os.onboarding_status,bs.bgv_status 
-from selection_details sd , lob lb, tagging_details td, onboarding_status os, BGVStatus bs
+from selection_details sd , lob lb, tagging_details td, onboarding_status os, bgvstatus bs
 where sd.ps_id = td.ps_id
 and sd.lob_id=lb.lob_id
 and td.onboarding_status_id = os.status_id
@@ -571,12 +589,13 @@ and td.bgv_status_id = bs.bgv_status_id
 group by lb.lob_id,os.status_id,bs.bgv_status_id;
 
 SELECT count(*) as awaited_count,lb.delivery_manager,sd.pricing_model,bs.bgv_status,os.onboarding_status 
-from selection_details sd,tagging_details td,BGVStatus bs,onboarding_status os,lob lb 
+from selection_details sd,tagging_details td,bgvstatus bs,onboarding_status os,lob lb 
 where sd.ps_id = td.ps_id 
 and sd.lob_id=lb.lob_id
 and td.bgv_status_id = bs.bgv_status_id 
 and td.onboarding_status_id = os.status_id 
 group by bs.bgv_status_id,sd.pricing_model,lb.delivery_manager,os.status_id;
+
 
 -- Select obs.onboarding_status as onboardingStatus, emp.psid as lti_ps_id,emp.first_name as firstName,emp.last_name as lastName,emp.grade as grade,emp.location as location,emp.total_experience as totalExperience,emp.skill as skill,
 -- selection.hsbcselection_date as hsbcselectionDate,selection.ltionboarding_date as ltijoiningDate,selection.create_date as createdDate,DATE_FORMAT(hsbcselection_date, '%Y-%m') as selectionMonthYear,datediff(now(),hsbcselection_date) as selectionAging,

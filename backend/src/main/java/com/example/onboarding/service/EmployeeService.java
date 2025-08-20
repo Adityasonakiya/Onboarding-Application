@@ -8,20 +8,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.onboarding.model.AccessControlDTO;
 import com.example.onboarding.model.Employee;
 import com.example.onboarding.model.EmployeeCandidateDTO;
+import com.example.onboarding.model.Roles;
 import com.example.onboarding.repository.EmployeeRepository;
+import com.example.onboarding.repository.RolesRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
-
 @Service
 public class EmployeeService {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private RolesRepository rolesRepository;
 
     public Employee getEmployeeByPsid(int psid) {
         Optional<Employee> employee = employeeRepository.findById(psid);
@@ -56,6 +61,34 @@ public class EmployeeService {
 
     public List<EmployeeCandidateDTO> getCandidatesByBgvStatus(String bgvStatus) {
         return employeeRepository.findByBgvStatus(bgvStatus);
+    }
+
+    public Employee updateEmployee(int psid, Employee employee) {
+        if (employee.getPsid() == null) {
+            throw new IllegalArgumentException("PSID cannot be null");
+        }
+        Employee emp = employeeRepository.findById(psid)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found with PSID: " + psid));
+        Roles role = rolesRepository.findById(employee.getRoles().getRoleId()).get();
+        role.setRoleName(employee.getRoles().getRoleName());
+        role.setRoleFunctions(employee.getRoles().getRoleFunctions());
+        rolesRepository.save(role);
+        emp.setRoles(role);
+        emp.setUpdatedBy(employee.getUpdatedBy());
+
+        return employeeRepository.save(employee);
+    }
+
+    public AccessControlDTO getAccessControlByPsid(Integer psid) {
+        if (psid == null) {
+            throw new IllegalArgumentException("PSID cannot be null");
+        }
+        return employeeRepository.getAccessByPsid(psid);
+    }
+
+    // In EmployeeService
+    public List<EmployeeCandidateDTO> searchEmployeeByClientName(String hsbchiringManager) {
+        return employeeRepository.searchEmployeeByClientName(hsbchiringManager);
     }
 
 }

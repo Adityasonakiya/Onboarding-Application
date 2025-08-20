@@ -36,30 +36,31 @@ public class CandidateService {
         return candidates;
 
     }
-    
+
     public Candidate getCandidateById(Long phoneNumber) {
         Optional<Candidate> candidate = candidateRepository.findByPhoneNumber(phoneNumber);
         return candidate.orElse(null);
     }
 
-    public List<Candidate> getAllCandidates(){
+    public List<Candidate> getAllCandidates() {
         return candidateRepository.findAll();
     }
 
     public Candidate createCandidate(Candidate candidate) {
-        System.out.println("ServicePoint "+ candidate);
+        System.out.println("ServicePoint " + candidate);
         candidate.setCandidateId(1);
         candidate.setCreateDate(new Date());
         candidate.setUpdateDate(new Date());
-        candidate.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
-        candidate.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        //candidate.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        //candidate.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
         return candidateRepository.save(candidate);
     }
 
     public EmployeeCandidateDTO getEmployeeCandidateById(Long id) {
         logger.info("Id that is coming: {}", id);
-        Optional<EmployeeCandidateDTO> employeeCandidateOptional = candidateRepository.findEmployeeCandidateByPhoneNumber(id);
-    
+        Optional<EmployeeCandidateDTO> employeeCandidateOptional = candidateRepository
+                .findEmployeeCandidateByPhoneNumber(id);
+
         if (employeeCandidateOptional.isPresent()) {
             EmployeeCandidateDTO employeeCandidate = employeeCandidateOptional.get();
             logger.info("Employee Candidate: {}", employeeCandidate);
@@ -69,4 +70,10 @@ public class CandidateService {
             throw new EntityNotFoundException("Employee Candidate not found with ID: " + id);
         }
     }
+
+    // In CandidateService
+    public List<EmployeeCandidateDTO> searchCandidateByClientName(String hsbchiringManager) {
+        return candidateRepository.searchCandidateByClientName(hsbchiringManager);
+    }
+
 }

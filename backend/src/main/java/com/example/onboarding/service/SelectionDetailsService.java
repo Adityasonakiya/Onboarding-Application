@@ -20,6 +20,7 @@ import com.example.onboarding.model.ExcelDataDTO;
 import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
 import com.example.onboarding.model.VendorCandidate;
+import com.example.onboarding.repository.CandidateRepository;
 import com.example.onboarding.repository.EmployeeRepository;
 import com.example.onboarding.repository.SelectionDetailsRepository;
 import com.example.onboarding.repository.VendorCandidateRepository;
@@ -32,11 +33,14 @@ public class SelectionDetailsService {
     @Autowired
     private SelectionDetailsRepository selectionDetailsRepository;
 
-    @Autowired
-    private UserService userService;
+    // @Autowired
+    // private UserService userService;
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private CandidateRepository candidateRepository;
 
     @Autowired
     private TaggingDetailsService taggingDetailsService;
@@ -108,7 +112,7 @@ public class SelectionDetailsService {
             existingDetails.setCtoolStartDate(updatedDetails.getCtoolStartDate());
             existingDetails.setUpdateDate(new Date());
             existingDetails.setCreatedBy(existingDetails.getCreatedBy());
-            existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            existingDetails.setUpdatedBy(existingDetails.getUpdatedBy());
             return selectionDetailsRepository.save(existingDetails);
         }
         return selectionDetailsRepository.save(updatedDetails);
@@ -158,7 +162,7 @@ public class SelectionDetailsService {
             existingDetails.setUpdateDate(new Date());
             existingDetails.setIrm(updatedDetails.getIrm());
             existingDetails.setCreatedBy(existingDetails.getCreatedBy());
-            existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            existingDetails.setUpdatedBy(existingDetails.getUpdatedBy());
             return selectionDetailsRepository.save(existingDetails);
         }
         return selectionDetailsRepository.save(updatedDetails);
@@ -208,7 +212,7 @@ public class SelectionDetailsService {
             existingDetails.setUpdateDate(new Date());
             existingDetails.setIrm(updatedDetails.getIrm());
             existingDetails.setCreatedBy(existingDetails.getCreatedBy());
-            existingDetails.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            existingDetails.setUpdatedBy(existingDetails.getUpdatedBy());
             return selectionDetailsRepository.save(existingDetails);
         }
         return selectionDetailsRepository.save(updatedDetails);
@@ -217,13 +221,14 @@ public class SelectionDetailsService {
     public SelectionDetails createSelectionDetails_Employee(SelectionDetails details) {
         int psid = details.getEmployee().getPsid();
         if (selectionDetailsRepository.existsByEmployee_Psid(psid)
-                && taggingDetailsService.getTaggingDetailsByPsId(psid).getOnboardingStatus().getStatusId() != 6) {
+              //  || taggingDetailsService.getTaggingDetailsByPsId(psid).getOnboardingStatus().getStatusId() != 6
+                ) {
             throw new RuntimeException("Selection already exists");
         } else {
             details.setCreateDate(new Date());
             details.setUpdateDate(new Date());
-            details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
-            details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            // details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            // details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             System.out.println("Dates" + details.getCreateDate() + details.getUpdateDate());
             return selectionDetailsRepository.save(details);
         }
@@ -231,15 +236,16 @@ public class SelectionDetailsService {
 
     public SelectionDetails createSelectionDetails_Candidate(SelectionDetails details) {
         Long phoneNumber = details.getCandidate().getPhoneNumber();
-        if (selectionDetailsRepository.existsByCandidate_PhoneNumber(phoneNumber) && taggingDetailsService
-                .getTaggingDetailsByCandidatePhoneNumber(phoneNumber).getOnboardingStatus().getStatusId() != 6) {
+        if (selectionDetailsRepository.existsByCandidate_PhoneNumber(phoneNumber) 
+        //&& taggingDetailsService.getTaggingDetailsByCandidatePhoneNumber(phoneNumber).getOnboardingStatus().getStatusId() != 6
+                ) {
             throw new RuntimeException(
                     "Selection already exists for Candidate: " + details.getCandidate().getPhoneNumber());
         } else {
             details.setCreateDate(new Date());
             details.setUpdateDate(new Date());
-            details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
-            details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            //details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+            //details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
             System.out.println("Dates" + details.getCreateDate() + details.getUpdateDate());
             return selectionDetailsRepository.save(details);
         }
@@ -257,18 +263,18 @@ public class SelectionDetailsService {
 
         details.setCreateDate(new Date());
         details.setUpdateDate(new Date());
-        details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
-        details.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        //details.setCreatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
+        //.setUpdatedBy(employeeRepository.findById(userService.loggedUser().getPsid()).get());
 
         System.out.println("Dates: " + details.getCreateDate() + " " + details.getUpdateDate());
 
         return selectionDetailsRepository.save(details);
     }
 
-    public Page<EmployeeCandidateDTO> getEmployeeCandidates(Integer createdBy, int page, int size) {
+    public Page<EmployeeCandidateDTO> getEmployeeCandidates(Integer loggedInPsid, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<EmployeeCandidateDTO> employeeCandidateDTOPage = selectionDetailsRepository.findEmployeeCandidates(
-                createdBy,
+                loggedInPsid,
                 pageable);
 
         logger.info("Employee Candidates Handler data : Page {} of {}", page, employeeCandidateDTOPage.getTotalPages());
@@ -278,16 +284,16 @@ public class SelectionDetailsService {
     }
 
     // In SelectionDetailsService.java
-    public List<SelectionDTO> findSelections(String filter) {
-        return selectionDetailsRepository.findSelections(filter);
+    public List<SelectionDTO> findSelections(String filter,Integer loggedInPsid) {
+        return selectionDetailsRepository.findSelections(filter, loggedInPsid);
     }
 
-    public List<AwaitedCasesDTO> findAwaitedCases(String filter) {
-        return selectionDetailsRepository.findAwaitedCases(filter);
+    public List<AwaitedCasesDTO> findAwaitedCases(String filter,Integer loggedInPsid) {
+        return selectionDetailsRepository.findAwaitedCases(filter,loggedInPsid);
     }
 
-    public List<CtoolDto> findCtool(String filter) {
-        return selectionDetailsRepository.findCtool(filter);
+    public List<CtoolDto> findCtool(String filter,Integer loggedInPsid) {
+        return selectionDetailsRepository.findCtool(filter,loggedInPsid);
     }
 
     public List<ExcelDataDTO> findExcelData(Integer createdBy) {
@@ -295,5 +301,16 @@ public class SelectionDetailsService {
         System.out.println(selectionDetailsRepository.findCustomQueryResults(createdBy));
         return selectionDetailsRepository.findCustomQueryResults(createdBy);
     }
+   public List<EmployeeCandidateDTO> searchAllByHiringManager(String hsbchiringManager) {
+    List<EmployeeCandidateDTO> candidates = candidateRepository.searchCandidateByClientName(hsbchiringManager);
+    List<EmployeeCandidateDTO> employees = employeeRepository.searchEmployeeByClientName(hsbchiringManager);
+    List<EmployeeCandidateDTO> combined = new ArrayList<>();
+    combined.addAll(candidates);
+    combined.addAll(employees);
+    return combined;
+}
 
+public List<String> getAllDistinctHSBCHiringManagers() {
+    return selectionDetailsRepository.findAllDistinctHsbchiringManager();
+}
 }

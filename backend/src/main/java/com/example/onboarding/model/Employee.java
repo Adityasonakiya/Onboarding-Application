@@ -31,6 +31,10 @@ public class Employee {
     @JoinColumn(name="updatedByPsId")
     private Employee updatedBy;
 
+    @ManyToOne
+    @JoinColumn(name="roleId")
+    private Roles roles;
+
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 
@@ -160,5 +164,18 @@ public class Employee {
     public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public void setPsid(Integer psid) {
+        this.psid = psid;
+    }
+
+    public Roles getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Roles roles) {
+        this.roles = roles;
+    }
+    
     
 }

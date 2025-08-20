@@ -1,5 +1,6 @@
 package com.example.onboarding.controller;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,9 @@ import com.example.onboarding.service.UserService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("api")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
@@ -29,13 +31,12 @@ public class UserController {
         try {
             Optional<User> user = userService.getUserById(id);
             return user.map(ResponseEntity::ok)
-                       .orElseGet(() -> ResponseEntity.notFound().build());
+                    .orElseGet(() -> ResponseEntity.notFound().build());
         } catch (Exception e) {
             e.printStackTrace(); // This will print the real cause of the 500 error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
 
     @PostMapping("/create")
     public ResponseEntity<String> createUser(@RequestBody User user) {
@@ -57,16 +58,20 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestBody LoginDTO loginDTO) {
-        Optional<User> optionalUser = userService.getUserById(loginDTO.getPsid());
-
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username");
-        }
-
-        User user = optionalUser.get();
-        userService.logoutUser(user);
-
-        return ResponseEntity.ok("User logged out successfully");
+    public ResponseEntity<?> logout(@RequestBody Map<String, String> payload) {
+        String psid = payload.get("psid");
+        // Optional: log logout event or clear any cached data
+        return ResponseEntity.ok("Logged out successfully");
     }
+
+    // @PostMapping("/logout")
+    // public ResponseEntity<?> logout(@RequestBody LoginDTO loginDTO) {
+    //     Optional<User> optionalUser = userService.getUserById(loginDTO.getPsid());
+    //     if (optionalUser.isEmpty()) {
+    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username");
+    //     }
+    //     User user = optionalUser.get();
+    //     userService.logoutUser(user);
+    //     return ResponseEntity.ok("User logged out successfully");
+    // }
 }

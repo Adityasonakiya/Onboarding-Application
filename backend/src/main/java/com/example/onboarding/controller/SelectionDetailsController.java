@@ -139,27 +139,27 @@ public class SelectionDetailsController {
 
     @GetMapping("/api/employee-candidates")
     public Page<EmployeeCandidateDTO> getEmployeeCandidates(
-            @RequestParam Integer createdBy,
+            @RequestParam Integer loggedInPsid,
             @RequestParam int page,
             @RequestParam int size) {
-        return selectionDetailsService.getEmployeeCandidates(createdBy, page, size);
+        return selectionDetailsService.getEmployeeCandidates(loggedInPsid, page, size);
     }
 
     @GetMapping("/selections")
-    public ResponseEntity<List<SelectionDTO>> findSelections(@RequestParam String filter) {
-        List<SelectionDTO> selections = selectionDetailsService.findSelections(filter);
+    public ResponseEntity<List<SelectionDTO>> findSelections(@RequestParam String filter, @RequestParam Integer loggedInPsid) {
+        List<SelectionDTO> selections = selectionDetailsService.findSelections(filter,loggedInPsid);
         return ResponseEntity.ok(selections);
     }
 
     @GetMapping("/awaited-cases")
-    public ResponseEntity<List<AwaitedCasesDTO>> findAwaitedCases(@RequestParam String filter) {
-        List<AwaitedCasesDTO> awaitedCases = selectionDetailsService.findAwaitedCases(filter);
+    public ResponseEntity<List<AwaitedCasesDTO>> findAwaitedCases(@RequestParam String filter,@RequestParam Integer loggedInPsid) {
+        List<AwaitedCasesDTO> awaitedCases = selectionDetailsService.findAwaitedCases(filter,loggedInPsid);
         return ResponseEntity.ok(awaitedCases);
     }
 
     @GetMapping("/ctool")
-    public ResponseEntity<List<CtoolDto>> findCtool(@RequestParam String filter) {
-        List<CtoolDto> ctool = selectionDetailsService.findCtool(filter);
+    public ResponseEntity<List<CtoolDto>> findCtool(@RequestParam String filter,@RequestParam Integer loggedInPsid) {
+        List<CtoolDto> ctool = selectionDetailsService.findCtool(filter,loggedInPsid);
         return ResponseEntity.ok(ctool);
     }
 
@@ -169,6 +169,12 @@ public class SelectionDetailsController {
         List<ExcelDataDTO> data = selectionDetailsService.findExcelData(createdBy);
         System.out.println("Data"+data);
         return ResponseEntity.ok(data);
+    }
+
+    @GetMapping("/hiringManager")
+    public ResponseEntity<List<String>> findManager(){
+        List<String> results = selectionDetailsService.getAllDistinctHSBCHiringManagers();
+        return ResponseEntity.ok(results);
     }
 
 }

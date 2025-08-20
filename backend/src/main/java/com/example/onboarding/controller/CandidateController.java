@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.onboarding.model.Candidate;
 import com.example.onboarding.model.EmployeeCandidateDTO;
 import com.example.onboarding.service.CandidateService;
+import com.example.onboarding.service.SelectionDetailsService;
 import com.example.onboarding.service.UserService;
 
 @CrossOrigin("*")
@@ -30,6 +31,16 @@ public class CandidateController {
     private CandidateService candidateService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    @Autowired
+    private SelectionDetailsService selectionDetailsService;
+
+@GetMapping("/api/candidates/searchAllByHiringManager")
+public ResponseEntity<List<EmployeeCandidateDTO>> searchAllByHiringManager(
+        @RequestParam("hsbchiringManager") String hsbchiringManager) {
+    List<EmployeeCandidateDTO> results = selectionDetailsService.searchAllByHiringManager(hsbchiringManager);
+    return ResponseEntity.ok(results);
+}
 
     @GetMapping("/{phoneNumber}")
     public ResponseEntity<Candidate> getCandidateById(@PathVariable Long phoneNumber) {
@@ -76,8 +87,19 @@ public class CandidateController {
         return ResponseEntity.ok(candidates);
     }
 
+    @GetMapping("/api/candidates/searchClient")
+    public ResponseEntity<List<EmployeeCandidateDTO>> searchCandidatesByClientName(
+            @RequestParam("hsbchiringManager") String hsbchiringManager) {
+        List<EmployeeCandidateDTO> candidates = candidateService.searchCandidateByClientName(hsbchiringManager);
+        if (candidates.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(candidates);
+    }
+
+    
     @PostMapping("/create")
-    public ResponseEntity<Candidate> createVendorCandidate(@RequestBody Candidate candidate) {
+    public ResponseEntity<Candidate> createCandidate(@RequestBody Candidate candidate) {
         System.out.println("Object sent" + candidate);
         if (candidate == null) {
             return ResponseEntity.badRequest().build();

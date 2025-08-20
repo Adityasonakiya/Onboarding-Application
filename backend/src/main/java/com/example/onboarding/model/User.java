@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 // import jakarta.persistence.GeneratedValue;
 // import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 // import jakarta.persistence.JoinColumn;
 // import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -17,11 +19,11 @@ import jakarta.persistence.Table;
 public class User {
     @Id
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int psid;
+    private Integer psid;
 
-    Integer roleId;
-
-    private int userManagerId;
+    @ManyToOne
+    @JoinColumn(name = "roleId", nullable = false)
+    private Roles roles;
 
     @Column(nullable = false)
     private String password;
@@ -30,11 +32,11 @@ public class User {
 
     public User() {}
 
-    
-    public int getPsid() {
+
+    public Integer getPsid() {
         return psid;
     }
-    public void setPsid(int psid) {
+    public void setPsid(Integer psid) {
         this.psid = psid;
     }
     public String getPassword() {
@@ -55,28 +57,20 @@ public class User {
     public void setLastLogout(Timestamp lastLogout) {
         this.lastLogout = lastLogout;
     }
-    
-    public int getUserManagerId() {
-        return userManagerId;
+    public Roles getRoles() {
+        return roles;
     }
-    public void setUserManagerId(int userManagerId) {
-        this.userManagerId = userManagerId;
-    }
-    public int getRoleId() {
-        return roleId;
-    }
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setRoles(Roles roles) {
+        this.roles = roles;
     }
     
     @Override
     public String toString() {
         return "TaggingDetails{" +
                 "psid=" + psid +
-                ", roleId=" + roleId +
-                ", userManagerId=" + userManagerId +
+                ", roles=" + roles +
                 ", lastLogin=" + lastLogin +
-                ", lastLogout=" + lastLogout+ 
+                ", lastLogout=" + lastLogout +
                 '}';
     }
 
