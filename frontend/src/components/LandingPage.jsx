@@ -282,10 +282,11 @@ useEffect(() => {
 
   useEffect(() => {
     const getEmployeeCandidates = async () => {
-      const user = JSON.parse(localStorage.getItem("user")).psid;
-      try {
-        let content = [];
-        let totalPages = 0;
+      const user = JSON.parse(localStorage.getItem("user"))?.psid;
+      if (user) {
+        try {
+          let content = [];
+          let totalPages = 0;
 
         // ADD THIS BLOCK
       if (state?.hsbchiringManager) {
@@ -300,68 +301,71 @@ useEffect(() => {
         return; // Stop further execution
       }
 
-        if (searchType === "ctool" && status) {
-          const response = await getEmployeeCandidateByCtool(status);
-          content = response;
-          totalPages = response.totalPages;
-        } else if (searchType === "bgv" && status) {
-          const response = await getEmployeeCandidateByBgv(status);
-          content = response;
-          totalPages = response.totalPages;
-        } else {
-          const response = await fetchEmployeeCandidatesBySelections(
-            user,
-            currentPage,
-            rowsPerPage
-          );
-          content = response.content;
-          totalPages = response.totalPages;
-        }
-
-        setEmployeeCandidates(content);
-        setTotalPages(totalPages);
-        setFilteredCandidates(content);
-        console.log("dashboard data: ", content);
-
-        // Fetch vendor names
-        let vendorNamesMap = {};
-        for (const candidate of content) {
-          if (candidate.id && candidate.id < 100) {
-            const vendor = await getVendorById(candidate.id);
-            console.log(`Vendor response for ID ${candidate.id}:`, vendor);
-            vendorNamesMap[candidate.id] = vendor.vendorName;
+          if (searchType === "ctool" && status) {
+            const response = await getEmployeeCandidateByCtool(status);
+            content = response;
+            totalPages = response.totalPages;
+          } else if (searchType === "bgv" && status) {
+            const response = await getEmployeeCandidateByBgv(status);
+            content = response;
+            totalPages = response.totalPages;
+          } else {
+            const response = await fetchEmployeeCandidatesBySelections(
+              user,
+              currentPage,
+              rowsPerPage
+            );
+            content = response.content;
+            totalPages = response.totalPages;
           }
-        }
-
-        console.log("Vendor Names:", vendorNamesMap);
-        setVendorNames(vendorNamesMap);
-        console.log("Vendor Names:", vendorNamesMap);
-
-        if (id) {
-          const filtered = content.filter((candidate) => candidate.id === id);
-          console.log("displaying filtered by ID");
-          const employee = await getEmployeeCandidateByPsid(id);
-          if (employee && employee.id) {
-            setFilteredCandidates([employee]);
-            setTotalPages(1);
-            console.log("searched emp2:", employee);
-          }
-        } else if (phoneNumber) {
-          const candidate = await getCandidateByPhoneNumber(phoneNumber);
-          if (candidate && candidate.phoneNumber) {
-            setFilteredCandidates([candidate]);
-            setTotalPages(1);
-            console.log("searched Candidate using phone:", candidate);
-          }
-        } else {
+          setEmployeeCandidates(content);
+          setTotalPages(totalPages);
           setFilteredCandidates(content);
-          console.log("displaying All");
+          console.log("dashboard data: ", content);
+
+          // Fetch vendor names
+          let vendorNamesMap = {};
+          for (const candidate of content) {
+            if (candidate.id && candidate.id < 100) {
+              const vendor = await getVendorById(candidate.id);
+              console.log(`Vendor response for ID ${candidate.id}:`, vendor);
+              vendorNamesMap[candidate.id] = vendor.vendorName;
+            }
+          }
+
+          console.log("Vendor Names:", vendorNamesMap);
+          setVendorNames(vendorNamesMap);
+          console.log("Vendor Names:", vendorNamesMap);
+
+          if (id) {
+            const filtered = content.filter((candidate) => candidate.id === id);
+            console.log("displaying filtered by ID");
+            const employee = await getEmployeeCandidateByPsid(id);
+            if (employee && employee.id) {
+              setFilteredCandidates([employee]);
+              setTotalPages(1);
+              console.log("searched emp2:", employee);
+            }
+          } else if (phoneNumber) {
+            const candidate = await getCandidateByPhoneNumber(phoneNumber);
+            if (candidate && candidate.phoneNumber) {
+              setFilteredCandidates([candidate]);
+              setTotalPages(1);
+              console.log("searched Candidate using phone:", candidate);
+            }
+          } else {
+            setFilteredCandidates(content);
+            console.log("displaying All");
+          }
+        } catch (error) {
+          console.error(
+            "There was an error fetching the employee candidates!",
+            error
+          );
         }
-      } catch (error) {
-        console.error(
-          "There was an error fetching the employee candidates!",
-          error
-        );
+      } else {
+        navigate("/unauthorized");
+        return;
       }
     };
     getEmployeeCandidates();
@@ -380,31 +384,31 @@ useEffect(() => {
   return (
     <>
     <Navbar />
-      {permissions?.canViewDashboard && (
-        <div className="w-full px-4 py-6 mt-0">
-          {/* Tabs code*/}
-          <div className="flex mb-2 border-b">
-            <button
-              className={`px-4 py-2 font-semibold focus:outline-none ${
-                activeTab === "myselection"
-                  ? "border-b-2 border-blue-800 text-blue-800"
-                  : "text-gray-600"
-              }`}
-              onClick={() => handleTabClick("myselection")}
-            >
-              LOB Selection
-            </button>
-            <button
-              className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
-                activeTab === "dashboard"
-                  ? "border-b-2 border-blue-500 text-blue-600"
-                  : "text-gray-600"
-              }`}
-              onClick={() => handleTabClick("dashboard")}
-            >
-              Dashboard
-            </button>
-            {permissions?.canAccessAdminDashboard && (
+      {permissions?.canViewLandingPage && (
+            <div className="w-full px-4 py-6 mt-0">
+              {/* Tabs code*/}
+              <div className="flex mb-2 border-b">
+                <button
+                  className={`px-4 py-2 font-semibold focus:outline-none ${
+                    activeTab === "myselection"
+                      ? "border-b-2 border-blue-800 text-blue-800"
+                      : "text-gray-600"
+                  }`}
+                  onClick={() => handleTabClick("myselection")}
+                >
+                  LOB Selection
+                </button>
+                <button
+                  className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
+                    activeTab === "dashboard"
+                      ? "border-b-2 border-blue-500 text-blue-600"
+                      : "text-gray-600"
+                  }`}
+                  onClick={() => handleTabClick("dashboard")}
+                >
+                  Dashboard
+                </button>
+                {permissions?.canAccessAdminDashboard && (
               <button
                 className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
                   activeTab === "admin"

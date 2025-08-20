@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import lti from '../assets/images/logo.png';
-import logo from '../assets/ltim2.png';
-
+import logo from "../assets/ltim2.png";
+import { useAuth } from "./AuthContext";
 
 const Login = () => {
+  const { permissions, fetchPermissions } = useAuth();
   const [form, setForm] = useState({ username: "", otp: "" });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
@@ -35,7 +36,9 @@ const Login = () => {
   const sendOtp = async () => {
     setIsSendingOtp(true);
     try {
-      const response = await fetch(`http://localhost:8080/employees/${form.username}`);
+      const response = await fetch(
+        `http://localhost:8080/employees/${form.username}`
+      );
       if (!response.ok) throw new Error("Invalid PSID");
 
       const data = await response.json();
@@ -60,7 +63,6 @@ const Login = () => {
     }
   };
 
-
   const verifyOtp = async (e) => {
     e.preventDefault();
     const errors = validate();
@@ -74,7 +76,8 @@ const Login = () => {
 
         if (response.ok) {
           localStorage.setItem("user", JSON.stringify({ psid: form.username }));
-          navigate("/landing-page");
+          //navigate("/landing-page");
+          fetchPermissions();
         } else {
           const errorData = await response.json();
           setErrors({ submit: errorData.message });
@@ -86,6 +89,18 @@ const Login = () => {
       setErrors(errors);
     }
   };
+
+  useEffect(() => {
+    if (permissions && Object.keys(permissions).length > 0) {
+      if (permissions.canViewLandingPage) {
+        navigate("/landing-page");
+      } else if (permissions.canViewDashboard) {
+        navigate("/selection-tracker-dashboard");
+      } else {
+        setErrors({ submit: "You do not have access to any dashboard." });
+      }
+    }
+  }, [permissions, navigate]);
 
   return (
 
@@ -107,7 +122,10 @@ const Login = () => {
             Everything your team needs, in one workspace
           </p>
           <p className="text-sm font-light leading-relaxed px-4">
-            The HSBC Onboarding Application (Selection Tracker) is a streamlined solution designed to automate the client onboarding process at HSBC. It reduces manual effort, minimizes errors, and enhances efficiency by providing a centralized platform to manage onboarding activities.
+            The HSBC Onboarding Application (Selection Tracker) is a streamlined
+            solution designed to automate the client onboarding process at HSBC.
+            It reduces manual effort, minimizes errors, and enhances efficiency
+            by providing a centralized platform to manage onboarding activities.
           </p>
           <img
   src={lti}
@@ -123,7 +141,9 @@ const Login = () => {
         className="bg-white p-8 rounded-xl shadow-2xl w-full md:w-1/2 max-w-md mx-auto my-auto transition-all duration-300"
         onSubmit={verifyOtp}
       >
-        <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">Login</h2>
+        <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">
+          Login
+        </h2>
 
         <label className="block mb-2 text-base font-semibold text-gray-800 tracking-wide">
           PSID
@@ -147,15 +167,19 @@ const Login = () => {
             type="button"
             onClick={sendOtp}
             disabled={isSendingOtp}
-            className={`w-full ${isSendingOtp ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-              } text-white font-semibold py-2 px-4 rounded-lg transition duration-200`}
+            className={`w-full ${
+              isSendingOtp
+                ? "bg-blue-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            } text-white font-semibold py-2 px-4 rounded-lg transition duration-200`}
           >
             {isSendingOtp ? "Sending OTP..." : "Send OTP"}
           </button>
-
         ) : (
           <>
-            <label className="block mt-4 mb-2 text-sm font-medium text-gray-700">OTP</label>
+            <label className="block mt-4 mb-2 text-sm font-medium text-gray-700">
+              OTP
+            </label>
             <input
               type="text"
               name="otp"
@@ -178,7 +202,9 @@ const Login = () => {
         )}
 
         {errors.submit && (
-          <p className="text-red-500 text-sm mt-4 text-center">{errors.submit}</p>
+          <p className="text-red-500 text-sm mt-4 text-center">
+            {errors.submit}
+          </p>
         )}
       </form>
     </div>

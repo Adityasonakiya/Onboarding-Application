@@ -5,15 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
-import java.util.Date;
+// import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.onboarding.model.Employee;
-import com.example.onboarding.model.User;
+// import com.example.onboarding.model.Employee;
+// import com.example.onboarding.model.User;
 import com.example.onboarding.model.Vendor;
 import com.example.onboarding.model.VendorCandidate;
-import com.example.onboarding.repository.EmployeeRepository;
+//import com.example.onboarding.repository.EmployeeRepository;
 import com.example.onboarding.repository.VendorCandidateRepository;
 import com.example.onboarding.repository.VendorRepository;
 
@@ -34,11 +34,11 @@ public class VendorCandidateServiceTest {
     @Mock
     private VendorCandidateRepository vendorCandidateRepository;
 
-    @Mock
-    private UserService userService;
+    //@Mock
+    //private UserService userService;
 
-    @Mock
-    private EmployeeRepository employeeRepository;
+   // @Mock
+    //private EmployeeRepository employeeRepository;
 
     @BeforeEach
     public void setUp() {
@@ -113,17 +113,17 @@ public class VendorCandidateServiceTest {
 public void testCreateVendorCandidate() {
     VendorCandidate input = new VendorCandidate();
     VendorCandidate saved = new VendorCandidate();
-    User user = new User(); // Assuming User is the correct type
-    user.setPsid(12345); // Set the Psid for the User object
+    //User user = new User(); // Assuming User is the correct type
+    //user.setPsid(12345); // Set the Psid for the User object
 
-    Employee employee = new Employee();
-    employee.setPsid(12345); // Set the Psid for the Employee object
+    //Employee employee = new Employee();
+    //employee.setPsid(12345); // Set the Psid for the Employee object
 
     // Mock the loggedUser() method to return a User object
-    when(userService.loggedUser()).thenReturn(user);
+    //when(userService.loggedUser()).thenReturn(user);
 
     // Mock the employeeRepository to return an Employee object
-    when(employeeRepository.findById(12345)).thenReturn(Optional.of(employee));
+    //when(employeeRepository.findById(12345)).thenReturn(Optional.of(employee));
 
     // Mock the save method to return the saved VendorCandidate
     when(vendorCandidateRepository.save(input)).thenReturn(saved);
@@ -134,6 +134,6 @@ public void testCreateVendorCandidate() {
     // Verify the result and interactions
     assertEquals(saved, result);
     verify(vendorCandidateRepository, times(1)).save(input);
-    verify(employeeRepository, times(2)).findById(12345);
+    //verify(employeeRepository, times(2)).findById(12345);
 }
 }

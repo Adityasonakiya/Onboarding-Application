@@ -26,7 +26,7 @@ import com.example.onboarding.model.ExcelDataDTO;
 import com.example.onboarding.model.HsbcRoles;
 import com.example.onboarding.model.SelectionDTO;
 import com.example.onboarding.model.SelectionDetails;
-import com.example.onboarding.model.User;
+//import com.example.onboarding.model.User;
 import com.example.onboarding.model.VendorCandidate;
 import com.example.onboarding.repository.EmployeeRepository;
 import com.example.onboarding.repository.SelectionDetailsRepository;
@@ -37,14 +37,14 @@ public class SelectionDetailsServiceTest {
     @Mock
     private SelectionDetailsRepository selectionDetailsRepository;
 
-    @Mock
-    private UserService userService;
+    // @Mock
+    // private UserService userService;
 
     @Mock
     private EmployeeRepository employeeRepository;
 
-    @Mock
-    private TaggingDetailsService taggingDetailsService;
+    // @Mock
+    // private TaggingDetailsService taggingDetailsService;
 
     @Mock
     private VendorCandidateRepository vendorCandidateRepository;
@@ -54,7 +54,7 @@ public class SelectionDetailsServiceTest {
 
     private SelectionDetails selectionDetails;
 
-    private User user;
+    //private User user;
 
     @BeforeEach
     public void setUp() {
@@ -112,12 +112,12 @@ public class SelectionDetailsServiceTest {
         hsbcRoles.setGrade(7); // or any grade you want
         updatedDetails.setHsbcRoles(hsbcRoles);
 
-        user = new User();
-        user.setPsid(1);
+        //user = new User();
+        //user.setPsid(1);
 
         when(selectionDetailsRepository.findSelectionDetailsByPsId(psid)).thenReturn(selectionDetails);
-        when(userService.loggedUser()).thenReturn(user);
-        when(employeeRepository.findById(anyInt())).thenReturn(Optional.of(new Employee(1)));
+        //when(userService.loggedUser()).thenReturn(user);
+        //when(employeeRepository.findById(anyInt())).thenReturn(Optional.of(new Employee(1)));
         when(selectionDetailsRepository.save(any(SelectionDetails.class))).thenReturn(selectionDetails);
 
         SelectionDetails result = selectionDetailsService.updateSelectionDetailsByPsId(psid, updatedDetails);
@@ -152,12 +152,12 @@ public class SelectionDetailsServiceTest {
         hsbcRoles.setGrade(7); // or any grade you want
         updatedDetails.setHsbcRoles(hsbcRoles);
 
-        user = new User();
-        user.setPsid(1);
+        //user = new User();
+        //user.setPsid(1);
 
         when(selectionDetailsRepository.findByCandidate_PhoneNumber(phone)).thenReturn(selectionDetails);
-        when(userService.loggedUser()).thenReturn(user);
-        when(employeeRepository.findById(anyInt())).thenReturn(Optional.of(new Employee(1)));
+        //when(userService.loggedUser()).thenReturn(user);
+        //when(employeeRepository.findById(anyInt())).thenReturn(Optional.of(new Employee(1)));
         when(selectionDetailsRepository.save(any(SelectionDetails.class))).thenReturn(selectionDetails);
 
         SelectionDetails result = selectionDetailsService.updateSelectionDetailsByCandidatePhoneNumber(phone, updatedDetails);
@@ -191,12 +191,12 @@ public class SelectionDetailsServiceTest {
         hsbcRoles.setGrade(7); // or any grade you want
         updatedDetails.setHsbcRoles(hsbcRoles);
 
-        user = new User();
-        user.setPsid(1);
+        //user = new User();
+        //user.setPsid(1);
 
         when(selectionDetailsRepository.findByVendorCandidate_PhoneNumber(phone)).thenReturn(selectionDetails);
-        when(userService.loggedUser()).thenReturn(user);
-        when(employeeRepository.findById(anyInt())).thenReturn(Optional.of(new Employee(1)));
+        //when(userService.loggedUser()).thenReturn(user);
+        //when(employeeRepository.findById(anyInt())).thenReturn(Optional.of(new Employee(1)));
         when(selectionDetailsRepository.save(any(SelectionDetails.class))).thenReturn(selectionDetails);
 
         SelectionDetails result = selectionDetailsService.updateSelectionDetailsByVendorCandidatePhoneNumber(phone, updatedDetails);
@@ -225,12 +225,12 @@ public class SelectionDetailsServiceTest {
         SelectionDetails details = new SelectionDetails();
         Employee emp = new Employee(1);
         details.setEmployee(emp);
-        user = new User();
-        user.setPsid(1);
+        //user = new User();
+        //user.setPsid(1);
 
         when(selectionDetailsRepository.existsByEmployee_Psid(1)).thenReturn(false);
-        when(userService.loggedUser()).thenReturn(user);
-        when(employeeRepository.findById(1)).thenReturn(Optional.of(emp));
+        //when(userService.loggedUser()).thenReturn(user);
+        //when(employeeRepository.findById(1)).thenReturn(Optional.of(emp));
         when(selectionDetailsRepository.save(details)).thenReturn(details);
 
         SelectionDetails result = selectionDetailsService.createSelectionDetails_Employee(details);
@@ -244,12 +244,12 @@ public class SelectionDetailsServiceTest {
         com.example.onboarding.model.Candidate candidate = new com.example.onboarding.model.Candidate();
         candidate.setPhoneNumber(1234567890L);
         details.setCandidate(candidate);
-        user = new User();
-        user.setPsid(1);
+        //user = new User();
+        //user.setPsid(1);
 
         when(selectionDetailsRepository.existsByCandidate_PhoneNumber(1234567890L)).thenReturn(false);
-        when(userService.loggedUser()).thenReturn(user);
-        when(employeeRepository.findById(1)).thenReturn(Optional.of(new Employee(1)));
+        //when(userService.loggedUser()).thenReturn(user);
+        //when(employeeRepository.findById(1)).thenReturn(Optional.of(new Employee(1)));
         when(selectionDetailsRepository.save(details)).thenReturn(details);
 
         SelectionDetails result = selectionDetailsService.createSelectionDetails_Candidate(details);
@@ -263,12 +263,12 @@ public class SelectionDetailsServiceTest {
         VendorCandidate vendorCandidate = new VendorCandidate();
         vendorCandidate.setVendorCandidateId(1);
         details.setVendorCandidate(vendorCandidate);
-        user = new User();
-        user.setPsid(1);
+        //user = new User();
+        //user.setPsid(1);
 
         when(vendorCandidateRepository.findById(1)).thenReturn(Optional.of(vendorCandidate));
-        when(userService.loggedUser()).thenReturn(user);
-        when(employeeRepository.findById(1)).thenReturn(Optional.of(new Employee(1)));
+        //when(userService.loggedUser()).thenReturn(user);
+        //when(employeeRepository.findById(1)).thenReturn(Optional.of(new Employee(1)));
         when(selectionDetailsRepository.save(details)).thenReturn(details);
 
         SelectionDetails result = selectionDetailsService.createSelectionDetails_VendorCandidate(details);
@@ -278,60 +278,63 @@ public class SelectionDetailsServiceTest {
 
     @Test
     public void testGetEmployeeCandidates() {
-        Integer createdBy = 1;
+        Integer loggedInPsid = 1;
         int page = 0;
         int size = 2;
         List<EmployeeCandidateDTO> dtoList = Arrays.asList(new EmployeeCandidateDTO(), new EmployeeCandidateDTO());
         Page<EmployeeCandidateDTO> pageResult = new PageImpl<>(dtoList, PageRequest.of(page, size), dtoList.size());
 
-        when(selectionDetailsRepository.findEmployeeCandidates(eq(createdBy), any(PageRequest.class)))
+        when(selectionDetailsRepository.findEmployeeCandidates(eq(loggedInPsid), any(PageRequest.class)))
                 .thenReturn(pageResult);
 
-        Page<EmployeeCandidateDTO> result = selectionDetailsService.getEmployeeCandidates(createdBy, page, size);
+        Page<EmployeeCandidateDTO> result = selectionDetailsService.getEmployeeCandidates(loggedInPsid, page, size);
 
         assertNotNull(result);
         assertEquals(2, result.getContent().size());
         verify(selectionDetailsRepository, times(1))
-                .findEmployeeCandidates(eq(createdBy), any(PageRequest.class));
+                .findEmployeeCandidates(eq(loggedInPsid), any(PageRequest.class));
     }
 
     @Test
     public void testFindSelections() {
         String filter = "test";
+        Integer loggedInPsid = 1;
         List<SelectionDTO> selectionList = Arrays.asList(new SelectionDTO(), new SelectionDTO());
-        when(selectionDetailsRepository.findSelections(filter)).thenReturn(selectionList);
+        when(selectionDetailsRepository.findSelections(filter, loggedInPsid)).thenReturn(selectionList);
 
-        List<SelectionDTO> result = selectionDetailsService.findSelections(filter);
+        List<SelectionDTO> result = selectionDetailsService.findSelections(filter, loggedInPsid);
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(selectionDetailsRepository, times(1)).findSelections(filter);
+        verify(selectionDetailsRepository, times(1)).findSelections(filter, loggedInPsid);
     }
 
     @Test
     public void testFindAwaitedCases() {
         String filter = "awaited";
+        Integer loggedInPsid = 1;
         List<AwaitedCasesDTO> awaitedList = Arrays.asList(new AwaitedCasesDTO(), new AwaitedCasesDTO());
-        when(selectionDetailsRepository.findAwaitedCases(filter)).thenReturn(awaitedList);
+        when(selectionDetailsRepository.findAwaitedCases(filter, loggedInPsid)).thenReturn(awaitedList);
 
-        List<AwaitedCasesDTO> result = selectionDetailsService.findAwaitedCases(filter);
+        List<AwaitedCasesDTO> result = selectionDetailsService.findAwaitedCases(filter, loggedInPsid);
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(selectionDetailsRepository, times(1)).findAwaitedCases(filter);
+        verify(selectionDetailsRepository, times(1)).findAwaitedCases(filter, loggedInPsid);
     }
 
     @Test
     public void testFindCtool() {
         String filter = "ctool";
+        Integer loggedInPsid = 1;
         List<CtoolDto> ctoolList = Arrays.asList(new CtoolDto(), new CtoolDto());
-        when(selectionDetailsRepository.findCtool(filter)).thenReturn(ctoolList);
+        when(selectionDetailsRepository.findCtool(filter, loggedInPsid)).thenReturn(ctoolList);
 
-        List<CtoolDto> result = selectionDetailsService.findCtool(filter);
+        List<CtoolDto> result = selectionDetailsService.findCtool(filter, loggedInPsid);
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(selectionDetailsRepository, times(1)).findCtool(filter);
+        verify(selectionDetailsRepository, times(1)).findCtool(filter, loggedInPsid);
     }
 
     @Test
