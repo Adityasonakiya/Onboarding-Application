@@ -791,7 +791,7 @@ function SelectionTracker() {
             // Candidate logic
             const candidate = {
               phoneNumber: form.phone,
-              vendor: { vendorId: '1' },
+              vendor: form.vendors,
               firstName: form.fname,
               lastName: form.lname,
               createdBy: user,
