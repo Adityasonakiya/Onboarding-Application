@@ -564,7 +564,7 @@ const SelectionTrackerDashboard = ({ user }) => {
                 {/* Tabs Bar */}
                 <div
                   ref={tabsRef}
-                  className={`tabs w-full bg-white border-b px-2 py-2 transition-all duration-300 ${isSticky ? "fixed top-[75px] z-[49] shadow-md" : ""
+                  className={`tabs w-full bg-white border-b px-2 py-2 transition-all duration-300 ${isSticky ? "fixed top-[87px] z-[49] shadow-md" : ""
                     }`}
                 >
                   <div className="flex items-center justify-between flex-wrap">

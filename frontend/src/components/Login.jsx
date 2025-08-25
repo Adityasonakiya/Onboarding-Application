@@ -6,14 +6,51 @@ import { useAuth } from "./AuthContext";
 
 const Login = () => {
   const { permissions, fetchPermissions } = useAuth();
-  const [form, setForm] = useState({ username: "", otp: "" });
+  const [form, setForm] = useState({ username: "", otp: "", password: "" });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [otpSent, setOtpSent] = useState(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [usePassword, setUsePassword] = useState(false);
+
+  const toggleLoginMethod = () => {
+    setUsePassword(!usePassword);
+    setErrors({});
+    setOtpSent(false);
+  };
+
+  const loginWithPassword = async (e) => {
+    e.preventDefault();
+    if (!form.username || !form.password) {
+      setErrors({
+        username: !form.username ? "PSID is required" : undefined,
+        password: !form.password ? "Password is required" : undefined,
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ psid: form.username, password: form.password }),
+      });
+
+      if (response.ok) {
+        localStorage.setItem("user", JSON.stringify({ psid: form.username }));
+        fetchPermissions();
+      } else {
+        const errorData = await response.text();
+        setErrors({ submit: "Login failed. Please try again." });
+      }
+    } catch (error) {
+      setErrors({ submit: "Login failed. Please try again." });
+    }
+  };
+
 
   const navigate = useNavigate();
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
@@ -42,7 +79,7 @@ const Login = () => {
       if (!response.ok) throw new Error("Invalid PSID");
 
       const data = await response.json();
-      const email = "komalmore7015@gmail.com"; // Replace with: const email = data.mailID;
+      const email = "adityasonakiya29@gmail.com"; // Replace with: const email = data.mailID;
 
       const otpResponse = await fetch("http://localhost:8080/api/send-otp", {
         method: "POST",
@@ -106,14 +143,12 @@ const Login = () => {
 
     <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-blue-100 to-purple-200 relative">
       <div className="md:w-1/2 h-screen flex  bg-blue-600">
-
         <div className="group text-white p-10 rounded-xl w-full max-w-xl flex flex-col items-center text-center">
           <img
             src={logo}
             alt="Company Logo"
 
             className="w-63 h-24 mb-4"
-
           />
           {/* <h1 className="text-3xl font-bold mb-2 tracking-wide">
             Selection Tracker
@@ -128,85 +163,117 @@ const Login = () => {
             by providing a centralized platform to manage onboarding activities.
           </p>
           <img
-  src={lti}
-  alt="Company Logo"
-  className="absolute bottom-4 right-4 w-20 h-auto opacity-80"
-/>
-
+            src={lti}
+            alt="Company Logo"
+            className="absolute bottom-4 right-4 w-20 h-auto opacity-80"
+          />
         </div>
-        
       </div>
 
       <form
-        className="bg-white p-8 rounded-xl shadow-2xl w-full md:w-1/2 max-w-md mx-auto my-auto transition-all duration-300"
-        onSubmit={verifyOtp}
+  className="bg-white p-8 rounded-xl shadow-2xl w-full md:w-1/2 max-w-md mx-auto my-auto transition-all duration-300"
+  onSubmit={verifyOtp}
+>
+  <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">
+    Login
+  </h2>
+
+  <label className="block mb-2 text-base font-semibold text-gray-800 tracking-wide">
+    PSID
+  </label>
+  <input
+    type="number"
+    name="username"
+    placeholder="Enter your PSID"
+    value={form.username}
+    onChange={handleChange}
+    onBlur={handleBlur}
+    className="block w-full p-3 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+  />
+  {touched.username && errors.username && (
+    <p className="text-red-500 text-sm mb-4">{errors.username}</p>
+  )}
+
+  {usePassword ? (
+    <>
+      <label className="block mb-2 text-base font-semibold text-gray-800 tracking-wide">
+        Password
+      </label>
+      <input
+        type="password"
+        name="password"
+        placeholder="Enter your password"
+        value={form.password}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className="block w-full p-3 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+      {touched.password && errors.password && (
+        <p className="text-red-500 text-sm mb-4">{errors.password}</p>
+      )}
+      <button
+        type="button"
+        onClick={loginWithPassword}
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
       >
-        <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">
-          Login
-        </h2>
-
-        <label className="block mb-2 text-base font-semibold text-gray-800 tracking-wide">
-          PSID
-        </label>
-
-        <input
-          type="number"
-          name="username"
-          placeholder="Enter your PSID"
-          value={form.username}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          className="block w-full p-3 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        {touched.username && errors.username && (
-          <p className="text-red-500 text-sm mb-4">{errors.username}</p>
-        )}
-
-        {!otpSent ? (
+        Login
+      </button>
+    </>
+  ) : (
+    <>
+      {!otpSent ? (
+        <button
+          type="button"
+          onClick={sendOtp}
+          disabled={isSendingOtp}
+          className={`w-full ${
+            isSendingOtp
+              ? "bg-blue-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          } text-white font-semibold py-2 px-4 rounded-lg transition duration-200`}
+        >
+          {isSendingOtp ? "Sending OTP..." : "Send OTP"}
+        </button>
+      ) : (
+        <>
+          <label className="block mt-4 mb-2 text-sm font-medium text-gray-700">
+            OTP
+          </label>
+          <input
+            type="text"
+            name="otp"
+            placeholder="Enter OTP"
+            value={form.otp}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className="block w-full p-3 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          {touched.otp && errors.otp && (
+            <p className="text-red-500 text-sm mb-4">{errors.otp}</p>
+          )}
           <button
-            type="button"
-            onClick={sendOtp}
-            disabled={isSendingOtp}
-            className={`w-full ${
-              isSendingOtp
-                ? "bg-blue-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
-            } text-white font-semibold py-2 px-4 rounded-lg transition duration-200`}
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
           >
-            {isSendingOtp ? "Sending OTP..." : "Send OTP"}
+            Verify OTP
           </button>
-        ) : (
-          <>
-            <label className="block mt-4 mb-2 text-sm font-medium text-gray-700">
-              OTP
-            </label>
-            <input
-              type="text"
-              name="otp"
-              placeholder="Enter OTP"
-              value={form.otp}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="block w-full p-3 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-            {touched.otp && errors.otp && (
-              <p className="text-red-500 text-sm mb-4">{errors.otp}</p>
-            )}
-            <button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
-            >
-              Verify OTP
-            </button>
-          </>
-        )}
+        </>
+      )}
+    </>
+  )}
 
-        {errors.submit && (
-          <p className="text-red-500 text-sm mt-4 text-center">
-            {errors.submit}
-          </p>
-        )}
-      </form>
+  <p
+    className="text-sm text-blue-600 underline cursor-pointer text-center mt-6"
+    onClick={toggleLoginMethod}
+  >
+    {usePassword ? "Use OTP instead?" : "Login via password?"}
+  </p>
+
+  {errors.submit && (
+    <p className="text-red-500 text-sm mt-4 text-center">{errors.submit}</p>
+  )}
+</form>
+
     </div>
   );
 };
