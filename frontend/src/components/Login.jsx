@@ -79,7 +79,7 @@ const Login = () => {
       if (!response.ok) throw new Error("Invalid PSID");
 
       const data = await response.json();
-      const email = "adityasonakiya29@gmail.com"; // Replace with: const email = data.mailID;
+      const email = "komalmore7015@gmail.com"; // Replace with: const email = data.mailID;
 
       const otpResponse = await fetch("http://localhost:8080/api/send-otp", {
         method: "POST",

@@ -22,7 +22,7 @@ import {
   getCToolStatuses,
   getVendorById,
   getCandidateByPhoneNumber,
-  searchAllByClientName
+  searchAllByClientName,
 } from "../services/api";
 //import zIndex from "@mui/material/styles/zIndex";
 
@@ -53,9 +53,9 @@ const LandingPage = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [statusOptions, setStatusOptions] = useState([]);
   const suggestionsRef = useRef(null);
+  const [noResultsFound, setNoResultsFound] = useState(false);
 
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-  
 
   const handleSort = (key) => {
     setSortConfig((prev) => ({
@@ -84,92 +84,88 @@ const LandingPage = () => {
     };
   };
 
+  // const handleSearchChange = (event) => {
+  //   const query = event.target.value;
+  //   setSearchQuery(query);
+  //   handleSearchChangeDebounced(query);
+  // };
   const handleSearchChange = (event) => {
     const query = event.target.value;
     setSearchQuery(query);
+
+    // Reset suggestions and "No data found" when input is cleared
+    if (query.trim() === "") {
+      setSuggestions([]);
+      setNoResultsFound(false);
+      return;
+    }
+
     handleSearchChangeDebounced(query);
   };
 
-  // const handleSearchChangeDebounced = debounce(async (query) => {
-  //   if (query.length > 3) {
-  //     try {
-  //       let response;
-  //       if (selectedOption === "PSID") {
-  //         response = await fetch(
-  //           `http://localhost:8080/employees/search?query=${query}`
-  //         );
-  //       } else if (selectedOption === "CandidateName") {
-  //         response = await fetch(
-  //           `http://localhost:8080/candidates/api/candidates/search?query=${query}`
-  //         ); 
-  //       } else if (selectedOption === "ClientName") {
-  //         const results = await searchAllByHiringManager(query);
-  //         setSuggestions(results);
-  //         return;
-  //       }
-  //       if (response && response.ok) {
-  //         const data = await response.json();
-  //         setSuggestions(data);
-  //       } else {
-  //         setSuggestions([]);
-  //       }
-  //     } catch (error) {
-  //       setSuggestions([]);
-  //     }
-  //   } else {
-  //     setSuggestions([]);
-  //   }
-  // }, 300);
-
   const handleSearchChangeDebounced = debounce(async (query) => {
-  if (query.length > 3 && selectedOption === "ClientName") {
-    // Filter hiringManagers locally for suggestions
-    const filtered = hiringManagers
-      .filter(name => name.toLowerCase().includes(query.toLowerCase()))
-      .map(name => ({ hsbchiringManager: name }));
-    setSuggestions(filtered);
-    return;
-  }
-  try {
-    let response;
-    if (selectedOption === "PSID") {
-      response = await fetch(
-        `http://localhost:8080/employees/search?query=${query}`
-      );
-    } else if (selectedOption === "CandidateName") {
-      response = await fetch(
-        `http://localhost:8080/candidates/api/candidates/search?query=${query}`
-      );
-    }
-    if (response && response.ok) {
-      const data = await response.json();
-      setSuggestions(data);
-    } else {
+    if (selectedOption === "ClientName" && query.length <= 3) {
+      // Don't show suggestions or "No data found"
       setSuggestions([]);
+      return;
     }
-  } catch (error) {
-    setSuggestions([]);
-  }
-}, 300);
 
-useEffect(() => {
-  const fetchHiringManagers = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/selection-details/hiringManager");
-      const data = await response.json();
-      setHiringManagers(data);
-    } catch (error) {
-      setHiringManagers([]);
+    if (query.length > 3 && selectedOption === "ClientName") {
+      // Filter hiringManagers locally for suggestions
+      const filtered = hiringManagers
+        .filter((name) => name.toLowerCase().includes(query.toLowerCase()))
+        .map((name) => ({ hsbchiringManager: name }));
+      setSuggestions(filtered);
+      setNoResultsFound(filtered.length === 0);
+      return;
     }
-  };
-  fetchHiringManagers();
-}, []);
+    try {
+      let response;
+      if (selectedOption === "PSID") {
+        response = await fetch(
+          `http://localhost:8080/employees/search?query=${query}`
+        );
+      } else if (selectedOption === "CandidateName") {
+        response = await fetch(
+          `http://localhost:8080/candidates/api/candidates/search?query=${query}`
+        );
+      }
+      if (response && response.ok) {
+        const data = await response.json();
+        setSuggestions(data);
+        setNoResultsFound(data.length === 0);
+      } else {
+        setSuggestions([]);
+        setNoResultsFound(true);
+      }
+    } catch (error) {
+      setSuggestions([]);
+      setNoResultsFound(true);
+    }
+  }, 300);
+
+  useEffect(() => {
+    const fetchHiringManagers = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/selection-details/hiringManager"
+        );
+        const data = await response.json();
+        setHiringManagers(data);
+      } catch (error) {
+        setHiringManagers([]);
+      }
+    };
+    fetchHiringManagers();
+  }, []);
 
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
     setSearchQuery("");
     setSuggestions([]);
     setSelectedStatus("");
+    setNoResultsFound(false);
+    setStatusOptions([]);
   };
 
   const handleStatusChange = (e) => {
@@ -191,11 +187,10 @@ useEffect(() => {
     } else if (selectedOption === "CandidateName") {
       navigate("/landing-page", { state: { phoneNumber: value } });
       setSuggestions([]);
-    } else if (selectedOption === "ClientName"){
+    } else if (selectedOption === "ClientName") {
       navigate("/landing-page", { state: { hsbchiringManager: value } });
       setSuggestions([]);
-    }
-     else {
+    } else {
       setSelectedStatus(value);
       handleSearch();
     }
@@ -288,18 +283,20 @@ useEffect(() => {
           let content = [];
           let totalPages = 0;
 
-        // ADD THIS BLOCK
-      if (state?.hsbchiringManager) {
-        const results = await searchAllByHiringManager(state.hsbchiringManager);
-        // const response = await searchAllByHiringManager(state.hsbchiringManager);
-        content = results;
-        // content = response;
-        totalPages = results.totalPages || 1;;
-        setEmployeeCandidates(content);
-        setFilteredCandidates(content);
-        setTotalPages(totalPages);
-        return; // Stop further execution
-      }
+          // ADD THIS BLOCK
+          if (state?.hsbchiringManager) {
+            const results = await searchAllByHiringManager(
+              state.hsbchiringManager
+            );
+            // const response = await searchAllByHiringManager(state.hsbchiringManager);
+            content = results;
+            // content = response;
+            totalPages = results.totalPages || 1;
+            setEmployeeCandidates(content);
+            setFilteredCandidates(content);
+            setTotalPages(totalPages);
+            return; // Stop further execution
+          }
 
           if (searchType === "ctool" && status) {
             const response = await getEmployeeCandidateByCtool(status);
@@ -321,6 +318,7 @@ useEffect(() => {
           setEmployeeCandidates(content);
           setTotalPages(totalPages);
           setFilteredCandidates(content);
+          setNoResultsFound(content.length === 0);
           console.log("dashboard data: ", content);
 
           // Fetch vendor names
@@ -369,7 +367,16 @@ useEffect(() => {
       }
     };
     getEmployeeCandidates();
-  }, [id, phoneNumber, searchType, status, currentPage, rowsPerPage, state?.hsbchiringManager, location.key]);
+  }, [
+    id,
+    phoneNumber,
+    searchType,
+    status,
+    currentPage,
+    rowsPerPage,
+    state?.hsbchiringManager,
+    location.key,
+  ]);
 
   useEffect(() => {
     if (currentPage >= totalPages) {
@@ -383,32 +390,32 @@ useEffect(() => {
 
   return (
     <>
-    <Navbar />
+      <Navbar />
       {permissions?.canViewLandingPage && (
-            <div className="w-full px-4 py-6 mt-0">
-              {/* Tabs code*/}
-              <div className="flex mb-2 border-b">
-                <button
-                  className={`px-4 py-2 font-semibold focus:outline-none ${
-                    activeTab === "myselection"
-                      ? "border-b-2 border-blue-800 text-blue-800"
-                      : "text-gray-600"
-                  }`}
-                  onClick={() => handleTabClick("myselection")}
-                >
-                  LOB Selection
-                </button>
-                <button
-                  className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
-                    activeTab === "dashboard"
-                      ? "border-b-2 border-blue-500 text-blue-600"
-                      : "text-gray-600"
-                  }`}
-                  onClick={() => handleTabClick("dashboard")}
-                >
-                  Dashboard
-                </button>
-                {permissions?.canAccessAdminDashboard && (
+        <div className="w-full px-4 py-6 mt-0">
+          {/* Tabs code*/}
+          <div className="flex mb-2 border-b">
+            <button
+              className={`px-4 py-2 font-semibold focus:outline-none ${
+                activeTab === "myselection"
+                  ? "border-b-2 border-blue-800 text-blue-800"
+                  : "text-gray-600"
+              }`}
+              onClick={() => handleTabClick("myselection")}
+            >
+              LOB Selection
+            </button>
+            <button
+              className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
+                activeTab === "dashboard"
+                  ? "border-b-2 border-blue-500 text-blue-600"
+                  : "text-gray-600"
+              }`}
+              onClick={() => handleTabClick("dashboard")}
+            >
+              Dashboard
+            </button>
+            {permissions?.canAccessAdminDashboard && (
               <button
                 className={`px-4 py-2 font-semibold ml-2 focus:outline-none ${
                   activeTab === "admin"
@@ -480,10 +487,11 @@ useEffect(() => {
                             handleSuggestionClick(suggestion.id);
                           } else if (selectedOption === "CandidateName") {
                             handleSuggestionClick(`${suggestion.phoneNumber}`);
-                          } else if (selectedOption === "ClientName"){
-                            handleSuggestionClick(`${suggestion.hsbchiringManager}`)
-                          }
-                           else {
+                          } else if (selectedOption === "ClientName") {
+                            handleSuggestionClick(
+                              `${suggestion.hsbchiringManager}`
+                            );
+                          } else {
                             handleSuggestionClick(
                               suggestion.onboardingStatus ||
                                 suggestion.bgvStatus
@@ -505,7 +513,7 @@ useEffect(() => {
                         )}
                         {selectedOption === "ClientName" && (
                           <p className="text-sm">
-                           Client Name: {suggestion.hsbchiringManager}
+                            Client Name: {suggestion.hsbchiringManager}
                           </p>
                         )}
                         {(selectedOption === "CTool Status" ||
@@ -535,7 +543,7 @@ useEffect(() => {
                 }
               />
             </div>
-            
+
             {/* Buttons on the left */}
             <div className="flex items-center gap-2">
               {permissions?.canAddSelection && (
@@ -734,47 +742,59 @@ useEffect(() => {
               </thead>
 
               <tbody>
-                {sortedCandidates.map((emp, index) => (
-                  <tr key={`${emp.id}-${index}`}>
-                    <td className="p-2 border text-center">
-                      <button
-                        className="text-blue-400 underline"
-                        onClick={() => handleViewOnly(emp.id, emp.phoneNumber)}
-                      >
-                        {emp.id === 1
-                          ? "EXTERNAL"
-                          : emp.id < 100
-                          ? vendorNames[emp.id]
-                          : emp.id}
-                      </button>
-                    </td>
-                    <td className="p-2 border text-left">
-                      {emp.firstName} {emp.lastName}
-                    </td>
-                    <td className="p-2 border text-left">{emp.lobName}</td>
-                    <td className="p-2 border text-left">
-                      {emp.hsbchiringManager}
-                    </td>
-                    <td className="p-2 border text-left">
-                      {emp.onboardingStatus || "-"}
-                    </td>
-                    <td className="p-2 border text-left">
-                      {emp.bgvStatus || "-"}
-                    </td>
-                    <td className="p-2 border text-center">
-                      <div className="flex justify-center">
-                        {permissions?.canUpdateSelection && (
-                          <button
-                            className="bg-gray-400 text-white p-[4px] rounded mr-2 hover:bg-gray-800 transition duration-200"
-                            onClick={() => handleEdit(emp.id, emp.phoneNumber)}
-                          >
-                            <FaEdit size={12} />
-                          </button>
-                        )}
-                      </div>
+                {noResultsFound ? (
+                  <tr>
+                    <td colSpan="7" className="text-center py-4 text-gray-500">
+                      No data found for your search.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  sortedCandidates.map((emp, index) => (
+                    <tr key={`${emp.id}-${index}`}>
+                      <td className="p-2 border text-center">
+                        <button
+                          className="text-blue-400 underline"
+                          onClick={() =>
+                            handleViewOnly(emp.id, emp.phoneNumber)
+                          }
+                        >
+                          {emp.id === 1
+                            ? "EXTERNAL"
+                            : emp.id < 100
+                            ? vendorNames[emp.id]
+                            : emp.id}
+                        </button>
+                      </td>
+                      <td className="p-2 border text-left">
+                        {emp.firstName} {emp.lastName}
+                      </td>
+                      <td className="p-2 border text-left">{emp.lobName}</td>
+                      <td className="p-2 border text-left">
+                        {emp.hsbchiringManager}
+                      </td>
+                      <td className="p-2 border text-left">
+                        {emp.onboardingStatus || "-"}
+                      </td>
+                      <td className="p-2 border text-left">
+                        {emp.bgvStatus || "-"}
+                      </td>
+                      <td className="p-2 border text-center">
+                        <div className="flex justify-center">
+                          {permissions?.canUpdateSelection && (
+                            <button
+                              className="bg-gray-400 text-white p-[4px] rounded mr-2 hover:bg-gray-800 transition duration-200"
+                              onClick={() =>
+                                handleEdit(emp.id, emp.phoneNumber)
+                              }
+                            >
+                              <FaEdit size={12} />
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
