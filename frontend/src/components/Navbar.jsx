@@ -4,14 +4,12 @@ import { FiAlignJustify } from "react-icons/fi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/images/Logof.png";
 import logo1 from "../assets/images/logo.png";
-import smallLogo from "../assets/images/logo2.png";
+import hsbclogo from "../assets/images/hsbclogo.png";
 import { useAuth } from "./AuthContext";
-import {
-  getEmployeeByPsid,
-} from "../services/api";
+import { getEmployeeByPsid } from "../services/api";
 
 export default function Navbar() {
-  const {setPermissions} = useAuth();
+  const { setPermissions } = useAuth();
   const [activePopup, setActivePopup] = useState(null);
   const [hoverPopup, setHoverPopup] = useState(null);
   const [errors, setErrors] = useState("");
@@ -20,6 +18,7 @@ export default function Navbar() {
   const [suggestions, setSuggestions] = useState([]);
   const suggestionsRef = useRef(null);
 
+  const [showConfirmLogout, setShowConfirmLogout] = useState(false);
 
   const togglePopup = (popup) => {
     setActivePopup(activePopup === popup ? null : popup);
@@ -68,7 +67,7 @@ export default function Navbar() {
     };
 
     fetchUserData();
-  })
+  });
 
   const handleLogout = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -92,14 +91,18 @@ export default function Navbar() {
       className="shadow-md w-full p-2 fixed top-0 left-0 bg-white"
       style={{ zIndex: 2 }}
     >
-      <div className="flex items-center justify-between py-2 px-4 md:py-4 md:px-7">
-        <div className="flex items-center space-x-2">
-          <Link to="/landing-page" className="flex items-center space-x-10">
+      <div className="flex items-center justify-between py-1 px-3 md:py-3 md:px-7">
+        <div className="flex items-center space-x-2 h-6">
+          <Link to="/landing-page" className="flex items-center space-x-0">
             {/* First logo */}
-            <img src={logo1} alt="New Logo" className="h-10" />
-            <img src={logo} alt="Logo" className="hidden md:block h-12" />
-            <img src={smallLogo} alt="Logo" className="block md:hidden h-10" />
+            <img src={logo1} alt="New Logo" className="h-6 object-contain" />
+            <img src={hsbclogo} alt="Logo" className="block md:block h-10 object-contain" />
+            <img src={logo} alt="Logo" className="hidden md:block h-8" />
           </Link>
+          {/* <div className="absolute left-1/2 transform -translate-x-6">
+            <img src={logo} alt="Logo" className="h-8 mx-auto object-contain" />
+          </div>
+          <div className="w-20"></div> */}
         </div>
 
         <div
@@ -138,6 +141,33 @@ export default function Navbar() {
                 </p>
               </div>
 
+              {showConfirmLogout && (
+                <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+                  <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-300 w-72">
+                    <h2 className="text-base font-semibold mb-3 text-center">
+                      Confirm Logout
+                    </h2>
+                    <p className="text-sm text-gray-700 mb-4 text-center">
+                      Are you sure you want to logout?
+                    </p>
+                    <div className="flex justify-between">
+                      <button
+                        onClick={handleLogout}
+                        className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
+                      >
+                        Yes, Logout
+                      </button>
+                      <button
+                        onClick={() => setShowConfirmLogout(false)}
+                        className="px-3 py-1 text-sm bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Details */}
               <div className="flex flex-col space-y-1 mb-4">
                 <p className="text-gray-700">
@@ -155,14 +185,20 @@ export default function Navbar() {
               </div>
 
               {/* Logout Button - Styled and Positioned at Bottom */}
-              <div className="mt-auto pt-2 flex justify-left">
+              {/* <div className="mt-auto pt-2 flex justify-left">
                 <button
                   onClick={handleLogout}
                   className="text-center text-gray-500 hover:text-white hover:bg-red-500 border border-gray-400 rounded-md py-2 px-6 transition duration-300"
                 >
                   Logout
                 </button>
-              </div>
+              </div> */}
+              <button
+                onClick={() => setShowConfirmLogout(true)}
+                className="text-center text-gray-500 hover:text-white hover:bg-red-500 border border-gray-400 rounded-md py-2 px-6 transition duration-300"
+              >
+                Logout
+              </button>
             </div>
           )}
         </div>
